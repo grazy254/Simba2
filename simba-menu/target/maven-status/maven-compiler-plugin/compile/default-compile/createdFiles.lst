@@ -1,0 +1,6 @@
+com\simba\menu\service\impl\MenuServiceImpl.class
+com\simba\menu\model\Menu.class
+com\simba\menu\controller\MenuController.class
+com\simba\menu\dao\impl\MenuDaoImpl.class
+com\simba\menu\dao\MenuDao.class
+com\simba\menu\service\MenuService.class

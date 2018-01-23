@@ -1,0 +1,17 @@
+com\simba\baidu\ai\model\audit\TextAuditResponse.class
+com\simba\baidu\ai\model\audit\TextAuditResult.class
+com\simba\baidu\ai\KnowledgeAIUtil.class
+com\simba\baidu\ai\util\BaiduAiAccessTokenUtil.class
+com\simba\baidu\ai\model\AiAccessToken.class
+com\simba\baidu\ai\FaceAIUtil.class
+com\simba\baidu\ai\ImageSearchAIUtil.class
+com\simba\baidu\ai\model\error\Error.class
+com\simba\baidu\ai\util\audit\TextAuditAIUtil.class
+com\simba\baidu\ai\aspect\BaiduAIUtilAspect.class
+com\simba\baidu\ai\OCRAIUtil.class
+com\simba\baidu\ai\WordsAIUtil.class
+com\simba\baidu\ai\ImageAuditAIUtil.class
+com\simba\baidu\ai\jobs\BaiduAIAccessTokenJob.class
+com\simba\baidu\ai\exception\BaiduAIException.class
+com\simba\baidu\ai\VoiceAIUtil.class
+com\simba\baidu\ai\ImageAIUtil.class

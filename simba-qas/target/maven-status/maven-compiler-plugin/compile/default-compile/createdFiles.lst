@@ -1,0 +1,9 @@
+com\simba\qas\ApiRequest.class
+com\simba\qas\QaClient.class
+com\simba\qas\Base64.class
+com\simba\qas\ApiClient.class
+com\simba\qas\Constants.class
+com\simba\qas\QaAnswer.class
+com\simba\qas\QaRequest.class
+com\simba\qas\QaResponse.class
+com\simba\qas\HttpProxy.class

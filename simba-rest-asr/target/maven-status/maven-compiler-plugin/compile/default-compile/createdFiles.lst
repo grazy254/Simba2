@@ -1,0 +1,6 @@
+com\simba\rest\asr\RestAsrUtil$RestAsrUtilHolder.class
+com\simba\rest\asr\RestAsrUtil.class
+com\simba\rest\asr\model\HttpResponse.class
+com\simba\rest\asr\RestAsrUtil$1.class
+com\simba\rest\asr\util\HttpUtil.class
+com\simba\rest\asr\model\RestResult.class

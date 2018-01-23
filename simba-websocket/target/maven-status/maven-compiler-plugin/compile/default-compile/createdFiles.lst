@@ -1,0 +1,4 @@
+com\simba\websocket\WebSocketClientInterface.class
+com\simba\websocket\WebSocketConfig.class
+com\simba\websocket\WebSocketClient.class
+com\simba\websocket\WebSocketData.class

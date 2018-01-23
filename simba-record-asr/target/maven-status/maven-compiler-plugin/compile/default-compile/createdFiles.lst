@@ -1,0 +1,10 @@
+com\alibaba\idst\nls\utils\RequestBody.class
+com\simba\asr\record\model\RecordVoiceTransUtil$RecordVoiceTransUtilHolder.class
+com\alibaba\idst\nls\utils\HttpUtil.class
+com\simba\asr\record\model\SentenceResult.class
+com\alibaba\idst\nls\utils\RequestBody$validTime.class
+com\simba\asr\record\model\RecordVoiceTransUtil$1.class
+com\alibaba\idst\nls\response\HttpResponse.class
+com\simba\asr\record\model\RecordVoiceTransUtil.class
+com\simba\asr\record\model\RecordVoice.class
+com\simba\asr\record\model\Result.class

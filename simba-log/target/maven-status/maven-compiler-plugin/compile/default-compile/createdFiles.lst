@@ -1,0 +1,7 @@
+com\simba\model\form\OperLogSearchForm.class
+com\simba\controller\OperLogController.class
+com\simba\dao\impl\OperLogDaoImpl.class
+com\simba\dao\OperLogDao.class
+com\simba\service\impl\OperLogServiceImpl.class
+com\simba\service\OperLogService.class
+com\simba\model\OperLog.class

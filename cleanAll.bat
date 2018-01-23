@@ -1,0 +1,225 @@
+cd simba-jquery
+call mvn clean -U 
+cd ../
+cd simba-bootstrap
+call mvn clean -U 
+cd ../
+cd simba-page-common
+call mvn clean -U 
+cd ../
+cd simba-adminlte
+call mvn clean -U 
+cd ../
+cd simba-constant
+call mvn clean -U 
+cd ../
+cd simba-exception
+call mvn clean -U 
+cd ../
+cd simba-echarts
+call mvn clean -U 
+cd ../
+cd simba-json
+call mvn clean -U 
+cd ../
+cd simba-common
+call mvn clean -U 
+cd ../
+cd simba-calendar
+call mvn clean -U
+cd ../
+cd simba-ftp
+call mvn clean -U 
+cd ../
+cd simba-git
+call mvn clean -U 
+cd ../
+cd simba-ip
+call mvn clean -U 
+cd ../
+cd simba-freemarker
+call mvn clean -U 
+cd ../
+cd simba-groovy
+call mvn clean -U 
+cd ../
+cd simba-python
+call mvn clean -U 
+cd ../
+cd simba-office
+call mvn clean -U 
+cd ../
+cd simba-socket
+call mvn clean -U 
+cd ../
+cd simba-thirft
+call mvn clean -U 
+cd ../
+cd simba-udpsocket
+call mvn clean -U 
+cd ../
+cd simba-zookeeper
+call mvn clean -U 
+cd ../
+cd simba-httpclient
+call mvn clean -U 
+cd ../
+cd simba-database
+call mvn clean -U 
+cd ../
+cd simba-cache
+call mvn clean -U 
+cd ../
+cd simba-framework-util
+call mvn clean -U 
+cd ../
+cd simba-oss
+call mvn clean -U 
+cd ../
+cd simba-msg
+call mvn clean -U 
+cd ../
+cd simba-jpush
+call mvn clean -U 
+cd ../
+cd simba-mobile-message
+call mvn clean -U
+cd ../
+cd simba-asr
+call mvn clean -U 
+cd ../
+cd simba-qas
+call mvn clean -U 
+cd ../
+cd simba-realtime-asr
+call mvn clean -U
+cd ../
+cd simba-record-asr
+call mvn clean -U
+cd ../
+cd simba-rest-asr
+call mvn clean -U
+cd ../
+cd simba-rabbitmq
+call mvn clean -U 
+cd ../
+cd simba-fastdfs
+call mvn clean -U 
+cd ../
+cd simba-schedule
+call mvn clean -U 
+cd ../
+cd simba-distributed
+call mvn clean -U 
+cd ../
+cd simba-mongodb
+call mvn clean -U 
+cd ../
+cd simba-elasticsearch
+call mvn clean -U
+cd ../
+cd simba-aop
+call mvn clean -U 
+cd ../
+cd simba-codegenerate
+call mvn clean -U 
+cd ../
+cd simba-websocket
+call mvn clean -U 
+cd ../
+cd simba-activiti
+call mvn clean -U 
+cd ../
+cd simba-web
+call mvn clean -U 
+cd ../
+cd simba-address
+call mvn clean -U 
+cd ../
+cd simba-video
+call mvn clean -U 
+cd ../
+cd simba-baidu-ai
+call mvn clean -U 
+cd ../
+cd simba-email
+call mvn clean -U 
+cd ../
+cd simba-expressage
+call mvn clean -U 
+cd ../
+cd simba-permission
+call mvn clean -U 
+cd ../
+cd simba-registry
+call mvn clean -U 
+cd ../
+cd simba-buss
+call mvn clean -U 
+cd ../
+cd simba-menu
+call mvn clean -U 
+cd ../
+cd simba-create
+call mvn clean -U 
+cd ../
+cd simba-job
+call mvn clean -U
+cd ../
+cd simba-third-login
+call mvn clean -U
+cd ../
+cd simba-weather
+call mvn clean -U
+cd ../
+cd simba-exception-management
+call mvn clean -U
+cd ../
+cd simba-ueditor
+call mvn clean -U 
+cd ../
+cd simba-boot-admin-client
+call mvn clean -U 
+cd ../
+cd simba-turbine-amqp-client
+call mvn clean -U
+cd ../
+cd simba-wechatutil
+call mvn clean -U 
+cd ../
+cd simba-wechathardware
+call mvn clean -U 
+cd ../
+cd simba-wechatpay
+call mvn clean -U 
+cd ../
+cd simba-stream-amqp-client
+call mvn clean -U
+cd ../
+cd simba-cloud-task
+call mvn clean -U
+cd ../
+cd simba-sleuth
+call mvn clean -U
+cd ../
+cd simba-sleuth-rabbitmq
+call mvn clean -U
+cd ../
+cd simba-eureka-client
+call mvn clean -U 
+cd ../
+cd simba-bus-amqp-client
+call mvn clean -U 
+cd ../
+cd simba-bus-kafka-client
+call mvn clean -U 
+cd ../
+cd simba-config-client
+call mvn clean -U 
+cd ../
+cd simba-config-management
+call mvn clean -U 
+cd ../
+cd simbaRoot
+call mvn clean -U
+echo " clean all finish "

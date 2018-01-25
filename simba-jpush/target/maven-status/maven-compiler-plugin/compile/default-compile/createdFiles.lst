@@ -1,8 +1,0 @@
-com\simba\jpush\msg\model\CallbackModel.class
-com\simba\jpush\msg\model\TemplateAuditResult.class
-com\simba\jpush\msg\interfaces\CallbackDealInterface.class
-com\simba\jpush\msg\model\SendMsgModel.class
-com\simba\jpush\msg\util\JpushMsgUtil.class
-com\simba\jpush\msg\model\SendResult.class
-com\simba\jpush\msg\controller\MsgCallbackController.class
-com\simba\jpush\msg\model\ReceiveMsg.class

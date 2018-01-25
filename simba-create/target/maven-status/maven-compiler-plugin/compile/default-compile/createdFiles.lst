@@ -1,8 +1,0 @@
-com\simba\dao\ProjectVersionDao.class
-com\simba\controller\ProjectVersionController.class
-com\simba\service\impl\ProjectVersionServiceImpl.class
-com\simba\controller\ProjectPackageController.class
-com\simba\dao\impl\ProjectVersionDaoImpl.class
-com\simba\model\ProjectPackage.class
-com\simba\service\ProjectVersionService.class
-com\simba\model\ProjectVersion.class

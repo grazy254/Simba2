@@ -1,7 +1,0 @@
-com\simba\dao\impl\ExceptionInfoDaoImpl.class
-com\simba\service\ExceptionInfoService.class
-com\simba\service\impl\ExceptionInfoServiceImpl.class
-com\simba\model\ExceptionInfo.class
-com\simba\dao\ExceptionInfoDao.class
-com\simba\controller\ExceptionInfoController.class
-com\simba\model\form\ExceptionInfoSearchForm.class

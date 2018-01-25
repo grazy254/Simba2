@@ -11,14 +11,26 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.simba.common.EnvironmentUtil;
+import com.simba.model.constant.ConstantData;
 
 @Component("sessionFilter")
 public class SessionFilter implements Filter {
 
+	@Autowired
+	private EnvironmentUtil util;
+
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-
+		String expiredTime = util.get("session.expired.time");
+		if (StringUtils.isNotEmpty(expiredTime)) {
+			DisSessionRequestWrapper.setExpiry(NumberUtils.toInt(expiredTime, ConstantData.SESSION_TIMEOUT));
+		}
 	}
 
 	@Override

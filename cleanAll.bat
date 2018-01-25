@@ -1,3 +1,42 @@
+cd simba-zipkin
+call mvn clean -U 
+cd ..
+cd simba-zipkin-rabbitmq
+call mvn clean -U 
+cd ../
+cd simba-eureka-client
+call mvn clean -U 
+cd ../
+cd simba-config-server
+call mvn clean -U 
+cd ../
+cd simba-boot-admin-server
+call mvn clean -U 
+cd ../
+cd simba-turbine
+call mvn clean -U 
+cd ../
+cd simba-log
+call mvn clean -U 
+cd ../
+cd simba-config-management
+call mvn clean -U 
+cd ../
+cd simba-sleuth-rabbbitmq
+call mvn clean -U 
+cd ../
+cd simba-turbine-amqp-server
+call mvn clean -U 
+cd ../
+cd simba-hystrix-dashboard
+call mvn clean -U 
+cd ../
+cd simba-gateway
+call mvn clean -U 
+cd ../
+cd simba-eureka-server
+call mvn clean -U 
+cd ../
 cd simba-jquery
 call mvn clean -U 
 cd ../
@@ -202,7 +241,7 @@ cd ../
 cd simba-sleuth
 call mvn clean -U
 cd ../
-cd simba-sleuth-rabbitmq
+cd simba-sleuth-rabbbitmq
 call mvn clean -U
 cd ../
 cd simba-eureka-client
@@ -215,9 +254,6 @@ cd simba-bus-kafka-client
 call mvn clean -U 
 cd ../
 cd simba-config-client
-call mvn clean -U 
-cd ../
-cd simba-config-management
 call mvn clean -U 
 cd ../
 cd simbaRoot

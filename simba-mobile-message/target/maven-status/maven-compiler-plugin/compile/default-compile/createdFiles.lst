@@ -1,6 +1,0 @@
-com\simba\mobile\message\impls\JpsuhSendMsg.class
-com\simba\mobile\message\interfaces\SendMsgInterface.class
-com\simba\mobile\message\model\MsgType.class
-com\simba\mobile\message\impls\AliSendMsg.class
-com\simba\mobile\message\util\InitSendMsg.class
-com\simba\mobile\message\util\SendMsgUtil.class

@@ -1,5 +1,0 @@
-com\simba\exception\ForbidException.class
-com\simba\exception\SimbaException.class
-com\simba\exception\BussException.class
-com\simba\exception\LoginException.class
-com\simba\exception\XssException.class

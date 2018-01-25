@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
@@ -16,6 +17,8 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.stereotype.Component;
+
+import com.simba.common.EnvironmentUtil;
 
 /**
  * Spring上下文工具类
@@ -34,6 +37,11 @@ public class ApplicationContextUtil implements ApplicationContextAware {
 	public void setApplicationContext(ApplicationContext context) throws BeansException {
 		ApplicationContextUtil.context = context;
 		logger.info("****************************init ApplicationContext successfully:" + context.getClass().getName());
+		initEvent();
+		initEncode(context);
+	}
+
+	private void initEvent() {
 		List<ApplicationContextInit> list = getBeansOfType(ApplicationContextInit.class);
 		if (list != null && list.size() > 0) {
 			Collections.sort(list, new InitSort());
@@ -41,6 +49,18 @@ public class ApplicationContextUtil implements ApplicationContextAware {
 				init.init();
 				logger.info("****************************Spring容器启动完成执行初始化方法完成:" + init.getClass().getName());
 			});
+		}
+	}
+
+	private void initEncode(ApplicationContext context) {
+		EnvironmentUtil environmentUtil = context.getBean(EnvironmentUtil.class);
+		String groovyEncode = environmentUtil.get("groovy.source.encoding");
+		String fileEncode = environmentUtil.get("file.encoding");
+		if (StringUtils.isNotEmpty(groovyEncode)) {
+			System.setProperty("groovy.source.encoding", groovyEncode);
+		}
+		if (StringUtils.isNotEmpty(fileEncode)) {
+			System.setProperty("file.encoding", fileEncode);
 		}
 	}
 

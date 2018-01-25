@@ -4,16 +4,21 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.csource.common.FastdfsException;
 
 import com.simba.common.EnvironmentUtil;
 import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
+import com.simba.model.constant.ConstantData;
 
 /**
  * 本地上传文件管理
@@ -22,6 +27,8 @@ import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
  *
  */
 public class LocalUpload implements UploadInterface {
+
+	private static final Log logger = LogFactory.getLog(LocalUpload.class);
 
 	private static final SimpleDateFormat format = new SimpleDateFormat("/yyyy/MM/dd");
 
@@ -43,12 +50,21 @@ public class LocalUpload implements UploadInterface {
 		return LocalUploadHolder.instance;
 	}
 
+	private String dealPath(String path) {
+		try {
+			return "/download/download.do?fileName=" + URLEncoder.encode(path, ConstantData.DEFAULT_CHARSET);
+		} catch (UnsupportedEncodingException e) {
+			logger.error("处理路径URI编码异常" + path, e);
+			return path;
+		}
+	}
+
 	@Override
 	public String upload(byte[] content, String fileName, String type) throws IOException, FastdfsException {
 		String absPath = "/" + type + getPath() + getUniqueFileName(fileName);
 		String fullPath = localDir + absPath;
 		FileUtils.writeByteArrayToFile(new File(fullPath), content);
-		return absPath;
+		return dealPath(absPath);
 	}
 
 	@Override

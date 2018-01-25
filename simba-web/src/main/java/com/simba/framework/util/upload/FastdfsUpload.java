@@ -4,12 +4,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.csource.common.FastdfsException;
 
 import com.simba.fastdfs.FastdfsUtil;
 import com.simba.framework.util.common.SystemUtil;
+import com.simba.model.constant.ConstantData;
 
 /**
  * fastdfs分布式文件上传管理
@@ -18,6 +23,8 @@ import com.simba.framework.util.common.SystemUtil;
  *
  */
 public class FastdfsUpload implements UploadInterface {
+
+	private static final Log logger = LogFactory.getLog(FastdfsUpload.class);
 
 	private FastdfsUpload() {
 
@@ -31,9 +38,18 @@ public class FastdfsUpload implements UploadInterface {
 		return FastdfsUploadHolder.instance;
 	}
 
+	private String dealPath(String path) {
+		try {
+			return "/download/download.do?fileName=" + URLEncoder.encode(path, ConstantData.DEFAULT_CHARSET);
+		} catch (UnsupportedEncodingException e) {
+			logger.error("处理路径URI编码异常" + path, e);
+			return path;
+		}
+	}
+
 	@Override
 	public String upload(byte[] content, String fileName, String type) throws IOException, FastdfsException {
-		return FastdfsUtil.getInstance().upload(content, fileName);
+		return dealPath(FastdfsUtil.getInstance().upload(content, fileName));
 	}
 
 	@Override

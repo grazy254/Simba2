@@ -84,7 +84,7 @@ public class UeditorController {
 			InputStream is = null;
 			try {
 				is = conn.getInputStream();
-				if ("local".equals(storage)) {
+				if (!"alioss".equals(storage)) {
 					outSrc[i] = request.getContextPath() + UploadUtil.getInstance().getUpload().upload(StreamUtils.copyToByteArray(is), saveName, "ueditor");
 				} else {
 					outSrc[i] = UploadUtil.getInstance().getUpload().upload(StreamUtils.copyToByteArray(is), saveName, "ueditor");

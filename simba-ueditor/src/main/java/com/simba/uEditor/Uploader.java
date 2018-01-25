@@ -3,7 +3,6 @@ package com.simba.uEditor;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -27,7 +26,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.simba.common.EnvironmentUtil;
 import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.framework.util.upload.UploadUtil;
-import com.simba.model.constant.ConstantData;
 
 /**
  * UEditor文件上传辅助工具类
@@ -57,8 +55,7 @@ public class Uploader {
 	private String title = "";
 
 	// 文件允许格式
-	private String[] allowFiles = { ".rar", ".doc", ".docx", ".zip", ".pdf", ".txt", ".swf", ".wmv", ".gif", ".png",
-			".jpg", ".jpeg", ".bmp" };
+	private String[] allowFiles = { ".rar", ".doc", ".docx", ".zip", ".pdf", ".txt", ".swf", ".wmv", ".gif", ".png", ".jpg", ".jpeg", ".bmp" };
 	// 文件大小限制，单位KB
 	private int maxSize = 10000;
 
@@ -96,7 +93,7 @@ public class Uploader {
 			return;
 		}
 		MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
-		
+
 		MultipartFile file = mRequest.getFile("upfile");
 		if (file == null) {
 			this.state = this.errorInfo.get("NOFILE");
@@ -117,13 +114,10 @@ public class Uploader {
 		}
 		this.fileName = this.getName(this.originalName);
 		this.type = this.getFileExt(this.fileName);
-		if ("local".equals(storage)) {
-			this.url = request.getContextPath() + "/download/download.do?fileName=" + URLEncoder.encode(
-					UploadUtil.getInstance().getUpload().upload(file.getBytes(), file.getOriginalFilename(), "ueditor"),
-					ConstantData.DEFAULT_CHARSET);
+		if (!"alioss".equals(storage)) {
+			this.url = request.getContextPath() + UploadUtil.getInstance().getUpload().upload(file.getBytes(), file.getOriginalFilename(), "ueditor");
 		} else {
-			this.url = UploadUtil.getInstance().getUpload().upload(file.getBytes(), file.getOriginalFilename(),
-					"ueditor");
+			this.url = UploadUtil.getInstance().getUpload().upload(file.getBytes(), file.getOriginalFilename(), "ueditor");
 		}
 		this.title = request.getParameter("pictitle");
 		this.state = this.errorInfo.get("SUCCESS");
@@ -145,20 +139,17 @@ public class Uploader {
 			while (fii.hasNext()) {
 				FileItemStream fis = fii.next();
 				if (!fis.isFormField()) {
-					this.originalName = fis.getName()
-							.substring(fis.getName().lastIndexOf(System.getProperty("file.separator")) + 1);
+					this.originalName = fis.getName().substring(fis.getName().lastIndexOf(System.getProperty("file.separator")) + 1);
 					if (!this.checkFileType(this.originalName)) {
 						this.state = this.errorInfo.get("TYPE");
 						continue;
 					}
 					this.fileName = this.getName(this.originalName);
 					this.type = this.getFileExt(this.fileName);
-					if ("local".equals(storage)) {
-						this.url = request.getContextPath() + UploadUtil.getInstance().getUpload()
-								.upload(StreamUtils.copyToByteArray(fis.openStream()), this.originalName, "ueditor");
+					if (!"alioss".equals(storage)) {
+						this.url = request.getContextPath() + UploadUtil.getInstance().getUpload().upload(StreamUtils.copyToByteArray(fis.openStream()), this.originalName, "ueditor");
 					} else {
-						this.url = UploadUtil.getInstance().getUpload()
-								.upload(StreamUtils.copyToByteArray(fis.openStream()), this.originalName, "ueditor");
+						this.url = UploadUtil.getInstance().getUpload().upload(StreamUtils.copyToByteArray(fis.openStream()), this.originalName, "ueditor");
 					}
 					this.state = this.errorInfo.get("SUCCESS");
 					break;

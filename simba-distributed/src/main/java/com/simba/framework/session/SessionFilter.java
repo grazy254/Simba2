@@ -27,6 +27,9 @@ public class SessionFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
+		if (util == null) {
+			return;
+		}
 		String expiredTime = util.get("session.expired.time");
 		if (StringUtils.isNotEmpty(expiredTime)) {
 			DisSessionRequestWrapper.setExpiry(NumberUtils.toInt(expiredTime, ConstantData.SESSION_TIMEOUT));

@@ -1,4 +1,19 @@
+cd simba-publish-server
+call mvn clean -U 
+cd ../
+cd simba-ios-push
+call mvn clean -U 
+cd ../
+cd simba-mock
+call mvn clean -U 
+cd ../
+cd simba-publish-client
+call mvn clean -U 
+cd ../
 cd simba-zipkin
+call mvn clean -U 
+cd ..
+cd simba-svn
 call mvn clean -U 
 cd ..
 cd simba-zipkin-rabbitmq

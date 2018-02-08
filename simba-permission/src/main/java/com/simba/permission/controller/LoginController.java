@@ -39,12 +39,6 @@ import com.simba.util.SessionUtil;
 @RequestMapping("/login")
 public class LoginController {
 
-	private String adminUserName;
-
-	private String adminPassword;
-
-	private String captchaEnabled;
-
 	@Value("${key}")
 	private String key;
 
@@ -70,9 +64,6 @@ public class LoginController {
 	private void init() {
 		indexPage = StringUtils.defaultIfEmpty(indexPage, "index");
 		loginPage = StringUtils.defaultIfEmpty(loginPage, "login");
-		adminUserName = RegistryUtil.get("administrator.username");
-		adminPassword = RegistryUtil.get("administrator.password");
-		captchaEnabled = RegistryUtil.get("login.captcha.enabled");
 	}
 
 	/**
@@ -85,6 +76,7 @@ public class LoginController {
 		if (SessionUtil.isLogin(request.getSession())) {
 			return indexPage;
 		}
+		String captchaEnabled = RegistryUtil.get("login.captcha.enabled");
 		model.put("captchaEnabled", captchaEnabled);
 		return loginPage;
 	}
@@ -104,6 +96,7 @@ public class LoginController {
 			return indexPage;
 		}
 		String view = null;
+		String captchaEnabled = RegistryUtil.get("login.captcha.enabled");
 		if ("true".equals(captchaEnabled) && !checkCaptcha(request)) {
 			view = loginPage;
 			model.put("errMsg", "验证码错误");
@@ -143,6 +136,7 @@ public class LoginController {
 	public String logout(HttpServletRequest request, ModelMap model) {
 		operLogService.add(request, "退出", false);
 		SessionUtil.clearSession(request.getSession());
+		String captchaEnabled = RegistryUtil.get("login.captcha.enabled");
 		model.put("captchaEnabled", captchaEnabled);
 		return loginPage;
 	}
@@ -205,6 +199,8 @@ public class LoginController {
 	 * @return
 	 */
 	private boolean checkAdmin(String userName, String password) {
+		String adminUserName = RegistryUtil.get("administrator.username");
+		String adminPassword = RegistryUtil.get("administrator.password");
 		String un = EncryptUtil.md5(userName + key);
 		if (!adminUserName.equals(un)) {
 			return false;

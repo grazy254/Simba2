@@ -80,6 +80,20 @@ public class SystemUtil {
 	}
 
 	/**
+	 * 根据进程号杀掉进程
+	 * 
+	 * @param pid
+	 * @throws IOException
+	 */
+	public static void killByPid(int pid) throws IOException {
+		if (isWindowsOs()) {
+			ExecuteUtil.execute("taskkill /f /pid " + pid);
+		} else {
+			ExecuteUtil.execute("kill -9 " + pid);
+		}
+	}
+
+	/**
 	 * 获取当前机器ip地址
 	 * 
 	 * @return

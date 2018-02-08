@@ -56,6 +56,33 @@ public class GitUtil {
 	}
 
 	/**
+	 * 
+	 * 拷贝远程git到本地仓库
+	 * 
+	 * @param remoteUri
+	 *            远程git地址
+	 * @param localPath
+	 *            本地文件目录
+	 * @param branch
+	 *            分支
+	 * @param name
+	 *            账号
+	 * @param password
+	 *            密码
+	 * @return
+	 * @throws InvalidRemoteException
+	 * @throws TransportException
+	 * @throws GitAPIException
+	 */
+	public static Git clone(String remoteUri, String localPath, String branch, String name, String password) throws InvalidRemoteException, TransportException, GitAPIException {
+		logger.info("begin to clone:" + remoteUri);
+		CredentialsProvider cp = new UsernamePasswordCredentialsProvider(name, password);
+		Git git = Git.cloneRepository().setURI(remoteUri).setBranch(branch).setCredentialsProvider(cp).setDirectory(new File(localPath)).call();
+		logger.info("end to clone:" + remoteUri);
+		return git;
+	}
+
+	/**
 	 * 拷贝远程git到本地仓库(master)
 	 * 
 	 * @param remoteUri
@@ -70,6 +97,30 @@ public class GitUtil {
 	public static Git clone(String remoteUri, String localPath) throws InvalidRemoteException, TransportException, GitAPIException {
 		logger.info("begin to clone:" + remoteUri);
 		Git git = Git.cloneRepository().setURI(remoteUri).setDirectory(new File(localPath)).call();
+		logger.info("end to clone:" + remoteUri);
+		return git;
+	}
+
+	/**
+	 * 拷贝远程git到本地仓库(master)
+	 * 
+	 * @param remoteUri
+	 *            远程git地址
+	 * @param localPath
+	 *            本地文件目录
+	 * @param name
+	 *            账号
+	 * @param password
+	 *            密码
+	 * @return
+	 * @throws InvalidRemoteException
+	 * @throws TransportException
+	 * @throws GitAPIException
+	 */
+	public static Git clone(String remoteUri, String localPath, String name, String password) throws InvalidRemoteException, TransportException, GitAPIException {
+		logger.info("begin to clone:" + remoteUri);
+		CredentialsProvider cp = new UsernamePasswordCredentialsProvider(name, password);
+		Git git = Git.cloneRepository().setURI(remoteUri).setCredentialsProvider(cp).setDirectory(new File(localPath)).call();
 		logger.info("end to clone:" + remoteUri);
 		return git;
 	}
@@ -117,6 +168,38 @@ public class GitUtil {
 	 *            本地文件目录
 	 * @param branch
 	 *            分支
+	 * @param name
+	 *            账号
+	 * @param password
+	 *            密码
+	 * @return
+	 * @throws IOException
+	 * @throws WrongRepositoryStateException
+	 * @throws InvalidConfigurationException
+	 * @throws InvalidRemoteException
+	 * @throws CanceledException
+	 * @throws RefNotFoundException
+	 * @throws RefNotAdvertisedException
+	 * @throws NoHeadException
+	 * @throws TransportException
+	 * @throws GitAPIException
+	 */
+	public static Git pull(String localPath, String branch, String name, String password) throws IOException, WrongRepositoryStateException, InvalidConfigurationException, InvalidRemoteException,
+			CanceledException, RefNotFoundException, RefNotAdvertisedException, NoHeadException, TransportException, GitAPIException {
+		Git git = get(localPath);
+		CredentialsProvider cp = new UsernamePasswordCredentialsProvider(name, password);
+		git.pull().setRemoteBranchName(branch).setCredentialsProvider(cp).call();
+		logger.info("Pull本地仓库成功:" + localPath);
+		return git;
+	}
+
+	/**
+	 * pull请求
+	 * 
+	 * @param localPath
+	 *            本地文件目录
+	 * @param branch
+	 *            分支
 	 * @return
 	 * @throws IOException
 	 * @throws WrongRepositoryStateException
@@ -133,6 +216,36 @@ public class GitUtil {
 			RefNotFoundException, RefNotAdvertisedException, NoHeadException, TransportException, GitAPIException {
 		Git git = get(localPath);
 		git.pull().setRemoteBranchName(branch).call();
+		logger.info("Pull本地仓库成功:" + localPath);
+		return git;
+	}
+
+	/**
+	 * pull请求
+	 * 
+	 * @param localPath
+	 *            本地文件目录
+	 * @param name
+	 *            账号
+	 * @param password
+	 *            密码
+	 * @return
+	 * @throws IOException
+	 * @throws WrongRepositoryStateException
+	 * @throws InvalidConfigurationException
+	 * @throws InvalidRemoteException
+	 * @throws CanceledException
+	 * @throws RefNotFoundException
+	 * @throws RefNotAdvertisedException
+	 * @throws NoHeadException
+	 * @throws TransportException
+	 * @throws GitAPIException
+	 */
+	public static Git pull(String localPath, String name, String password) throws IOException, WrongRepositoryStateException, InvalidConfigurationException, InvalidRemoteException, CanceledException,
+			RefNotFoundException, RefNotAdvertisedException, NoHeadException, TransportException, GitAPIException {
+		Git git = get(localPath);
+		CredentialsProvider cp = new UsernamePasswordCredentialsProvider(name, password);
+		git.pull().setCredentialsProvider(cp).call();
 		logger.info("Pull本地仓库成功:" + localPath);
 		return git;
 	}

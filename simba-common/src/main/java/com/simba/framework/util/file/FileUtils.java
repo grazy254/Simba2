@@ -10,6 +10,8 @@ import java.io.OutputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * 文件处理工具类
@@ -17,6 +19,8 @@ import org.apache.commons.lang.StringUtils;
  * @author caozj
  */
 public class FileUtils {
+
+	private static final Log logger = LogFactory.getLog(FileUtils.class);
 
 	/**
 	 * 创建目录
@@ -53,9 +57,9 @@ public class FileUtils {
 			os = new FileOutputStream(new File(outPath));
 			IOUtils.copy(is, os);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error("拷贝文件发生异常", e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("拷贝文件发生异常", e);
 		} finally {
 			IOUtils.closeQuietly(is);
 			IOUtils.closeQuietly(os);
@@ -78,9 +82,9 @@ public class FileUtils {
 			os = new FileOutputStream(new File(outPath));
 			IOUtils.copy(is, os);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error("拷贝文件发生异常", e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("拷贝文件发生异常", e);
 		} finally {
 			IOUtils.closeQuietly(is);
 			IOUtils.closeQuietly(os);
@@ -101,9 +105,9 @@ public class FileUtils {
 			os = new FileOutputStream(new File(outPath));
 			IOUtils.copy(is, os);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error("拷贝文件发生异常", e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("拷贝文件发生异常", e);
 		} finally {
 			IOUtils.closeQuietly(is);
 			IOUtils.closeQuietly(os);
@@ -126,4 +130,18 @@ public class FileUtils {
 		return ext;
 	}
 
+	/**
+	 * 获取文件对应的windows系统盘符
+	 * 
+	 * @param filePath
+	 * @return
+	 */
+	public static String getWindowsPanFu(String filePath) {
+		String panfu = StringUtils.EMPTY;
+		int index = filePath.indexOf(":");
+		if (index > -1) {
+			panfu = filePath.substring(0, index);
+		}
+		return panfu;
+	}
 }

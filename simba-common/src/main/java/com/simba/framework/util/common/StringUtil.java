@@ -12,6 +12,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.xmlbeans.impl.util.Base64;
@@ -209,6 +210,29 @@ public class StringUtil {
 			IOUtils.closeQuietly(out);
 		}
 		return decompressed;
+	}
+
+	/**
+	 * 从文本中获取第一个数字
+	 * 
+	 * @param text
+	 * @return
+	 */
+	public static String getFirstNumber(String text) {
+		String number = "";
+		boolean get = false;
+		int length = text.length();
+		for (int i = 0; i < length; i++) {
+			String l = text.substring(i, i + 1);
+			if (NumberUtils.isDigits(l)) {
+				get = true;
+				number += l;
+			}
+			if (get && !NumberUtils.isDigits(l)) {
+				break;
+			}
+		}
+		return number;
 	}
 
 }

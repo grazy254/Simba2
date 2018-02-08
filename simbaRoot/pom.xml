@@ -165,6 +165,21 @@
 				<artifactId>simba-baidu-ai</artifactId>
 				<version>${simba.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.simba</groupId>
+				<artifactId>simba-publish-server</artifactId>
+				<version>${simba.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.simba</groupId>
+				<artifactId>simba-publish-client</artifactId>
+				<version>${simba.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.simba</groupId>
+				<artifactId>simba-mock</artifactId>
+				<version>${simba.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

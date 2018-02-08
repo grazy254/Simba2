@@ -64,6 +64,9 @@ cd ../
 cd simba-git
 call mvn clean -U deploy
 cd ../
+cd simba-svn
+call mvn clean -U deploy
+cd ../
 cd simba-cache
 call mvn clean -U deploy
 cd ../
@@ -74,15 +77,6 @@ cd simba-framework-util
 call mvn clean -U deploy
 cd ../
 cd simba-oss
-call mvn clean -U deploy
-cd ../
-cd simba-msg
-call mvn clean -U deploy
-cd ../
-cd simba-jpush
-call mvn clean -U deploy
-cd ../
-cd simba-mobile-message
 call mvn clean -U deploy
 cd ../
 cd simba-asr
@@ -139,6 +133,24 @@ cd ../
 cd simba-web
 call mvn clean -U deploy
 cd ../
+cd simba-msg
+call mvn clean -U deploy
+cd ../
+cd simba-jpush
+call mvn clean -U deploy
+cd ../
+cd simba-ios-push
+call mvn clean -U deploy
+cd ../
+cd simba-mobile-message
+call mvn clean -U deploy
+cd ../
+cd simba-publish-server
+call mvn clean -U deploy
+cd ../
+cd simba-publish-client
+call mvn clean -U deploy
+cd ../
 cd simba-address
 call mvn clean -U deploy
 cd ../
@@ -152,6 +164,9 @@ cd simba-expressage
 call mvn clean -U deploy
 cd ../
 cd simba-permission
+call mvn clean -U deploy
+cd ../
+cd simba-mock
 call mvn clean -U deploy
 cd ../
 cd simba-buss

@@ -1,10 +1,14 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/12/1 星期五 17:39:05                       */
+/* Created on:     2018/1/31 星期三 14:30:29                       */
 /*==============================================================*/
 
 
 drop table if exists buss;
+
+drop table if exists deployLog;
+
+drop table if exists devProject;
 
 drop table if exists exceptionInfo;
 
@@ -22,6 +26,16 @@ drop table if exists orgRole;
 
 drop table if exists permission;
 
+drop table if exists project;
+
+drop table if exists projectPackageResult;
+
+drop table if exists projectServer;
+
+drop table if exists projectServerRel;
+
+drop table if exists projectUser;
+
 drop table if exists projectVersion;
 
 drop table if exists registryTable;
@@ -34,7 +48,7 @@ drop table if exists rolePermission;
 
 drop table if exists systemUser;
 
-drop table if exists template;
+drop table if exists urlData;
 
 drop table if exists userExt;
 
@@ -52,6 +66,42 @@ create table buss
    script               text not null,
    primary key (name)
 );
+
+/*==============================================================*/
+/* Table: deployLog                                             */
+/*==============================================================*/
+create table deployLog
+(
+   id                   bigint not null auto_increment,
+   projectId            int comment '项目id',
+   name                 varchar(64) comment '项目名称',
+   createTime           datetime comment '时间',
+   primary key (id)
+);
+
+alter table deployLog comment '部署日志';
+
+/*==============================================================*/
+/* Table: devProject                                            */
+/*==============================================================*/
+create table devProject
+(
+   id                   int not null auto_increment,
+   code                 varchar(64) comment '编号',
+   name                 varchar(64) comment '名称',
+   versionType          varchar(64) comment '版本管理类型(svn/git)',
+   account              varchar(128) comment '账号',
+   pwd                  varchar(128) comment '密码',
+   versionUrl           varchar(256) comment '版本管理地址',
+   packageCommandFile   varchar(512) comment '打包命令文件路径',
+   startParams          varchar(512) comment '服务启动参数',
+   createTime           datetime comment '时间',
+   notifyEmails         varchar(1024) comment '通知邮件地址',
+   primary key (id),
+   unique key AK_Key_Code (code)
+);
+
+alter table devProject comment '项目';
 
 /*==============================================================*/
 /* Table: exceptionInfo                                         */
@@ -175,6 +225,75 @@ create table permission
 );
 
 /*==============================================================*/
+/* Table: project                                               */
+/*==============================================================*/
+create table project
+(
+   id                   int not null auto_increment,
+   code                 varchar(128) not null,
+   name                 varchar(128) not null,
+   primary key (id),
+   unique key AK_Key_Code (code)
+);
+
+alter table project comment '项目';
+
+/*==============================================================*/
+/* Table: projectPackageResult                                  */
+/*==============================================================*/
+create table projectPackageResult
+(
+   id                   int not null auto_increment,
+   projectId            int comment '项目id',
+   filePath             varchar(512) comment '打包结果文件路径',
+   primary key (id),
+   key AK_Key_projectId (projectId)
+);
+
+alter table projectPackageResult comment '项目打包结果';
+
+/*==============================================================*/
+/* Table: projectServer                                         */
+/*==============================================================*/
+create table projectServer
+(
+   id                   int not null auto_increment,
+   name                 varchar(64) comment '名称',
+   ip                   varchar(64) comment 'IP',
+   port                 int comment '端口号',
+   primary key (id)
+);
+
+alter table projectServer comment '服务器';
+
+/*==============================================================*/
+/* Table: projectServerRel                                      */
+/*==============================================================*/
+create table projectServerRel
+(
+   id                   int not null auto_increment,
+   projectId            int comment '项目id',
+   serverId             int comment '服务器id',
+   primary key (id)
+);
+
+alter table projectServerRel comment '项目绑定部署的服务器';
+
+/*==============================================================*/
+/* Table: projectUser                                           */
+/*==============================================================*/
+create table projectUser
+(
+   id                   int not null auto_increment,
+   account              varchar(128) not null,
+   projectId            int not null,
+   type                 tinyint not null,
+   primary key (id)
+);
+
+alter table projectUser comment '项目用户关系表';
+
+/*==============================================================*/
 /* Table: projectVersion                                        */
 /*==============================================================*/
 create table projectVersion
@@ -250,6 +369,21 @@ create table systemUser
 );
 
 /*==============================================================*/
+/* Table: urlData                                               */
+/*==============================================================*/
+create table urlData
+(
+   id                   int not null auto_increment,
+   projectId            int not null,
+   url                  varchar(128) not null,
+   data                 text not null,
+   description          varchar(128),
+   primary key (id)
+);
+
+alter table urlData comment 'url地址对应的数据表';
+
+/*==============================================================*/
 /* Table: userExt                                               */
 /*==============================================================*/
 create table userExt
@@ -281,47 +415,5 @@ create table userRole
    userAccount          varchar(64) not null,
    roleName             varchar(64) not null,
    primary key (userAccount, roleName)
-);
-
-/*==============================================================*/
-/* Table: template                                              */
-/*==============================================================*/
-create table template
-(
-   id                   int not null auto_increment,
-   name                 varchar(64) not null,
-   description          varchar(128),
-   template             text,
-   createtime           datetime not null,
-   primary key (id)
-);
-
-/*==============================================================*/
-/* Table: applicationUser                                       */
-/*==============================================================*/
-create table applicationUser
-(
-   id                   int not null auto_increment,
-   userId               int not null,
-   appliactionId        int not null,
-   userType             tinyint,
-   primary key (id)
-);
-
-drop table if exists applicationproperty;
-
-/*==============================================================*/
-/* Table: applicationproperty                                   */
-/*==============================================================*/
-create table applicationproperty
-(
-   id                   int not null auto_increment,
-   name                 varchar(128),
-   templateId           int not null,
-   dev                  text,
-   prod                 text,
-   test                 text,
-   createtime           datetime not null,
-   primary key (id)
 );
 

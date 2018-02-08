@@ -70,6 +70,18 @@
 			<groupId>com.simba</groupId>
 			<artifactId>simba-config-management</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-publish-server</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-publish-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-mock</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -9,7 +9,7 @@ import com.simba.dao.TemplateDao;
 import com.simba.framework.util.jdbc.Jdbc;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.jdbc.StatementParameter;
-import com.simba.model.Template;
+import com.simba.model.PropertyTemplate;
 
 /**
  * 配置模板表 Dao实现类
@@ -23,16 +23,16 @@ public class TemplateDaoImpl implements TemplateDao {
 	@Autowired
 	private Jdbc jdbc;
 
-	private static final String table = "template";
+	private static final String table = "propertytemplate";
 
 	@Override
-	public void add(Template template) {
+	public void add(PropertyTemplate template) {
 		String sql = "insert into " + table + "( name, description, template, createTime) values(?,?,?,?)";
 		jdbc.updateForBoolean(sql, template.getName(),template.getDescription(),template.getTemplate(),template.getCreateTime());
 	}
 
 	@Override
-	public void update(Template template) {
+	public void update(PropertyTemplate template) {
 		String sql = "update " + table + " set  name = ? , description = ? , template = ? , createTime = ?  where id = ?  ";
 		jdbc.updateForBoolean(sql,template.getName(),template.getDescription(),template.getTemplate(),template.getCreateTime(), template.getId());
 	}
@@ -44,15 +44,15 @@ public class TemplateDaoImpl implements TemplateDao {
 	}
 
 	@Override
-	public List<Template> page(Pager page) {
+	public List<PropertyTemplate> page(Pager page) {
 		String sql = "select * from " + table;
-		return jdbc.queryForPage(sql, Template.class, page);
+		return jdbc.queryForPage(sql, PropertyTemplate.class, page);
 	}
 
 	@Override
-	public List<Template> listAll(){
+	public List<PropertyTemplate> listAll(){
 		String sql = "select * from " + table;
-		return jdbc.queryForList(sql, Template.class);
+		return jdbc.queryForList(sql, PropertyTemplate.class);
 	}
 
 	@Override
@@ -62,71 +62,71 @@ public class TemplateDaoImpl implements TemplateDao {
 	}
 
 	@Override
-	public Template get(Long id) {
+	public PropertyTemplate get(Long id) {
 		String sql = "select * from " + table + " where id = ? ";
-		return jdbc.query(sql, Template.class, id);
+		return jdbc.query(sql, PropertyTemplate.class, id);
 	}
 	
 	@Override
-	public Template getBy(String field, Object value) {
+	public PropertyTemplate getBy(String field, Object value) {
 		String sql = "select * from " + table + " where " + field + " = ? ";
-		return jdbc.query(sql, Template.class, value);
+		return jdbc.query(sql, PropertyTemplate.class, value);
 	}
 
 	@Override
-	public Template getByAnd(String field1, Object value1, String field2, Object value2) {
+	public PropertyTemplate getByAnd(String field1, Object value1, String field2, Object value2) {
 		String sql = "select * from " + table + " where " + field1 + " = ? and " + field2 + " = ? ";
-		return jdbc.query(sql, Template.class, value1, value2);
+		return jdbc.query(sql, PropertyTemplate.class, value1, value2);
 	}
 
 	@Override
-	public Template getByOr(String field1, Object value1, String field2, Object value2) {
+	public PropertyTemplate getByOr(String field1, Object value1, String field2, Object value2) {
 		String sql = "select * from " + table + " where " + field1 + " = ? or " + field2 + " = ? ";
-		return jdbc.query(sql, Template.class, value1, value2);
+		return jdbc.query(sql, PropertyTemplate.class, value1, value2);
 	}
 
 	@Override
-	public List<Template> listBy(String field, Object value) {
+	public List<PropertyTemplate> listBy(String field, Object value) {
 		String sql = "select * from " + table + " where " + field + " = ? ";
-		return jdbc.queryForList(sql, Template.class, value);
+		return jdbc.queryForList(sql, PropertyTemplate.class, value);
 	}
 
 	@Override
-	public List<Template> listByAnd(String field1, Object value1, String field2, Object value2) {
+	public List<PropertyTemplate> listByAnd(String field1, Object value1, String field2, Object value2) {
 		String sql = "select * from " + table + " where " + field1 + " = ? and " + field2 + " = ? ";
-		return jdbc.queryForList(sql, Template.class, value1, value2);
+		return jdbc.queryForList(sql, PropertyTemplate.class, value1, value2);
 	}
 
 	@Override
-	public List<Template> listByOr(String field1, Object value1, String field2, Object value2) {
+	public List<PropertyTemplate> listByOr(String field1, Object value1, String field2, Object value2) {
 		String sql = "select * from " + table + " where " + field1 + " = ? or " + field2 + " = ? ";
-		return jdbc.queryForList(sql, Template.class, value1, value2);
+		return jdbc.queryForList(sql, PropertyTemplate.class, value1, value2);
 	}
 
 	@Override
-	public List<Template> pageBy(String field, Object value, Pager page) {
+	public List<PropertyTemplate> pageBy(String field, Object value, Pager page) {
 		String sql = "select * from " + table + " where " + field + " = ? ";
 		StatementParameter param = new StatementParameter();
 		param.set(value);
-		return jdbc.queryForPage(sql, Template.class, page, param);
+		return jdbc.queryForPage(sql, PropertyTemplate.class, page, param);
 	}
 
 	@Override
-	public List<Template> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page) {
+	public List<PropertyTemplate> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page) {
 		String sql = "select * from " + table + " where " + field1 + " = ? and " + field2 + " = ? ";
 		StatementParameter param = new StatementParameter();
 		param.set(value1);
 		param.set(value2);
-		return jdbc.queryForPage(sql, Template.class, page, param);
+		return jdbc.queryForPage(sql, PropertyTemplate.class, page, param);
 	}
 
 	@Override
-	public List<Template> pageByOr(String field1, Object value1, String field2, Object value2, Pager page) {
+	public List<PropertyTemplate> pageByOr(String field1, Object value1, String field2, Object value2, Pager page) {
 		String sql = "select * from " + table + " where " + field1 + " = ? or " + field2 + " = ? ";
 		StatementParameter param = new StatementParameter();
 		param.set(value1);
 		param.set(value2);
-		return jdbc.queryForPage(sql, Template.class, page, param);
+		return jdbc.queryForPage(sql, PropertyTemplate.class, page, param);
 	}
 	
 	@Override

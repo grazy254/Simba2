@@ -82,6 +82,42 @@
 			<groupId>com.simba</groupId>
 			<artifactId>simba-mock</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-wechat-management</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-version-management</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-switch-management</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-msg-management</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-user-management</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-realtime-management</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-wechat-enterprise-bill</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-wechat-redpack-bill</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-wechat-pay-bill</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -45,8 +45,6 @@ var DeployLog = {
 			dataType: "html",
 			success: function(html) {
 				$("#table").find("tbody").html(html);
-				CheckBox.init();
-				setTimeout("CheckBox.bindCheckAll();", 1000);
 			}
 		});
 		$.ajax({

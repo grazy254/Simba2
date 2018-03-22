@@ -26,7 +26,7 @@ drop table if exists orgRole;
 
 drop table if exists permission;
 
-drop table if exists project;
+drop table if exists mockProject;
 
 drop table if exists projectPackageResult;
 
@@ -225,9 +225,9 @@ create table permission
 );
 
 /*==============================================================*/
-/* Table: project                                               */
+/* Table: mockProject                                               */
 /*==============================================================*/
-create table project
+create table mockProject
 (
    id                   int not null auto_increment,
    code                 varchar(128) not null,
@@ -236,7 +236,7 @@ create table project
    unique key AK_Key_Code (code)
 );
 
-alter table project comment '项目';
+alter table mockProject comment '项目';
 
 /*==============================================================*/
 /* Table: projectPackageResult                                  */

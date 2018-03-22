@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.simba.model.Project;
+import com.simba.model.MockProject;
 import com.simba.model.UrlData;
 import com.simba.service.ProjectService;
 import com.simba.service.UrlDataService;
@@ -83,7 +83,7 @@ public class RouteController {
 		}
 		logger.info("项目:" + project + ",url:" + url);
 		// 根据项目编号和url从数据库获取配置的对应的数据返回
-		Project projectObj = projecService.getBy("code", project);
+		MockProject projectObj = projecService.getBy("code", project);
 		int projectId = projectObj.getId();
 		UrlData urlObj = urlDataService.getByAnd("url", url, "projectId", projectId);
 		logger.info("返回数据:" + urlObj.getData());

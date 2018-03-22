@@ -23,7 +23,7 @@ public class ApplicationPropertyDaoImpl implements ApplicationPropertyDao {
 	@Autowired
 	private Jdbc jdbc;
 
-	private static final String table = "applicationProperty";
+	private static final String table = "property";
 
 	@Override
 	public void add(ApplicationProperty applicationProperty) {

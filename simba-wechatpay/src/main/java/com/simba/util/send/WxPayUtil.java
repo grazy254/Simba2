@@ -1,29 +1,17 @@
 package com.simba.util.send;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.security.KeyStore;
 import java.util.Arrays;
 import java.util.Map;
 
-import javax.net.ssl.SSLContext;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.http.Consts;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.ParseException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ssl.DefaultHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContexts;
-import org.apache.http.util.EntityUtils;
 import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 
@@ -55,14 +43,13 @@ import com.simba.util.common.WxPayConstantData;
  */
 public class WxPayUtil {
 
-	private static final String[] TRADE_TYPES = new String[] { "JSAPI", "NATIVE", "APP" };
-	private static final String[] REFUND_ACCOUNT = new String[] { "REFUND_SOURCE_RECHARGE_FUNDS",
-			"REFUND_SOURCE_UNSETTLED_FUNDS" };
+	private static final Log logger = LogFactory.getLog(WxPayUtil.class);
+	private static final String[] TRADE_TYPES = new String[] { "JSAPI", "NATIVE", "APP", "MWEB" };
+	private static final String[] REFUND_ACCOUNT = new String[] { "REFUND_SOURCE_RECHARGE_FUNDS", "REFUND_SOURCE_UNSETTLED_FUNDS" };
 	private static final String[] BILL_TYPE = new String[] { "ALL", "REFUND", "SUCCESS" };
 	private String key = null;
 	private String appid = null;
 	private String mchId = null;
-	private String certFile = null;
 
 	private WxPayUtil() {
 		init();
@@ -73,7 +60,6 @@ public class WxPayUtil {
 		key = environmentUtil.get("wx.pay.key");
 		appid = environmentUtil.get("appID");
 		mchId = environmentUtil.get("wx.pay.mchid");
-		certFile = environmentUtil.get("wx.pay.cert");
 	}
 
 	private static final class WxPayUtilHolder {
@@ -101,7 +87,9 @@ public class WxPayUtil {
 		String sign = SignUtil.getInstance().createSign(params, key);
 		request.setSign(sign);
 		String xml = request.toXML();
+		logger.info("统一下单:" + WxPayConstantData.unifiedorderUrl + ",内容:" + xml);
 		String resp = HttpClientUtil.postXML(WxPayConstantData.unifiedorderUrl, xml);
+		logger.info("统一下单返回结果:" + resp);
 		UnifiedOrderRes result = XmlUtil.toOject(resp, UnifiedOrderRes.class);
 		checkResult(result);
 		return result;
@@ -124,8 +112,7 @@ public class WxPayUtil {
 	 * @throws XPathExpressionException
 	 * @throws DOMException
 	 */
-	public OrderQueryRes queryOrderByTransactionId(String transactionId)
-			throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+	public OrderQueryRes queryOrderByTransactionId(String transactionId) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		return queryOrder(transactionId, null);
 	}
 
@@ -146,8 +133,7 @@ public class WxPayUtil {
 	 * @throws XPathExpressionException
 	 * @throws DOMException
 	 */
-	public OrderQueryRes queryOrderByOutTradeNo(String outTradeNo)
-			throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+	public OrderQueryRes queryOrderByOutTradeNo(String outTradeNo) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		return queryOrder(null, outTradeNo);
 	}
 
@@ -165,8 +151,7 @@ public class WxPayUtil {
 	 * @throws XPathExpressionException
 	 * @throws DOMException
 	 */
-	private OrderQueryRes queryOrder(String transactionId, String outTradeNo)
-			throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+	private OrderQueryRes queryOrder(String transactionId, String outTradeNo) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		OrderQueryReq request = new OrderQueryReq();
 		if (StringUtils.isNotEmpty(transactionId)) {
 			request.setTransaction_id(transactionId);
@@ -182,7 +167,9 @@ public class WxPayUtil {
 		String sign = SignUtil.getInstance().createSign(params, key);
 		request.setSign(sign);
 		String xml = request.toXML();
+		logger.info("查询订单:" + WxPayConstantData.orderqueryUrl + ",内容:" + xml);
 		String resp = HttpClientUtil.postXML(WxPayConstantData.orderqueryUrl, xml);
+		logger.info("查询订单返回结果:" + resp);
 		OrderQueryRes result = XmlUtil.toOject(resp, OrderQueryRes.class);
 		result.composeCoupons(resp);
 		checkResult(result);
@@ -213,7 +200,9 @@ public class WxPayUtil {
 		String sign = SignUtil.getInstance().createSign(params, key);
 		request.setSign(sign);
 		String xml = request.toXML();
+		logger.info("关闭订单:" + WxPayConstantData.closeorderUrl + ",内容:" + xml);
 		String resp = HttpClientUtil.postXML(WxPayConstantData.closeorderUrl, xml);
+		logger.info("关闭订单返回结果:" + resp);
 		CloseOrderRes result = XmlUtil.toOject(resp, CloseOrderRes.class);
 		checkResult(result);
 		return result;
@@ -232,8 +221,7 @@ public class WxPayUtil {
 	 * @throws XPathExpressionException
 	 * @throws DOMException
 	 */
-	public RefundQueryRes refundQueryByTransactionId(String transactionId)
-			throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+	public RefundQueryRes refundQueryByTransactionId(String transactionId) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		return refundQuery(transactionId, null, null, null);
 	}
 
@@ -250,8 +238,7 @@ public class WxPayUtil {
 	 * @throws XPathExpressionException
 	 * @throws DOMException
 	 */
-	public RefundQueryRes refundQueryByOutTradeNo(String outTradeNo)
-			throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+	public RefundQueryRes refundQueryByOutTradeNo(String outTradeNo) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		return refundQuery(null, outTradeNo, null, null);
 	}
 
@@ -268,8 +255,7 @@ public class WxPayUtil {
 	 * @throws XPathExpressionException
 	 * @throws DOMException
 	 */
-	public RefundQueryRes refundQueryByOutRefundNo(String outRefundNo)
-			throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+	public RefundQueryRes refundQueryByOutRefundNo(String outRefundNo) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		return refundQuery(null, null, outRefundNo, null);
 	}
 
@@ -286,8 +272,7 @@ public class WxPayUtil {
 	 * @throws XPathExpressionException
 	 * @throws DOMException
 	 */
-	public RefundQueryRes refundQueryByRefundId(String refundId)
-			throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+	public RefundQueryRes refundQueryByRefundId(String refundId) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		return refundQuery(null, null, null, refundId);
 	}
 
@@ -332,7 +317,9 @@ public class WxPayUtil {
 		String sign = SignUtil.getInstance().createSign(params, key);
 		request.setSign(sign);
 		String xml = request.toXML();
+		logger.info("查询退款:" + WxPayConstantData.refundqueryUrl + ",内容:" + xml);
 		String resp = HttpClientUtil.postXML(WxPayConstantData.refundqueryUrl, xml);
+		logger.info("查询退款返回结果:" + resp);
 		RefundQueryRes result = XmlUtil.toOject(resp, RefundQueryRes.class);
 		result.composeRefundRecords(resp);
 		checkResult(result);
@@ -367,7 +354,9 @@ public class WxPayUtil {
 		String sign = SignUtil.getInstance().createSign(params, key);
 		request.setSign(sign);
 		String xml = request.toXML();
+		logger.info("下载对账单:" + WxPayConstantData.downloadbillUrl + ",内容:" + xml);
 		String resp = HttpClientUtil.postXML(WxPayConstantData.downloadbillUrl, xml);
+		logger.info("下载对账单返回结果:" + resp);
 		return resp;
 	}
 
@@ -401,49 +390,16 @@ public class WxPayUtil {
 		String sign = SignUtil.getInstance().createSign(params, key);
 		request.setSign(sign);
 		String xml = request.toXML();
-		String resp = this.executeWithKey(WxPayConstantData.refundUrl, xml);
+		String resp = CertRequestUrl.getInstance().executeWithKey(WxPayConstantData.refundUrl, xml);
 		RefundRes result = XmlUtil.toOject(resp, RefundRes.class);
 		checkResult(result);
 		return result;
 	}
 
-	private String executeWithKey(String url, String xml) throws ParseException, IOException {
-		SSLContext sslContext = buildSSLContext();
-		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext, new String[] { "TLSv1" }, null,
-				new DefaultHostnameVerifier());
-		HttpPost httpPost = new HttpPost(url);
-		try (CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build()) {
-			httpPost.setEntity(new StringEntity(new String(xml.getBytes("UTF-8"), "ISO-8859-1")));
-			try (CloseableHttpResponse response = httpclient.execute(httpPost)) {
-				String result = EntityUtils.toString(response.getEntity(), Consts.UTF_8);
-				return result;
-			}
-		} finally {
-			httpPost.releaseConnection();
-		}
-	}
-
-	private SSLContext buildSSLContext() {
-		File file = new File(certFile);
-		if (!file.exists()) {
-			throw new RuntimeException("证书文件：【" + file.getPath() + "】不存在！");
-		}
-		try {
-			FileInputStream inputStream = new FileInputStream(file);
-			KeyStore keystore = KeyStore.getInstance("PKCS12");
-			char[] partnerId2charArray = mchId.toCharArray();
-			keystore.load(inputStream, partnerId2charArray);
-			return SSLContexts.custom().loadKeyMaterial(keystore, partnerId2charArray).build();
-		} catch (Exception e) {
-			throw new RuntimeException("证书文件有问题，请核实！", e);
-		}
-	}
-
 	private void checkParameters(RefundReq request) {
 		if (StringUtils.isNotBlank(request.getRefund_account())) {
 			if (!ArrayUtils.contains(REFUND_ACCOUNT, request.getRefund_account())) {
-				throw new IllegalArgumentException("refund_account目前必须为" + Arrays.toString(REFUND_ACCOUNT) + "其中之一,实际值："
-						+ request.getRefund_account());
+				throw new IllegalArgumentException("refund_account目前必须为" + Arrays.toString(REFUND_ACCOUNT) + "其中之一,实际值：" + request.getRefund_account());
 			}
 		}
 		if (StringUtils.isBlank(request.getOut_trade_no()) && StringUtils.isBlank(request.getTransaction_id())) {
@@ -456,8 +412,7 @@ public class WxPayUtil {
 			throw new IllegalArgumentException("tar_type值如果存在，只能为GZIP");
 		}
 		if (!ArrayUtils.contains(BILL_TYPE, request.getBill_type())) {
-			throw new IllegalArgumentException(
-					"bill_tpye目前必须为" + Arrays.toString(BILL_TYPE) + "其中之一,实际值：" + request.getBill_type());
+			throw new IllegalArgumentException("bill_tpye目前必须为" + Arrays.toString(BILL_TYPE) + "其中之一,实际值：" + request.getBill_type());
 		}
 	}
 
@@ -475,8 +430,7 @@ public class WxPayUtil {
 
 	private void checkParameters(UnifiedOrderReq request) {
 		if (!ArrayUtils.contains(TRADE_TYPES, request.getTrade_type())) {
-			throw new IllegalArgumentException(
-					"trade_type目前必须为" + Arrays.toString(TRADE_TYPES) + "其中之一,实际值：" + request.getTrade_type());
+			throw new IllegalArgumentException("trade_type目前必须为" + Arrays.toString(TRADE_TYPES) + "其中之一,实际值：" + request.getTrade_type());
 		}
 		if ("JSAPI".equals(request.getTrade_type()) && request.getOpenid() == null) {
 			throw new IllegalArgumentException("当 trade_type是'JSAPI'时未指定openid");

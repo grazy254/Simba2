@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
-import com.simba.model.Template;
+import com.simba.model.PropertyTemplate;
 import com.simba.service.TemplateService;
 
 /**
@@ -35,7 +35,7 @@ public class TemplateController {
 	
 	@RequestMapping("/getList")
 	public String getList(Pager pager,ModelMap model){
-		List<Template> list = templateService.page(pager);
+		List<PropertyTemplate> list = templateService.page(pager);
 		model.put("list", list);
 		return "template/table";
 	}
@@ -53,7 +53,7 @@ public class TemplateController {
 	}
 
 	@RequestMapping("/add")
-	public String add(Template template) {
+	public String add(PropertyTemplate template) {
 		template.setCreateTime(new Date());
 		templateService.add(template);
 		return "redirect:/template/list";
@@ -61,13 +61,13 @@ public class TemplateController {
 
 	@RequestMapping("/toUpdate")
 	public String toUpdate(Long id, ModelMap model) {
-		Template template = templateService.get(id);
+		PropertyTemplate template = templateService.get(id);
 		model.put("template", template);
 		return "template/update";
 	}
 
 	@RequestMapping("/update")
-	public String update(Template template) {
+	public String update(PropertyTemplate template) {
 		template.setCreateTime(new Date());
 		templateService.update(template);
 		return "redirect:/template/list";
@@ -75,14 +75,14 @@ public class TemplateController {
 	
 	@RequestMapping("/showTemplate")
 	public String showTemplate(Long id, ModelMap model) {
-		Template template = templateService.get(id);
+		PropertyTemplate template = templateService.get(id);
 		model.put("template", template);
 		return "template/showTemplate";
 	}
 	@ResponseBody
 	@RequestMapping("/getTemplate")
 	public JsonResult getTemplate(Long id, ModelMap model) {
-		Template template = templateService.get(id);
+		PropertyTemplate template = templateService.get(id);
 		return new JsonResult(template,"",200);
 	}
 

@@ -175,6 +175,12 @@ def insert_prefix(text, keyword, inserted_text):
 
 
 def del_next_line(text, keyword):
+    """
+    删除下一行
+    :param text:
+    :param keyword:
+    :return: str: 删除行之后的结果 
+    """
     position = text.find(keyword)
     if position != -1:
         text_pre = text[:position + len(keyword)]
@@ -247,7 +253,8 @@ def do_PD_improve(text):
         if content.find('*/') == -1:
             ret = del_next_line(ret, line_str)
             ret = insert_suffix(ret, line_str, '\n    * ' + content)
-    ret = re.sub(r'/\*\*\s.+(?<!\*/)', '/**', ret)
+    # ret = re.sub(r'/\*\*\s.+(?<!\*/)', '/**', ret)
+    ret = re.sub(r'/\*\*\s[^\*\n]+', '/**', ret)
 
     # 生成所有getter和setter
     getter_setter_list = []
@@ -338,7 +345,7 @@ def run_with_cmd():
     except Exception as e:
         print('Translate Error')
     print("Translate complete!")
-    os.system('pause')
+    # os.system('pause')
 
 
 if __name__ == '__main__':

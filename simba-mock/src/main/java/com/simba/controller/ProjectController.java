@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
-import com.simba.model.Project;
+import com.simba.model.MockProject;
 import com.simba.model.ProjectUser;
 import com.simba.service.ProjectService;
 import com.simba.service.ProjectUserService;
@@ -42,7 +42,7 @@ public class ProjectController {
 
 	@RequestMapping("/getList")
 	public String getList(String sessAccount, Pager pager, ModelMap model) {
-		List<Project> projectList = new ArrayList<>();
+		List<MockProject> projectList = new ArrayList<>();
 		List<ProjectUser> projectUserObj = projectUserService.pageBy("account", sessAccount, pager);
 		for (ProjectUser projectUser : projectUserObj) {
 			projectList.add(projectService.get(projectUser.getProjectId()));
@@ -64,20 +64,20 @@ public class ProjectController {
 	}
 
 	@RequestMapping("/add")
-	public String add(String sessAccount, Project project) {
+	public String add(String sessAccount, MockProject project) {
 		projectService.add(sessAccount, project);
 		return "redirect:/project/list";
 	}
 
 	@RequestMapping("/toUpdate")
 	public String toUpdate(int id, ModelMap model) {
-		Project project = projectService.get(id);
+		MockProject project = projectService.get(id);
 		model.put("project", project);
 		return "project/update";
 	}
 
 	@RequestMapping("/update")
-	public String update(Project project) {
+	public String update(MockProject project) {
 		projectService.update(project);
 		return "redirect:/project/list";
 	}

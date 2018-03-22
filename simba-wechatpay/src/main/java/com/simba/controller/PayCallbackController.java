@@ -54,11 +54,12 @@ public class PayCallbackController {
 	 * @throws DOMException
 	 */
 	@RequestMapping("/receive")
-	public String receive(@RequestBody String body, ModelMap model)
-			throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+	public String receive(@RequestBody String body, ModelMap model) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		PayResult payResult = XmlUtil.toOject(body, PayResult.class);
 		payResult.composeCoupons(body);
-		payService.dealResult(payResult);
+		if (payService != null) {
+			payService.dealResult(payResult);
+		}
 		PayResultRes res = new PayResultRes();
 		res.setReturn_code("SUCCESS");
 		res.setReturn_msg("OK");

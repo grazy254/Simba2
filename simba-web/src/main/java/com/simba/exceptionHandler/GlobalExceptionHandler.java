@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.simba.exception.ErrorCodeException;
 import com.simba.exception.ForbidException;
 import com.simba.exception.LoginException;
 import com.simba.framework.util.common.ExceptionUtil;
@@ -62,7 +63,12 @@ class GlobalExceptionHandler {
 		ModelAndView model = new ModelAndView();
 		if (isJsonException(req)) {
 			model.setViewName("message");
-			String message = new JsonResult(e.getMessage(), 400).toJson();
+			String message = null;
+			if (e instanceof ErrorCodeException) {
+				message = new JsonResult(e.getMessage(), ((ErrorCodeException) e).getCode()).toJson();
+			} else {
+				message = new JsonResult(e.getMessage(), 400).toJson();
+			}
 			String callback = req.getParameter("callback");
 			if (StringUtils.isNotEmpty(callback)) {
 				message = callback + "(" + message + ")";

@@ -81,7 +81,7 @@ var Menu = {
 			}
 		});
 		if(ids.length == 0) {
-			parent.showInfo("请选择要删除的机构");
+			parent.showInfo("请选择要删除的菜单");
 			return false;
 		}
 		$.ajax({

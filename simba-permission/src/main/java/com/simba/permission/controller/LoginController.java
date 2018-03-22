@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.simba.common.EnvironmentUtil;
 import com.simba.framework.util.code.EncryptUtil;
 import com.simba.permission.model.Org;
 import com.simba.permission.model.OrgExt;
@@ -48,6 +49,10 @@ public class LoginController {
 	@Value("${page.login}")
 	private String loginPage;
 
+	private String longTitle;
+
+	private String shortTitle;
+
 	@Autowired
 	private UserService userService;
 
@@ -60,10 +65,15 @@ public class LoginController {
 	@Autowired
 	private OperLogService operLogService;
 
+	@Autowired
+	private EnvironmentUtil environmentUtil;
+
 	@PostConstruct
 	private void init() {
 		indexPage = StringUtils.defaultIfEmpty(indexPage, "index");
 		loginPage = StringUtils.defaultIfEmpty(loginPage, "login");
+		longTitle = StringUtils.defaultIfEmpty(environmentUtil.get("page.index.long.title"), "管理系统");
+		shortTitle = StringUtils.defaultIfEmpty(environmentUtil.get("page.index.short.title"), "系统");
 	}
 
 	/**
@@ -74,11 +84,17 @@ public class LoginController {
 	@RequestMapping("/toLogin")
 	public String toLogin(HttpServletRequest request, ModelMap model) {
 		if (SessionUtil.isLogin(request.getSession())) {
+			putIndexModel(model);
 			return indexPage;
 		}
 		String captchaEnabled = RegistryUtil.get("login.captcha.enabled");
 		model.put("captchaEnabled", captchaEnabled);
 		return loginPage;
+	}
+
+	private void putIndexModel(ModelMap model) {
+		model.put("shortTitle", shortTitle);
+		model.put("longTitle", longTitle);
 	}
 
 	/**
@@ -93,6 +109,7 @@ public class LoginController {
 	@RequestMapping("/login")
 	public String login(String userName, String password, ModelMap model, HttpServletRequest request) {
 		if (SessionUtil.isLogin(request.getSession())) {
+			putIndexModel(model);
 			return indexPage;
 		}
 		String view = null;
@@ -105,6 +122,7 @@ public class LoginController {
 			model.put("errMsg", "用户名和密码不能为空");
 		} else if (checkAccount(userName, password, request.getSession())) {
 			operLogService.add(request, "登录", true);
+			putIndexModel(model);
 			view = indexPage;
 		} else {
 			view = loginPage;

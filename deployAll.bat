@@ -40,6 +40,12 @@ cd ../
 cd simba-python
 call mvn clean -U deploy
 cd ../
+cd simba-netty
+call mvn clean -U deploy
+cd ../
+cd simba-mqtt
+call mvn clean -U deploy
+cd ../
 cd simba-office
 call mvn clean -U deploy
 cd ../
@@ -235,7 +241,40 @@ cd ../
 cd simba-wechatpay
 call mvn clean -U deploy
 cd ../
+cd simba-wechat-enterprise-pay
+call mvn clean -U deploy
+cd ../
+cd simba-wechat-redpack
+call mvn clean -U deploy
+cd ../
 cd simba-config-management
 call mvn clean -U deploy
+cd ../
+cd simba-wechat-pay-bill
+call mvn clean -U  deploy
+cd ../
+cd simba-wechat-redpack-bill
+call mvn clean -U  deploy
+cd ../
+cd simba-wechat-enterprise-bill
+call mvn clean -U  deploy
+cd ../
+cd simba-wechat-management
+call mvn clean -U  deploy
+cd ../
+cd simba-version-management
+call mvn clean -U  deploy
+cd ../
+cd simba-switch-management
+call mvn clean -U  deploy
+cd ../
+cd simba-msg-management
+call mvn clean -U  deploy
+cd ../
+cd simba-user-management
+call mvn clean -U  deploy
+cd ../
+cd simba-realtime-management
+call mvn clean -U  deploy
 cd ../
 echo " deplay all finish "

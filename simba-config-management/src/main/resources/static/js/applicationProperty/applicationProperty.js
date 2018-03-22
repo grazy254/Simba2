@@ -1,4 +1,8 @@
 var ApplicationProperty = {
+	
+	"auth": function(id) {
+		top.showModal("权限设置", contextPath + "/applicationProperty/auth?id=" + id, 600);
+	},
 
 	"showDevProperty": function(id) {
 		top.showModal("查看开发版配置", contextPath + "/applicationProperty/showDevProperty?id=" + id, 600);
@@ -37,9 +41,9 @@ var ApplicationProperty = {
 				dataType: "json",
 				success: function(data) {
 					if(data.code == 200) {
-						document.getElementById("dev").value = data.data.template;
-						document.getElementById("test").value = data.data.template;
-						document.getElementById("prod").value = data.data.template;
+						document.getElementById("dev").value=data.data.template;
+						document.getElementById("test").value=data.data.template;
+						document.getElementById("prod").value=data.data.template;
 					} else {
 						parent.showInfo("获取模板失败");
 					}
@@ -51,6 +55,82 @@ var ApplicationProperty = {
 		}
 
 	},
+	
+	"setTemplateDev": function(val,selectedIndex) {
+		if(confirm("切换模板将会把原来的配置文件重置，确定要这样做吗？")) {
+			$.ajax({
+				type: "post",
+				url: contextPath + "/template/getTemplate",
+				data: {
+					id: val.value
+				},
+				async: true,
+				dataType: "json",
+				success: function(data) {
+					if(data.code == 200) {
+						document.getElementById("dev").value=data.data.template;
+					} else {
+						parent.showInfo("获取模板失败");
+					}
+				}
+			});
+		} else {
+			alert(selectedIndex);
+			document.getElementById("templateId").selectedIndex =selectedIndex; 
+		}
+
+	},
+	"setTemplateProd": function(val,selectedIndex) {
+		if(confirm("切换模板将会把原来的配置文件重置，确定要这样做吗？")) {
+			$.ajax({
+				type: "post",
+				url: contextPath + "/template/getTemplate",
+				data: {
+					id: val.value
+				},
+				async: true,
+				dataType: "json",
+				success: function(data) {
+					if(data.code == 200) {
+						document.getElementById("prod").value=data.data.template;
+					} else {
+						parent.showInfo("获取模板失败");
+					}
+				}
+			});
+		} else {
+			alert(selectedIndex);
+			document.getElementById("templateId").selectedIndex =selectedIndex; 
+		}
+
+	},
+	
+	"setTemplateTest": function(val,selectedIndex) {
+		if(confirm("切换模板将会把原来的配置文件重置，确定要这样做吗？")) {
+			$.ajax({
+				type: "post",
+				url: contextPath + "/template/getTemplate",
+				data: {
+					id: val.value
+				},
+				async: true,
+				dataType: "json",
+				success: function(data) {
+					if(data.code == 200) {
+						document.getElementById("test").value=data.data.template;
+					} else {
+						parent.showInfo("获取模板失败");
+					}
+				}
+			});
+		} else {
+			alert(selectedIndex);
+			document.getElementById("templateId").selectedIndex =selectedIndex; 
+		}
+
+	},
+	
+	
 
 	"toAdd": function() {
 		window.self.location.href = contextPath + "/applicationProperty/toAdd";
@@ -122,6 +202,15 @@ var ApplicationProperty = {
 
 	"toUpdate": function(id) {
 		window.self.location.href = contextPath + "/applicationProperty/toUpdate?id=" + id;
+	},
+	"toUpdateDev": function(id) {
+		window.self.location.href = contextPath + "/applicationProperty/toUpdateDev?id=" + id;
+	},
+	"toUpdateProd": function(id) {
+		window.self.location.href = contextPath + "/applicationProperty/toUpdateProd?id=" + id;
+	},
+	"toUpdateTest": function(id) {
+		window.self.location.href = contextPath + "/applicationProperty/toUpdateTest?id=" + id;
 	},
 
 	"deleteApplicationProperty": function(id) {

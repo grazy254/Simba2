@@ -8,7 +8,7 @@ drop table if exists applicationUser;
 
 drop table if exists property;
 
-drop table if exists template;
+drop table if exists propertyTemplate;
 
 /*==============================================================*/
 /* Table: applicationUser                                       */
@@ -17,7 +17,7 @@ create table applicationUser
 (
    id                   int not null auto_increment,
    userId               int not null,
-   appliactionId        int not null,
+   applicationId        int not null,
    userType             tinyint,
    primary key (id)
 );
@@ -38,9 +38,9 @@ create table property
 );
 
 /*==============================================================*/
-/* Table: template                                              */
+/* Table: propertyTemplate*/
 /*==============================================================*/
-create table template
+create table propertyTemplate
 (
    id                   int not null auto_increment,
    name                 varchar(64) not null,

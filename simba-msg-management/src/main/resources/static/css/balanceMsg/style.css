@@ -1,0 +1,12 @@
+.td_lable {
+    width: 220px;
+    background-color: #E5E5E5;
+}
+
+div#chart-search-form {
+    padding: 10px;
+}
+
+div#balance-table {
+    margin-top: 10px;
+}

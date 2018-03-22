@@ -1,7 +1,7 @@
 package com.simba.model.pay.unifiedorder;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.simba.framework.util.common.XmlUtil;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  * 统一下单请求对象
@@ -99,7 +99,13 @@ public class UnifiedOrderReq {
 	private String notify_url;
 
 	/**
-	 * 取值如下：JSAPI，NATIVE，APP等
+	 * 取值如下：JSAPI 公众号支付/小程序支付
+	 * 
+	 * NATIVE 扫码支付
+	 * 
+	 * APP APP支付
+	 * 
+	 * MWEB H5支付
 	 */
 	private String trade_type;
 
@@ -117,6 +123,43 @@ public class UnifiedOrderReq {
 	 * trade_type=JSAPI时（即公众号支付），此参数必传，此参数为微信用户在商户对应appid下的唯一标识。
 	 */
 	private String openid;
+
+	/**
+	 * 场景信息 MWEB:
+	 * 该字段用于上报支付的场景信息,针对H5支付有以下三种场景,请根据对应场景上报,H5支付不建议在APP端使用，针对场景1，2请接入APP支付，不然可能会出现兼容性问题
+	 * 
+	 * 1，IOS移动应用 {"h5_info": //h5支付固定传"h5_info" {"type": "", //场景类型 "app_name":
+	 * "", //应用名 "bundle_id": "" //bundle_id } }
+	 * 
+	 * 2，安卓移动应用 {"h5_info": //h5支付固定传"h5_info" {"type": "", //场景类型 "app_name":
+	 * "", //应用名 "package_name": "" //包名 } }
+	 * 
+	 * 3，WAP网站应用 {"h5_info": //h5支付固定传"h5_info" {"type": "", //场景类型 "wap_url":
+	 * "",//WAP网站URL地址 "wap_name": "" //WAP 网站名 } }
+	 * 
+	 * APP: 该字段用于统一下单时上报场景信息，目前支持上报实际门店信息。
+	 * 
+	 * { "store_id": "", //门店唯一标识，选填，String(32)
+	 * "store_name":"”//门店名称，选填，String(64)
+	 * 
+	 * }
+	 * 
+	 * NATIVE: 该字段用于上报场景信息，目前支持上报实际门店信息。该字段为JSON对象数据，对象格式为{"store_info":{"id":
+	 * "门店ID","name": "名称","area_code": "编码","address": "地址" }} ，字段详细说明请点击行前的+展开
+	 * 
+	 * JSAPI : 该字段用于上报场景信息，目前支持上报实际门店信息。该字段为JSON对象数据，对象格式为{"store_info":{"id":
+	 * "门店ID","name": "名称","area_code": "编码","address": "地址" }} ，字段详细说明请点击行前的+展开
+	 * 
+	 */
+	private String scene_info;
+
+	public String getScene_info() {
+		return scene_info;
+	}
+
+	public void setScene_info(String scene_info) {
+		this.scene_info = scene_info;
+	}
 
 	public String getAppid() {
 		return appid;

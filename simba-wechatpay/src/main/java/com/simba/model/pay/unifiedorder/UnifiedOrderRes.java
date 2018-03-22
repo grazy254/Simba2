@@ -76,6 +76,19 @@ public class UnifiedOrderRes {
 	 */
 	private String code_url;
 
+	/**
+	 * 支付跳转链接 mweb_url为拉起微信支付收银台的中间页面，可通过访问该url来拉起微信客户端，完成支付,mweb_url的有效期为5分钟。
+	 */
+	private String mweb_url;
+
+	public String getMweb_url() {
+		return mweb_url;
+	}
+
+	public void setMweb_url(String mweb_url) {
+		this.mweb_url = mweb_url;
+	}
+
 	public String getReturn_code() {
 		return return_code;
 	}
@@ -183,7 +196,7 @@ public class UnifiedOrderRes {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("UnifiedorderRes [return_code=");
+		builder.append("UnifiedOrderRes [return_code=");
 		builder.append(return_code);
 		builder.append(", return_msg=");
 		builder.append(return_msg);
@@ -209,6 +222,8 @@ public class UnifiedOrderRes {
 		builder.append(trade_type);
 		builder.append(", code_url=");
 		builder.append(code_url);
+		builder.append(", mweb_url=");
+		builder.append(mweb_url);
 		builder.append("]");
 		return builder.toString();
 	}

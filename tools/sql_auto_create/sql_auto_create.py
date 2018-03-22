@@ -14,6 +14,7 @@ import natsort
 HOST = '127.0.0.1'
 USER = 'root'
 PASSWORD = 'ut123456'
+PORT = 3306
 
 DEL_TABLE = 'DROP TABLE %s'
 DEL_DATABASE = 'DROP DATABASE %s'
@@ -26,9 +27,9 @@ def delete_database(name):
     :return:
     """
     try:
-        conn = pymysql.connect(host=HOST, user=USER, passwd=PASSWORD, port=3306, charset='utf8')
+        conn = pymysql.connect(host=HOST, user=USER, passwd=PASSWORD, port=PORT, charset='utf8')
         cur = conn.cursor()
-        cur.execute(DEL_DATABASE(name))
+        cur.execute(DEL_DATABASE%(name))
         cur.close()
         conn.commit()
         conn.close()
@@ -42,7 +43,7 @@ def create_database(name):
     :return:
     """
     try:
-        conn = pymysql.connect(host=HOST, user=USER, passwd=PASSWORD, port=3306, charset='utf8')
+        conn = pymysql.connect(host=HOST, user=USER, passwd=PASSWORD, port=PORT, charset='utf8')
         cur = conn.cursor()
         cur.execute('CREATE DATABASE ' + name)
         cur.close()
@@ -52,8 +53,11 @@ def create_database(name):
         print(e)
 
 
-def get_mysql_session(user, password, db_name):
-    DB_CON_STR = 'mysql+pymysql://%s:%s@localhost/%s?charset=utf8mb4' % (user, password, db_name)
+def get_mysql_session(user, password, ip, port, db_name):
+    """
+    建立连接, 返回数据库连接对象, 用于增删改
+    """
+    DB_CON_STR = 'mysql+pymysql://%s:%s@%s:%s/%s?charset=utf8mb4' % (user, password, ip, port, db_name)
     print(DB_CON_STR)
     engine = create_engine(DB_CON_STR, echo=False)
     DBSession = sessionmaker(bind=engine)
@@ -110,9 +114,9 @@ def get_file_content(file_path):
 
 def auto_create(name):
     print('数据库初始化中...')
-    delete_database(name)
+    # delete_database(name)     # 删库太危险,暂时屏蔽
     create_database(name)
-    mysession = get_mysql_session('root', 'ut123456', name)
+    mysession = get_mysql_session(USER, PASSWORD, HOST, PORT, name)
     for x in get_suffixfiles_fullpath('.sql'):
         path,filename = os.path.split(x)
         print('执行SQL文件:',filename,"...")
@@ -124,10 +128,18 @@ def auto_create(name):
 def run_with_cmd():
     global USER
     global PASSWORD
+    global HOST
+    global PORT
     database_name = input('数据库名:')
     if database_name != '':
+        mysql_ip = input('ip(默认127.0.0.1):')
+        mysql_port = input('port(默认3306):')
         username = input('用户(默认root):')
         pwd = input('密码(默认ut123456):')
+        if mysql_ip != '':
+            HOST = mysql_ip
+        if mysql_port != '':
+            PORT = mysql_port
         if username != '':
             USER = username
         if pwd != '':

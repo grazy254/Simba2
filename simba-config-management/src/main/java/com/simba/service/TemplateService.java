@@ -3,7 +3,7 @@ package  com.simba.service;
 import java.util.List;
 
 import com.simba.framework.util.jdbc.Pager;
-import com.simba.model.Template;
+import com.simba.model.PropertyTemplate;
 
 /**
  *配置模板表 Service
@@ -13,13 +13,13 @@ import com.simba.model.Template;
  */
 public interface TemplateService {
 
-	void add(Template template);
+	void add(PropertyTemplate template);
 
-	void update(Template template);
+	void update(PropertyTemplate template);
 
 	void delete(Long id);
 
-	List<Template> listAll();
+	List<PropertyTemplate> listAll();
 
 	Long count();
 	
@@ -27,28 +27,28 @@ public interface TemplateService {
 	
 	void deleteBy(String field, Object value);
 	
-	List<Template> page(Pager page);
+	List<PropertyTemplate> page(Pager page);
 
-	Template get(Long id);
+	PropertyTemplate get(Long id);
 	
 	void batchDelete(List<Long> idList);
 
-	Template getBy(String field, Object value);
+	PropertyTemplate getBy(String field, Object value);
 
-	Template getByAnd(String field1, Object value1, String field2, Object value2);
+	PropertyTemplate getByAnd(String field1, Object value1, String field2, Object value2);
 
-	Template getByOr(String field1, Object value1, String field2, Object value2);
+	PropertyTemplate getByOr(String field1, Object value1, String field2, Object value2);
 
-	List<Template> listBy(String field, Object value);
+	List<PropertyTemplate> listBy(String field, Object value);
 
-	List<Template> listByAnd(String field1, Object value1, String field2, Object value2);
+	List<PropertyTemplate> listByAnd(String field1, Object value1, String field2, Object value2);
 
-	List<Template> listByOr(String field1, Object value1, String field2, Object value2);
+	List<PropertyTemplate> listByOr(String field1, Object value1, String field2, Object value2);
 
-	List<Template> pageBy(String field, Object value, Pager page);
+	List<PropertyTemplate> pageBy(String field, Object value, Pager page);
 
-	List<Template> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
+	List<PropertyTemplate> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
 
-	List<Template> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
+	List<PropertyTemplate> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
 
 }

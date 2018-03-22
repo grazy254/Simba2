@@ -180,6 +180,51 @@
 				<artifactId>simba-mock</artifactId>
 				<version>${simba.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.simba</groupId>
+				<artifactId>simba-wechat-management</artifactId>
+				<version>${simba.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.simba</groupId>
+				<artifactId>simba-version-management</artifactId>
+				<version>${simba.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.simba</groupId>
+				<artifactId>simba-switch-management</artifactId>
+				<version>${simba.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.simba</groupId>
+				<artifactId>simba-msg-management</artifactId>
+				<version>${simba.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.simba</groupId>
+				<artifactId>simba-user-management</artifactId>
+				<version>${simba.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.simba</groupId>
+				<artifactId>simba-realtime-management</artifactId>
+				<version>${simba.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.simba</groupId>
+				<artifactId>simba-wechat-enterprise-bill</artifactId>
+				<version>${simba.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.simba</groupId>
+				<artifactId>simba-wechat-redpack-bill</artifactId>
+				<version>${simba.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.simba</groupId>
+				<artifactId>simba-wechat-pay-bill</artifactId>
+				<version>${simba.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

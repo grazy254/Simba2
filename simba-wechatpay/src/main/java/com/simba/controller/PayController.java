@@ -71,7 +71,9 @@ public class PayController {
 			String openid = (String) request.getSession().getAttribute("openid");
 			req.setOpenid(openid);
 		}
-		payService.dealOrder(req);
+		if (payService != null) {
+			payService.dealOrder(req);
+		}
 		UnifiedOrderRes res = WxPayUtil.getInstance().unifiedOrder(req);
 		String prePayId = res.getPrepay_id();
 		String codeUrl = res.getCode_url();

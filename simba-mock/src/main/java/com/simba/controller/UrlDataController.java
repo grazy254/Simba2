@@ -27,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.framework.util.office.ExcelUtilFor2007;
-import com.simba.model.Project;
+import com.simba.model.MockProject;
 import com.simba.model.UrlData;
 import com.simba.service.ProjectService;
 import com.simba.service.UrlDataService;
@@ -119,7 +119,7 @@ public class UrlDataController {
 		ResponseEntity<byte[]> responseEntity = null;
 		if (null != urlDataList && !urlDataList.isEmpty()) {
 			OutputStream out = new ByteArrayOutputStream();
-			Project project = projectService.get(NumberUtils.toInt(Objects.toString(projectId)));
+			MockProject project = projectService.get(NumberUtils.toInt(Objects.toString(projectId)));
 			List<List<String>> rows = new ArrayList<>();
 			// add excel header
 			List<String> header = new ArrayList<>();

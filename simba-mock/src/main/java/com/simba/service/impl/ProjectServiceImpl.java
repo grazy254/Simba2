@@ -10,7 +10,7 @@ import com.simba.dao.ProjectDao;
 import com.simba.dao.ProjectUserDao;
 import com.simba.dao.UrlDataDao;
 import com.simba.framework.util.jdbc.Pager;
-import com.simba.model.Project;
+import com.simba.model.MockProject;
 import com.simba.service.ProjectService;
 
 /**
@@ -33,12 +33,12 @@ public class ProjectServiceImpl implements ProjectService {
 	private UrlDataDao urlDataDao;
 
 	@Override
-	public void add(Project project) {
+	public void add(MockProject project) {
 		projectDao.add(project);
 	}
 
 	@Override
-	public void add(String sessAccount, Project project) {
+	public void add(String sessAccount, MockProject project) {
 		projectDao.add(sessAccount, project);
 	}
 
@@ -51,13 +51,13 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Project get(Integer id) {
+	public MockProject get(Integer id) {
 		return projectDao.get(id);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Project> page(Pager page) {
+	public List<MockProject> page(Pager page) {
 		return projectDao.page(page);
 	}
 
@@ -75,12 +75,12 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Project> listAll() {
+	public List<MockProject> listAll() {
 		return projectDao.listAll();
 	}
 
 	@Override
-	public void update(Project project) {
+	public void update(MockProject project) {
 		projectDao.update(project);
 	}
 
@@ -93,55 +93,55 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Project getBy(String field, Object value) {
+	public MockProject getBy(String field, Object value) {
 		return projectDao.getBy(field, value);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public Project getByAnd(String field1, Object value1, String field2, Object value2) {
+	public MockProject getByAnd(String field1, Object value1, String field2, Object value2) {
 		return projectDao.getByAnd(field1, value1, field2, value2);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public Project getByOr(String field1, Object value1, String field2, Object value2) {
+	public MockProject getByOr(String field1, Object value1, String field2, Object value2) {
 		return projectDao.getByOr(field1, value1, field2, value2);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Project> listBy(String field, Object value) {
+	public List<MockProject> listBy(String field, Object value) {
 		return projectDao.listBy(field, value);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Project> listByAnd(String field1, Object value1, String field2, Object value2) {
+	public List<MockProject> listByAnd(String field1, Object value1, String field2, Object value2) {
 		return projectDao.listByAnd(field1, value1, field2, value2);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Project> listByOr(String field1, Object value1, String field2, Object value2) {
+	public List<MockProject> listByOr(String field1, Object value1, String field2, Object value2) {
 		return projectDao.listByOr(field1, value1, field2, value2);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Project> pageBy(String field, Object value, Pager page) {
+	public List<MockProject> pageBy(String field, Object value, Pager page) {
 		return projectDao.pageBy(field, value, page);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Project> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page) {
+	public List<MockProject> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page) {
 		return projectDao.pageByAnd(field1, value1, field2, value2, page);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Project> pageByOr(String field1, Object value1, String field2, Object value2, Pager page) {
+	public List<MockProject> pageByOr(String field1, Object value1, String field2, Object value2, Pager page) {
 		return projectDao.pageByOr(field1, value1, field2, value2, page);
 	}
 

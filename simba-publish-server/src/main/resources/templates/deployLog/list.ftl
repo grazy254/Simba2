@@ -37,7 +37,6 @@
 									<table class="table table-hover table-striped table-bordered" id="table">
 										<thead>
 											<tr>
-												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
 												<th>项目名称</th>
 												<th>时间</th>
 											</tr>

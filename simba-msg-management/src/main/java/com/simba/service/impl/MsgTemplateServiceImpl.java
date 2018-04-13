@@ -169,11 +169,11 @@ public class MsgTemplateServiceImpl implements MsgTemplateService {
 		EntryPlatform entryPlatform = new EntryPlatform();
 		if (jiGuangId != null) {
 			entryPlatform.setTemplateId(jiGuangId);
-			entryPlatform.setPlaformType(MsgType.JPUSH);
+			entryPlatform.setPlatformType(MsgType.JPUSH);
 			return entryPlatform;
 		} else if (aliId != null) {
 			entryPlatform.setTemplateId(aliId);
-			entryPlatform.setPlaformType(MsgType.ALI);
+			entryPlatform.setPlatformType(MsgType.ALI);
 			return entryPlatform;
 		}
 		return null;

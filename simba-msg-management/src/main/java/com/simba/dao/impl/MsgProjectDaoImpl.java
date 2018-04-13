@@ -23,7 +23,7 @@ public class MsgProjectDaoImpl implements MsgProjectDao {
 	@Autowired
 	private Jdbc jdbc;
 
-	private static final String table = "project";
+	private static final String table = "msgProject";
 
 	@Override
 	public void add(MsgProject project) {

@@ -16,7 +16,7 @@ import com.simba.framework.util.json.JsonResult;
 import com.simba.jpush.msg.util.JpushMsgUtil;
 import com.simba.model.MsgProject;
 import com.simba.model.ShortMessage;
-import com.simba.model.Vo.ShortMessageVo;
+import com.simba.model.VO.ShortMessageVo;
 import com.simba.model.form.ShortMsgSearchForm;
 import com.simba.service.MsgProjectService;
 import com.simba.service.SendMsgService;

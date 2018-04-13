@@ -118,6 +118,10 @@
 			<groupId>com.simba</groupId>
 			<artifactId>simba-wechat-pay-bill</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-database-management</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -76,8 +76,15 @@ public class UserIdWebSocketHandler implements WebSocketHandler {
 
 	@Override
 	public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
+		RedisUtil redisUtil = ApplicationContextUtil.getBean(RedisUtil.class);
 		String userId = getUserId(session);
 		logger.error("用户websocket连接发生异常:" + userId, exception);
+		if (StringUtils.isNotEmpty(userId)) {
+			UserIdConnectionPool.getInstance().remove(userId);
+			logger.info("清空websocket连接[userId:" + userId + "]");
+		}
+		// 连接断开后，统计当前离线用户+1
+		redisUtil.getAutoId("offlineCount");
 	}
 
 	@Override

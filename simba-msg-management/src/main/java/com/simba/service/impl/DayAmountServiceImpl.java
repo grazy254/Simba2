@@ -6,6 +6,7 @@ import com.simba.framework.util.date.DateUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.DayAmount;
 import com.simba.model.TotalDayAmountBean;
+import com.simba.model.other.RedisKey;
 import com.simba.service.DayAmountService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,16 +38,10 @@ public class DayAmountServiceImpl implements DayAmountService {
     @Autowired
     private DayAmountService dayAmountService;
 
-    @Value(value = "${msg.rediskey.dayAmount}")
-    private String MSG_DAY_AMOUNT_REDISKEY;
-
-    private static final String TIMERLOCK_REDIS_KEY = "shortmsg_timer_lock";
-    private static final String STATUS_LOCKED = "LOCKED";
-
     @PostConstruct
     private void init() {
-        if (redisUtil.get(MSG_DAY_AMOUNT_REDISKEY) == null) {
-            redisUtil.set(MSG_DAY_AMOUNT_REDISKEY, new HashMap<Integer, Integer>());
+        if (redisUtil.get(RedisKey.DAY_AMOUNT) == null) {
+            redisUtil.set(RedisKey.DAY_AMOUNT, new HashMap<Integer, Integer>());
         }
         logger.info("短信用量定时器开启");
     }
@@ -211,9 +206,9 @@ public class DayAmountServiceImpl implements DayAmountService {
      */
     @Scheduled(cron = "0 0 1 * * ?")
     private void countDayMsg() {
-        boolean isLock =  redisUtil.tryLock(TIMERLOCK_REDIS_KEY, 60);
+        boolean isLock = redisUtil.tryLock(RedisKey.TIMERLOCK_REDIS_KEY, 60);
         if (isLock) {
-            Map<Integer, Integer> projectIdToAmount = (Map<Integer, Integer>) redisUtil.get(MSG_DAY_AMOUNT_REDISKEY);
+            Map<Integer, Integer> projectIdToAmount = (Map<Integer, Integer>) redisUtil.get(RedisKey.DAY_AMOUNT);
             for (Integer projectId : projectIdToAmount.keySet()) {
                 DayAmount newDayAmount = new DayAmount();
                 newDayAmount.setAmount(projectIdToAmount.get(projectId));
@@ -222,7 +217,7 @@ public class DayAmountServiceImpl implements DayAmountService {
                 dayAmountService.add(newDayAmount);
             }
             // 清0
-            redisUtil.set(MSG_DAY_AMOUNT_REDISKEY, new HashMap<Integer, Integer>());
+            redisUtil.set(RedisKey.DAY_AMOUNT, new HashMap<Integer, Integer>());
         }
     }
 

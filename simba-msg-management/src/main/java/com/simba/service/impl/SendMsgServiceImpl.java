@@ -4,15 +4,19 @@ import com.simba.cache.RedisUtil;
 import com.simba.framework.util.code.EncryptUtil;
 import com.simba.framework.util.date.DateUtil;
 import com.simba.framework.util.json.FastJsonUtil;
+import com.simba.framework.util.json.JsonResult;
 import com.simba.mobile.message.model.MsgType;
 import com.simba.mobile.message.util.SendMsgUtil;
 import com.simba.model.MsgProject;
 import com.simba.model.ShortMessage;
 import com.simba.model.MsgTemplate;
 import com.simba.model.enums.SendStatus;
+import com.simba.model.other.RedisKey;
 import com.simba.service.*;
 import com.simba.model.other.MsgPostArgs;
+import com.simba.service.DO.EntryPlatform;
 import com.simba.util.EmailUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +24,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -35,31 +38,25 @@ public class SendMsgServiceImpl implements SendMsgService {
     private static final Log logger = LogFactory.getLog(SendMsgServiceImpl.class);
 
     @Autowired
-    MsgProjectService projectService;
+    private MsgProjectService projectService;
 
     @Autowired
-    MsgTemplateService templateService;
+    private MsgTemplateService templateService;
 
     @Autowired
-    ShortMessageService shortMessageService;
+    private ShortMessageService shortMessageService;
 
     @Autowired
-    MsgBlacklistService blacklistService;
+    private MsgBlacklistService blacklistService;
 
     @Autowired
-    RedisUtil redisUtil;
+    private RedisUtil redisUtil;
 
     @Autowired
-    EmailUtil emailUtil;
+    private EmailUtil emailUtil;
 
     @Autowired
-    SendMsgUtil sendMsgUtil;
-
-    @Value(value = "${msg.rediskey.dayAmount}")
-    private String MSG_DAY_AMOUNT_REDISKEY;
-
-    @Value(value = "${msg.rediskey.msgArgs}")
-    private String MSG_ID_ARGS_MAP;
+    private SendMsgUtil sendMsgUtil;
 
     @Value(value = "${project.alarm.email}")
     private boolean emailAlarmEnable;
@@ -67,58 +64,102 @@ public class SendMsgServiceImpl implements SendMsgService {
     @Value(value = "${project.alarm.shortmsg}")
     private boolean shortmsgAlarmEnable;
 
-    private static final int RESEND_LIMIT_TIMES = 3;
 
     /**
-     * 群发没有返回MessageId,这里MULTI_SEND_ID是群发的标识
-     */
-    public static final String MULTI_SEND_ID = "MULTI_SEND_ID";
-
-    /**
-     * 持久化短信
+     * 发送+记录
      *
-     * @param msgPostArgs
-     * @param sendDate
-     * @param sendStatus
-     * @param platform
-     * @param messageId
+     * @param mobile
+     * @param selfTemplateId
+     * @param params
+     * @param projectId
      * @return
      */
     @Override
-    public int addShortMessage(MsgPostArgs msgPostArgs, Date sendDate, SendStatus sendStatus, MsgType platform, String messageId) {
-        ShortMessage shortMessage = new ShortMessage();
-        List<String> mobileList = FastJsonUtil.toObject(msgPostArgs.getMobileList(),List.class);
-        shortMessage.setValue(msgPostArgs.getValues());
-        shortMessage.setPlatform(platform.getType());
-        shortMessage.setSendDate(sendDate);
-        shortMessage.setStatus(sendStatus.getId());
-        shortMessage.setProjectId(Integer.valueOf(msgPostArgs.getProjectId()));
-        shortMessage.setTemplateId(msgPostArgs.getTemplateSelfId());
-        shortMessage.setMessageId(messageId);
-        mobileList.forEach(moblieNo -> {
-            shortMessage.setMobile(moblieNo);
+    public JsonResult sendSimply(String mobile, String selfTemplateId, Map<String, String> params, String projectId) {
+        EntryPlatform platform = templateService.getOnePlatformTemplateId(selfTemplateId);
+        if (platform == null) {
+            return new JsonResult(JsonResult.failCode, "模板Id有误");
+        }
+        String platformTemplateId = platform.getTemplateId();
+        MsgType platformType = platform.getPlatformType();
+        String messageId = sendOneMessage(mobile, platformTemplateId, params, platformType, Integer.valueOf(projectId));
+        if (!StringUtils.isEmpty(messageId)) {
+            SendStatus sendStatus = SendStatus.SUCCESS;
+            ShortMessage shortMessage = new ShortMessage();
+            shortMessage.setValue(FastJsonUtil.toJson(params, false));
+            shortMessage.setPlatform(platformType.getType());
+            shortMessage.setSendDate(DateUtil.getTime());
+            shortMessage.setStatus(sendStatus.getId());
+            shortMessage.setProjectId(Integer.parseInt(projectId));
+            shortMessage.setTemplateId(platformTemplateId);
+            shortMessage.setMessageId(messageId);
+            shortMessage.setMobile(mobile);
             shortMessageService.add(shortMessage);
-        });
-        return 0;
+            return new JsonResult(JsonResult.successCode);
+        } else {
+            return new JsonResult(JsonResult.failCode, "第三方短信接口无返回短信Id");
+        }
     }
+
+    /**
+     * 校验+发送+记录
+     *
+     * @param msgPostArgs
+     * @param ip
+     * @return
+     */
+    @Override
+    public JsonResult checkAndSend(MsgPostArgs msgPostArgs, String ip) {
+        Map<String, String> values = FastJsonUtil.toObject(msgPostArgs.getValues(), Map.class);
+        boolean isVerified = check(msgPostArgs.getMobile(), Integer.parseInt(msgPostArgs.getProjectId()), msgPostArgs.getTimeStamp(), msgPostArgs.getCipherText(), ip);
+        if (isVerified) {
+            return sendSimply(msgPostArgs.getMobile(), msgPostArgs.getTemplateSelfId(), values, msgPostArgs.getProjectId());
+        } else {
+            return new JsonResult(JsonResult.failCode, "校验失败");
+        }
+    }
+
+    /**
+     * 短信重发
+     *
+     * @param msgId shortmessage中的id字段
+     * @return
+     */
+    @Override
+    public ShortMessage resend(long msgId) {
+        ShortMessage shortMessage = shortMessageService.get(msgId);
+        MsgType platform = MsgType.getByType(shortMessage.getPlatform());
+        MsgTemplate template = templateService.getBy("selfId", shortMessage.getTemplateId());
+        String realTemplateId = null;
+        if (platform == MsgType.JPUSH) {
+            realTemplateId = template.getJpushTemplateId();
+        } else if (platform == MsgType.ALI) {
+            realTemplateId = template.getAliTemplateId();
+        }
+        Map<String, String> values = FastJsonUtil.toObject(shortMessage.getValue(), Map.class);
+        String newMessageId = sendMsgUtil.send(shortMessage.getMobile(), realTemplateId, values, platform);
+        increaseSendNum(shortMessage.getProjectId(), 1);
+        shortMessage.setMessageId(newMessageId);
+        shortMessage.setStatus(SendStatus.UNKNOWN.getId());
+        shortMessage.setSendDate(DateUtil.getTime());
+        shortMessageService.update(shortMessage);
+        logger.info("短信已重发,手机号为" + shortMessage.getMobile());
+        return shortMessage;
+    }
+
 
     /**
      * 校验MD5密文
      *
-     * @param msgPostArgs
+     * @param projectId
+     * @param timeStamp
+     * @param cipherText
      * @return
      */
-    @Transactional(readOnly = true)
-    @Override
-    public boolean checkSecret(MsgPostArgs msgPostArgs) {
-        String projectKey = projectService.getProjectKeyBySelfId(msgPostArgs.getProjectId());
-        String verifyMD5 = EncryptUtil.md5(projectKey + msgPostArgs.getTimeStamp());
-        String cipherText = msgPostArgs.getCipherText();
-        if (verifyMD5 == null) {
-            return false;
-        } else {
-            return verifyMD5.equals(cipherText);
-        }
+    private boolean checkSecret(int projectId, long timeStamp, String cipherText) {
+        String projectKey = projectService.getProjectKeyBySelfId(String.valueOf(projectId));
+        String verifyMD5 = EncryptUtil.md5(projectKey + timeStamp);
+        return verifyMD5.equals(cipherText);
     }
 
     /**
@@ -127,14 +168,11 @@ public class SendMsgServiceImpl implements SendMsgService {
      * @param projectId
      * @return
      */
-    @Override
-    public boolean checkExcess(int projectId) {
+    private boolean checkExcess(int projectId) {
         // <K, V> --> <ProjectId, SendAmount>
-        Map<Integer, Integer> msgAmountMap = (Map<Integer, Integer>) redisUtil.get(MSG_DAY_AMOUNT_REDISKEY);
+        Map<Integer, Integer> msgAmountMap = (Map<Integer, Integer>) redisUtil.get(RedisKey.DAY_AMOUNT);
         // 发送量
-        if (msgAmountMap.get(projectId) == null) {
-            msgAmountMap.put(projectId, 0);
-        }
+        msgAmountMap.putIfAbsent(projectId, 0);
         Integer sendNum = msgAmountMap.get(projectId);
         MsgProject project = projectService.listBy("id", projectId).get(0);
         int threholdNum = (int) (project.getLimitNum() * project.getThreshold());
@@ -161,8 +199,7 @@ public class SendMsgServiceImpl implements SendMsgService {
      * @param ip
      * @return true:合法 false:不合法
      */
-    @Override
-    public boolean checkIp(int projectId, String ip) {
+    private boolean checkIp(int projectId, String ip) {
         MsgProject project = projectService.get(projectId);
         String ipStr = project.getIp();
         String[] ipList = ipStr.split(",");
@@ -180,10 +217,9 @@ public class SendMsgServiceImpl implements SendMsgService {
      * @param projectId
      * @return
      */
-    @Override
-    public int increaseSendNum(int projectId, int increasement) {
-        int sendAmount = 0;
-        Map<Integer, Integer> msgAmountMap = (Map<Integer, Integer>) redisUtil.get(MSG_DAY_AMOUNT_REDISKEY);
+    private int increaseSendNum(int projectId, int increasement) {
+        int sendAmount;
+        Map<Integer, Integer> msgAmountMap = (Map<Integer, Integer>) redisUtil.get(RedisKey.DAY_AMOUNT);
         if (msgAmountMap.get(projectId) == null) {
             sendAmount = 1;
             msgAmountMap.put(projectId, sendAmount);
@@ -192,77 +228,58 @@ public class SendMsgServiceImpl implements SendMsgService {
             sendAmount += increasement;
             msgAmountMap.put(projectId, sendAmount);
         }
-        redisUtil.set(MSG_DAY_AMOUNT_REDISKEY, msgAmountMap);
+        redisUtil.set(RedisKey.DAY_AMOUNT, msgAmountMap);
         return sendAmount;
     }
 
 
     /**
-     * 自带检测的发送, 包括了黑名单,用量检测,ip检测
+     * 单纯的调短信接口,不操作数据库
      *
-     * @param mobileList
+     * @param mobile
      * @param tid
      * @param values
      * @param platform
      * @param projectId
+     * @return 极光或阿里返回的msgId
+     */
+    private String sendOneMessage(String mobile, String tid, Map<String, String> values, MsgType platform, int projectId) {
+        // 发送短信
+        String messageId = sendMsgUtil.send(mobile, tid, values, platform);
+        increaseSendNum(projectId, 1);
+        return messageId;
+    }
+
+    /**
+     * 密文校验+ip校验+黑名单校验+超量校验
+     *
+     * @param mobile
+     * @param projectId
+     * @param timestamp
+     * @param cipherText
+     * @param ip
      * @return
      */
-    @Override
-    public String sendMsgWithCheck(List<String> mobileList, String tid, Map<String, String> values, MsgType platform, int projectId, HttpServletRequest request) {
+    private boolean check(String mobile, int projectId, long timestamp, String cipherText, String ip) {
         String projectName = projectService.get(projectId).getName();
-        if (!checkIp(projectId, request.getRemoteAddr())) { // ip校验
-            logger.info(projectName + "项目IP" + request.getRemoteAddr() + "不合法,无法发送短信!");
-            return null;
+        if (!checkSecret(projectId, timestamp, cipherText)) {
+            logger.info(projectName + "项目密文校验错误!");
+            return false;
         }
-        List<String> blackMobiles = blacklistService.filterBlacklist(mobileList);
-        if (blackMobiles.size() > 0) { // 有手机号是在黑名单里面
-            logger.info("手机号" + blackMobiles + "在黑名单中,无法发送短信!");
-            return null;
+        if (!checkIp(projectId, ip)) { // ip校验
+            logger.info(projectName + "项目IP" + ip + "不合法,无法发送短信!");
+            return false;
+        }
+        if (blacklistService.inBlackList(mobile)) { // 有手机号是在黑名单里面
+            logger.info("手机号" + mobile + "在黑名单中,无法发送短信!");
+            return false;
         }
         boolean isExcess = checkExcess(projectId);
         if (isExcess) { // 短信超量
             logger.info(projectName + "项目今天的短信数量已用尽!");
-            return null;
+            return false;
         }
-        // 发送短信
-        String messageId = "";
-        if (mobileList.size() > 1) {
-            sendMsgUtil.send(mobileList, tid, values, platform);
-            increaseSendNum(projectId, 1); // 群发算一条
-            messageId = MULTI_SEND_ID;
-        } else {
-            messageId = sendMsgUtil.send(mobileList.get(0), tid, values, platform);
-            increaseSendNum(projectId, 1);
-//            messageId = RandomUtil.randomNumWithTimeMillis(0); // 测试用
-        }
-        return messageId;
-    }
-
-    /** 短信重发
-     * @param id shortmessage中的id字段
-     * @return
-     */
-    @Override
-    public ShortMessage resend(long id) {
-        ShortMessage shortMessage = shortMessageService.get(id);
-        MsgType platform = MsgType.getByType(shortMessage.getPlatform());
-        MsgTemplate template = templateService.getBy("selfId", shortMessage.getTemplateId());
-        String realTemplateId = null;
-        if (platform == MsgType.JPUSH) {
-            realTemplateId = template.getJpushTemplateId();
-        } else if (platform == MsgType.ALI) {
-            realTemplateId = template.getAliTemplateId();
-        }
-        Map<String, String> values = FastJsonUtil.toObject(shortMessage.getValue(), Map.class);
-        String newMessageId = sendMsgUtil.send(shortMessage.getMobile(), realTemplateId, values, platform);
-        increaseSendNum(shortMessage.getProjectId(), 1);
-//        String newMessageId = RandomUtil.randomNumWithTimeMillis(0); // 测试用
-        shortMessage.setMessageId(newMessageId);
-        shortMessage.setStatus(SendStatus.UNKNOWN.getId());
-        shortMessage.setSendDate(DateUtil.getTime());
-        shortMessageService.update(shortMessage);
-        logger.info("短信已重发,手机号为"+shortMessage.getMobile());
-        return shortMessage;
+        return true;
     }
 
 }

@@ -147,7 +147,7 @@ var ShortMessage = {
     "getProjectList": function () {
         $.ajax({
             type: "get",
-            url: contextPath + "/project/listJson",
+            url: contextPath + "/msgProject/listJson",
             data: {},
             async: true,
             dataType: "json",

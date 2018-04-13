@@ -43,6 +43,10 @@
                             <div class="mailbox-controls">
                                 <!-- Check all button -->
                                 <button type="button" class="btn btn-default btn-sm checkbox-toggle"
+                                        onclick="Template.toAdd();"><i class="fa fa-plus"></i>
+                                    录入模板
+                                </button>
+                                <button type="button" class="btn btn-default btn-sm checkbox-toggle"
                                         onclick="Template.toAddAli();"><i class="fa fa-plus"></i>
                                     新增阿里模板
                                 </button>

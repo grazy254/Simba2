@@ -1,7 +1,10 @@
 package com.simba.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.simba.cache.RedisUtil;
 import com.simba.dao.SmartUserDao;
 import com.simba.dao.ThirdSystemUserDao;
+import com.simba.dao.UserProjectDao;
+import com.simba.exception.BussException;
+import com.simba.framework.util.code.DesUtil;
+import com.simba.framework.util.code.EncryptUtil;
 import com.simba.framework.util.jdbc.Pager;
+import com.simba.framework.util.json.JsonResult;
 import com.simba.model.SmartUser;
 import com.simba.model.ThirdSystemUser;
 import com.simba.model.enums.ThirdSystemType;
@@ -44,6 +52,9 @@ public class SmartUserServiceImpl implements SmartUserService {
 
 	@Autowired
 	private RedisUtil redisUtil;
+
+	@Autowired
+	private UserProjectDao userProjectDao;
 
 	@Override
 	public void add(SmartUser smartUser) {
@@ -115,7 +126,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 	public boolean updatePassword(String account, String password) {
 		return smartUserDao.updatePassword(account, password);
 	}
-	
+
 	public boolean updatePasswordWithUserId(long userId, String password) {
 		return smartUserDao.updatePasswordWithUserId(userId, password);
 	}
@@ -251,4 +262,253 @@ public class SmartUserServiceImpl implements SmartUserService {
 		redisUtil.set(key, userId);
 		return userId;
 	}
+
+	///////////////////////////////////////////////////// 原userLoginController里的方法/////////////////////////////////////////////////
+
+	/**
+	 * 密码登录
+	 */
+	@Override
+	public JsonResult toLogin(String code, String account, String password) throws Exception {
+
+		if(password==null || password.length()==0){
+			throw new BussException("登录密码不能为空");
+		}
+		String sk = "";
+		if (userProjectDao.listBy("code", code).size() > 0) {
+			sk = userProjectDao.listBy("code", code).get(0).getProjectKey();
+		} else {
+			throw new BussException("没有配置系统加密密钥，请联系管理员配置[" + code + "]");
+		}
+		List<SmartUser> ulist = smartUserDao.listBy("account", account);
+		if (ulist.size() == 0) {
+			throw new BussException("账户不存在[" + account + "]");
+		} else {
+			// 对密码des解密 再md5
+			String p = "";
+			p = DesUtil.decrypt(password, sk);
+			p = EncryptUtil.md5(p);
+
+			if (!ulist.get(0).getPassword().equals(p)) {
+				throw new BussException("账号或用户名错误");
+			}
+		}
+		return new JsonResult(ulist.get(0).getId(), "登录成功", 200);
+	}
+	
+	/**
+	 * 短信验证码登录
+	 */
+	@Override
+	public JsonResult toLoginVerif(String mobile) throws Exception {
+
+		String regex = "^1[3|4|5|7|8][0-9]\\d{4,8}$";
+		Pattern pat = Pattern.compile(regex);
+		Matcher m = pat.matcher(mobile);
+		boolean isMatch = m.matches();
+		if (!isMatch) {
+			throw new BussException("手机号不正确，请更换账号");
+		}
+		
+		List<SmartUser> ulist = smartUserDao.listBy("account", mobile);
+		if (ulist.size() == 0) {
+			return new JsonResult(-1, "账号"+mobile+"不存在", 400);
+		} else {
+			return new JsonResult(ulist.get(0).getId(), "登录成功", 200);
+		}
+	}
+	
+	/**
+	 * 短信验证码登录,没有登录则注册
+	 */
+	@Override
+	public JsonResult toLoginVerifAndRegister(String mobile){
+
+		String regex = "^1[3|4|5|7|8][0-9]\\d{4,8}$";
+		Pattern pat = Pattern.compile(regex);
+		Matcher m = pat.matcher(mobile);
+		boolean isMatch = m.matches();
+		if (!isMatch) {
+			throw new BussException("手机号不正确，请更换账号");
+		}
+		
+		List<SmartUser> ulist = smartUserDao.listBy("account", mobile);
+		if (ulist.size() == 0) {
+			//把手机号写入数据表中
+			SmartUser user = new SmartUser();
+			user.setAccount(mobile);
+			user.setEmail("");
+			user.setName(mobile);
+			user.setPassword("");
+			user.setTelNo(mobile);
+			user.setThirdSystem("");
+			return new JsonResult(-1, "账号"+mobile+"不存在", 400);
+		} else {
+			if(ulist.get(0).getPassword()==null ||ulist.get(0).getPassword().length()==0){
+				return new JsonResult(-2, "用户还未完善信息", 400);
+			}else{
+				return new JsonResult(ulist.get(0).getId(), "登录成功", 200);
+			}
+		}
+	}
+	
+	/**
+	 * 完善信息
+	 */
+	@Override
+	public JsonResult finishInfo(long id,String name ,String password){
+		if(name==null||name.length()==0||password==null||password.length()==0){
+			throw new BussException("密码或者昵称不能为空");
+		}
+		SmartUser user=smartUserDao.get(id);
+		user.setName(name);
+		user.setPassword(password);
+		smartUserDao.update(user);
+		return new JsonResult("信息完善成功",200);
+	}
+
+	/**
+	 * 注册
+	 */
+	@Override
+	public JsonResult toRegisterApp(String code, String account, String password) throws Exception {
+		String sk = "";
+		if (userProjectDao.listBy("code", code).size() > 0) {
+			sk = userProjectDao.listBy("code", code).get(0).getProjectKey();
+		} else {
+			throw new BussException("没有配置系统加密密钥，请联系管理员配置");
+		}
+		SmartUser user = new SmartUser();
+
+		// 判断此账号是否已经注册过
+		if (smartUserDao.listBy("account", account).size() > 0) {
+			throw new BussException("此账号已经注册，请更换账号");
+		}
+		String regex = "^1[3|4|5|7|8][0-9]\\d{4,8}$";
+		Pattern pat = Pattern.compile(regex);
+		Matcher m = pat.matcher(account);
+		boolean isMatch = m.matches();
+		if (!isMatch) {
+			throw new BussException("手机号不正确，请更换账号");
+		}
+		user.setAccount(account);
+		user.setName(account);
+		user.setTelNo(account);
+		user.setEmail("");
+		// 给密码解密之后再md5。
+		String p = "";
+		p = DesUtil.decrypt(password, sk);
+		p = EncryptUtil.md5(p);
+		user.setPassword(p);
+		long re = addRegister(user);
+		return new JsonResult(re, "注册成功", 200);
+	}
+
+	@Override
+	public JsonResult toResetPasswordApp(String code, String account, String oldPassword, String newPassword) throws Exception {
+		// 重置密码，使用原来的密码重置
+		String regex = "^1[3|4|5|7|8][0-9]\\d{4,8}$";
+		Pattern pat = Pattern.compile(regex);
+		Matcher m = pat.matcher(account);
+		boolean isMatch = m.matches();
+		if (!isMatch) {
+			throw new BussException("手机号不正确，请更换账号");
+		}
+		// 验证密码是否正确
+		String sk = "";
+		if (userProjectDao.listBy("code", code).size() > 0) {
+			sk = userProjectDao.listBy("code", code).get(0).getProjectKey();
+		} else {
+			throw new BussException("没有配置系统加密密钥，请联系管理员配置");
+		}
+		List<SmartUser> ulist = smartUserDao.listBy("account", account);
+		// 给密码解密之后再md5。
+		String op = "";
+		String np = "";
+		op = DesUtil.decrypt(oldPassword, sk);
+		np = DesUtil.decrypt(newPassword, sk);
+		op = EncryptUtil.md5(op);
+		np = EncryptUtil.md5(np);
+		if (ulist.get(0).getPassword().equals(op)) {
+			if (!smartUserDao.updatePassword(account, np)) {
+				throw new BussException("修改失败");
+			}
+		} else {
+			throw new BussException("密码错误");
+		}
+
+		return new JsonResult("重置成功",200);
+	}
+
+	@Override
+	public JsonResult toResetPasswordWithUserIdApp(String code, long userId, String oldPassword, String newPassword) throws Exception {
+
+		// 重置密码，使用原来的密码重置
+		// 验证密码是否正确
+		SmartUser smartUser = new SmartUser();
+		smartUser = smartUserDao.get(userId);
+		String sk = "";
+		if (userProjectDao.listBy("code", code).size() > 0) {
+			sk = userProjectDao.listBy("code", code).get(0).getProjectKey();
+		} else {
+			throw new BussException("没有配置系统加密密钥，请联系管理员配置");
+		}
+		// 给密码解密之后再md5。
+		String op = "";
+		String np = "";
+		op = DesUtil.decrypt(oldPassword, sk);
+		np = DesUtil.decrypt(newPassword, sk);
+		op = EncryptUtil.md5(op);
+		np = EncryptUtil.md5(np);
+		if (smartUser.getPassword().equals(op)) {
+			if (!smartUserDao.updatePasswordWithUserId(userId, np)) {
+				throw new BussException("修改失败");
+			}
+		} else {
+			throw new BussException("密码错误");
+		}
+
+		return new JsonResult("重置成功",200);
+	}
+	
+	
+	@Override
+	public JsonResult toFindPasswordApp(String code, String account, String newPassword) throws Exception {
+		// 找回密码，使用短信验证码重置
+		String regex = "^1[3|4|5|7|8][0-9]\\d{4,8}$";
+		Pattern pat = Pattern.compile(regex);
+		Matcher m = pat.matcher(account);
+		boolean isMatch = m.matches();
+		if (!isMatch) {
+			throw new BussException("手机号不正确，请更换账号");
+		}
+		// 给密码解密之后再md5。
+		String sk = "";
+		if (userProjectDao.listBy("code", code).size() > 0) {
+			sk = userProjectDao.listBy("code", code).get(0).getProjectKey();
+		} else {
+			throw new BussException("没有配置系统加密密钥，请联系管理员配置");
+		}
+		String p = "";
+		p = DesUtil.decrypt(newPassword, sk);
+		p = EncryptUtil.md5(p);
+		if (!smartUserDao.updatePassword(account, p)) {
+			throw new BussException("修改失败");
+		}
+		return new JsonResult("找回成功",200);
+	}
+	
+	@Override
+	public JsonResult getMobileByUserId(long userId) {
+		List<SmartUser> smartUserList = new ArrayList<SmartUser>();
+		smartUserList = smartUserDao.listBy("id", userId);
+		String mobile = "";
+		if (smartUserList.size() > 0) {
+			mobile = smartUserList.get(0).getTelNo();
+		} else {
+			throw new BussException("用户没有配置手机号");
+		}
+		return new JsonResult(mobile, "获取手机号成功", 200);
+	}
+
 }

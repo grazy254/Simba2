@@ -23,7 +23,7 @@ public class MsgBlacklistDaoImpl implements MsgBlacklistDao {
 	@Autowired
 	private Jdbc jdbc;
 
-	private static final String table = "blacklist";
+	private static final String table = "msgBlacklist";
 
 	@Override
 	public void add(MsgBlacklist blacklist) {

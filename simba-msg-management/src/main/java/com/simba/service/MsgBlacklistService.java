@@ -2,6 +2,7 @@ package com.simba.service;
 
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.MsgBlacklist;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -52,6 +53,9 @@ public interface MsgBlacklistService {
 	List<MsgBlacklist> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
 
 	List<String> filterBlacklist(List<String> mobileList);
+
+	@Transactional(readOnly = true)
+	boolean inBlackList(String mobile);
 
 	boolean isDuplicated(String mobile);
 }

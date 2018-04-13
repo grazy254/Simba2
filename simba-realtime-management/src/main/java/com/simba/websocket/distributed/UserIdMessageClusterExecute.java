@@ -1,7 +1,5 @@
 package com.simba.websocket.distributed;
 
-import java.io.IOException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +37,7 @@ public class UserIdMessageClusterExecute implements ClusterExecute {
 		String userId = messageData.getUserId();
 		String content = messageData.getContent();
 		WebSocketSession session = UserIdConnectionPool.getInstance().get(userId);
-		if (session != null) {
+		if (session != null && session.isOpen()) {
 			try {
 				TextMessage text = new TextMessage(content);
 				session.sendMessage(text);
@@ -49,7 +47,7 @@ public class UserIdMessageClusterExecute implements ClusterExecute {
 				realTimeMessage.setUserId(Integer.valueOf(userId));
 				realTimeMessage.setMessage(content);
 				realTimeMessageService.add(realTimeMessage);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				logger.error("发送websocket消息给用户[" + userId + "][" + content + "]发送异常", e);
 			}
 		} else {

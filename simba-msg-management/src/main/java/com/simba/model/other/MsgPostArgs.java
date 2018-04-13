@@ -8,7 +8,7 @@ public class MsgPostArgs {
 	/**
 	 * 手机列表
 	 */
-	private String mobileList;
+	private String mobile;
 	/**
 	 * 时间戳+projectKey加密后的密文
 	 */
@@ -30,12 +30,12 @@ public class MsgPostArgs {
 	 */
 	private String values;
 
-	public String getMobileList() {
-		return mobileList;
+	public String getMobile() {
+		return mobile;
 	}
 
-	public void setMobileList(String mobileList) {
-		this.mobileList = mobileList;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
 	public String getCipherText() {
@@ -80,7 +80,7 @@ public class MsgPostArgs {
 
 	@Override
 	public String toString() {
-		return "MsgPostArgs{" + "mobileList=" + mobileList + ", cipherText='" + cipherText + '\'' + ", projectId='" + projectId + '\'' + ", timeStamp='" + timeStamp + '\'' + ", templateId='"
+		return "MsgPostArgs{" + "mobile=" + mobile + ", cipherText='" + cipherText + '\'' + ", projectId='" + projectId + '\'' + ", timeStamp='" + timeStamp + '\'' + ", templateId='"
 				+ templateSelfId + '\'' + ", values=" + values + '}';
 	}
 }

@@ -1,3 +1,9 @@
+cd simba-amap
+call mvn clean -U 
+cd ../
+cd simba-database-management
+call mvn clean -U 
+cd ../
 cd simba-version-management
 call mvn clean -U 
 cd ../

@@ -23,9 +23,6 @@ public class CallBackDealAliImpl implements DealAliMsgCallback {
 
 	private static final Log logger = LogFactory.getLog(CallBackDealAliImpl.class);
 
-	@Value(value = "${msg.rediskey.msgArgs}")
-	private String MSG_ID_ARGS_MAP;
-
 	@Autowired
 	private ShortMessageService shortMessageService;
 
@@ -33,7 +30,7 @@ public class CallBackDealAliImpl implements DealAliMsgCallback {
 	public void dealReport(SmsReport smsReport) {
 		boolean sendStatus = smsReport.isSuccess();
 		ShortMessage shortMessage = shortMessageService.getBy("messageId", smsReport.getOut_id());
-		if (sendStatus == true) {
+		if (sendStatus) {
 			logger.info("收到阿里的短信回调," + smsReport.getOut_id() + "短信发送成功!");
 			shortMessage.setStatus(SendStatus.SUCCESS.getId());
 		} else {

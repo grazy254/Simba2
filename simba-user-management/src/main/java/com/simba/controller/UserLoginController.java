@@ -73,31 +73,30 @@ public class UserLoginController {
 	@ResponseBody
 	@RequestMapping("/toLogin")
 	public JsonResult toLogin(String code, String account, String password, HttpSession session) throws Exception {
-		String sk = "";
-		if (projectService.listBy("code", code).size() > 0) {
-			sk = projectService.listBy("code", code).get(0).getProjectKey();
-		} else {
-			throw new BussException("没有配置系统加密密钥，请联系管理员配置[" + code + "]");
+		JsonResult json=smartUserService.toLogin(code, account, password);
+		if(json.getCode()==200){
+			session.setAttribute("userId",json.getData());
+			return new JsonResult("登录成功",200);
+		}else{
+			return new JsonResult("登录失败",400);
 		}
-		List<SmartUser> ulist = smartUserService.listBy("account", account);
-		if (ulist.size() == 0) {
-			throw new BussException("账户不存在[" + account + "]");
-		} else {
-			// 对密码des解密 再md5
-			String p = "";
-			p = DesUtil.decrypt(password, sk);
-			logger.info("--------" + p);
-			p = EncryptUtil.md5(p);
-			logger.info("--------" + p);
-
-			if (ulist.get(0).getPassword().equals(p)) {
-				// 返回userId写入session中
-				session.setAttribute("userId", ulist.get(0).getId());
-			} else {
-				throw new BussException("账号或用户名错误");
-			}
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping("/toLoginVerif")
+	public JsonResult toLoginVerif(String mobile, String verif, HttpSession session) throws Exception {
+		//验证短信验证码
+		if(!verif(mobile,verif)){
+			throw new BussException("短信验证码错误");
 		}
-		return new JsonResult(ulist.get(0).getId(), "登录成功", 200);
+		JsonResult json=smartUserService.toLoginVerif(mobile);
+		if(json.getCode()==200){
+			session.setAttribute("userId",json.getData());
+			return new JsonResult("登录成功",200);
+		}else{
+			return new JsonResult("登录失败",400);
+		}
 	}
 
 	@RequestMapping("/register")
@@ -108,149 +107,44 @@ public class UserLoginController {
 	@ResponseBody
 	@RequestMapping("/toRegisterApp")
 	public JsonResult toRegisterApp(String code, String account, String password, HttpSession session) throws Exception {
-		String sk = "";
-		if (projectService.listBy("code", code).size() > 0) {
-			sk = projectService.listBy("code", code).get(0).getProjectKey();
-		} else {
-			throw new BussException("没有配置系统加密密钥，请联系管理员配置");
+		JsonResult json =new JsonResult();
+		json = smartUserService.toRegisterApp(code, account, password);
+		if(json.getCode()==200){
+			int re =Integer.parseInt(json.getData().toString());
+			if (re > 0) {
+				// 注册成功后userId写入session
+				session.setAttribute("userId", re);
+			}
+			return new JsonResult("注册成功",200);
+		}else{
+			return json;
 		}
-		SmartUser user = new SmartUser();
-
-		// 判断此账号是否已经注册过
-		if (smartUserService.listBy("account", account).size() > 0) {
-			throw new BussException("此账号已经注册，请更换账号");
-		}
-		String regex = "^1[3|4|5|7|8][0-9]\\d{4,8}$";
-		Pattern pat = Pattern.compile(regex);
-		Matcher m = pat.matcher(account);
-		boolean isMatch = m.matches();
-		if (!isMatch) {
-			throw new BussException("手机号不正确，请更换账号");
-		}
-		user.setAccount(account);
-		user.setName(account);
-		user.setTelNo(account);
-		user.setEmail("");
-		// 给密码解密之后再md5。
-		String p = "";
-		p = DesUtil.decrypt(password, sk);
-		p = EncryptUtil.md5(p);
-		user.setPassword(p);
-		long re = smartUserService.addRegister(user);
-		if (re > 0) {
-			// 注册成功后userId写入session
-			session.setAttribute("userId", re);
-		}
-		return new JsonResult();
+		
+		
 	}
 
 	@ResponseBody
 	@RequestMapping("/toResetPasswordApp")
 	public JsonResult toResetPasswordApp(String code, String account, String oldPassword, String newPassword) throws Exception {
-		// 重置密码，使用原来的密码重置
-		String regex = "^1[3|4|5|7|8][0-9]\\d{4,8}$";
-		Pattern pat = Pattern.compile(regex);
-		Matcher m = pat.matcher(account);
-		boolean isMatch = m.matches();
-		if (!isMatch) {
-			throw new BussException("手机号不正确，请更换账号");
-		}
-		// 验证密码是否正确
-		String sk = "";
-		if (projectService.listBy("code", code).size() > 0) {
-			sk = projectService.listBy("code", code).get(0).getProjectKey();
-		} else {
-			throw new BussException("没有配置系统加密密钥，请联系管理员配置");
-		}
-		List<SmartUser> ulist = smartUserService.listBy("account", account);
-		// 给密码解密之后再md5。
-		String op = "";
-		String np = "";
-		op = DesUtil.decrypt(oldPassword, sk);
-		np = DesUtil.decrypt(newPassword, sk);
-		op = EncryptUtil.md5(op);
-		np = EncryptUtil.md5(np);
-		if (ulist.get(0).getPassword().equals(op)) {
-			if (!smartUserService.updatePassword(account, np)) {
-				throw new BussException("修改失败");
-			}
-		} else {
-			throw new BussException("密码错误");
-		}
-
-		return new JsonResult();
+		return smartUserService.toResetPasswordApp(code, account, oldPassword, newPassword);
 	}
 
 	@ResponseBody
 	@RequestMapping("/toResetPasswordWithUserIdApp")
 	public JsonResult toResetPasswordWithUserIdApp(String code, long userId, String oldPassword, String newPassword) throws Exception {
-		// 重置密码，使用原来的密码重置
-		// 验证密码是否正确
-		SmartUser smartUser = new SmartUser();
-		smartUser = smartUserService.get(userId);
-		String sk = "";
-		if (projectService.listBy("code", code).size() > 0) {
-			sk = projectService.listBy("code", code).get(0).getProjectKey();
-		} else {
-			throw new BussException("没有配置系统加密密钥，请联系管理员配置");
-		}
-		// 给密码解密之后再md5。
-		String op = "";
-		String np = "";
-		op = DesUtil.decrypt(oldPassword, sk);
-		np = DesUtil.decrypt(newPassword, sk);
-		op = EncryptUtil.md5(op);
-		np = EncryptUtil.md5(np);
-		if (smartUser.getPassword().equals(op)) {
-			if (!smartUserService.updatePasswordWithUserId(userId, np)) {
-				throw new BussException("修改失败");
-			}
-		} else {
-			throw new BussException("密码错误");
-		}
-
-		return new JsonResult();
+		return smartUserService.toResetPasswordWithUserIdApp(code, userId, oldPassword, newPassword);
 	}
 
 	@ResponseBody
 	@RequestMapping("/toFindPasswordApp")
 	public JsonResult toFindPasswordApp(String code, String account, String newPassword) throws Exception {
-		// 找回密码，使用短信验证码重置
-		String regex = "^1[3|4|5|7|8][0-9]\\d{4,8}$";
-		Pattern pat = Pattern.compile(regex);
-		Matcher m = pat.matcher(account);
-		boolean isMatch = m.matches();
-		if (!isMatch) {
-			throw new BussException("手机号不正确，请更换账号");
-		}
-		// 给密码解密之后再md5。
-		String sk = "";
-		if (projectService.listBy("code", code).size() > 0) {
-			sk = projectService.listBy("code", code).get(0).getProjectKey();
-		} else {
-			throw new BussException("没有配置系统加密密钥，请联系管理员配置");
-		}
-		String p = "";
-		p = DesUtil.decrypt(newPassword, sk);
-		p = EncryptUtil.md5(p);
-		if (!smartUserService.updatePassword(account, p)) {
-			throw new BussException("修改失败");
-		}
-		return new JsonResult();
+		return smartUserService.toFindPasswordApp(code, account, newPassword);
 	}
 
 	@ResponseBody
 	@RequestMapping("/getMobileByUserId")
-	public JsonResult getMobileByUserId(long userId) throws Exception {
-		List<SmartUser> smartUserList = new ArrayList<SmartUser>();
-		smartUserList = smartUserService.listBy("id", userId);
-		String mobile = "";
-		if (smartUserList.size() > 0) {
-			mobile = smartUserList.get(0).getTelNo();
-		} else {
-			throw new BussException("用户没有配置手机号");
-		}
-		return new JsonResult(mobile, "获取手机号成功", 200);
+	public JsonResult getMobileByUserId(long userId) {
+		 return smartUserService.getMobileByUserId(userId);
 	}
 
 	/////////////////////////////////////////////////////// APP相关接口结束/////////////////////////////////////////////////////////////

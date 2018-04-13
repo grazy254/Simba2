@@ -63,7 +63,7 @@ var MessageBalance = {
         $("#projectId").append("<option value=-1>项目总和</option>");
         $.ajax({
             type: "get",
-            url: contextPath + "/project/listJson",
+            url: contextPath + "/msgProject/listJson",
             async: true,
             data: {},
             async: true,

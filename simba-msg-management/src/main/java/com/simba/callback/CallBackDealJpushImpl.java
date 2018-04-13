@@ -41,9 +41,6 @@ public class CallBackDealJpushImpl implements CallbackDealInterface {
     @Autowired
     private MsgTemplateService templateService;
 
-    @Value(value = "${msg.rediskey.msgArgs}")
-    private String MSG_ID_ARGS_MAP;
-
     @Override
     public void sendResult(SendResult sendResult) {
         int sendStatus = sendResult.getStatus();

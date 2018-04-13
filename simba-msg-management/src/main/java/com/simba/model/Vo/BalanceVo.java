@@ -1,4 +1,4 @@
-package com.simba.model.Vo;
+package com.simba.model.VO;
 
 /**
  * Created by linshuo on 2017/12/11.

@@ -13,11 +13,11 @@ public class EntryPlatform {
     /**
      * 短信平台
      */
-    private MsgType plaformType;
+    private MsgType platformType;
 
-    public EntryPlatform(String templateId, MsgType plaformType) {
+    public EntryPlatform(String templateId, MsgType platformType) {
         this.templateId = templateId;
-        this.plaformType = plaformType;
+        this.platformType = platformType;
     }
 
     public EntryPlatform() {
@@ -31,19 +31,19 @@ public class EntryPlatform {
         this.templateId = templateId;
     }
 
-    public MsgType getPlaformType() {
-        return plaformType;
+    public MsgType getPlatformType() {
+        return platformType;
     }
 
-    public void setPlaformType(MsgType plaformType) {
-        this.plaformType = plaformType;
+    public void setPlatformType(MsgType platformType) {
+        this.platformType = platformType;
     }
 
     @Override
     public String toString() {
         return "EntryPlatform{" +
                 "templateId='" + templateId + '\'' +
-                ", plaformType=" + plaformType +
+                ", platformType=" + platformType +
                 '}';
     }
 }

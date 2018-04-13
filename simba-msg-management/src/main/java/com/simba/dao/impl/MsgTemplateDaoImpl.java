@@ -22,7 +22,7 @@ public class MsgTemplateDaoImpl implements MsgTemplateDao {
     @Autowired
     private Jdbc jdbc;
 
-    private static final String table = "template";
+    private static final String table = "msgTemplate";
 
     @Override
     public void add(MsgTemplate template) {

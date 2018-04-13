@@ -35,9 +35,6 @@
                                 <label for="projectId">项目:</label>
                                 <select style="width: 120px; height: 30px" id="projectId" name="projectId">
                                     <option value="">全部项目</option>
-                                    <option value="1">能量计费</option>
-                                    <option value="1">用户管理</option>
-                                    <option value="1">邮件管理</option>
                                 </select>
                                 <label for="interval">平台:</label>
                                 <select style="width: 80px; height: 30px" id="platform" name="platform">

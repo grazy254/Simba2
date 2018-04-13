@@ -155,6 +155,13 @@ public class MsgBlacklistServiceImpl implements MsgBlacklistService {
 
     @Override
     @Transactional(readOnly = true)
+    public boolean inBlackList(String mobile) {
+        List<MsgBlacklist> result = listBy("mobile", mobile);
+        return result.size() > 0;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public boolean isDuplicated(String mobile) {
         int listSize = listBy("mobile", mobile).size();
         if (listSize > 0) {

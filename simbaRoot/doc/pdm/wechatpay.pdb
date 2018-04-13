@@ -2728,7 +2728,7 @@ TableComment 0 新宋体,8,N</a:FontList>
 <o:TableSymbol Id="o8">
 <a:CreationDate>1520822902</a:CreationDate>
 <a:ModificationDate>1520833591</a:ModificationDate>
-<a:Rect>((-12951,1928), (-103,15250))</a:Rect>
+<a:Rect>((-13144,1928), (90,15250))</a:Rect>
 <a:LineColor>12615680</a:LineColor>
 <a:FillColor>16570034</a:FillColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -3068,11 +3068,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 </o:Column>
 <o:Column Id="o34">
 <a:ObjectID>84AA85FA-5D70-427F-9F0F-D4C975386B89</a:ObjectID>
-<a:Name>partneTradeNo</a:Name>
-<a:Code>partneTradeNo</a:Code>
+<a:Name>partnerTradeNo</a:Name>
+<a:Code>partnerTradeNo</a:Code>
 <a:CreationDate>1520823974</a:CreationDate>
 <a:Creator>caozhejun</a:Creator>
-<a:ModificationDate>1520823974</a:ModificationDate>
+<a:ModificationDate>1520902614</a:ModificationDate>
 <a:Modifier>caozhejun</a:Modifier>
 <a:Comment>商户企业付款单号</a:Comment>
 <a:DataType>varchar(32)</a:DataType>

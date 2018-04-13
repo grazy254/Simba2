@@ -1,5 +1,6 @@
 package com.simba.service;
 
+import com.simba.framework.util.json.JsonResult;
 import com.simba.mobile.message.model.MsgType;
 import com.simba.model.ShortMessage;
 import com.simba.model.enums.SendStatus;
@@ -14,17 +15,9 @@ import java.util.Map;
  * Created by linshuo on 2017/12/21.
  */
 public interface SendMsgService {
-    int increaseSendNum(int projectId, int increasement);
+    JsonResult sendSimply(String mobile, String selfTemplateId, Map<String, String> params, String projectId);
 
-    int addShortMessage(MsgPostArgs msgPostArgs, Date sendDate, SendStatus sendStatus, MsgType platform, String messageId);
-
-    boolean checkSecret(MsgPostArgs msgPostArgs);
-
-    boolean checkExcess(int projectId);
-
-    boolean checkIp(int projectId, String ip);
-
-    String sendMsgWithCheck(List<String> mobileList, String tid, Map<String, String> values, MsgType platform, int projectId, HttpServletRequest request);
+    JsonResult checkAndSend(MsgPostArgs msgPostArgs, String ip);
 
     ShortMessage resend(long id);
 }

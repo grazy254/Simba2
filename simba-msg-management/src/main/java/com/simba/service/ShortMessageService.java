@@ -2,7 +2,7 @@ package com.simba.service;
 
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.ShortMessage;
-import com.simba.model.Vo.ShortMessageVo;
+import com.simba.model.VO.ShortMessageVo;
 import com.simba.model.form.ShortMsgSearchForm;
 
 import java.util.List;

@@ -166,6 +166,9 @@ cd ../
 cd simba-baidu-ai
 call mvn clean -U deploy
 cd ../
+cd simba-amap
+call mvn clean -U deploy
+cd ../
 cd simba-expressage
 call mvn clean -U deploy
 cd ../
@@ -276,5 +279,8 @@ call mvn clean -U  deploy
 cd ../
 cd simba-realtime-management
 call mvn clean -U  deploy
+cd ../
+cd simba-database-management
+call mvn clean -U deploy
 cd ../
 echo " deplay all finish "

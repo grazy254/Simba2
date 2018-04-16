@@ -14,6 +14,8 @@ public interface SessionKey {
 
 	String orgIdKey = "sessOrgId";
 
+	String orgNameKey = "sessOrgName";
+
 	String deviceTypeKey = "sessDeviceType";
 
 	String mobileTypeKey = "sessMobileType";

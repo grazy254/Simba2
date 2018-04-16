@@ -1,0 +1,1 @@
+<script type="text/javascript" src="${base}/js/echart/echart.min.js"></script>

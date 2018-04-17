@@ -25,7 +25,7 @@
 								<div class="box-header with-border">
 									<h3 class="box-title">新增用户</h3>
 								</div>
-								<form role="form" onsubmit="return User.checkForm();" id="form" action="${base}/currentOrgUser/add">
+								<form role="form" onsubmit="return CurrentOrgUser.checkForm();" id="form" action="${base}/currentOrgUser/add">
 									<input type="hidden" id="orgID" name="orgID" value="${orgID}" />
 									<div class="box-body">
 										<div class="form-group">

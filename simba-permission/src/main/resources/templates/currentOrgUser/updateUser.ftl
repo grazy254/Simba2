@@ -25,7 +25,7 @@
 								<div class="box-header with-border">
 									<h3 class="box-title">修改用户</h3>
 								</div>
-								<form role="form" onsubmit="return User.checkForm();" id="form" action="${base}/currentOrgUser/update">
+								<form role="form" onsubmit="return CurrentOrgUser.checkForm();" id="form" action="${base}/currentOrgUser/update">
 									<input type="hidden" id="orgID" name="orgID" value="${orgID}" />
 									<div class="box-body">
 										<div class="form-group">

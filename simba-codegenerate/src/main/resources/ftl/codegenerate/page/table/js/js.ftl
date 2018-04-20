@@ -55,7 +55,6 @@ var ${className} = {
 			async: true,
 			data: {
 			},
-			async: true,
 			dataType: "json",
 			success: function(data) {
 				var total = data.data;

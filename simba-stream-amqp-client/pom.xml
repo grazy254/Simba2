@@ -4,7 +4,7 @@
 
 	<groupId>com.simba</groupId>
 	<artifactId>simba-stream-amqp-client</artifactId>
-	<version>2.0.2-SNAPSHOT</version>
+	<version>2.0.2-RELEASE</version>
 	<packaging>jar</packaging>
 
 	<name>simba-stream-amqp-client</name>

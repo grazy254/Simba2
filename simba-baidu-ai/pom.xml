@@ -4,7 +4,7 @@
 
 	<groupId>com.simba</groupId>
 	<artifactId>simba-baidu-ai</artifactId>
-	<version>2.0.2-SNAPSHOT</version>
+	<version>2.0.2-RELEASE</version>
 	<packaging>jar</packaging>
 
 	<name>simba-baidu-ai</name>
@@ -12,7 +12,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<simba.version>2.0.2-SNAPSHOT</simba.version>
+		<simba.version>2.0.2-RELEASE</simba.version>
 		<baidu.ai.version>3.4.1</baidu.ai.version>
 	</properties>
 

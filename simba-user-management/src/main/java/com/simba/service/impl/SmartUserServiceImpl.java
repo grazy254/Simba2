@@ -342,6 +342,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 			user.setPassword("");
 			user.setTelNo(mobile);
 			user.setThirdSystem("");
+			smartUserDao.add(user);
 			return new JsonResult(-1, "账号"+mobile+"不存在", 400);
 		} else {
 			if(ulist.get(0).getPassword()==null ||ulist.get(0).getPassword().length()==0){
@@ -513,8 +514,14 @@ public class SmartUserServiceImpl implements SmartUserService {
 	
 	@Override
 	public JsonResult isRegByMobile(String mobile){
-		if(smartUserDao.listBy("account", mobile).size()>0){
-			return new JsonResult("已经注册",200);
+		List<SmartUser> list =smartUserDao.listBy("account", mobile);
+		if(list.size()>0){
+			if(list.get(0).getPassword()==null ||list.get(0).getPassword().equals("")){
+				return new JsonResult("已经注册,没有完善信息",400);
+			}else{
+				return new JsonResult("已经注册",200);
+			}
+			
 		}else{
 			return new JsonResult("没有注册",400);
 		}

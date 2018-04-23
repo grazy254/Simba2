@@ -190,4 +190,11 @@ public interface SmartUserService {
 	 * @return
 	 */
 	JsonResult getMobileByUserId(long userId);
+	
+	/**
+	 * 通过手机号判断用户是否注册
+	 * @param mobile
+	 * @return
+	 */
+	JsonResult isRegByMobile(String mobile);
 }

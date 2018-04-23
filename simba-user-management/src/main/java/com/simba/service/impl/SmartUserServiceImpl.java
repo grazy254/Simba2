@@ -510,5 +510,16 @@ public class SmartUserServiceImpl implements SmartUserService {
 		}
 		return new JsonResult(mobile, "获取手机号成功", 200);
 	}
+	
+	@Override
+	public JsonResult isRegByMobile(String mobile){
+		if(smartUserDao.listBy("account", mobile).size()>0){
+			return new JsonResult("已经注册",200);
+		}else{
+			return new JsonResult("没有注册",400);
+		}
+		
+		
+	}
 
 }

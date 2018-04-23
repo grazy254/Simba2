@@ -1,3 +1,5 @@
 /simba-wechatutil/target
 .idea
 /simba-python/*.iml
+/simba-groovy/*.iml
+*.iml

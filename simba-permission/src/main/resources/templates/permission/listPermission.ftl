@@ -46,7 +46,7 @@
 								<input type="hidden" id="parentID" name="parentID" value="${parentID}" />
 								<input type="hidden" id="parentName" name="parentName" value="${parentName}" />
 								<div class="table-responsive">
-									<table class="table table-hover table-striped table-bordered" id="table">
+									<table class="table table-hover table-striped table-bordered" id="table" style="word-wrap:break-word;word-break:break-all;">
 										<thead>
 											<tr>
 												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>

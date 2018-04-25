@@ -140,7 +140,7 @@ public interface SmartUserService {
 	 * @param password
 	 * @return
 	 */
-	JsonResult finishInfo(long id,String name ,String password);
+	JsonResult finishInfo(long id,String name ,String password,String code) throws Exception;
 	
 	/**注册
 	 * 

@@ -7,12 +7,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.simba.cache.RedisUtil;
+import com.simba.controller.UserLoginController;
 import com.simba.dao.SmartUserDao;
 import com.simba.dao.ThirdSystemUserDao;
 import com.simba.dao.UserProjectDao;
@@ -55,6 +58,8 @@ public class SmartUserServiceImpl implements SmartUserService {
 
 	@Autowired
 	private UserProjectDao userProjectDao;
+	
+	private static final Log logger = LogFactory.getLog(SmartUserServiceImpl.class);
 
 	@Override
 	public void add(SmartUser smartUser) {
@@ -288,9 +293,8 @@ public class SmartUserServiceImpl implements SmartUserService {
 			String p = "";
 			p = DesUtil.decrypt(password, sk);
 			p = EncryptUtil.md5(p);
-
 			if (!ulist.get(0).getPassword().equals(p)) {
-				throw new BussException("账号或用户名错误");
+				throw new BussException(account+"账号或用户名错误");
 			}
 		}
 		return new JsonResult(ulist.get(0).getId(), "登录成功", 200);
@@ -324,7 +328,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 	@Override
 	public JsonResult toLoginVerifAndRegister(String mobile){
 
-		String regex = "^1[3|4|5|7|8][0-9]\\d{4,8}$";
+		String regex = "^1[34578][0-9]\\d{4,8}$";
 		Pattern pat = Pattern.compile(regex);
 		Matcher m = pat.matcher(mobile);
 		boolean isMatch = m.matches();
@@ -342,11 +346,14 @@ public class SmartUserServiceImpl implements SmartUserService {
 			user.setPassword("");
 			user.setTelNo(mobile);
 			user.setThirdSystem("");
+			user.setCreateTime(new Date());
 			smartUserDao.add(user);
-			return new JsonResult(-1, "账号"+mobile+"不存在", 400);
+			//返回用户ID
+			Long userId=smartUserDao.getBy("account", mobile).getId();
+			return new JsonResult("-1", userId+",账号"+mobile+"不存在,", 400);
 		} else {
 			if(ulist.get(0).getPassword()==null ||ulist.get(0).getPassword().length()==0){
-				return new JsonResult(-2, "用户还未完善信息", 400);
+				return new JsonResult("-2",ulist.get(0).getId()+",用户还未完善信息", 400);
 			}else{
 				return new JsonResult(ulist.get(0).getId(), "登录成功", 200);
 			}
@@ -355,15 +362,25 @@ public class SmartUserServiceImpl implements SmartUserService {
 	
 	/**
 	 * 完善信息
+	 * @throws Exception 
 	 */
 	@Override
-	public JsonResult finishInfo(long id,String name ,String password){
+	public JsonResult finishInfo(long id,String name ,String password,String code) throws Exception{
 		if(name==null||name.length()==0||password==null||password.length()==0){
 			throw new BussException("密码或者昵称不能为空");
 		}
+		String sk = "";
+		if (userProjectDao.listBy("code", code).size() > 0) {
+			sk = userProjectDao.listBy("code", code).get(0).getProjectKey();
+		} else {
+			throw new BussException("没有配置系统加密密钥，请联系管理员配置");
+		}
 		SmartUser user=smartUserDao.get(id);
 		user.setName(name);
-		user.setPassword(password);
+		String p = "";
+		p = DesUtil.decrypt(password, sk);
+		p = EncryptUtil.md5(p);
+		user.setPassword(p);
 		smartUserDao.update(user);
 		return new JsonResult("信息完善成功",200);
 	}
@@ -476,7 +493,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 	@Override
 	public JsonResult toFindPasswordApp(String code, String account, String newPassword) throws Exception {
 		// 找回密码，使用短信验证码重置
-		String regex = "^1[3|4|5|7|8][0-9]\\d{4,8}$";
+		String regex = "^1[34578][0-9]\\d{4,8}$";
 		Pattern pat = Pattern.compile(regex);
 		Matcher m = pat.matcher(account);
 		boolean isMatch = m.matches();

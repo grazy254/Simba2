@@ -60,7 +60,8 @@ public class DevProjectController {
 	@ResponseBody
 	@RequestMapping("/copy")
 	public JsonResult copy(Integer id) {
-
+		DevProject devProject = devProjectService.get(id);
+		devProjectService.add(devProject);
 		return new JsonResult();
 	}
 

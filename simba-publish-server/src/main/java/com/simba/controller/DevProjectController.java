@@ -59,9 +59,8 @@ public class DevProjectController {
 
 	@ResponseBody
 	@RequestMapping("/copy")
-	public JsonResult copy(Integer id) {
-		DevProject devProject = devProjectService.get(id);
-		devProjectService.add(devProject);
+	public JsonResult copy(Integer id) throws InvalidRemoteException, TransportException, GitAPIException, SVNException {
+		devProjectService.copy(id);
 		return new JsonResult();
 	}
 

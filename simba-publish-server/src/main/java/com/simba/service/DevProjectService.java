@@ -99,4 +99,6 @@ public interface DevProjectService {
 	 */
 	void refreshCode(int id) throws InvalidRemoteException, TransportException, GitAPIException, SVNException;
 
+	void copy(Integer id) throws InvalidRemoteException, TransportException, GitAPIException, SVNException;
+
 }

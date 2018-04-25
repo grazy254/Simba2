@@ -621,4 +621,19 @@ public class DevProjectServiceImpl implements DevProjectService {
 	public void refreshCode(int id) throws InvalidRemoteException, TransportException, GitAPIException, SVNException {
 		reGetCodeFormVersionServer(this.get(id));
 	}
+
+	@Override
+	public void copy(Integer id) throws InvalidRemoteException, TransportException, GitAPIException, SVNException {
+		DevProject devProject = this.get(id);
+		List<ProjectPackageResult> ps = projectPackageResultDao.listBy("projectId", id);
+		String num = System.currentTimeMillis() + "";
+		devProject.setCode(devProject.getCode() + num);
+		devProject.setName(devProject.getName() + num);
+		int length = ps.size();
+		String[] targetFile = new String[length];
+		for (int i = 0; i < length; i++) {
+			targetFile[i] = ps.get(i).getFilePath();
+		}
+		this.add(devProject, targetFile);
+	}
 }

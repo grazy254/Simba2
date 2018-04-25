@@ -1,6 +1,7 @@
 var DevProject = {
 
 	"copy" : function(id) {
+		parent.showSuccessInfo("正在拷贝项目，请耐心等待...");
 		$.ajax({
 			type : "post",
 			url : contextPath + "/devProject/copy",
@@ -11,6 +12,7 @@ var DevProject = {
 			dataType : "json",
 			success : function(data) {
 				if (data.code == 200) {
+					parent.showSuccessInfo("拷贝项目完成");
 					DevProject.initDevProjectList(0, Page.size);
 				} else {
 					parent.showInfo(data.msg);

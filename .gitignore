@@ -3,3 +3,5 @@
 /simba-python/*.iml
 /simba-groovy/*.iml
 *.iml
+/simbaRoot/simba-admin/*.log
+/simbaRoot/simba-user/*.log

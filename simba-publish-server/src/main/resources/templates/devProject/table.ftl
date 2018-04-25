@@ -12,6 +12,7 @@
 			<button type="button" class="btn btn-default btn-sm" onclick="DevProject.refreshCode(${devProject.id});"><i class="fa fa-refresh"></i>重新初始化库</button>
 			<button type="button" class="btn btn-default btn-sm" onclick="DevProject.showPublishSome(${devProject.id});"><i class="fa fa-send"></i>发布某台服务器</button>
 			<button type="button" class="btn btn-default btn-sm" onclick="DevProject.publishAll(${devProject.id});"><i class="fa fa-upload"></i>发布所有关联服务器</button>
+			<button type="button" class="btn btn-default btn-sm" onclick="DevProject.copy(${devProject.id});"><i class="fa fa-copy"></i>拷贝配置</button>
 		</td>
 	</tr>
 </#list>

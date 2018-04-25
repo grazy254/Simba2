@@ -1,5 +1,24 @@
 var DevProject = {
 
+	"copy" : function(id) {
+		$.ajax({
+			type : "post",
+			url : contextPath + "/devProject/copy",
+			data : {
+				"id" : id
+			},
+			async : true,
+			dataType : "json",
+			success : function(data) {
+				if (data.code == 200) {
+					DevProject.initDevProjectList(0, Page.size);
+				} else {
+					parent.showInfo(data.msg);
+				}
+			}
+		});
+	},
+
 	"refreshCode" : function(id) {
 		parent.showSuccessInfo("正在重新初始化库，请耐心等待...");
 		$.ajax({

@@ -57,6 +57,13 @@ public class DevProjectController {
 	@Autowired
 	private ProjectServerService projectServerService;
 
+	@ResponseBody
+	@RequestMapping("/copy")
+	public JsonResult copy(Integer id) {
+
+		return new JsonResult();
+	}
+
 	@RequestMapping("/list")
 	public String list() {
 		return "devProject/list";

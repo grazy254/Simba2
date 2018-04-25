@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
  * Created by linshuo on 2017/12/5.
  */
 @Controller
-@RequestMapping("sendMsg")
+@RequestMapping("/sendMsg")
 public class SendMsgController {
 
     @Autowired

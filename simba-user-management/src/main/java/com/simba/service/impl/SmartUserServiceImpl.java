@@ -294,7 +294,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 			p = DesUtil.decrypt(password, sk);
 			p = EncryptUtil.md5(p);
 			if (!ulist.get(0).getPassword().equals(p)) {
-				throw new BussException(account+"账号或用户名错误");
+				throw new BussException("用户名或密码错误");
 			}
 		}
 		return new JsonResult(ulist.get(0).getId(), "登录成功", 200);
@@ -347,6 +347,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 			user.setTelNo(mobile);
 			user.setThirdSystem("");
 			user.setCreateTime(new Date());
+			user.setStatus(0);
 			smartUserDao.add(user);
 			//返回用户ID
 			Long userId=smartUserDao.getBy("account", mobile).getId();
@@ -422,6 +423,9 @@ public class SmartUserServiceImpl implements SmartUserService {
 		return new JsonResult(re, "注册成功", 200);
 	}
 
+	/**
+	 * 使用旧密码重置密码
+	 */
 	@Override
 	public JsonResult toResetPasswordApp(String code, String account, String oldPassword, String newPassword) throws Exception {
 		// 重置密码，使用原来的密码重置
@@ -458,6 +462,9 @@ public class SmartUserServiceImpl implements SmartUserService {
 		return new JsonResult("重置成功",200);
 	}
 
+	/**
+	 * 使用userId重置密码
+	 */
 	@Override
 	public JsonResult toResetPasswordWithUserIdApp(String code, long userId, String oldPassword, String newPassword) throws Exception {
 
@@ -489,7 +496,9 @@ public class SmartUserServiceImpl implements SmartUserService {
 		return new JsonResult("重置成功",200);
 	}
 	
-	
+	/**
+	 * 使用短信验证码找回密码
+	 */
 	@Override
 	public JsonResult toFindPasswordApp(String code, String account, String newPassword) throws Exception {
 		// 找回密码，使用短信验证码重置
@@ -516,6 +525,9 @@ public class SmartUserServiceImpl implements SmartUserService {
 		return new JsonResult("找回成功",200);
 	}
 	
+	/**
+	 * 通过手机号获取userId
+	 */
 	@Override
 	public JsonResult getMobileByUserId(long userId) {
 		List<SmartUser> smartUserList = new ArrayList<SmartUser>();
@@ -529,6 +541,9 @@ public class SmartUserServiceImpl implements SmartUserService {
 		return new JsonResult(mobile, "获取手机号成功", 200);
 	}
 	
+	/**
+	 * 判断手机号是否已经注册
+	 */
 	@Override
 	public JsonResult isRegByMobile(String mobile){
 		List<SmartUser> list =smartUserDao.listBy("account", mobile);
@@ -542,8 +557,21 @@ public class SmartUserServiceImpl implements SmartUserService {
 		}else{
 			return new JsonResult("没有注册",400);
 		}
-		
-		
+	}
+	
+	/**
+	 * 根据UserId更新昵称
+	 * @param name
+	 * @param userId
+	 * @return
+	 */
+	@Override
+	public JsonResult updateName(String name,long userId){
+		SmartUser smartUser=new SmartUser();
+		smartUser=smartUserDao.get(userId);
+		smartUser.setName(name);
+		smartUserDao.update(smartUser);
+		return new JsonResult("更新成功",200);
 	}
 
 }

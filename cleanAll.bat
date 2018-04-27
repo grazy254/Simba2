@@ -1,3 +1,6 @@
+cd simba-user-wallet
+call mvn clean -U 
+cd ../
 cd simba-autoId
 call mvn clean -U 
 cd ../

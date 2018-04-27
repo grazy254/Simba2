@@ -1,3 +1,6 @@
+cd simba-autoId
+call mvn clean -U 
+cd ../
 cd simba-amap
 call mvn clean -U 
 cd ../

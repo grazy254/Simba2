@@ -283,4 +283,7 @@ cd ../
 cd simba-database-management
 call mvn clean -U deploy
 cd ../
+cd simba-autoId
+call mvn clean -U deploy
+cd ../
 echo " deplay all finish "

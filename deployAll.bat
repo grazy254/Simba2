@@ -289,4 +289,7 @@ cd ../
 cd simba-user-wallet
 call mvn clean -U deploy
 cd ../
+cd simba-user-integral
+call mvn clean -U deploy
+cd ../
 echo " deplay all finish "

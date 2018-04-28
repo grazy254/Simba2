@@ -23,7 +23,8 @@ public class SendMsgController {
     @RequestMapping("/send")
     @ResponseBody
     public JsonResult send(HttpServletRequest request, MsgPostArgs msgPostArgs) {
-        return sendMsgService.checkAndSend(msgPostArgs, request.getRemoteAddr());
+        sendMsgService.checkAndSend(msgPostArgs, request.getRemoteAddr());
+        return new JsonResult("发送成功", JsonResult.successCode);
     }
 
 }

@@ -3,7 +3,7 @@ package com.simba.service.impl;
 import com.simba.dao.ShortMessageDao;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.ShortMessage;
-import com.simba.model.VO.ShortMessageVo;
+import com.simba.model.Vo.ShortMessageVo;
 import com.simba.model.enums.SendStatus;
 import com.simba.model.form.ShortMsgSearchForm;
 import com.simba.service.MsgProjectService;

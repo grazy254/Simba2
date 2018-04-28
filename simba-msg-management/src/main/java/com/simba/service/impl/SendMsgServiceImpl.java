@@ -1,20 +1,20 @@
 package com.simba.service.impl;
 
 import com.simba.cache.RedisUtil;
+import com.simba.exception.BussException;
 import com.simba.framework.util.code.EncryptUtil;
 import com.simba.framework.util.date.DateUtil;
 import com.simba.framework.util.json.FastJsonUtil;
-import com.simba.framework.util.json.JsonResult;
 import com.simba.mobile.message.model.MsgType;
 import com.simba.mobile.message.util.SendMsgUtil;
 import com.simba.model.MsgProject;
-import com.simba.model.ShortMessage;
 import com.simba.model.MsgTemplate;
+import com.simba.model.ShortMessage;
 import com.simba.model.enums.SendStatus;
-import com.simba.model.other.RedisKey;
-import com.simba.service.*;
 import com.simba.model.other.MsgPostArgs;
+import com.simba.model.other.RedisKey;
 import com.simba.service.DO.EntryPlatform;
+import com.simba.service.*;
 import com.simba.util.EmailUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -24,8 +24,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -75,11 +73,9 @@ public class SendMsgServiceImpl implements SendMsgService {
      * @return
      */
     @Override
-    public JsonResult sendSimply(String mobile, String selfTemplateId, Map<String, String> params, String projectId) {
+    public void sendSimply(String mobile, String selfTemplateId, Map<String, String> params, String projectId) {
         EntryPlatform platform = templateService.getOnePlatformTemplateId(selfTemplateId);
-        if (platform == null) {
-            return new JsonResult(JsonResult.failCode, "模板Id有误");
-        }
+        if (platform == null) throw new BussException("模板Id有误");
         String platformTemplateId = platform.getTemplateId();
         MsgType platformType = platform.getPlatformType();
         String messageId = sendOneMessage(mobile, platformTemplateId, params, platformType, Integer.valueOf(projectId));
@@ -95,9 +91,8 @@ public class SendMsgServiceImpl implements SendMsgService {
             shortMessage.setMessageId(messageId);
             shortMessage.setMobile(mobile);
             shortMessageService.add(shortMessage);
-            return new JsonResult(JsonResult.successCode);
         } else {
-            return new JsonResult(JsonResult.failCode, "第三方短信接口无返回短信Id");
+            throw new BussException("第三方短信接口无返回短信Id");
         }
     }
 
@@ -109,13 +104,13 @@ public class SendMsgServiceImpl implements SendMsgService {
      * @return
      */
     @Override
-    public JsonResult checkAndSend(MsgPostArgs msgPostArgs, String ip) {
+    public void checkAndSend(MsgPostArgs msgPostArgs, String ip) {
         Map<String, String> values = FastJsonUtil.toObject(msgPostArgs.getValues(), Map.class);
         boolean isVerified = check(msgPostArgs.getMobile(), Integer.parseInt(msgPostArgs.getProjectId()), msgPostArgs.getTimeStamp(), msgPostArgs.getCipherText(), ip);
         if (isVerified) {
-            return sendSimply(msgPostArgs.getMobile(), msgPostArgs.getTemplateSelfId(), values, msgPostArgs.getProjectId());
+            sendSimply(msgPostArgs.getMobile(), msgPostArgs.getTemplateSelfId(), values, msgPostArgs.getProjectId());
         } else {
-            return new JsonResult(JsonResult.failCode, "校验失败");
+            throw new BussException("校验失败");
         }
     }
 

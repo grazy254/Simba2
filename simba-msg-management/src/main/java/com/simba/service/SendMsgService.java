@@ -15,9 +15,11 @@ import java.util.Map;
  * Created by linshuo on 2017/12/21.
  */
 public interface SendMsgService {
-    JsonResult sendSimply(String mobile, String selfTemplateId, Map<String, String> params, String projectId);
 
-    JsonResult checkAndSend(MsgPostArgs msgPostArgs, String ip);
+    void sendSimply(String mobile, String selfTemplateId, Map<String, String> params, String projectId);
+
+    void checkAndSend(MsgPostArgs msgPostArgs, String ip);
 
     ShortMessage resend(long id);
+
 }

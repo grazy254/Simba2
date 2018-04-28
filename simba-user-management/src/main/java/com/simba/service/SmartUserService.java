@@ -197,4 +197,12 @@ public interface SmartUserService {
 	 * @return
 	 */
 	JsonResult isRegByMobile(String mobile);
+	
+	/**
+	 * 根据UserId更新昵称
+	 * @param name
+	 * @param userId
+	 * @return
+	 */
+	JsonResult updateName(String name,long userId);
 }

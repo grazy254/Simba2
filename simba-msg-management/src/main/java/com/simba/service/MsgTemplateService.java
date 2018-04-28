@@ -1,16 +1,17 @@
 package com.simba.service;
 
-import cn.jiguang.common.resp.APIConnectionException;
-import cn.jiguang.common.resp.APIRequestException;
+import java.util.List;
+
+import com.simba.controller.form.AliTemplateForm;
+import com.simba.controller.form.JpushTemplateForm;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.mobile.message.model.MsgType;
 import com.simba.model.MsgTemplate;
 import com.simba.model.enums.AuditStatus;
-import com.simba.model.form.AliTemplateForm;
-import com.simba.model.form.JpushTemplateForm;
 import com.simba.service.DO.EntryPlatform;
 
-import java.util.List;
+import cn.jiguang.common.resp.APIConnectionException;
+import cn.jiguang.common.resp.APIRequestException;
 
 /**
  * Service

@@ -1,4 +1,4 @@
-package com.simba.model.Vo;
+package com.simba.controller.vo;
 
 import java.util.Date;
 

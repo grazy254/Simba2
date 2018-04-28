@@ -323,13 +323,12 @@ public class RedisClusterUtil implements Redis {
 
 	@Override
 	public void appendString(String key, String value) {
-
+		jedisCluster.append(key, value);
 	}
 
 	@Override
 	public boolean existString(String key) {
-
-		return false;
+		return jedisCluster.exists(key);
 	}
 
 	@Override

@@ -1,11 +1,11 @@
 package com.simba.service;
 
+import java.util.List;
+
+import com.simba.controller.form.ShortMsgSearchForm;
+import com.simba.controller.vo.ShortMessageVo;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.ShortMessage;
-import com.simba.model.Vo.ShortMessageVo;
-import com.simba.model.form.ShortMsgSearchForm;
-
-import java.util.List;
 
 /**
  * Service
@@ -24,19 +24,19 @@ public interface ShortMessageService {
 	List<ShortMessage> listAll();
 
 	Long count();
-	
+
 	Long countBy(String field, Object value);
-	
+
 	void deleteBy(String field, Object value);
-	
+
 	List<ShortMessage> page(Pager page);
 
-    List<ShortMessage> page(Pager page, ShortMsgSearchForm msgSearchForm);
+	List<ShortMessage> page(Pager page, ShortMsgSearchForm msgSearchForm);
 
-    Long count(ShortMsgSearchForm msgSearchForm);
+	Long count(ShortMsgSearchForm msgSearchForm);
 
 	ShortMessage get(Long id);
-	
+
 	void batchDelete(List<Long> idList);
 
 	ShortMessage getBy(String field, Object value);
@@ -59,6 +59,6 @@ public interface ShortMessageService {
 
 	List<ShortMessageVo> pageVo(Pager page);
 
-    List<ShortMessageVo> pageVo(Pager page, ShortMsgSearchForm msgSearchForm);
+	List<ShortMessageVo> pageVo(Pager page, ShortMsgSearchForm msgSearchForm);
 
 }

@@ -1,4 +1,4 @@
-package com.simba.model.VO;
+package com.simba.controller.vo;
 
 /**
  * Created by linshuo on 2017/12/11.

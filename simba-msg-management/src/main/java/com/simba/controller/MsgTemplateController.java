@@ -9,11 +9,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.simba.controller.form.AliTemplateForm;
+import com.simba.controller.form.JpushTemplateForm;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.MsgTemplate;
-import com.simba.model.form.AliTemplateForm;
-import com.simba.model.form.JpushTemplateForm;
 import com.simba.service.MsgTemplateService;
 
 import cn.jiguang.common.resp.APIConnectionException;

@@ -1,19 +1,23 @@
 package com.simba.controller;
 
-import com.simba.echarts.model.Chart;
-import com.simba.framework.util.date.DateUtil;
-import com.simba.framework.util.json.FastJsonUtil;
-import com.simba.model.DayAmount;
-import com.simba.model.TotalDayAmountBean;
-import com.simba.model.form.MsgAmountChartForm;
-import com.simba.service.DayAmountService;
-import com.simba.service.MsgProjectService;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.*;
+import com.simba.controller.form.MsgAmountChartForm;
+import com.simba.echarts.model.Chart;
+import com.simba.framework.util.date.DateUtil;
+import com.simba.framework.util.json.FastJsonUtil;
+import com.simba.model.DayAmount;
+import com.simba.model.TotalDayAmountBean;
+import com.simba.service.DayAmountService;
+import com.simba.service.MsgProjectService;
 
 /**
  * Created by linshuo on 2017/12/12.

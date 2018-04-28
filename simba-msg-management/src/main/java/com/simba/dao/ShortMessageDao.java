@@ -2,9 +2,9 @@ package com.simba.dao;
 
 import java.util.List;
 
+import com.simba.controller.form.ShortMsgSearchForm;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.ShortMessage;
-import com.simba.model.form.ShortMsgSearchForm;
 
 /**
  * 短信 Dao
@@ -23,15 +23,15 @@ public interface ShortMessageDao {
 	List<ShortMessage> listAll();
 
 	Long count();
-	
+
 	Long countBy(String field, Object value);
-	
+
 	void deleteBy(String field, Object value);
-	
+
 	List<ShortMessage> page(Pager page);
 
 	ShortMessage get(Long id);
-	
+
 	ShortMessage getBy(String field, Object value);
 
 	ShortMessage getByAnd(String field1, Object value1, String field2, Object value2);

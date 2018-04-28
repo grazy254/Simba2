@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.simba.controller.form.AliTemplateForm;
+import com.simba.controller.form.JpushTemplateForm;
 import com.simba.dao.MsgTemplateDao;
 import com.simba.framework.util.date.DateUtil;
 import com.simba.framework.util.jdbc.Pager;
@@ -16,8 +18,6 @@ import com.simba.jpush.msg.util.JpushMsgUtil;
 import com.simba.mobile.message.model.MsgType;
 import com.simba.model.MsgTemplate;
 import com.simba.model.enums.AuditStatus;
-import com.simba.model.form.AliTemplateForm;
-import com.simba.model.form.JpushTemplateForm;
 import com.simba.service.MsgTemplateService;
 import com.simba.service.DO.EntryPlatform;
 

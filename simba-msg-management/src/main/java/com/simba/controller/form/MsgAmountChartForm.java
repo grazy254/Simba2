@@ -1,4 +1,4 @@
-package com.simba.model.form;
+package com.simba.controller.form;
 
 /**
  * Created by linshuo on 2017/12/20.

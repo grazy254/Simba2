@@ -33,42 +33,13 @@ public class AutoIdController {
 	}
 	
 	@RequestMapping("/getList")
-	public String getList(Pager pager,ModelMap model){
-		List<AutoId> list = autoIdService.page(pager);
+	public String getList(String key ,Pager pager,ModelMap model){
+		List<AutoId> list = autoIdService.listAll(key);
 		model.put("list", list);
 		return "autoId/table";
 	}
 	
-	@ResponseBody
-	@RequestMapping("/count")
-	public JsonResult count() {
-		Integer count = autoIdService.count();
-		return new JsonResult(count, "", 200);
-	}
-
-	@RequestMapping("/toAdd")
-	public String toAdd() {
-		return "autoId/add";
-	}
-
-	@RequestMapping("/add")
-	public String add(AutoId autoId) {
-		autoIdService.add(autoId);
-		return "redirect:/autoId/list";
-	}
-
-	@RequestMapping("/toUpdate")
-	public String toUpdate(String id, ModelMap model) {
-		AutoId autoId = autoIdService.get(id);
-		model.put("autoId", autoId);
-		return "autoId/update";
-	}
-
-	@RequestMapping("/update")
-	public String update(AutoId autoId) {
-		autoIdService.update(autoId);
-		return "redirect:/autoId/list";
-	}
+	
 
 	@ResponseBody
 	@RequestMapping("/delete")

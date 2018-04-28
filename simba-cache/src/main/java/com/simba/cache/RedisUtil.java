@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -188,7 +189,7 @@ public class RedisUtil implements Redis {
 		long id = 1;
 		try {
 			jedis = pool.getResource();
-			id = jedis.incr(key.getBytes());
+			id = jedis.incr(key);
 		} catch (Exception e) {
 			logger.error("Redis出现错误", e);
 			throw new RuntimeException("Redis出现错误！", e);
@@ -493,6 +494,315 @@ public class RedisUtil implements Redis {
 		try {
 			jedis = pool.getResource();
 			jedis.lrem(key.getBytes(), count, SerializeUtil.serialize(value));
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			if (jedis != null) {
+				jedis.close();
+			}
+		}
+	}
+
+	@Override
+	public long getNum(String key) {
+		Jedis jedis = null;
+		long id = 0L;
+		try {
+			jedis = pool.getResource();
+			String autoId = (String) jedis.get(key);
+			if (StringUtils.isNotEmpty(autoId)) {
+				id = NumberUtils.toLong(autoId);
+			}
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			close(jedis);
+		}
+		return id;
+	}
+
+	@Override
+	public void clearAutoId(String key) {
+		Jedis jedis = null;
+		try {
+			jedis = pool.getResource();
+			jedis.del(key);
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			close(jedis);
+		}
+	}
+
+	@Override
+	public void setString(String key, String value) {
+		Jedis jedis = null;
+		try {
+			jedis = pool.getResource();
+			jedis.set(key, value);
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			close(jedis);
+		}
+	}
+
+	@Override
+	public void expireString(String key, int timeoutSecond) {
+		Jedis jedis = null;
+		try {
+			jedis = pool.getResource();
+			jedis.expire(key, timeout);
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			close(jedis);
+		}
+	}
+
+	@Override
+	public void setString(String key, String value, int second) {
+		Jedis jedis = null;
+		try {
+			jedis = pool.getResource();
+			jedis.set(key, value);
+			jedis.expire(key, second);
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			close(jedis);
+		}
+	}
+
+	@Override
+	public void hsetString(String key, String field, String value) {
+		Jedis jedis = null;
+		try {
+			jedis = pool.getResource();
+			jedis.hset(key, field, value);
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			close(jedis);
+		}
+	}
+
+	@Override
+	public String hgetString(String key, String field) {
+		Jedis jedis = null;
+		try {
+			jedis = pool.getResource();
+			return jedis.hget(key, field);
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			close(jedis);
+		}
+	}
+
+	@Override
+	public void removeString(String key) {
+		Jedis jedis = null;
+		try {
+			jedis = pool.getResource();
+			jedis.del(key);
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			close(jedis);
+		}
+	}
+
+	@Override
+	public void lpushString(String key, String value) {
+		Jedis jedis = null;
+		try {
+			jedis = pool.getResource();
+			jedis.lpush(key, value);
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			close(jedis);
+		}
+	}
+
+	@Override
+	public void rpushString(String key, String value) {
+		Jedis jedis = null;
+		try {
+			jedis = pool.getResource();
+			jedis.rpush(key, value);
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			close(jedis);
+		}
+	}
+
+	@Override
+	public List<String> lrangeString(String key) {
+		Jedis jedis = null;
+		try {
+			jedis = pool.getResource();
+			return jedis.lrange(key, 0, -1);
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			close(jedis);
+		}
+	}
+
+	@Override
+	public String lpopString(String key) {
+		Jedis jedis = null;
+		try {
+			jedis = pool.getResource();
+			return jedis.lpop(key);
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			close(jedis);
+		}
+	}
+
+	@Override
+	public String rpopString(String key) {
+		Jedis jedis = null;
+		try {
+			jedis = pool.getResource();
+			return jedis.rpop(key);
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			close(jedis);
+		}
+	}
+
+	@Override
+	public String lindexString(String key, int index) {
+		Jedis jedis = null;
+		try {
+			jedis = pool.getResource();
+			return jedis.lindex(key, index);
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			close(jedis);
+		}
+	}
+
+	@Override
+	public List<String> keysString(String pattern) {
+		Jedis jedis = null;
+		List<String> list = null;
+		try {
+			jedis = pool.getResource();
+			Set<String> set = jedis.keys(pattern);
+			list = new ArrayList<>(set);
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			if (jedis != null) {
+				jedis.close();
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public List<String> keysString() {
+		return keysString("*");
+	}
+
+	@Override
+	public long llenString(String key) {
+		Jedis jedis = null;
+		long object = 0L;
+		try {
+			jedis = pool.getResource();
+			object = jedis.llen(key);
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			if (jedis != null) {
+				jedis.close();
+			}
+		}
+		return object;
+	}
+
+	@Override
+	public void appendString(String key, String value) {
+		Jedis jedis = null;
+		try {
+			jedis = pool.getResource();
+			jedis.append(key, value);
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			if (jedis != null) {
+				jedis.close();
+			}
+		}
+	}
+
+	@Override
+	public boolean existString(String key) {
+		Jedis jedis = null;
+		try {
+			jedis = pool.getResource();
+			return jedis.exists(key);
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			if (jedis != null) {
+				jedis.close();
+			}
+		}
+	}
+
+	@Override
+	public Set<String> hkeysString(String key) {
+		Jedis jedis = null;
+		try {
+			jedis = pool.getResource();
+			Set<String> set = jedis.hkeys(key);
+			return set;
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			if (jedis != null) {
+				jedis.close();
+			}
+		}
+	}
+
+	@Override
+	public void lremString(String key, long count, String value) {
+		Jedis jedis = null;
+		try {
+			jedis = pool.getResource();
+			jedis.lrem(key, count, value);
 		} catch (Exception e) {
 			logger.error("Redis出现错误", e);
 			throw new RuntimeException("Redis出现错误！", e);

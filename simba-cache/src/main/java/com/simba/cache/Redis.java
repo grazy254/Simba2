@@ -9,35 +9,69 @@ public interface Redis {
 
 	void set(String key, Object value);
 
+	void setString(String key, String value);
+
 	void expire(String key, int timeoutSecond);
+
+	void expireString(String key, int timeoutSecond);
 
 	void set(String key, Object value, int second);
 
+	void setString(String key, String value, int second);
+
 	void hset(String key, String field, Object value);
+
+	void hsetString(String key, String field, String value);
 
 	Object hget(String key, String field);
 
+	String hgetString(String key, String field);
+
 	void remove(String key);
+
+	void removeString(String key);
 
 	long getAutoId(String key);
 
+	long getNum(String key);
+
+	void clearAutoId(String key);
+
 	void lpush(String key, Object value);
+
+	void lpushString(String key, String value);
 
 	void rpush(String key, Object value);
 
+	void rpushString(String key, String value);
+
 	List<Object> lrange(String key);
+
+	List<String> lrangeString(String key);
 
 	Object lpop(String key);
 
+	String lpopString(String key);
+
 	Object rpop(String key);
+
+	String rpopString(String key);
 
 	Object lindex(String key, int index);
 
+	String lindexString(String key, int index);
+
 	List<String> keys(String pattern);
+
+	List<String> keysString(String pattern);
 
 	List<String> keys();
 
+	List<String> keysString();
+
 	long llen(String key);
+
+	long llenString(String key);
 
 	boolean tryLock(String key);
 
@@ -54,7 +88,11 @@ public interface Redis {
 	 */
 	void append(String key, String value);
 
+	void appendString(String key, String value);
+
 	boolean exist(String key);
+
+	boolean existString(String key);
 
 	/**
 	 * 返回 key 指定的哈希集中所有字段的名字
@@ -63,6 +101,8 @@ public interface Redis {
 	 * @return
 	 */
 	Set<String> hkeys(String key);
+
+	Set<String> hkeysString(String key);
 
 	/**
 	 * 从存于 key 的列表里移除前 count 次出现的值为 value 的元素。 这个 count 参数通过下面几种方式影响这个操作： count
@@ -74,4 +114,6 @@ public interface Redis {
 	 * @param value
 	 */
 	void lrem(String key, long count, String value);
+
+	void lremString(String key, long count, String value);
 }

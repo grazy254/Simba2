@@ -240,115 +240,105 @@ public class RedisClusterUtil implements Redis {
 
 	@Override
 	public void setString(String key, String value) {
-		
-		
+
 	}
 
 	@Override
 	public void expireString(String key, int timeoutSecond) {
-		
-		
+
 	}
 
 	@Override
 	public void setString(String key, String value, int second) {
-		
-		
+
 	}
 
 	@Override
 	public void hsetString(String key, String field, String value) {
-		
-		
+
 	}
 
 	@Override
 	public String hgetString(String key, String field) {
-		
+
 		return null;
 	}
 
 	@Override
 	public void removeString(String key) {
-		
-		
+
 	}
 
 	@Override
 	public void lpushString(String key, String value) {
-		
-		
+
 	}
 
 	@Override
 	public void rpushString(String key, String value) {
-		
-		
+
 	}
 
 	@Override
 	public List<String> lrangeString(String key) {
-		
+
 		return null;
 	}
 
 	@Override
 	public String lpopString(String key) {
-		
+
 		return null;
 	}
 
 	@Override
 	public String rpopString(String key) {
-		
+
 		return null;
 	}
 
 	@Override
 	public String lindexString(String key, int index) {
-		
+
 		return null;
 	}
 
 	@Override
 	public List<String> keysString(String pattern) {
-		
+
 		return null;
 	}
 
 	@Override
 	public List<String> keysString() {
-		
+
 		return null;
 	}
 
 	@Override
 	public long llenString(String key) {
-		
+
 		return 0;
 	}
 
 	@Override
 	public void appendString(String key, String value) {
-		
-		
+
 	}
 
 	@Override
 	public boolean existString(String key) {
-		
+
 		return false;
 	}
 
 	@Override
 	public Set<String> hkeysString(String key) {
-		
-		return null;
+		return jedisCluster.hkeys(key);
 	}
 
 	@Override
 	public void lremString(String key, long count, String value) {
-		
-		
+		jedisCluster.lrem(key, count, value);
 	}
 }

@@ -240,85 +240,78 @@ public class RedisClusterUtil implements Redis {
 
 	@Override
 	public void setString(String key, String value) {
-
+		jedisCluster.set(key, value);
 	}
 
 	@Override
 	public void expireString(String key, int timeoutSecond) {
-
+		jedisCluster.expire(key, timeoutSecond);
 	}
 
 	@Override
 	public void setString(String key, String value, int second) {
-
+		jedisCluster.set(key, value);
+		jedisCluster.expire(key, second);
 	}
 
 	@Override
 	public void hsetString(String key, String field, String value) {
-
+		jedisCluster.hset(key, field, value);
 	}
 
 	@Override
 	public String hgetString(String key, String field) {
-
-		return null;
+		return jedisCluster.hget(key, field);
 	}
 
 	@Override
 	public void removeString(String key) {
-
+		jedisCluster.del(key);
 	}
 
 	@Override
 	public void lpushString(String key, String value) {
-
+		jedisCluster.lpush(key, value);
 	}
 
 	@Override
 	public void rpushString(String key, String value) {
-
+		jedisCluster.rpush(key, value);
 	}
 
 	@Override
 	public List<String> lrangeString(String key) {
-
-		return null;
+		return jedisCluster.lrange(key, 0, -1);
 	}
 
 	@Override
 	public String lpopString(String key) {
-
-		return null;
+		return jedisCluster.lpop(key);
 	}
 
 	@Override
 	public String rpopString(String key) {
-
-		return null;
+		return jedisCluster.rpop(key);
 	}
 
 	@Override
 	public String lindexString(String key, int index) {
-
-		return null;
+		return jedisCluster.lindex(key, index);
 	}
 
 	@Override
 	public List<String> keysString(String pattern) {
-
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public List<String> keysString() {
-
-		return null;
+		return keysString("*");
 	}
 
 	@Override
 	public long llenString(String key) {
-
-		return 0;
+		return jedisCluster.llen(key);
 	}
 
 	@Override

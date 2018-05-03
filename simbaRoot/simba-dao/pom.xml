@@ -23,5 +23,6 @@
 			<groupId>com.simba</groupId>
 			<artifactId>simba-database</artifactId>
 		</dependency>
+
 	</dependencies>
 </project>

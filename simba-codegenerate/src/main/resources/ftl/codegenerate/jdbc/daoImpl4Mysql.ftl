@@ -2,6 +2,8 @@ package ${packageName}.dao.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +12,7 @@ import com.simba.framework.util.jdbc.Jdbc;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.jdbc.StatementParameter;
 import ${packageName}.model.${className};
+import ${packageName}.model.form.${searchFormClassName};
 
 /**
  * ${classDesc} Dao实现类
@@ -54,7 +57,14 @@ public class ${className}DaoImpl implements ${className}Dao {
 		String sql = "select * from " + table;
 		return jdbc.queryForPage(sql, ${className}.class, page);
 	}
-
+	
+	@Override
+	public List<${className}> page(Pager page, ${searchFormClassName} ${searchFormFirstLower}) {
+		String sql = "select * from " + table + " where 1 = 1 ";
+		StatementParameter param = new StatementParameter();
+		return jdbc.queryForPage(buildCondition(sql, ${searchFormFirstLower}, param), ${className}.class, page, param);
+	}
+	
 	@Override
 	public List<${className}> listAll(){
 		String sql = "select * from " + table;
@@ -62,9 +72,10 @@ public class ${className}DaoImpl implements ${className}Dao {
 	}
 
 	@Override
-	public ${countType} count(){
-		String sql = "select count(*) from " + table;
-		return jdbc.queryFor${countName}(sql); 
+	public ${countType} count(${searchFormClassName} ${searchFormFirstLower}){
+		String sql = "select count(*) from " + table + " where 1 = 1 ";
+		StatementParameter param = new StatementParameter();
+		return jdbc.queryFor${countName}(buildCondition(sql, ${searchFormFirstLower}, param)); 
 	}
 
 	@Override
@@ -134,7 +145,7 @@ public class ${className}DaoImpl implements ${className}Dao {
 		param.set(value2);
 		return jdbc.queryForPage(sql, ${className}.class, page, param);
 	}
-	
+
 	@Override
 	public ${countType} countBy(String field, Object value) {
 		String sql = "select count(*) from " + table + " where " + field + " = ? ";
@@ -170,5 +181,16 @@ public class ${className}DaoImpl implements ${className}Dao {
 	public void deleteByOr(String field1, Object value1, String field2, Object value2){
 		String sql = "delete from " + table + " where " + field1 + " = ? or " + field2 + " = ? ";
 		jdbc.updateForBoolean(sql, value1, value2);
+	}
+	private String buildCondition(String sql, ${searchFormClassName} ${searchFormFirstLower}, StatementParameter param) {
+		<#if searchFormFields?exists>
+		<#list searchFormFields?keys as field>  
+        if (StringUtils.isNotEmpty(${searchFormFirstLower}.get${searchFormFields[field]}())) {
+			sql += " and ${field} = ? ";
+			param.set(${searchFormFirstLower}.get${searchFormFields[field]}());
+		}
+        </#list>  
+		</#if>
+		return sql;
 	}
 }

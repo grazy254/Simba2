@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.simba.framework.util.jdbc.Pager;
 import ${packageName}.model.${className};
+import ${packageName}.model.form.${searchFormClassName};
 
 /**
  *${classDesc} Service
@@ -21,7 +22,7 @@ public interface ${className}Service {
 
 	List<${className}> listAll();
 
-	${countType} count();
+	${countType} count(${searchFormClassName} ${searchFormFirstLower});
 	
 	${countType} countBy(String field, Object value);
 	
@@ -36,7 +37,9 @@ public interface ${className}Service {
 	void deleteByOr(String field1, Object value1, String field2, Object value2);
 	
 	List<${className}> page(Pager page);
-
+	
+	List<${className}> page(Pager page, ${searchFormClassName} ${searchFormFirstLower});
+	
 	${className} get(${idType} id);
 	
 	void batchDelete(List<${idType}> idList);

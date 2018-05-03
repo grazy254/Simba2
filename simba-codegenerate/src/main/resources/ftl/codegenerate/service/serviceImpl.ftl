@@ -11,6 +11,7 @@ import ${packageName}.dao.${className}Dao;
 import com.simba.framework.util.jdbc.Pager;
 import ${packageName}.model.${className};
 import ${packageName}.service.${className}Service;
+import ${packageName}.model.form.${searchFormClassName};
 
 /**
  * ${classDesc} Service实现类
@@ -51,11 +52,17 @@ public class ${className}ServiceImpl implements ${className}Service {
 	public List<${className}> page(Pager page) {
 		return ${firstLower}Dao.page(page);
 	}
-
+	
 	@Override
 	@Transactional(readOnly = true)
-	public ${countType} count() {
-		return ${firstLower}Dao.count();
+	public List<${className}> page(Pager page, ${searchFormClassName} ${searchFormFirstLower}) {
+		return ${firstLower}Dao.page(page, ${searchFormFirstLower});
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public ${countType} count(${searchFormClassName} ${searchFormFirstLower}) {
+		return ${firstLower}Dao.count(${searchFormFirstLower});
 	}
 	
 	@Override

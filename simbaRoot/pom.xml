@@ -230,6 +230,11 @@
 				<artifactId>simba-database-management</artifactId>
 				<version>${simba.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.simba</groupId>
+				<artifactId>simba-user-integral</artifactId>
+				<version>${simba.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

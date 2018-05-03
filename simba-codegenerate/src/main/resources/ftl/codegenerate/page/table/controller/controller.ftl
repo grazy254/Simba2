@@ -13,6 +13,7 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import ${packageName}.model.${className};
 import ${packageName}.service.${className}Service;
+import ${packageName}.model.form.${searchFormClassName};
 
 /**
  * ${classDesc}控制器
@@ -39,10 +40,23 @@ public class ${className}Controller {
 		return "${firstLower}/table";
 	}
 	
+	@RequestMapping("/search")
+	public String search() {
+		return "${firstLower}/search";
+	}
+	
+	
+	@RequestMapping("/doSearch")
+	public String getList(Pager pager, ${searchFormClassName} ${searchFormFirstLower}, ModelMap model){
+		List<${className}> list = ${firstLower}Service.page(pager, ${searchFormFirstLower});
+		model.put("list", list);
+		return "${firstLower}/searchtable";
+	}
+	
 	@ResponseBody
 	@RequestMapping("/count")
-	public JsonResult count() {
-		${countType} count = ${firstLower}Service.count();
+	public JsonResult count(${searchFormClassName} ${searchFormFirstLower}) {
+		${countType} count = ${firstLower}Service.count(${searchFormFirstLower});
 		return new JsonResult(count, "", 200);
 	}
 

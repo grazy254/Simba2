@@ -14,6 +14,8 @@ public enum PAGETYPE {
 
 	// 此类型的对象必须包含id , text , parentID字段，且存入数据库
 	TREETABLE("treeTable", "生成左树右表页面");
+	
+	
 
 	private String name;
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.simba.framework.util.jdbc.Pager;
 import ${packageName}.model.${className};
+import ${packageName}.model.form.${searchFormClassName};
 
 /**
  * ${classDesc} Dao
@@ -21,7 +22,7 @@ public interface ${className}Dao {
 
 	List<${className}> listAll();
 
-	${countType} count();
+	${countType} count(${searchFormClassName} ${searchFormFirstLower});
 	
 	${countType} countBy(String field, Object value);
 	
@@ -36,6 +37,8 @@ public interface ${className}Dao {
 	void deleteByOr(String field1, Object value1, String field2, Object value2);
 	
 	List<${className}> page(Pager page);
+	
+	List<${className}> page(Pager page, ${searchFormClassName} ${searchFormFirstLower});
 
 	${className} get(${idType} id);
 	
@@ -56,7 +59,6 @@ public interface ${className}Dao {
 	List<${className}> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
 
 	List<${className}> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
-	
 	
 
 }

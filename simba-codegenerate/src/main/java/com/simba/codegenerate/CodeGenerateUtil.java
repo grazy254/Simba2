@@ -74,11 +74,15 @@ public class CodeGenerateUtil {
 		String updateFile = pageDir + "/update.ftl";
 		String listFile = pageDir + "/list.ftl";
 		String tableFile = pageDir + "/table.ftl";
+		String searchTableFile = pageDir + "/searchtable.ftl";
+		String searchFile = pageDir + "/search.ftl";
 		String jsContent = getJs(param, pageType);
 		String addContent = getAdd(param, pageType);
 		String updateContent = getUpdate(param, pageType);
 		String listContent = getList(param, pageType);
 		String tableContent = getTable(param, pageType);
+		String searchTableContent = getSearchTable(param, pageType);
+		String searchContent = getSearch(param, pageType);
 		FileUtils.writeStringToFile(new File(jsFile), jsContent, ConstantData.DEFAULT_CHARSET);
 		logger.info("生成" + jsFile);
 		FileUtils.writeStringToFile(new File(addFile), addContent, ConstantData.DEFAULT_CHARSET);
@@ -89,10 +93,21 @@ public class CodeGenerateUtil {
 		logger.info("生成" + listFile);
 		FileUtils.writeStringToFile(new File(tableFile), tableContent, ConstantData.DEFAULT_CHARSET);
 		logger.info("生成" + tableFile);
+		FileUtils.writeStringToFile(new File(searchTableFile), searchTableContent, ConstantData.DEFAULT_CHARSET);
+		logger.info("生成" + searchTableFile);
+		FileUtils.writeStringToFile(new File(searchFile), searchContent, ConstantData.DEFAULT_CHARSET);
+		logger.info("生成" + searchFile);
 	}
 
+	private String getSearch(Map<String, Object> param, PAGETYPE pageType) throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException {
+		return FreemarkerUtil.parseFile("codegenerate/page/" + pageType.getName() + "/page/search.ftl", param);
+	}
+	
 	private String getTable(Map<String, Object> param, PAGETYPE pageType) throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException {
 		return FreemarkerUtil.parseFile("codegenerate/page/" + pageType.getName() + "/page/table.ftl", param);
+	}
+	private String getSearchTable(Map<String, Object> param, PAGETYPE pageType) throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException {
+		return FreemarkerUtil.parseFile("codegenerate/page/" + pageType.getName() + "/page/searchtable.ftl", param);
 	}
 
 	private String getList(Map<String, Object> param, PAGETYPE pageType) throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException {
@@ -117,10 +132,12 @@ public class CodeGenerateUtil {
 	 * @param c
 	 * @return
 	 */
-	private Map<String, Object> buildParam(Class<?> c, PAGETYPE pageType) {
+	private Map<String, Object> buildParam(Class<?> c, Class<?> searchFromC, PAGETYPE pageType) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		String className = c.getSimpleName();
+		String searchFormClassName = searchFromC.getSimpleName();
 		String firstLower = StringUtil.getFirstLower(className);
+		String searchFormFirstLower = StringUtil.getFirstLower(searchFormClassName);
 		DescAnnotation descAnnotation = AnnotationUtil.getClassAnnotation(c, DescAnnotation.class);
 		if (descAnnotation == null) {
 			param.put("classDesc", "");
@@ -129,9 +146,13 @@ public class CodeGenerateUtil {
 		}
 		param.put("className", className);
 		param.put("firstLower", firstLower);
+		param.put("searchFormClassName", searchFormClassName);
+		param.put("searchFormFirstLower", searchFormFirstLower);
 		param.put("packageName", packageName);
 		param.put("pageType", pageType.getName());
 		List<String> fields = ReflectUtil.getAllPropertiesName(c);
+		List<String> searchFormFieldNames = ReflectUtil.getAllPropertiesName(searchFromC);
+		Map<String,String> searchFormFields = new HashMap<>(); 
 		List<Map<String, String>> filedsWithPage = new ArrayList<>();
 		String updateProperties = "";
 		String insertProperties = "";
@@ -157,6 +178,9 @@ public class CodeGenerateUtil {
 			propertiesCount += "?,";
 			params += firstLower + ".get" + StringUtil.getFirstUpper(field) + "(),";
 		}
+		for (String field : searchFormFieldNames) {
+			searchFormFields.put(field, StringUtil.getFirstUpper(field));
+		}
 		updateProperties = updateProperties.substring(0, updateProperties.length() - 1);
 		insertProperties = insertProperties.substring(0, insertProperties.length() - 1);
 		propertiesCount = propertiesCount.substring(0, propertiesCount.length() - 1);
@@ -166,6 +190,7 @@ public class CodeGenerateUtil {
 		param.put("params", params);
 		param.put("propertiesCount", propertiesCount);
 		param.put("filedsWithPage", filedsWithPage);
+		param.put("searchFormFields", searchFormFields);
 		String idType = "Integer";
 		Field[] fs = c.getDeclaredFields();
 		Map<String, String> typeMapping = new HashMap<>();
@@ -306,10 +331,16 @@ public class CodeGenerateUtil {
 	 * @throws MalformedTemplateNameException
 	 * @throws TemplateNotFoundException
 	 */
-	public void codeGenerate(Class<?>[] classes, CODETYPE codeType, PAGETYPE pageType, String projectName, String webPath)
+	public void codeGenerate(Class<?>[] classes, Class<?>[] searchFormClasses, CODETYPE codeType, PAGETYPE pageType, String projectName, String webPath)
 			throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException {
+		int counter = 0;
 		for (Class<?> c : classes) {
-			codeGenerate(c, codeType, pageType, projectName, webPath);
+			Class<?> searchFormClass = null;
+			if(counter < searchFormClasses.length) {
+				searchFormClass = searchFormClasses[counter];
+			}
+			counter++;
+			codeGenerate(c, searchFormClass, codeType, pageType, projectName, webPath);
 		}
 	}
 
@@ -332,11 +363,11 @@ public class CodeGenerateUtil {
 	 * @throws MalformedTemplateNameException
 	 * @throws TemplateNotFoundException
 	 */
-	private void codeGenerate(Class<?> c, CODETYPE codeType, PAGETYPE pageType, String projectName, String webPath)
+	private void codeGenerate(Class<?> c, Class<?> searchFormC, CODETYPE codeType, PAGETYPE pageType, String projectName, String webPath)
 			throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException {
 		logger.info("生成代码" + c.getName() + "开始,代码类型为" + codeType.getFolderName() + ",页面类型为" + pageType.getName() + ",项目名称:" + projectName + ",web项目目录:" + webPath);
 		initPath(projectName, webPath, codeType, pageType, c);
-		Map<String, Object> param = buildParam(c, pageType);
+		Map<String, Object> param = buildParam(c, searchFormC, pageType);
 		generateClassFile(projectName, pageType, webPath, param, codeType);
 		if (pageType != PAGETYPE.NONE) {
 			generatePageFile(webPath, param, pageType);

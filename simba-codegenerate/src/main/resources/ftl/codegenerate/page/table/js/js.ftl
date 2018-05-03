@@ -1,5 +1,9 @@
 var ${className} = {
-
+	
+	"toSearch": function() {
+		${className}.init${className}SearchList(0, Page.size);
+	},
+	
 	"toAdd": function() {
 		window.self.location.href = contextPath + "/${firstLower}/toAdd";
 	},
@@ -32,15 +36,22 @@ var ${className} = {
 			}
 		});
 	},
-
-	"init${className}List": function(start, pageSize) {
+	"init${className}List": function(start, pageSize, method) {
+		var data = {}
+		var data2 = {}
+		method = method || "getList"
+		<#if searchFormFields?exists>
+		<#list searchFormFields? keys as field>
+		data["${field}"] = $("#${field}").val()
+		</#list>
+		</#if>
+		$.extend(data2,data);
+		data["pageStart"] = start
+		data["pageSize"] = pageSize
 		$.ajax({
 			type: "get",
-			url: contextPath + "/${firstLower}/getList",
-			data: {
-				"pageStart": start,
-				"pageSize": pageSize
-			},
+			url: contextPath + "/${firstLower}/" + method,
+			data: data,
 			async: true,
 			dataType: "html",
 			success: function(html) {
@@ -53,17 +64,19 @@ var ${className} = {
 			type: "get",
 			url: contextPath + "/${firstLower}/count",
 			async: true,
-			data: {
-			},
+			data: data2,
 			dataType: "json",
 			success: function(data) {
 				var total = data.data;
 				var pageHtml = Page.init(total, start, pageSize, "${className}.clickPager");
+				alert(pageHtml)
 				$("#page").html(pageHtml);
 			}
 		});
 	},
-
+	"init${className}SearchList": function(start, pageSize,) {
+		${className}.init${className}List(start, pageSize, "doSearch");
+	},
 	"clickPager": function(start, pageSize) {
 		${className}.init${className}List(start, pageSize);
 	},

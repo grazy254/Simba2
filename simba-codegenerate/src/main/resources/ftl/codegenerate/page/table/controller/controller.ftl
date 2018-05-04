@@ -40,17 +40,12 @@ public class ${className}Controller {
 		return "${firstLower}/table";
 	}
 	
-	@RequestMapping("/search")
-	public String search() {
-		return "${firstLower}/search";
-	}
-	
-	
+
 	@RequestMapping("/doSearch")
 	public String getList(Pager pager, ${searchFormClassName} ${searchFormFirstLower}, ModelMap model){
 		List<${className}> list = ${firstLower}Service.page(pager, ${searchFormFirstLower});
 		model.put("list", list);
-		return "${firstLower}/searchtable";
+		return "${firstLower}/table";
 	}
 	
 	@ResponseBody

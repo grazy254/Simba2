@@ -36,6 +36,19 @@
 
 										</div>
 									</div>
+									<div class="mailbox-controls">
+										<#if searchFormFields?exists>
+										<#list searchFormFields?keys as field> 
+										<label for="${field}">${searchFormFields[field]}:</label>
+										<input type="text" id="${field}" name="${field}" placeholder="请输入${searchFormFields[field]}">
+										&nbsp;&nbsp;
+										</#list> 
+										</#if>
+										<!-- Check all button -->
+										<button type="button" class="btn btn-default btn-sm" onclick="${className}.toSearch();"><i class="fa fa-search"></i>查询</button>
+										<div class="pull-right">
+										
+									</div>
 									<!-- /.pull-right -->
 								</div>
 								<div class="table-responsive">

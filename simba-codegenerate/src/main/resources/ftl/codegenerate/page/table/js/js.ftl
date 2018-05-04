@@ -1,7 +1,7 @@
 var ${className} = {
 	
 	"toSearch": function() {
-		${className}.init${className}SearchList(0, Page.size);
+		${className}.init${className}List(0, Page.size, "doSearch");
 	},
 	
 	"toAdd": function() {
@@ -69,13 +69,9 @@ var ${className} = {
 			success: function(data) {
 				var total = data.data;
 				var pageHtml = Page.init(total, start, pageSize, "${className}.clickPager");
-				alert(pageHtml)
 				$("#page").html(pageHtml);
 			}
 		});
-	},
-	"init${className}SearchList": function(start, pageSize,) {
-		${className}.init${className}List(start, pageSize, "doSearch");
 	},
 	"clickPager": function(start, pageSize) {
 		${className}.init${className}List(start, pageSize);

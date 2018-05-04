@@ -60,7 +60,7 @@ public class ${className}DaoImpl implements ${className}Dao {
 	
 	@Override
 	public List<${className}> page(Pager page, ${searchFormClassName} ${searchFormFirstLower}) {
-		String sql = "select * from " + table + " where 1 = 1 ";
+		String sql = "select * from " + table;
 		StatementParameter param = new StatementParameter();
 		return jdbc.queryForPage(buildCondition(sql, ${searchFormFirstLower}, param), ${className}.class, page, param);
 	}
@@ -73,9 +73,9 @@ public class ${className}DaoImpl implements ${className}Dao {
 
 	@Override
 	public ${countType} count(${searchFormClassName} ${searchFormFirstLower}){
-		String sql = "select count(*) from " + table + " where 1 = 1 ";
+		String sql = "select count(*) from " + table;
 		StatementParameter param = new StatementParameter();
-		return jdbc.queryFor${countName}(buildCondition(sql, ${searchFormFirstLower}, param)); 
+		return jdbc.queryFor${countName}(buildCondition(sql, ${searchFormFirstLower}, param), param); 
 	}
 
 	@Override
@@ -183,6 +183,7 @@ public class ${className}DaoImpl implements ${className}Dao {
 		jdbc.updateForBoolean(sql, value1, value2);
 	}
 	private String buildCondition(String sql, ${searchFormClassName} ${searchFormFirstLower}, StatementParameter param) {
+		sql += " where 1 = 1 ";
 		<#if searchFormFields?exists>
 		<#list searchFormFields?keys as field>  
         if (StringUtils.isNotEmpty(${searchFormFirstLower}.get${searchFormFields[field]}())) {

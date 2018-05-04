@@ -74,15 +74,11 @@ public class CodeGenerateUtil {
 		String updateFile = pageDir + "/update.ftl";
 		String listFile = pageDir + "/list.ftl";
 		String tableFile = pageDir + "/table.ftl";
-		String searchTableFile = pageDir + "/searchtable.ftl";
-		String searchFile = pageDir + "/search.ftl";
 		String jsContent = getJs(param, pageType);
 		String addContent = getAdd(param, pageType);
 		String updateContent = getUpdate(param, pageType);
 		String listContent = getList(param, pageType);
 		String tableContent = getTable(param, pageType);
-		String searchTableContent = getSearchTable(param, pageType);
-		String searchContent = getSearch(param, pageType);
 		FileUtils.writeStringToFile(new File(jsFile), jsContent, ConstantData.DEFAULT_CHARSET);
 		logger.info("生成" + jsFile);
 		FileUtils.writeStringToFile(new File(addFile), addContent, ConstantData.DEFAULT_CHARSET);
@@ -93,21 +89,10 @@ public class CodeGenerateUtil {
 		logger.info("生成" + listFile);
 		FileUtils.writeStringToFile(new File(tableFile), tableContent, ConstantData.DEFAULT_CHARSET);
 		logger.info("生成" + tableFile);
-		FileUtils.writeStringToFile(new File(searchTableFile), searchTableContent, ConstantData.DEFAULT_CHARSET);
-		logger.info("生成" + searchTableFile);
-		FileUtils.writeStringToFile(new File(searchFile), searchContent, ConstantData.DEFAULT_CHARSET);
-		logger.info("生成" + searchFile);
 	}
 
-	private String getSearch(Map<String, Object> param, PAGETYPE pageType) throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException {
-		return FreemarkerUtil.parseFile("codegenerate/page/" + pageType.getName() + "/page/search.ftl", param);
-	}
-	
 	private String getTable(Map<String, Object> param, PAGETYPE pageType) throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException {
 		return FreemarkerUtil.parseFile("codegenerate/page/" + pageType.getName() + "/page/table.ftl", param);
-	}
-	private String getSearchTable(Map<String, Object> param, PAGETYPE pageType) throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException {
-		return FreemarkerUtil.parseFile("codegenerate/page/" + pageType.getName() + "/page/searchtable.ftl", param);
 	}
 
 	private String getList(Map<String, Object> param, PAGETYPE pageType) throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException {
@@ -130,6 +115,7 @@ public class CodeGenerateUtil {
 	 * 构造参数
 	 * 
 	 * @param c
+	 * @param searchFormC
 	 * @return
 	 */
 	private Map<String, Object> buildParam(Class<?> c, Class<?> searchFromC, PAGETYPE pageType) {
@@ -317,6 +303,8 @@ public class CodeGenerateUtil {
 	 * 
 	 * @param classes
 	 *            要生成代码的Class对象数组
+	 * @param searchFormClasses
+	 * 			     要生成代码的表单Class对象数组
 	 * @param codeType
 	 *            代码类型
 	 * @param pageType
@@ -349,6 +337,8 @@ public class CodeGenerateUtil {
 	 * 
 	 * @param c
 	 *            要生成代码的Class对象
+	 * @param searchFormC
+	 * 			    要生成代码的表单Class对象数组
 	 * @param codeType
 	 *            代码类型
 	 * @param pageType

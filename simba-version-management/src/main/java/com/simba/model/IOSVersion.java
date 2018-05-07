@@ -83,8 +83,22 @@ public class IOSVersion {
 	 * 类型名称
 	 */
 	private String type;
-	
-	
+
+	public int getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(int typeId) {
+		this.typeId = typeId;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	public int getId() {
 		return id;
@@ -169,7 +183,7 @@ public class IOSVersion {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("VersionIOS [id=");
+		builder.append("IOSVersion [id=");
 		builder.append(id);
 		builder.append(", version=");
 		builder.append(version);
@@ -189,6 +203,10 @@ public class IOSVersion {
 		builder.append(fullImageFileUrl);
 		builder.append(", logFileUrl=");
 		builder.append(logFileUrl);
+		builder.append(", typeId=");
+		builder.append(typeId);
+		builder.append(", type=");
+		builder.append(type);
 		builder.append("]");
 		return builder.toString();
 	}

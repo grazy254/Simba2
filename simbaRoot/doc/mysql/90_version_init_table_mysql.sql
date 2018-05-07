@@ -1,8 +1,14 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/10/19 星期四 15:19:39                      */
+/* Created on:     2018/5/7 星期一 11:47:56                        */
 /*==============================================================*/
 
+
+drop table if exists FAQ;
+
+drop table if exists FAQType;
+
+drop table if exists bugFeedback;
 
 drop table if exists commonFile;
 
@@ -11,6 +17,45 @@ drop table if exists fileType;
 drop table if exists fileVersion;
 
 drop table if exists iOSVersion;
+
+drop table if exists opinionFeedback;
+
+/*==============================================================*/
+/* Table: FAQ                                                   */
+/*==============================================================*/
+create table FAQ
+(
+   id                   int not null auto_increment,
+   title                varchar(128),
+   text                 text,
+   type                 int not null,
+   createTime           datetime not null,
+   primary key (id)
+);
+
+/*==============================================================*/
+/* Table: FAQType                                               */
+/*==============================================================*/
+create table FAQType
+(
+   id                   int not null auto_increment,
+   type                 varchar(32) not null,
+   primary key (id)
+);
+
+/*==============================================================*/
+/* Table: bugFeedback                                           */
+/*==============================================================*/
+create table bugFeedback
+(
+   id                   int not null auto_increment,
+   userId               int not null,
+   title                varchar(128),
+   text                 text,
+   img                  text,
+   createTime           datetime not null,
+   primary key (id)
+);
 
 /*==============================================================*/
 /* Table: commonFile                                            */
@@ -79,9 +124,23 @@ create table iOSVersion
    ipaFileUrl           varchar(128) not null comment 'IPA文件地址',
    fullImageFileUrl     varchar(128) not null comment '大图片文件地址',
    logFileUrl           varchar(128) not null comment 'logo文件地址',
+   typeId               int comment '类型id',
    primary key (id),
    key AK_Key_Time (createTime)
 );
 
 alter table iOSVersion comment 'IOS安装包版本管理';
+
+/*==============================================================*/
+/* Table: opinionFeedback                                       */
+/*==============================================================*/
+create table opinionFeedback
+(
+   id                   int not null auto_increment,
+   userId               int not null,
+   title                varchar(128),
+   text                 text,
+   createTime           datetime not null,
+   primary key (id)
+);
 

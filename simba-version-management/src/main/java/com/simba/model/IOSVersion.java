@@ -72,6 +72,20 @@ public class IOSVersion {
 	@DescAnnotation(desc = "logo文件地址")
 	private String logFileUrl;
 
+	/**
+	 * 类型ID
+	 */
+	@DescAnnotation(desc = "类型ID")
+	private int typeId;
+
+	/////////////// 扩展///////////////////
+	/**
+	 * 类型名称
+	 */
+	private String type;
+	
+	
+
 	public int getId() {
 		return id;
 	}

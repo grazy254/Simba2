@@ -27,17 +27,17 @@ public class IOSVersionDaoImpl implements IOSVersionDao {
 
 	@Override
 	public void add(IOSVersion iOSVersion) {
-		String sql = "insert into " + table + "( version, fileSize, description, createTime, identifer, title, ipaFileUrl, fullImageFileUrl, logFileUrl) values(?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into " + table + "( version, fileSize, description, createTime, identifer, title, ipaFileUrl, fullImageFileUrl, logFileUrl,typeId) values(?,?,?,?,?,?,?,?,?,?)";
 		jdbc.updateForBoolean(sql, iOSVersion.getVersion(), iOSVersion.getFileSize(), iOSVersion.getDescription(), iOSVersion.getCreateTime(), iOSVersion.getIdentifer(), iOSVersion.getTitle(),
-				iOSVersion.getIpaFileUrl(), iOSVersion.getFullImageFileUrl(), iOSVersion.getLogFileUrl());
+				iOSVersion.getIpaFileUrl(), iOSVersion.getFullImageFileUrl(), iOSVersion.getLogFileUrl(), iOSVersion.getTypeId());
 	}
 
 	@Override
 	public void update(IOSVersion iOSVersion) {
 		String sql = "update " + table
-				+ " set  version = ? , fileSize = ? , description = ? , createTime = ? , identifer = ? , title = ? , ipaFileUrl = ? , fullImageFileUrl = ? , logFileUrl = ?  where id = ?  ";
+				+ " set  version = ? , fileSize = ? , description = ? , createTime = ? , identifer = ? , title = ? , ipaFileUrl = ? , fullImageFileUrl = ? , logFileUrl = ? , typeId = ? where id = ?  ";
 		jdbc.updateForBoolean(sql, iOSVersion.getVersion(), iOSVersion.getFileSize(), iOSVersion.getDescription(), iOSVersion.getCreateTime(), iOSVersion.getIdentifer(), iOSVersion.getTitle(),
-				iOSVersion.getIpaFileUrl(), iOSVersion.getFullImageFileUrl(), iOSVersion.getLogFileUrl(), iOSVersion.getId());
+				iOSVersion.getIpaFileUrl(), iOSVersion.getFullImageFileUrl(), iOSVersion.getLogFileUrl(), iOSVersion.getTypeId(), iOSVersion.getId());
 	}
 
 	@Override
@@ -145,9 +145,9 @@ public class IOSVersionDaoImpl implements IOSVersionDao {
 	}
 
 	@Override
-	public IOSVersion getNewestVersion() {
-		String sql = "select * from " + table + " order by createTime desc limit 1 ";
-		return jdbc.query(sql, IOSVersion.class);
+	public IOSVersion getNewestVersionByTpeId(int typeId) {
+		String sql = "select * from " + table + " where typeId = ? order by createTime desc limit 1 ";
+		return jdbc.query(sql, IOSVersion.class, typeId);
 	}
 
 }

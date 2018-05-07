@@ -36,11 +36,15 @@ public class IosController {
 	 * @return
 	 */
 	@RequestMapping("/download")
-	public String download(ModelMap model) {
-		IOSVersion version = iOSVersionService.getNewestVersion();
-		model.put("url", iosUrl);
+	public String download(int typeId, ModelMap model) {
+		IOSVersion version = iOSVersionService.getNewestVersionByTpeId(typeId);
+		String url = iosUrl;
+		int index = url.lastIndexOf("/");
+		url = url.substring(0, index) + "/" + "ios_" + typeId + ".plist";
+		model.put("url", url);
 		model.put("fileSize", version.getFileSize());
 		model.put("fileName", version.getTitle());
+		model.put("typeId", version.getTypeId());
 		return "iosDownload";
 	}
 
@@ -52,8 +56,8 @@ public class IosController {
 	 */
 	@ResponseBody
 	@RequestMapping("/getVersionInfo")
-	public Map<String, Object> getVersionInfo(ModelMap model) {
-		IOSVersion version = iOSVersionService.getNewestVersion();
+	public Map<String, Object> getVersionInfo(int typeId, ModelMap model) {
+		IOSVersion version = iOSVersionService.getNewestVersionByTpeId(typeId);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("version", version.getVersion());
 		resultMap.put("verdescription", version.getDescription());

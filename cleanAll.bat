@@ -1,6 +1,9 @@
 cd simba-user-wallet
 call mvn clean -U 
 cd ../
+cd simba-user-message
+call mvn clean -U 
+cd ../
 cd simba-user-integral
 call mvn clean -U 
 cd ../

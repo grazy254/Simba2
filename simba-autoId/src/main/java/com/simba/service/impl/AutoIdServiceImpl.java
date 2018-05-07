@@ -45,17 +45,29 @@ public class AutoIdServiceImpl implements AutoIdService {
 		String keys = key + "*" + suffix;
 		List<String> keyList = redisUtil.keysString(keys);
 		List<AutoId> autoIdList = new ArrayList<>(keyList.size());
-
+		keyList.forEach((String k) -> {
+			int index = k.lastIndexOf(suffix);
+			String id = k.substring(0, index);
+			long num = redisUtil.getNum(k);
+			AutoId autoId = new AutoId();
+			autoId.setId(id);
+			autoId.setNum(num);
+			autoIdList.add(autoId);
+		});
 		return autoIdList;
 	}
 
 	@Override
 	public void add(AutoId autoId) {
-
+		String key = autoId.getId() + suffix;
+		long num = autoId.getNum();
+		redisUtil.setString(key, num + "");
 	}
 
 	@Override
 	public AutoId get(String id) {
+		String key = id + suffix;
+
 		return null;
 	}
 

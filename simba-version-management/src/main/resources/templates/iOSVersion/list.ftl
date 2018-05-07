@@ -21,8 +21,15 @@
 						<div class="col-md-12">
 							<div class="box box-primary">
 								<div class="box-header with-border">
-									<h3 class="box-title">IOS手机App版本管理</h3>
+									<h3 class="box-title">
+										<#if typeName??>
+											${typeName}
+										<#else>
+											IOS App版本管理
+										</#if>
+										</h3>
 								</div>
+								<input type="hidden" id="typeId" name="typeId" value="${typeId!}" />
 								<!-- /.box-header -->
 								<div class="box-body no-padding">
 									<div class="mailbox-controls">
@@ -42,6 +49,7 @@
 											<tr>
 												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
 												<th>版本号</th>
+												<th>文件类型</th>
 												<th>文件大小</th>
 												<th>文件描述</th>
 												<th>时间</th>

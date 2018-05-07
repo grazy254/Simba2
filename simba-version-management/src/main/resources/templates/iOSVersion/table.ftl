@@ -2,6 +2,7 @@
 	<tr>
 		<td><input type="checkbox" name="iOSVersion" value="${iOSVersion.id}"></td>
 		<td>${iOSVersion.version}</td>
+		<td>${iOSVersion.type}</td>
 		<td>${iOSVersion.fileSize} MB</td>
 		<td>${iOSVersion.description!}</td>
 		<td>${iOSVersion.createTime?string("yyyy-MM-dd HH:mm:ss")}</td>

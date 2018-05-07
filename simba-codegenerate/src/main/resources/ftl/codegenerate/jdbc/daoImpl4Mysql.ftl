@@ -12,8 +12,9 @@ import com.simba.framework.util.jdbc.Jdbc;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.jdbc.StatementParameter;
 import ${packageName}.model.${className};
+<#if isSearch == true>
 import ${packageName}.model.form.${searchFormClassName};
-
+</#if>
 /**
  * ${classDesc} Dao实现类
  * 
@@ -57,27 +58,33 @@ public class ${className}DaoImpl implements ${className}Dao {
 		String sql = "select * from " + table;
 		return jdbc.queryForPage(sql, ${className}.class, page);
 	}
-	
+	<#if isSearch == true>
 	@Override
 	public List<${className}> page(Pager page, ${searchFormClassName} ${searchFormFirstLower}) {
 		String sql = "select * from " + table;
 		StatementParameter param = new StatementParameter();
 		return jdbc.queryForPage(buildCondition(sql, ${searchFormFirstLower}, param), ${className}.class, page, param);
 	}
-	
+	</#if>
 	@Override
 	public List<${className}> listAll(){
 		String sql = "select * from " + table;
 		return jdbc.queryForList(sql, ${className}.class);
 	}
-
+	
+	public ${countType} count(){
+		String sql = "select count(*) from " + table;
+		return jdbc.queryFor${countName}(sql); 
+	}
+	
+	<#if isSearch == true>
 	@Override
 	public ${countType} count(${searchFormClassName} ${searchFormFirstLower}){
 		String sql = "select count(*) from " + table;
 		StatementParameter param = new StatementParameter();
 		return jdbc.queryFor${countName}(buildCondition(sql, ${searchFormFirstLower}, param), param); 
 	}
-
+	</#if>
 	@Override
 	public ${className} get(${idType} id) {
 		String sql = "select * from " + table + " where id = ? ";
@@ -158,7 +165,6 @@ public class ${className}DaoImpl implements ${className}Dao {
 		jdbc.updateForBoolean(sql, value);
 	}
 
-
 	@Override
 	public ${countType} countByOr(String field1, Object value1, String field2, Object value2){
 		String sql = "select count(*) from " + table + " where " + field1 + " = ? or " + field2 + " = ? ";
@@ -182,16 +188,19 @@ public class ${className}DaoImpl implements ${className}Dao {
 		String sql = "delete from " + table + " where " + field1 + " = ? or " + field2 + " = ? ";
 		jdbc.updateForBoolean(sql, value1, value2);
 	}
+	<#if isSearch == true>
 	private String buildCondition(String sql, ${searchFormClassName} ${searchFormFirstLower}, StatementParameter param) {
-		sql += " where 1 = 1 ";
+		sql += " where 1 = 1";
 		<#if searchFormFields?exists>
-		<#list searchFormFields?keys as field>  
-        if (StringUtils.isNotEmpty(${searchFormFirstLower}.get${searchFormFields[field]}())) {
-			sql += " and ${field} = ? ";
-			param.set(${searchFormFirstLower}.get${searchFormFields[field]}());
+		<#list searchFormFields as tableField>
+        if (${searchFormFirstLower}.get${tableField["firstUpperKey"]}() != null 
+        		&& StringUtils.isNotEmpty(${searchFormFirstLower}.get${tableField["firstUpperKey"]}()+"")) {
+			sql += " and ${tableField["field"]}  ${tableField["oper"]} ?";
+			param.set(${searchFormFirstLower}.get${tableField["firstUpperKey"]}());
 		}
         </#list>  
 		</#if>
 		return sql;
 	}
+	</#if>
 }

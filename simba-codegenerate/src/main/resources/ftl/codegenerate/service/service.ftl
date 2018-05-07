@@ -4,8 +4,9 @@ import java.util.List;
 
 import com.simba.framework.util.jdbc.Pager;
 import ${packageName}.model.${className};
+<#if isSearch == true>
 import ${packageName}.model.form.${searchFormClassName};
-
+</#if>
 /**
  *${classDesc} Service
  * 
@@ -21,9 +22,12 @@ public interface ${className}Service {
 	void delete(${idType} id);
 
 	List<${className}> listAll();
-
-	${countType} count(${searchFormClassName} ${searchFormFirstLower});
+		
+	${countType} count();
 	
+	<#if isSearch == true>
+	${countType} count(${searchFormClassName} ${searchFormFirstLower});
+	</#if>
 	${countType} countBy(String field, Object value);
 	
 	${countType} countByAnd(String field1, Object value1, String field2, Object value2);
@@ -38,8 +42,9 @@ public interface ${className}Service {
 	
 	List<${className}> page(Pager page);
 	
+	<#if isSearch == true>
 	List<${className}> page(Pager page, ${searchFormClassName} ${searchFormFirstLower});
-	
+	</#if>
 	${className} get(${idType} id);
 	
 	void batchDelete(List<${idType}> idList);

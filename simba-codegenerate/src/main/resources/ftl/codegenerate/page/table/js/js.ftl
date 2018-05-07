@@ -1,8 +1,9 @@
 var ${className} = {
-	
+	<#if isSearch == true>
 	"toSearch": function() {
 		${className}.init${className}List(0, Page.size, "doSearch");
 	},
+	</#if>
 	
 	"toAdd": function() {
 		window.self.location.href = contextPath + "/${firstLower}/toAdd";
@@ -41,8 +42,8 @@ var ${className} = {
 		var data2 = {}
 		method = method || "getList"
 		<#if searchFormFields?exists>
-		<#list searchFormFields? keys as field>
-		data["${field}"] = $("#${field}").val()
+		<#list searchFormFields as tableField>
+		data["${tableField["key"]}"] = $("#${tableField["key"]}").val()
 		</#list>
 		</#if>
 		$.extend(data2,data);
@@ -74,7 +75,7 @@ var ${className} = {
 		});
 	},
 	"clickPager": function(start, pageSize) {
-		${className}.init${className}List(start, pageSize);
+		${className}.init${className}List(start, pageSize<#if isSearch == true>, "doSearch"</#if>);
 	},
 
 	"toUpdate": function(id) {

@@ -8,6 +8,7 @@
 		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 		<title>系统首页</title>
 		<${pound}include "../adminlte.ftl"/>
+		<#if importDateJs==true><${pound}include "../datetimepicker.ftl"/></#if>
 		<${pound}include "../iCheck.ftl"/>
 		<script type="text/javascript" src="${dollar}{base}/js/common/checkbox.js"></script>
 		<script type="text/javascript" src="${dollar}{base}/js/common/page.js"></script>
@@ -36,11 +37,13 @@
 
 										</div>
 									</div>
+									<!-- /.pull-right -->
+									<#if isSearch == true>
 									<div class="mailbox-controls">
 										<#if searchFormFields?exists>
-										<#list searchFormFields?keys as field> 
-										<label for="${field}">${searchFormFields[field]}:</label>
-										<input type="text" id="${field}" name="${field}" placeholder="请输入${searchFormFields[field]}">
+										<#list searchFormFields as tableField> 
+										<label for="${tableField["key"]}">${tableField["key"]}:</label>
+										<input type="text" id="${tableField["key"]}" <#if tableField["type"]=="Date">class="datetimepicker"</#if> name="${tableField["key"]}" placeholder="请输入${tableField["desc"]}">
 										&nbsp;&nbsp;
 										</#list> 
 										</#if>
@@ -49,7 +52,7 @@
 										<div class="pull-right">
 										
 									</div>
-									<!-- /.pull-right -->
+									</#if>									
 								</div>
 								<div class="table-responsive">
 									<table class="table table-hover table-striped table-bordered" id="table">

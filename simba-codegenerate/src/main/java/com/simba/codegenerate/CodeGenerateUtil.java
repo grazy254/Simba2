@@ -4,15 +4,18 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.simba.annotation.DescAnnotation;
+import com.simba.annotation.DBFieldAnnotation;
 import com.simba.framework.util.common.AnnotationUtil;
 import com.simba.framework.util.common.ReflectUtil;
 import com.simba.framework.util.common.StringUtil;
@@ -121,9 +124,56 @@ public class CodeGenerateUtil {
 	private Map<String, Object> buildParam(Class<?> c, Class<?> searchFromC, PAGETYPE pageType) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		String className = c.getSimpleName();
-		String searchFormClassName = searchFromC.getSimpleName();
+		param.put("isSearch", false);
+		if (searchFromC != null) {
+			String searchFormClassName = searchFromC.getSimpleName();
+			String searchFormFirstLower = StringUtil.getFirstLower(searchFormClassName);
+			param.put("searchFormClassName", searchFormClassName);
+			param.put("searchFormFirstLower", searchFormFirstLower);
+			List<String> searchFormFieldNames = ReflectUtil.getAllPropertiesName(searchFromC);			
+			List<Map<String,String>> searchFormFields = new ArrayList<>();
+			param.put("importDateJs", false);
+			for (String field : searchFormFieldNames) {
+				Map<String,String> tableField = new HashMap<>(); 
+				tableField.put("key", field);
+				tableField.put("firstUpperKey", StringUtil.getFirstUpper(field));
+				DBFieldAnnotation ta = AnnotationUtil.getFiledAnnotion(searchFromC, field, DBFieldAnnotation.class);
+				Field f = null;
+				try {
+					f = searchFromC.getDeclaredField(field);
+					if (f.getType() == Date.class) {
+						param.put("importDateJs", true);
+					}
+					tableField.put("type", f.getType().getSimpleName());
+				} catch (NoSuchFieldException e) {
+					logger.error("获取字段： "+ field+" 的类型异常, error "+e.getMessage().toString());
+				} catch (SecurityException e) {
+					logger.error("获取字段： "+ field+" 的类型异常, error "+e.getMessage().toString());
+				}
+				tableField.put("desc", StringUtil.getFirstUpper(field));
+				tableField.put("field", field);
+				tableField.put("oper", "=");
+				
+				if (ta != null) {
+					if (StringUtils.isNotEmpty(ta.field())) {
+						tableField.put("field", ta.field());
+					}
+					if (StringUtils.isNotEmpty(ta.oper())) {
+						tableField.put("oper", ta.oper());
+					}					
+					if (StringUtils.isNotEmpty(ta.desc())) {
+						tableField.put("desc", ta.desc());
+					}
+				} 
+				
+				searchFormFields.add(tableField);
+			}
+			param.put("searchFormFields", searchFormFields);
+			param.put("isSearch", true);
+		}
+		
+		
 		String firstLower = StringUtil.getFirstLower(className);
-		String searchFormFirstLower = StringUtil.getFirstLower(searchFormClassName);
 		DescAnnotation descAnnotation = AnnotationUtil.getClassAnnotation(c, DescAnnotation.class);
 		if (descAnnotation == null) {
 			param.put("classDesc", "");
@@ -132,13 +182,9 @@ public class CodeGenerateUtil {
 		}
 		param.put("className", className);
 		param.put("firstLower", firstLower);
-		param.put("searchFormClassName", searchFormClassName);
-		param.put("searchFormFirstLower", searchFormFirstLower);
 		param.put("packageName", packageName);
 		param.put("pageType", pageType.getName());
 		List<String> fields = ReflectUtil.getAllPropertiesName(c);
-		List<String> searchFormFieldNames = ReflectUtil.getAllPropertiesName(searchFromC);
-		Map<String,String> searchFormFields = new HashMap<>(); 
 		List<Map<String, String>> filedsWithPage = new ArrayList<>();
 		String updateProperties = "";
 		String insertProperties = "";
@@ -164,9 +210,7 @@ public class CodeGenerateUtil {
 			propertiesCount += "?,";
 			params += firstLower + ".get" + StringUtil.getFirstUpper(field) + "(),";
 		}
-		for (String field : searchFormFieldNames) {
-			searchFormFields.put(field, StringUtil.getFirstUpper(field));
-		}
+
 		updateProperties = updateProperties.substring(0, updateProperties.length() - 1);
 		insertProperties = insertProperties.substring(0, insertProperties.length() - 1);
 		propertiesCount = propertiesCount.substring(0, propertiesCount.length() - 1);
@@ -176,7 +220,6 @@ public class CodeGenerateUtil {
 		param.put("params", params);
 		param.put("propertiesCount", propertiesCount);
 		param.put("filedsWithPage", filedsWithPage);
-		param.put("searchFormFields", searchFormFields);
 		String idType = "Integer";
 		Field[] fs = c.getDeclaredFields();
 		Map<String, String> typeMapping = new HashMap<>();
@@ -297,6 +340,30 @@ public class CodeGenerateUtil {
 	private String getPackagePath() {
 		return packageName.replaceAll("\\.", "/");
 	}
+	
+	/**
+	 * 生成代码
+	 * 
+	 * @param classes
+	 *            要生成代码的Class对象数组
+	 * @param codeType
+	 *            代码类型
+	 * @param pageType
+	 *            页面类型
+	 * @param projectName
+	 *            项目名称
+	 * @param webPath
+	 *            web项目路径
+	 * @throws TemplateException
+	 * @throws IOException
+	 * @throws ParseException
+	 * @throws MalformedTemplateNameException
+	 * @throws TemplateNotFoundException
+	 */
+	public void codeGenerate(Class<?>[] classes, CODETYPE codeType, PAGETYPE pageType, String projectName, String webPath)
+			throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException {
+		codeGenerate(classes, null, codeType, pageType, projectName, webPath);
+	}
 
 	/**
 	 * 生成代码
@@ -324,7 +391,7 @@ public class CodeGenerateUtil {
 		int counter = 0;
 		for (Class<?> c : classes) {
 			Class<?> searchFormClass = null;
-			if(counter < searchFormClasses.length) {
+			if(searchFormClasses!=null && counter < searchFormClasses.length) {
 				searchFormClass = searchFormClasses[counter];
 			}
 			counter++;

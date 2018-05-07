@@ -11,8 +11,9 @@ import ${packageName}.dao.${className}Dao;
 import com.simba.framework.util.jdbc.Pager;
 import ${packageName}.model.${className};
 import ${packageName}.service.${className}Service;
+<#if isSearch == true>
 import ${packageName}.model.form.${searchFormClassName};
-
+</#if>
 /**
  * ${classDesc} Service实现类
  * 
@@ -53,18 +54,26 @@ public class ${className}ServiceImpl implements ${className}Service {
 		return ${firstLower}Dao.page(page);
 	}
 	
+	<#if isSearch == true>
 	@Override
 	@Transactional(readOnly = true)
 	public List<${className}> page(Pager page, ${searchFormClassName} ${searchFormFirstLower}) {
 		return ${firstLower}Dao.page(page, ${searchFormFirstLower});
 	}
+	</#if>
+	@Override
+	@Transactional(readOnly = true)
+	public ${countType} count() {
+		return ${firstLower}Dao.count();
+	}
 	
+	<#if isSearch == true>
 	@Override
 	@Transactional(readOnly = true)
 	public ${countType} count(${searchFormClassName} ${searchFormFirstLower}) {
 		return ${firstLower}Dao.count(${searchFormFirstLower});
 	}
-	
+	</#if>
 	@Override
 	@Transactional(readOnly = true)
 	public ${countType} countBy(String field, Object value){

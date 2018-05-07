@@ -42,7 +42,7 @@
 									<div class="mailbox-controls">
 										<#if searchFormFields?exists>
 										<#list searchFormFields as tableField> 
-										<label for="${tableField["key"]}">${tableField["key"]}:</label>
+										<label for="${tableField["key"]}">${tableField["desc"]}:</label>
 										<input type="text" id="${tableField["key"]}" <#if tableField["type"]=="Date">class="datetimepicker"</#if> name="${tableField["key"]}" placeholder="请输入${tableField["desc"]}">
 										&nbsp;&nbsp;
 										</#list> 

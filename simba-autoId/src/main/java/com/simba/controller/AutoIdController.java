@@ -77,4 +77,11 @@ public class AutoIdController {
 		return new JsonResult();
 	}
 
+	@ResponseBody
+	@RequestMapping("/getAutoId")
+	public JsonResult getAutoId(String id) {
+		long num = autoIdService.getAutoId(id);
+		return new JsonResult(num);
+	}
+
 }

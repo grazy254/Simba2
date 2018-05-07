@@ -25,8 +25,12 @@
 								<form role="form" onsubmit="return AutoId.checkForm();" id="form" action="${base}/autoId/add">
 									<div class="box-body">
 										<div class="form-group">
+											<label for="id">Key</label>
+											<input type="text" class="form-control" id="id" name="id" placeholder="请输入Key">
+										</div>
+										<div class="form-group">
 											<label for="num">数值</label>
-											<input type="text" class="form-control" id="num" name="num" placeholder="请输入数值">
+											<input type="text" class="form-control" id="num" name="num" placeholder="请输入数值" value="0">
 										</div>
 									</div>
 									<!-- /.box-body -->

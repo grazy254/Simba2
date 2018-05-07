@@ -235,6 +235,21 @@
 				<artifactId>simba-user-integral</artifactId>
 				<version>${simba.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.simba</groupId>
+				<artifactId>simba-user-message</artifactId>
+				<version>${simba.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.simba</groupId>
+				<artifactId>simba-user-wallet</artifactId>
+				<version>${simba.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.simba</groupId>
+				<artifactId>simba-autoId</artifactId>
+				<version>${simba.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

@@ -27,11 +27,14 @@
 								<div class="box-body no-padding">
 									<div class="mailbox-controls">
 										<!-- Check all button -->
-										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="AutoId.toAdd();"><i class="fa fa-plus"></i>
+										<label for="key">Key:</label>
+										<input type="text" id="key" name="key" placeholder="请输入Key">
+										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="AutoId.search();"><i class="fa fa-search"></i>
+                						查询</button>
+										<div class="pull-right">
+<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="AutoId.toAdd();"><i class="fa fa-plus"></i>
                 新增</button>
 										<button type="button" class="btn btn-default btn-sm" onclick="AutoId.batchDelete();"><i class="fa fa-remove"></i>删除</button>
-										<div class="pull-right">
-
 										</div>
 									</div>
 									<!-- /.pull-right -->

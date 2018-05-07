@@ -1,30 +1,34 @@
 var AutoId = {
 
-	"toAdd": function() {
+	"search" : function() {
+		AutoId.initAutoIdList();
+	},
+
+	"toAdd" : function() {
 		window.self.location.href = contextPath + "/autoId/toAdd";
 	},
 
-	"batchDelete": function() {
+	"batchDelete" : function() {
 		var ids = new Array();
 		$("input[name='autoId']").each(function() {
-			if(true == $(this).is(':checked')) {
+			if (true == $(this).is(':checked')) {
 				ids.push($(this).val());
 			}
 		});
-		if(ids.length == 0) {
+		if (ids.length == 0) {
 			parent.showInfo("请选择要删除的记录");
 			return false;
 		}
 		$.ajax({
-			type: "post",
-			url: contextPath + "/autoId/batchDelete",
-			data: {
-				"id": ids.join(",")
+			type : "post",
+			url : contextPath + "/autoId/batchDelete",
+			data : {
+				"id" : ids.join(",")
 			},
-			async: true,
-			dataType: "json",
-			success: function(data) {
-				if(data.code == 200) {
+			async : true,
+			dataType : "json",
+			success : function(data) {
+				if (data.code == 200) {
 					AutoId.initAutoIdList();
 				} else {
 					parent.showInfo(data.msg);
@@ -33,15 +37,16 @@ var AutoId = {
 		});
 	},
 
-	"initAutoIdList": function() {
+	"initAutoIdList" : function() {
 		$.ajax({
-			type: "get",
-			url: contextPath + "/autoId/getList",
-			data: {	
+			type : "get",
+			url : contextPath + "/autoId/getList",
+			data : {
+				"key" : $("#key").val()
 			},
-			async: true,
-			dataType: "html",
-			success: function(html) {
+			async : true,
+			dataType : "html",
+			success : function(html) {
 				$("#table").find("tbody").html(html);
 				CheckBox.init();
 				setTimeout("CheckBox.bindCheckAll();", 1000);
@@ -49,21 +54,21 @@ var AutoId = {
 		});
 	},
 
-	"toUpdate": function(id) {
+	"toUpdate" : function(id) {
 		window.self.location.href = contextPath + "/autoId/toUpdate?id=" + id;
 	},
 
-	"deleteAutoId": function(id) {
+	"deleteAutoId" : function(id) {
 		$.ajax({
-			type: "post",
-			url: contextPath + "/autoId/batchDelete",
-			data: {
-				"id": id
+			type : "post",
+			url : contextPath + "/autoId/batchDelete",
+			data : {
+				"id" : id
 			},
-			async: true,
-			dataType: "json",
-			success: function(data) {
-				if(data.code == 200) {
+			async : true,
+			dataType : "json",
+			success : function(data) {
+				if (data.code == 200) {
 					AutoId.initAutoIdList(0, Page.size);
 				} else {
 					parent.showInfo(data.msg);
@@ -72,13 +77,13 @@ var AutoId = {
 		});
 	},
 
-	"checkForm": function() {
+	"checkForm" : function() {
 		return true;
 	},
 
-	"toList": function() {
+	"toList" : function() {
 		window.self.location.href = contextPath + "/autoId/list";
 	},
 
-	"end": null
+	"end" : null
 };

@@ -23,8 +23,11 @@
 									<h3 class="box-title">修改自增id</h3>
 								</div>
 								<form role="form" onsubmit="return AutoId.checkForm();" id="form" action="${base}/autoId/update">
-									<input type="hidden" id="id" name="id" value="${autoId.id}" />
 									<div class="box-body">
+										<div class="form-group">
+											<label for="id">Key</label>
+											<input type="text" class="form-control" id="id" name="id" placeholder="请输入Key" value="${autoId.id}" readOnly>
+										</div>
 										<div class="form-group">
 											<label for="num">数值</label>
 											<input type="text" class="form-control" id="num" name="num" value="${autoId.num}" placeholder="请输入数值">

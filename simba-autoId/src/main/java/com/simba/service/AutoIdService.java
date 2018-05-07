@@ -24,4 +24,6 @@ public interface AutoIdService {
 
 	void update(AutoId autoId);
 
+	long getAutoId(String id);
+
 }

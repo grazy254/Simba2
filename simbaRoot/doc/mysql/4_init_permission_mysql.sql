@@ -13,3 +13,4 @@ insert into permission(id,text,url,parentID) values(14,'注册表管理','/registryTy
 insert into permission(id,text,url,parentID) values(15,'异常信息管理','/exceptionInfo/**',4);
 insert into permission(id,text,url,parentID) values(16,'日志管理','/operLog/**',4);
 insert into permission(id,text,url,parentID) values(17,'任务管理','/job/**',4);
+insert into permission(id,text,url,parentID) values(18,'自增ID管理','/autoId/**',4);

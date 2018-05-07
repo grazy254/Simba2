@@ -67,13 +67,22 @@ public class AutoIdServiceImpl implements AutoIdService {
 	@Override
 	public AutoId get(String id) {
 		String key = id + suffix;
-
-		return null;
+		long num = redisUtil.getNum(key);
+		AutoId autoId = new AutoId();
+		autoId.setId(id);
+		autoId.setNum(num);
+		return autoId;
 	}
 
 	@Override
 	public void update(AutoId autoId) {
+		this.add(autoId);
+	}
 
+	@Override
+	public long getAutoId(String id) {
+		String key = id + suffix;
+		return redisUtil.getAutoId(key);
 	}
 
 }

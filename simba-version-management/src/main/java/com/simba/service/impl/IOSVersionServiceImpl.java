@@ -237,14 +237,14 @@ public class IOSVersionServiceImpl implements IOSVersionService {
 		params.put("ipaVersion", version);
 		params.put("title", title);
 		String content = FreemarkerUtil.parseFile("plist.ftl", params);
-		FileUtils.write(new File(githubWorkDir + "/" + "ios.plist"), content, ConstantData.DEFAULT_CHARSET);
+		FileUtils.write(new File(githubWorkDir + "/" + "ios_" + iosVersion.getTypeId() + ".plist"), content, ConstantData.DEFAULT_CHARSET);
 		GitUtil.commitAndPush(githubWorkDir, iosVersion.toString(), githubUserName, githubPassword);
 		logger.info("提交github成功");
 	}
 
 	@Override
-	public IOSVersion getNewestVersion() {
-		return iOSVersionDao.getNewestVersion();
+	public IOSVersion getNewestVersionByTpeId(int typeId) {
+		return iOSVersionDao.getNewestVersionByTpeId(typeId);
 	}
 
 }

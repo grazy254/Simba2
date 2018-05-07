@@ -145,9 +145,9 @@ public class IOSVersionDaoImpl implements IOSVersionDao {
 	}
 
 	@Override
-	public IOSVersion getNewestVersion() {
-		String sql = "select * from " + table + " order by createTime desc limit 1 ";
-		return jdbc.query(sql, IOSVersion.class);
+	public IOSVersion getNewestVersionByTpeId(int typeId) {
+		String sql = "select * from " + table + " where typeId = ? order by createTime desc limit 1 ";
+		return jdbc.query(sql, IOSVersion.class, typeId);
 	}
 
 }

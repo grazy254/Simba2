@@ -49,6 +49,6 @@ public interface IOSVersionDao {
 
 	List<IOSVersion> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
 
-	IOSVersion getNewestVersion();
+	IOSVersion getNewestVersionByTpeId(int typeId);
 
 }

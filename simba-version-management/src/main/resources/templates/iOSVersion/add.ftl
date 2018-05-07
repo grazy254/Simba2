@@ -21,7 +21,11 @@
 						<div class="col-md-12">
 							<div class="box box-primary">
 								<div class="box-header with-border">
-									<h3 class="box-title">新增IOS安装包版本管理</h3>
+									<h3 class="box-title">新增<#if typeName??>
+											${typeName}
+										<#else>
+											IOS App版本管理
+										</#if></h3>
 								</div>
 								<form role="form" onsubmit="return IOSVersion.checkForm();" id="form" action="${base}/iOSVersion/add" method="post" enctype="multipart/form-data">
 									<div class="box-body">
@@ -29,6 +33,18 @@
 											<label for="version">版本号</label>
 											<input type="text" class="form-control" id="version" name="version" placeholder="请输入版本号">
 										</div>
+										<#if typeId??>
+											<input type="hidden" id="typeId" name="typeId" value="${typeId}" />
+											<#else>
+												<div class="form-group">
+													<label for="type">类型</label>
+													<select name="typeId" class="form-control" id="typeId" placeholder="请选择类型">
+														<#list list as type>
+															<option value="${type.id}">${type.getName()}</option>
+														</#list>
+													</select>
+												</div>
+										</#if>
 										<div class="form-group">
 											<label for="description">文件描述</label>
 											<input type="text" class="form-control" id="description" name="description" placeholder="请输入文件描述">

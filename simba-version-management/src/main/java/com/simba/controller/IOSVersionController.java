@@ -31,7 +31,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.git.GitUtil;
+import com.simba.model.FileType;
 import com.simba.model.IOSVersion;
+import com.simba.service.FileTypeService;
 import com.simba.service.IOSVersionService;
 
 import freemarker.core.ParseException;
@@ -53,6 +55,9 @@ public class IOSVersionController {
 
 	@Autowired
 	private IOSVersionService iOSVersionService;
+
+	@Autowired
+	private FileTypeService fileTypeService;
 
 	@Value("${github.address}")
 	private String githubAddress;
@@ -93,38 +98,76 @@ public class IOSVersionController {
 	}
 
 	@RequestMapping("/list")
-	public String list() {
+	public String list(ModelMap model, Integer typeId) {
+		String typeName = null;
+		if (typeId != null && typeId > 0) {
+			FileType fileType = fileTypeService.get(typeId);
+			typeName = fileType.getName();
+		}
+		model.put("typeId", typeId);
+		model.put("typeName", typeName);
 		return "iOSVersion/list";
 	}
 
+	private String getType(Integer id) {
+		FileType f = fileTypeService.get(id);
+		String type = f.getName();
+		return type;
+	}
+
 	@RequestMapping("/getList")
-	public String getList(Pager pager, ModelMap model) {
-		List<IOSVersion> list = iOSVersionService.page(pager);
+	public String getList(Pager pager, Integer typeId, ModelMap model) {
+		List<IOSVersion> list = null;
+		if (typeId != null && typeId > 0) {
+			list = iOSVersionService.pageBy("typeId", typeId, pager);
+		} else {
+			list = iOSVersionService.page(pager);
+		}
+		list.forEach((fileversion) -> {
+			fileversion.setType(getType(fileversion.getTypeId()));
+		});
 		model.put("list", list);
 		return "iOSVersion/table";
 	}
 
 	@ResponseBody
 	@RequestMapping("/count")
-	public JsonResult count() {
-		int count = iOSVersionService.count();
+	public JsonResult count(Integer typeId) {
+		int count = 0;
+		if (typeId != null && typeId > 0) {
+			count = iOSVersionService.countBy("typeId", typeId);
+		} else {
+			count = iOSVersionService.count();
+		}
 		return new JsonResult(count, "", 200);
 	}
 
 	@RequestMapping("/toAdd")
-	public String toAdd() {
+	public String toAdd(Integer typeId, ModelMap model) {
+		List<FileType> list = fileTypeService.listAll();
+		String typeName = null;
+		if (typeId != null && typeId > 0) {
+			FileType fileType = fileTypeService.get(typeId);
+			typeName = fileType.getName();
+		}
+		model.put("typeName", typeName);
+		model.put("list", list);
+		model.put("typeId", typeId);
 		return "iOSVersion/add";
 	}
 
 	@RequestMapping("/add")
 	public String add(IOSVersion iOSVersion, MultipartFile ipaFile, MultipartFile fullImageFile, MultipartFile logFile) throws IOException, FastdfsException {
 		iOSVersionService.add(iOSVersion, ipaFile, fullImageFile, logFile);
-		return "redirect:/iOSVersion/list";
+		return "redirect:/iOSVersion/lis?typeId=" + iOSVersion.getTypeId();
 	}
 
 	@RequestMapping("/toUpdate")
 	public String toUpdate(Integer id, ModelMap model) {
 		IOSVersion iOSVersion = iOSVersionService.get(id);
+		FileType fileType = fileTypeService.get(iOSVersion.getTypeId());
+		String typeName = fileType.getName();
+		model.put("typeName", typeName);
 		model.put("iOSVersion", iOSVersion);
 		return "iOSVersion/update";
 	}
@@ -132,7 +175,7 @@ public class IOSVersionController {
 	@RequestMapping("/update")
 	public String update(IOSVersion iOSVersion, MultipartFile ipaFile, MultipartFile fullImageFile, MultipartFile logFile) throws IOException, FastdfsException {
 		iOSVersionService.update(iOSVersion, ipaFile, fullImageFile, logFile);
-		return "redirect:/iOSVersion/list";
+		return "redirect:/iOSVersion/lis?typeId=" + iOSVersion.getTypeId();
 	}
 
 	@ResponseBody

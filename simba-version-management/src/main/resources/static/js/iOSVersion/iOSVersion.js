@@ -1,16 +1,16 @@
 var IOSVersion = {
 
-	"publish": function(id) {
+	"publish" : function(id) {
 		parent.showSuccessInfo("正在发布，请耐心等待...");
 		$.ajax({
-			type: "post",
-			url: contextPath + "/iOSVersion/publish",
-			async: true,
-			data: {
-				id: id
+			type : "post",
+			url : contextPath + "/iOSVersion/publish",
+			async : true,
+			data : {
+				id : id
 			},
-			success: function(data) {
-				if(data.code == 200) {
+			success : function(data) {
+				if (data.code == 200) {
 					parent.showSuccessInfo("发布ISOApp安装包成功");
 				} else {
 					parent.showInfo(data.msg);
@@ -19,31 +19,31 @@ var IOSVersion = {
 		});
 	},
 
-	"toAdd": function() {
-		window.self.location.href = contextPath + "/iOSVersion/toAdd";
+	"toAdd" : function() {
+		window.self.location.href = contextPath + "/iOSVersion/toAdd?typeId=" + $("#typeId").val();
 	},
 
-	"batchDelete": function() {
+	"batchDelete" : function() {
 		var ids = new Array();
 		$("input[name='iOSVersion']").each(function() {
-			if(true == $(this).is(':checked')) {
+			if (true == $(this).is(':checked')) {
 				ids.push($(this).val());
 			}
 		});
-		if(ids.length == 0) {
+		if (ids.length == 0) {
 			parent.showInfo("请选择要删除的记录");
 			return false;
 		}
 		$.ajax({
-			type: "post",
-			url: contextPath + "/iOSVersion/batchDelete",
-			data: {
-				"id": ids.join(",")
+			type : "post",
+			url : contextPath + "/iOSVersion/batchDelete",
+			data : {
+				"id" : ids.join(",")
 			},
-			async: true,
-			dataType: "json",
-			success: function(data) {
-				if(data.code == 200) {
+			async : true,
+			dataType : "json",
+			success : function(data) {
+				if (data.code == 200) {
 					IOSVersion.initIOSVersionList(0, Page.size);
 				} else {
 					parent.showInfo(data.msg);
@@ -52,30 +52,33 @@ var IOSVersion = {
 		});
 	},
 
-	"initIOSVersionList": function(start, pageSize) {
+	"initIOSVersionList" : function(start, pageSize) {
 		$.ajax({
-			type: "get",
-			url: contextPath + "/iOSVersion/getList",
-			data: {
-				"pageStart": start,
-				"pageSize": pageSize
+			type : "get",
+			url : contextPath + "/iOSVersion/getList",
+			data : {
+				"pageStart" : start,
+				"pageSize" : pageSize,
+				"typeId" : $("#typeId").val()
 			},
-			async: true,
-			dataType: "html",
-			success: function(html) {
+			async : true,
+			dataType : "html",
+			success : function(html) {
 				$("#table").find("tbody").html(html);
 				CheckBox.init();
 				setTimeout("CheckBox.bindCheckAll();", 1000);
 			}
 		});
 		$.ajax({
-			type: "get",
-			url: contextPath + "/iOSVersion/count",
-			async: true,
-			data: {},
-			async: true,
-			dataType: "json",
-			success: function(data) {
+			type : "get",
+			url : contextPath + "/iOSVersion/count",
+			async : true,
+			data : {
+				"typeId" : $("#typeId").val()
+			},
+			async : true,
+			dataType : "json",
+			success : function(data) {
 				var total = data.data;
 				var pageHtml = Page.init(total, start, pageSize, "IOSVersion.clickPager");
 				$("#page").html(pageHtml);
@@ -83,25 +86,25 @@ var IOSVersion = {
 		});
 	},
 
-	"clickPager": function(start, pageSize) {
+	"clickPager" : function(start, pageSize) {
 		IOSVersion.initIOSVersionList(start, pageSize);
 	},
 
-	"toUpdate": function(id) {
+	"toUpdate" : function(id) {
 		window.self.location.href = contextPath + "/iOSVersion/toUpdate?id=" + id;
 	},
 
-	"deleteIOSVersion": function(id) {
+	"deleteIOSVersion" : function(id) {
 		$.ajax({
-			type: "post",
-			url: contextPath + "/iOSVersion/batchDelete",
-			data: {
-				"id": id
+			type : "post",
+			url : contextPath + "/iOSVersion/batchDelete",
+			data : {
+				"id" : id
 			},
-			async: true,
-			dataType: "json",
-			success: function(data) {
-				if(data.code == 200) {
+			async : true,
+			dataType : "json",
+			success : function(data) {
+				if (data.code == 200) {
 					IOSVersion.initIOSVersionList(0, Page.size);
 				} else {
 					parent.showInfo(data.msg);
@@ -110,46 +113,51 @@ var IOSVersion = {
 		});
 	},
 
-	"checkForm": function() {
+	"checkForm" : function() {
 
 		var version = $("#version").val();
-		if(!version) {
+		if (!version) {
 			parent.showInfo("版本号不能为空");
 			return false;
 		}
 		var ipaFile = $("#ipaFile").val();
-		if(!ipaFile) {
+		if (!ipaFile) {
 			parent.showInfo("IPA不能为空");
 			return false;
 		}
 		var identifer = $("#identifer").val();
-		if(!identifer) {
+		if (!identifer) {
 			parent.showInfo("IOS版本identifer属性不能为空");
 			return false;
 		}
 		var title = $("#title").val();
-		if(!title) {
+		if (!title) {
 			parent.showInfo("标题不能为空");
 			return false;
 		}
 
 		var fullImageFile = $("#fullImageFile").val();
-		if(!fullImageFile) {
+		if (!fullImageFile) {
 			parent.showInfo("大图片文件不能为空");
 			return false;
 		}
 		var logFile = $("#logFile").val();
-		if(!logFile) {
+		if (!logFile) {
 			parent.showInfo("logo文件不能为空");
 			return false;
 		}
 
+		var typeId = $("#typeId").val();
+		if (!typeId) {
+			parent.showInfo("类型不能为空");
+			return false;
+		}
 		return true;
 	},
 
-	"toList": function() {
-		window.self.location.href = contextPath + "/iOSVersion/list";
+	"toList" : function() {
+		window.self.location.href = contextPath + "/iOSVersion/list?typeId=" + $("#typeId").val();
 	},
 
-	"end": null
+	"end" : null
 };

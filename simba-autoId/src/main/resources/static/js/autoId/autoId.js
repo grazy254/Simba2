@@ -78,6 +78,11 @@ var AutoId = {
 	},
 
 	"checkForm" : function() {
+		var id = $("#id").val();
+		if(!id) {
+			parent.showInfo("Key不能为空");
+			return false;
+		}
 		return true;
 	},
 

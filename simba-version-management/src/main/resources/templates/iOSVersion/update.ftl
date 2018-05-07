@@ -20,10 +20,11 @@
 						<div class="col-md-12">
 							<div class="box box-primary">
 								<div class="box-header with-border">
-									<h3 class="box-title">修改IOS安装包版本管理</h3>
+									<h3 class="box-title">修改${typeName}</h3>
 								</div>
 								<form role="form" onsubmit="return IOSVersion.checkForm();" id="form" action="${base}/iOSVersion/update" method="post" enctype="multipart/form-data">
 									<input type="hidden" id="id" name="id" value="${iOSVersion.id}" />
+									<input type="hidden" id="typeId" name="typeId" value="${iOSVersion.typeId}" />
 									<input type="hidden" id="fileSize" name="fileSize" value="${iOSVersion.fileSize}" />
 									<input type="hidden" id="ipaFileUrl" name="ipaFileUrl" value="${iOSVersion.ipaFileUrl}" />
 									<input type="hidden" id="fullImageFileUrl" name="fullImageFileUrl" value="${iOSVersion.fullImageFileUrl}" />

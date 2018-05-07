@@ -31,15 +31,37 @@ public class AutoIdController {
 	public String list() {
 		return "autoId/list";
 	}
-	
+
 	@RequestMapping("/getList")
-	public String getList(String key ,Pager pager,ModelMap model){
+	public String getList(String key, Pager pager, ModelMap model) {
 		List<AutoId> list = autoIdService.listAll(key);
 		model.put("list", list);
 		return "autoId/table";
 	}
-	
-	
+
+	@RequestMapping("/toAdd")
+	public String toAdd() {
+		return "autoId/add";
+	}
+
+	@RequestMapping("/add")
+	public String add(AutoId autoId) {
+		autoIdService.add(autoId);
+		return "redirect:/autoId/list";
+	}
+
+	@RequestMapping("/toUpdate")
+	public String toUpdate(String id, ModelMap model) {
+		AutoId autoId = autoIdService.get(id);
+		model.put("autoId", autoId);
+		return "autoId/update";
+	}
+
+	@RequestMapping("/update")
+	public String update(AutoId autoId) {
+		autoIdService.update(autoId);
+		return "redirect:/autoId/list";
+	}
 
 	@ResponseBody
 	@RequestMapping("/delete")
@@ -54,7 +76,5 @@ public class AutoIdController {
 		autoIdService.batchDelete(Arrays.asList(id));
 		return new JsonResult();
 	}
-
-	
 
 }

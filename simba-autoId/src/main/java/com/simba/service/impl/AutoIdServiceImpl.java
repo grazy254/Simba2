@@ -38,4 +38,19 @@ public class AutoIdServiceImpl implements AutoIdService {
 		return null;
 	}
 
+	@Override
+	public void add(AutoId autoId) {
+
+	}
+
+	@Override
+	public AutoId get(String id) {
+		return null;
+	}
+
+	@Override
+	public void update(AutoId autoId) {
+
+	}
+
 }

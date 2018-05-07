@@ -18,4 +18,10 @@ public interface AutoIdService {
 
 	List<AutoId> listAll(String key);
 
+	void add(AutoId autoId);
+
+	AutoId get(String id);
+
+	void update(AutoId autoId);
+
 }

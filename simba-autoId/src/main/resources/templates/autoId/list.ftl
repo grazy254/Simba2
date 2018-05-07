@@ -41,6 +41,7 @@
 										<thead>
 											<tr>
 												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
+												<th>Key</th>
 												<th>数值</th>
 												<th>操作</th>
 											</tr>
@@ -50,8 +51,6 @@
 										</tbody>
 									</table>
 									<!-- /.table -->
-									<div id="page">
-									</div>
 								</div>
 								<!-- /.mail-box-messages -->
 							</div>
@@ -72,7 +71,7 @@
 	</body>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			AutoId.initAutoIdList(0, Page.size);
+			AutoId.initAutoIdList();
 		});
 	</script>
 

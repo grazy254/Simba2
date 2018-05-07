@@ -25,7 +25,7 @@ var AutoId = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
-					AutoId.initAutoIdList(0, Page.size);
+					AutoId.initAutoIdList();
 				} else {
 					parent.showInfo(data.msg);
 				}
@@ -33,13 +33,11 @@ var AutoId = {
 		});
 	},
 
-	"initAutoIdList": function(start, pageSize) {
+	"initAutoIdList": function() {
 		$.ajax({
 			type: "get",
 			url: contextPath + "/autoId/getList",
-			data: {
-				"pageStart": start,
-				"pageSize": pageSize
+			data: {	
 			},
 			async: true,
 			dataType: "html",
@@ -49,23 +47,6 @@ var AutoId = {
 				setTimeout("CheckBox.bindCheckAll();", 1000);
 			}
 		});
-		$.ajax({
-			type: "get",
-			url: contextPath + "/autoId/count",
-			async: true,
-			data: {
-			},
-			dataType: "json",
-			success: function(data) {
-				var total = data.data;
-				var pageHtml = Page.init(total, start, pageSize, "AutoId.clickPager");
-				$("#page").html(pageHtml);
-			}
-		});
-	},
-
-	"clickPager": function(start, pageSize) {
-		AutoId.initAutoIdList(start, pageSize);
 	},
 
 	"toUpdate": function(id) {

@@ -72,9 +72,10 @@ public interface IOSVersionService {
 	/**
 	 * 获取最新的版本
 	 * 
+	 * @param typeId
 	 * @return
 	 */
-	IOSVersion getNewestVersion();
+	IOSVersion getNewestVersionByTpeId(int typeId);
 
 	void update(IOSVersion iOSVersion, MultipartFile ipaFile, MultipartFile fullImageFile, MultipartFile logFile) throws IOException, FastdfsException;
 

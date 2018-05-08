@@ -6,8 +6,6 @@ import com.simba.codegenerate.CODETYPE;
 import com.simba.codegenerate.CodeGenerateUtil;
 import com.simba.codegenerate.PAGETYPE;
 import com.simba.framework.util.file.PropertiesUtil;
-import com.simba.model.OperLogger;
-import com.simba.model.form.OperLoggerSearchForm;
 
 import freemarker.template.TemplateException;
 
@@ -33,8 +31,9 @@ public class CodeGenerate {
 		int index = path.indexOf("/target");
 		String webPath = path.substring(0, index);
 		// 下面的代码无需修改
-		//如果没有搜索需求，调用该方法
-//		CodeGenerateUtil.getInstance().codeGenerate(classes, codeType, pageType, projectName, webPath);
+		// 如果没有搜索需求，调用该方法
+		// CodeGenerateUtil.getInstance().codeGenerate(classes, codeType,
+		// pageType, projectName, webPath);
 		CodeGenerateUtil.getInstance().codeGenerate(classes, searchFormClasses, codeType, pageType, projectName, webPath);
 		System.exit(0);
 	}

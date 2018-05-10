@@ -139,6 +139,9 @@ cd ../
 cd simba-web
 call mvn clean -U deploy
 cd ../
+cd simba-jwt
+call mvn clean -U deploy
+cd ../
 cd simba-msg
 call mvn clean -U deploy
 cd ../

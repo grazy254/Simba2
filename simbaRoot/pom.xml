@@ -250,6 +250,11 @@
 				<artifactId>simba-autoId</artifactId>
 				<version>${simba.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.simba</groupId>
+				<artifactId>simba-jwt</artifactId>
+				<version>${simba.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

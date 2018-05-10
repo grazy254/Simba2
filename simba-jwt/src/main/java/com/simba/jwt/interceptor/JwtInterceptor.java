@@ -1,6 +1,7 @@
 package com.simba.jwt.interceptor;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,9 @@ import com.simba.common.EnvironmentUtil;
 import com.simba.exception.ForbidException;
 import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.framework.util.common.PathUtil;
+import com.simba.jwt.util.JwtUtil;
+
+import io.jsonwebtoken.Claims;
 
 /**
  * JWT拦截器(请求头中authorization,值为bearer;token)
@@ -55,7 +59,19 @@ public class JwtInterceptor implements HandlerInterceptor {
 		if (StringUtils.isEmpty(authHeader)) {
 			throw new ForbidException("请求头中没有带token信息");
 		}
-
+		if (authHeader == null || !authHeader.startsWith("bearer;")) {
+			throw new ForbidException("请求头中token信息格式错误");
+		}
+		String token = authHeader.substring(7);
+		Claims claims = JwtUtil.parseJWT(token);
+		Date expiration = claims.getExpiration();
+		if (expiration.before(new Date())) {
+			throw new ForbidException("token已经过期");
+		}
+		String audience = claims.getAudience();
+		String issuer = claims.getIssuer();
+		String content = (String) claims.get("content");
+		request.setAttribute("jwtTokenContent", content);
 		return true;
 	}
 

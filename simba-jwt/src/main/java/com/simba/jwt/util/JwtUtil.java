@@ -70,7 +70,7 @@ public class JwtUtil {
 	 * @return
 	 */
 	public static String parseJWTContent(String jsonWebToken, String base64Security) {
-		return parseJWT(jsonWebToken, base64Security).get("content", String.class);
+		return (String) parseJWT(jsonWebToken, base64Security).get("content");
 	}
 
 	/**

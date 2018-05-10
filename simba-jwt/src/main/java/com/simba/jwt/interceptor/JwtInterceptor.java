@@ -16,7 +16,7 @@ import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.framework.util.common.PathUtil;
 
 /**
- * JWT拦截器
+ * JWT拦截器(请求头中authorization,值为bearer;token)
  * 
  * @author caozj
  */
@@ -50,7 +50,13 @@ public class JwtInterceptor implements HandlerInterceptor {
 				return true;
 			}
 		}
-		throw new ForbidException("您没有权限访问,所以不能访问" + requestUri);
+		// 请求头信息authorization信息
+		String authHeader = request.getHeader("authorization");
+		if (StringUtils.isEmpty(authHeader)) {
+			throw new ForbidException("请求头中没有带token信息");
+		}
+
+		return true;
 	}
 
 	@Override

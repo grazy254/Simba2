@@ -15,7 +15,9 @@ import com.simba.common.EnvironmentUtil;
 import com.simba.exception.ForbidException;
 import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.framework.util.common.PathUtil;
+import com.simba.jwt.constant.JwtConstantData;
 import com.simba.jwt.util.JwtUtil;
+import com.simba.registry.util.RegistryUtil;
 
 import io.jsonwebtoken.Claims;
 
@@ -69,9 +71,15 @@ public class JwtInterceptor implements HandlerInterceptor {
 			throw new ForbidException("token已经过期");
 		}
 		String audience = claims.getAudience();
+		if (!audience.equals(RegistryUtil.get("jwt.audience"))) {
+			throw new ForbidException("token无效");
+		}
 		String issuer = claims.getIssuer();
+		if (!issuer.equals(RegistryUtil.get("jwt.issuer"))) {
+			throw new ForbidException("token无效");
+		}
 		String content = (String) claims.get("content");
-		request.setAttribute("jwtTokenContent", content);
+		request.setAttribute(JwtConstantData.requestAttributeName, content);
 		return true;
 	}
 

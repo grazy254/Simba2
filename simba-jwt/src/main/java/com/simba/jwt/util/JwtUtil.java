@@ -8,6 +8,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
+import com.simba.jwt.constant.JwtConstantData;
 import com.simba.registry.util.RegistryUtil;
 
 import io.jsonwebtoken.Claims;
@@ -70,7 +71,7 @@ public class JwtUtil {
 	 * @return
 	 */
 	public static String parseJWTContent(String jsonWebToken, String base64Security) {
-		return (String) parseJWT(jsonWebToken, base64Security).get("content");
+		return (String) parseJWT(jsonWebToken, base64Security).get(JwtConstantData.tokenContentName);
 	}
 
 	/**
@@ -96,7 +97,8 @@ public class JwtUtil {
 		byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(base64Security);
 		Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 		// 添加构成JWT的参数
-		JwtBuilder builder = Jwts.builder().setHeaderParam("typ", "JWT").claim("content", content).setIssuer(issuer).setAudience(audience).signWith(signatureAlgorithm, signingKey);
+		JwtBuilder builder = Jwts.builder().setHeaderParam("typ", "JWT").claim(JwtConstantData.tokenContentName, content).setIssuer(issuer).setAudience(audience).signWith(signatureAlgorithm,
+				signingKey);
 		// 添加Token过期时间
 		if (ttlMillis >= 0) {
 			long expMillis = nowMillis + ttlMillis;

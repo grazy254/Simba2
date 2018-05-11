@@ -78,7 +78,7 @@ public class JwtInterceptor implements HandlerInterceptor {
 		if (!issuer.equals(RegistryUtil.get("jwt.issuer"))) {
 			throw new ForbidException("token无效");
 		}
-		String content = (String) claims.get("content");
+		String content = (String) claims.get(JwtConstantData.tokenContentName);
 		request.setAttribute(JwtConstantData.requestAttributeName, content);
 		return true;
 	}

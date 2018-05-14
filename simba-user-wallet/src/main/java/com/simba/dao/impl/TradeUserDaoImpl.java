@@ -27,9 +27,10 @@ public class TradeUserDaoImpl implements TradeUserDao {
 	private static final String table = "tradeUser";
 
 	@Override
-	public void add(TradeUser tradeUser) {
+	public Long add(TradeUser tradeUser) {
 		String sql = "insert into " + table + "( userID, name, isAllowPay, payPassword, payPhone, payEmail, createTime, lastUpdateTime) values(?,?,?,?,?,?,?,?)";
-		jdbc.updateForBoolean(sql, tradeUser.getUserID(),tradeUser.getName(),tradeUser.getIsAllowPay(),tradeUser.getPayPassword(),tradeUser.getPayPhone(),tradeUser.getPayEmail(),tradeUser.getCreateTime(),tradeUser.getLastUpdateTime());
+		Number id = jdbc.updateForGeneratedKey(sql, tradeUser.getUserID(),tradeUser.getName(),tradeUser.getIsAllowPay(),tradeUser.getPayPassword(),tradeUser.getPayPhone(),tradeUser.getPayEmail(),tradeUser.getCreateTime(),tradeUser.getLastUpdateTime());
+		return id.longValue();
 	}
 
 	@Override

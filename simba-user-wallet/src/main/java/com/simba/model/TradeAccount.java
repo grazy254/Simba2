@@ -45,25 +45,25 @@ public class TradeAccount {
     * 是否允许充值：0不允许，1允许
     * */
    @DescAnnotation(desc = "是否允许充值：0不允许，1允许")
-	private byte isAllowRecharge;
+	private int isAllowRecharge;
 
    /**
     * 是否允许支付：0不允许，1允许
     * */
    @DescAnnotation(desc = "是否允许支付：0不允许，1允许")
-	private byte isAllowPay;
+	private int isAllowPay;
 
    /**
     * 是否激活：0不允许，1允许
     * */
    @DescAnnotation(desc = "是否激活：0不允许，1允许")
-	private byte isActive;
+	private int isActive;
 
    /**
     * 是否冻结：0不允许，1允许
     * */
    @DescAnnotation(desc = "是否冻结：0不允许，1允许")
-	private byte isFrozen;
+	private int isFrozen;
 
    /**
     * 账户当前余额
@@ -136,35 +136,35 @@ public class TradeAccount {
         this.feeType = feeType;
     }
 
-    public byte getIsAllowRecharge() {
+    public int getIsAllowRecharge() {
         return isAllowRecharge;
     }
 
-    public void setIsAllowRecharge(byte isAllowRecharge) {
+    public void setIsAllowRecharge(int isAllowRecharge) {
         this.isAllowRecharge = isAllowRecharge;
     }
 
-    public byte getIsAllowPay() {
+    public int getIsAllowPay() {
         return isAllowPay;
     }
 
-    public void setIsAllowPay(byte isAllowPay) {
+    public void setIsAllowPay(int isAllowPay) {
         this.isAllowPay = isAllowPay;
     }
 
-    public byte getIsActive() {
+    public int getIsActive() {
         return isActive;
     }
 
-    public void setIsActive(byte isActive) {
+    public void setIsActive(int isActive) {
         this.isActive = isActive;
     }
 
-    public byte getIsFrozen() {
+    public int getIsFrozen() {
         return isFrozen;
     }
 
-    public void setIsFrozen(byte isFrozen) {
+    public void setIsFrozen(int isFrozen) {
         this.isFrozen = isFrozen;
     }
 

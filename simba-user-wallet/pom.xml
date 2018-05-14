@@ -20,7 +20,11 @@
 			<artifactId>simba-web</artifactId>
 			<version>${simba.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-user-management</artifactId>
+			<version>${simba.version}</version>
+		</dependency>
 	</dependencies>
 
 	<distributionManagement>

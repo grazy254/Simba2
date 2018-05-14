@@ -33,7 +33,7 @@ public class TradeUser {
     * 是否允许支付：0不允许，1允许
     * */
    @DescAnnotation(desc = "是否允许支付：0不允许，1允许")
-	private byte isAllowPay;
+	private int isAllowPay;
 
    /**
     * 支付密码 
@@ -90,11 +90,11 @@ public class TradeUser {
         this.name = name;
     }
 
-    public byte getIsAllowPay() {
+    public int getIsAllowPay() {
         return isAllowPay;
     }
 
-    public void setIsAllowPay(byte isAllowPay) {
+    public void setIsAllowPay(int isAllowPay) {
         this.isAllowPay = isAllowPay;
     }
 

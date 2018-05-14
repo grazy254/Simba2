@@ -27,9 +27,10 @@ public class TradeAccountDaoImpl implements TradeAccountDao {
 	private static final String table = "tradeAccount";
 
 	@Override
-	public void add(TradeAccount tradeAccount) {
+	public Long add(TradeAccount tradeAccount) {
 		String sql = "insert into " + table + "( tradeUserID, accountID, accountType, feeType, isAllowRecharge, isAllowPay, isActive, isFrozen, accountBalance, availableBalance, frozenBalance, createTime, lastUpdateTime) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		jdbc.updateForBoolean(sql, tradeAccount.getTradeUserID(),tradeAccount.getAccountID(),tradeAccount.getAccountType(),tradeAccount.getFeeType(),tradeAccount.getIsAllowRecharge(),tradeAccount.getIsAllowPay(),tradeAccount.getIsActive(),tradeAccount.getIsFrozen(),tradeAccount.getAccountBalance(),tradeAccount.getAvailableBalance(),tradeAccount.getFrozenBalance(),tradeAccount.getCreateTime(),tradeAccount.getLastUpdateTime());
+		Number id = jdbc.updateForGeneratedKey(sql, tradeAccount.getTradeUserID(),tradeAccount.getAccountID(),tradeAccount.getAccountType(),tradeAccount.getFeeType(),tradeAccount.getIsAllowRecharge(),tradeAccount.getIsAllowPay(),tradeAccount.getIsActive(),tradeAccount.getIsFrozen(),tradeAccount.getAccountBalance(),tradeAccount.getAvailableBalance(),tradeAccount.getFrozenBalance(),tradeAccount.getCreateTime(),tradeAccount.getLastUpdateTime());
+		return id.longValue();
 	}
 
 	@Override

@@ -1,6 +1,9 @@
 cd simba-user-wallet
 call mvn clean -U 
 cd ../
+cd simba-alipay
+call mvn clean -U 
+cd ../
 cd simba-jwt
 call mvn clean -U 
 cd ../

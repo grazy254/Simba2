@@ -145,6 +145,9 @@ cd ../
 cd simba-msg
 call mvn clean -U deploy
 cd ../
+cd simba-alipay
+call mvn clean -U deploy
+cd ../
 cd simba-jpush
 call mvn clean -U deploy
 cd ../

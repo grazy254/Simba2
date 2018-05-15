@@ -118,6 +118,17 @@ public class ProjectPackageController {
 		dealSimbaDao(projectPackage, dir);
 		dealSimbaUtil(projectPackage, dir);
 		dealSimbaModel(projectPackage, dir);
+		dealSimbaDocMysql(projectPackage, dir);
+	}
+
+	/**
+	 * 处理doc目录下的mysql脚本
+	 * 
+	 * @param projectPackage
+	 * @param dir
+	 */
+	private void dealSimbaDocMysql(ProjectPackage projectPackage, String dir) {
+
 	}
 
 	/**

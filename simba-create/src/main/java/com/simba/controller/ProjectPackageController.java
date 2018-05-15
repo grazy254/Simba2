@@ -126,9 +126,32 @@ public class ProjectPackageController {
 	 * 
 	 * @param projectPackage
 	 * @param dir
+	 * @throws IOException
 	 */
-	private void dealSimbaDocMysql(ProjectPackage projectPackage, String dir) {
+	private void dealSimbaDocMysql(ProjectPackage projectPackage, String dir) throws IOException {
+		String code = projectPackage.getProjectCode();
+		String mysqlDir = getRootDir(code, dir) + "/doc/mysql";
+		String registryFile = mysqlDir + "/" + "3_init_registry_mysql.sql";
+		replaceRegistryFile(projectPackage, registryFile);
+	}
 
+	/**
+	 * 替换注册表脚本文件内容
+	 * 
+	 * @param projectPackage
+	 * @param registryFile
+	 * @throws IOException
+	 */
+	private void replaceRegistryFile(ProjectPackage projectPackage, String registryFile) throws IOException {
+		String account = projectPackage.getAccount();
+		String pwd = projectPackage.getPwd();
+		String encryptKey = projectPackage.getEncryptKey();
+		String encryptAccount = EncryptUtil.md5(account + encryptKey);
+		String encryptPwd = EncryptUtil.md5(pwd + encryptKey);
+		String content = FileUtils.readFileToString(new File(registryFile), ConstantData.DEFAULT_CHARSET);
+		content = content.replaceAll("66d4aaa5ea177ac32c69946de3731ec0", encryptAccount);
+		content = content.replaceAll("91d4b760bf3bf963b775955e12d0a3c2", encryptPwd);
+		FileUtils.write(new File(registryFile), content, ConstantData.DEFAULT_CHARSET);
 	}
 
 	/**

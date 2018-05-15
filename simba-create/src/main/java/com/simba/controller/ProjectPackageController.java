@@ -143,6 +143,10 @@ public class ProjectPackageController {
 	 * @throws IOException
 	 */
 	private void replaceRegistryFile(ProjectPackage projectPackage, String registryFile) throws IOException {
+		if (!new File(registryFile).exists()) {
+			logger.warn(registryFile + "不存在");
+			return;
+		}
 		String account = projectPackage.getAccount();
 		String pwd = projectPackage.getPwd();
 		String encryptKey = projectPackage.getEncryptKey();

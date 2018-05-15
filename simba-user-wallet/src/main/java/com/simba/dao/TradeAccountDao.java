@@ -12,7 +12,7 @@ import com.simba.model.TradeAccount;
  */
 public interface TradeAccountDao {
 
-	void add(TradeAccount tradeAccount);
+	Long add(TradeAccount tradeAccount);
 
 	void update(TradeAccount tradeAccount);
 

@@ -12,7 +12,7 @@ import com.simba.model.TradeDetail;
  */
 public interface TradeDetailDao {
 
-	void add(TradeDetail tradeDetail);
+	Long add(TradeDetail tradeDetail);
 
 	void update(TradeDetail tradeDetail);
 

@@ -18,9 +18,9 @@ public class TradeParty {
 	private long id;
 
    /**
-    * TradeUser的逻辑外键
+    * 支付用户ID
     * */
-   @DescAnnotation(desc = "TradeUser的逻辑外键")
+   @DescAnnotation(desc = "支付用户ID")
 	private long tradeUserID;
 
    /**
@@ -36,45 +36,37 @@ public class TradeParty {
 	private String partyType;
 
    /**
-    * TradeAccount表的逻辑外键
+    * 账户ID
     * */
-   @DescAnnotation(desc = "TradeAccount表的逻辑外键")
-	private long tradeAccountID;
+   @DescAnnotation(desc = "账户ID")
+	private String tradeAccountID;
 
    /**
     * 交易的设备IP信息（对手主体可选填）
     * */
-   @DescAnnotation(desc = "交易的设备IP信息（对手主体可选填）")
-	private String ip;
-
+   private String ip = "";
    /**
     * 用户的电话信息（对手主体可选填）
     * */
-   @DescAnnotation(desc = "用户的电话信息（对手主体可选填）")
-	private String mobileNumber;
-
+   private String mobileNumber = "";
    /**
     * 手机的平台： IOS/Android（ 对手主体可选填）
     * */
-   @DescAnnotation(desc = "手机的平台： IOS/Android（ 对手主体可选填）")
-	private String device;
-
+   private String device = "";
    /**
     * 通知的邮箱
     * */
-   @DescAnnotation(desc = "通知的邮箱")
+   @DescAnnotation(desc = "交易的设备IP信息（对手主体可选填）")
 	private String noticeMail;
 
    /**
     * 当时的位置信息（对手主体可选填）
     * */
-   @DescAnnotation(desc = "当时的位置信息（对手主体可选填）")
-	private String location;
-
+   private String location = "";
    /**
     * 创建时间
     * */
-   @DescAnnotation(desc = "创建时间")
+   @DescAnnotation(desc = "用户的电话信息（对手主体可选填）")
 	private Date createTime;
 
 
@@ -110,36 +102,12 @@ public class TradeParty {
         this.partyType = partyType;
     }
 
-    public long getTradeAccountID() {
+    public String getTradeAccountID() {
         return tradeAccountID;
     }
 
-    public void setTradeAccountID(long tradeAccountID) {
+    public void setTradeAccountID(String tradeAccountID) {
         this.tradeAccountID = tradeAccountID;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public String getMobileNumber() {
-        return mobileNumber;
-    }
-
-    public void setMobileNumber(String mobileNumber) {
-        this.mobileNumber = mobileNumber;
-    }
-
-    public String getDevice() {
-        return device;
-    }
-
-    public void setDevice(String device) {
-        this.device = device;
     }
 
     public String getNoticeMail() {
@@ -150,14 +118,6 @@ public class TradeParty {
         this.noticeMail = noticeMail;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -166,19 +126,47 @@ public class TradeParty {
         this.createTime = createTime;
     }
 
-    @Override
+    public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+
+	public String getDevice() {
+		return device;
+	}
+
+	public void setDevice(String device) {
+		this.device = device;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	@Override
     public String toString() {
         return "TradeParty{" +
 		"id=" + id +
 		", tradeUserID=" + tradeUserID + 
 		", partyName='" + partyName + '\'' + 
 		", partyType='" + partyType + '\'' + 
-		", tradeAccountID=" + tradeAccountID + 
-		", ip='" + ip + '\'' + 
-		", mobileNumber='" + mobileNumber + '\'' + 
-		", device='" + device + '\'' + 
+		", tradeAccountID='" + tradeAccountID + '\'' + 
 		", noticeMail='" + noticeMail + '\'' + 
-		", location='" + location + '\'' + 
 		", createTime=" + createTime + 
 		'}';
     }

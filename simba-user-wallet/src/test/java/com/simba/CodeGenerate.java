@@ -8,6 +8,7 @@ import com.simba.codegenerate.PAGETYPE;
 import com.simba.framework.util.file.PropertiesUtil;
 import com.simba.model.TradeAccount;
 import com.simba.model.TradeChannel;
+import com.simba.model.TradeDepartment;
 import com.simba.model.TradeDetail;
 import com.simba.model.TradeParty;
 import com.simba.model.TradeUser;
@@ -24,7 +25,7 @@ public class CodeGenerate {
 
 	public static void main(String[] args) throws IOException, TemplateException {
 		// 只需要将需要生成代码的class对象放入下面数组中，就可以自动生成代码
-		Class<?>[] classes = new Class<?>[] {TradeChannel.class};
+		Class<?>[] classes = new Class<?>[] {TradeDepartment.class};
 		// 将创建好的搜索用的Form类放入下面的数据组中
 		Class<?>[] searchFormClasses = new Class<?>[] {};
 		// 生成代码的dao层使用的方式，目前只支持枚举类型CODETYPE的类型

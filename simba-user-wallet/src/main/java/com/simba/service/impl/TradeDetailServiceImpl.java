@@ -25,8 +25,8 @@ public class TradeDetailServiceImpl implements TradeDetailService {
 	private TradeDetailDao tradeDetailDao;
 
 	@Override
-	public void add(TradeDetail tradeDetail) {
-		tradeDetailDao.add(tradeDetail);
+	public Long add(TradeDetail tradeDetail) {
+		return tradeDetailDao.add(tradeDetail);
 	}
 
 	@Override
@@ -155,5 +155,11 @@ public class TradeDetailServiceImpl implements TradeDetailService {
 	@Transactional(readOnly = true)
 	public Long countByOr(String field1, Object value1, String field2, Object value2){
 		return tradeDetailDao.countByOr(field1,value1,field2,value2);
+	}
+
+	@Override
+	public void recharge() {
+		
+		
 	}
 }

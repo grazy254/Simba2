@@ -50,73 +50,63 @@ public class TradeDetail {
    /**
     * 订单描述
     * */
-   @DescAnnotation(desc = "订单描述")
-	private String orderDesc;
-
+   private String orderDesc = "";
    /**
     * 订单地址
     * */
-   @DescAnnotation(desc = "订单地址")
-	private String orderAddress;
-
+   private String orderAddress = "";
    /**
     * 货币类型
     * */
-   @DescAnnotation(desc = "货币类型")
-	private String feeType;
-
+   private String feeType = "CNY";
    /**
     * 原始费用
     * */
-   @DescAnnotation(desc = "原始费用")
-	private long originalAmount;
-
+   private long originalAmount = 0;
    /**
     * 实际费用
     * */
-   @DescAnnotation(desc = "实际费用")
-	private long paymentAmount;
-
+   private long paymentAmount = 0;
    /**
     * 交易主体ID
     * */
-   @DescAnnotation(desc = "交易主体ID")
+   @DescAnnotation(desc = "订单描述")
 	private long tradePartyID;
 
    /**
     * 交易对手ID
     * */
-   @DescAnnotation(desc = "交易对手ID")
+   @DescAnnotation(desc = "订单地址")
 	private long tradeCounterpartyID;
 
    /**
     * 交易渠道ID
     * */
-   @DescAnnotation(desc = "交易渠道ID")
+   @DescAnnotation(desc = "货币类型")
 	private long tradeChannelID;
 
    /**
     * 请求支付时间
     * */
-   @DescAnnotation(desc = "请求支付时间")
+   @DescAnnotation(desc = "原始费用")
 	private Date tradeCreateTime;
 
    /**
     * 支付创建时间
     * */
-   @DescAnnotation(desc = "支付创建时间")
+   @DescAnnotation(desc = "实际费用")
 	private Date tradePaymentTime;
 
    /**
     * 创建时间
     * */
-   @DescAnnotation(desc = "创建时间")
+   @DescAnnotation(desc = "交易主体ID")
 	private Date createTime;
 
    /**
     * 最后更新时间
     * */
-   @DescAnnotation(desc = "最后更新时间")
+   @DescAnnotation(desc = "交易对手ID")
 	private Date lastUpdateTime;
 
 
@@ -166,46 +156,6 @@ public class TradeDetail {
 
     public void setOrderName(String orderName) {
         this.orderName = orderName;
-    }
-
-    public String getOrderDesc() {
-        return orderDesc;
-    }
-
-    public void setOrderDesc(String orderDesc) {
-        this.orderDesc = orderDesc;
-    }
-
-    public String getOrderAddress() {
-        return orderAddress;
-    }
-
-    public void setOrderAddress(String orderAddress) {
-        this.orderAddress = orderAddress;
-    }
-
-    public String getFeeType() {
-        return feeType;
-    }
-
-    public void setFeeType(String feeType) {
-        this.feeType = feeType;
-    }
-
-    public long getOriginalAmount() {
-        return originalAmount;
-    }
-
-    public void setOriginalAmount(long originalAmount) {
-        this.originalAmount = originalAmount;
-    }
-
-    public long getPaymentAmount() {
-        return paymentAmount;
-    }
-
-    public void setPaymentAmount(long paymentAmount) {
-        this.paymentAmount = paymentAmount;
     }
 
     public long getTradePartyID() {
@@ -264,7 +214,47 @@ public class TradeDetail {
         this.lastUpdateTime = lastUpdateTime;
     }
 
-    @Override
+    public String getOrderDesc() {
+		return orderDesc;
+	}
+
+	public void setOrderDesc(String orderDesc) {
+		this.orderDesc = orderDesc;
+	}
+
+	public String getOrderAddress() {
+		return orderAddress;
+	}
+
+	public void setOrderAddress(String orderAddress) {
+		this.orderAddress = orderAddress;
+	}
+
+	public String getFeeType() {
+		return feeType;
+	}
+
+	public void setFeeType(String feeType) {
+		this.feeType = feeType;
+	}
+
+	public long getOriginalAmount() {
+		return originalAmount;
+	}
+
+	public void setOriginalAmount(long originalAmount) {
+		this.originalAmount = originalAmount;
+	}
+
+	public long getPaymentAmount() {
+		return paymentAmount;
+	}
+
+	public void setPaymentAmount(long paymentAmount) {
+		this.paymentAmount = paymentAmount;
+	}
+
+	@Override
     public String toString() {
         return "TradeDetail{" +
 		"id=" + id +
@@ -273,11 +263,6 @@ public class TradeDetail {
 		", tradeStatus='" + tradeStatus + '\'' + 
 		", orderNO='" + orderNO + '\'' + 
 		", orderName='" + orderName + '\'' + 
-		", orderDesc='" + orderDesc + '\'' + 
-		", orderAddress='" + orderAddress + '\'' + 
-		", feeType='" + feeType + '\'' + 
-		", originalAmount=" + originalAmount + 
-		", paymentAmount=" + paymentAmount + 
 		", tradePartyID=" + tradePartyID + 
 		", tradeCounterpartyID=" + tradeCounterpartyID + 
 		", tradeChannelID=" + tradeChannelID + 

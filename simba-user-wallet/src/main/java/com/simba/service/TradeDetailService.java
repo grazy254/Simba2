@@ -12,7 +12,7 @@ import com.simba.model.TradeDetail;
  */
 public interface TradeDetailService {
 
-	void add(TradeDetail tradeDetail);
+	Long add(TradeDetail tradeDetail);
 
 	void update(TradeDetail tradeDetail);
 
@@ -58,4 +58,5 @@ public interface TradeDetailService {
 
 	List<TradeDetail> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
 
+	void recharge();
 }

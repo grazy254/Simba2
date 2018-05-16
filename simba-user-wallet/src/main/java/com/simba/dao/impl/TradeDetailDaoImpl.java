@@ -27,9 +27,10 @@ public class TradeDetailDaoImpl implements TradeDetailDao {
 	private static final String table = "tradeDetail";
 
 	@Override
-	public void add(TradeDetail tradeDetail) {
+	public Long add(TradeDetail tradeDetail) {
 		String sql = "insert into " + table + "( tradeNO, tradeType, tradeStatus, orderNO, orderName, orderDesc, orderAddress, feeType, originalAmount, paymentAmount, tradePartyID, tradeCounterpartyID, tradeChannelID, tradeCreateTime, tradePaymentTime, createTime, lastUpdateTime) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		jdbc.updateForBoolean(sql, tradeDetail.getTradeNO(),tradeDetail.getTradeType(),tradeDetail.getTradeStatus(),tradeDetail.getOrderNO(),tradeDetail.getOrderName(),tradeDetail.getOrderDesc(),tradeDetail.getOrderAddress(),tradeDetail.getFeeType(),tradeDetail.getOriginalAmount(),tradeDetail.getPaymentAmount(),tradeDetail.getTradePartyID(),tradeDetail.getTradeCounterpartyID(),tradeDetail.getTradeChannelID(),tradeDetail.getTradeCreateTime(),tradeDetail.getTradePaymentTime(),tradeDetail.getCreateTime(),tradeDetail.getLastUpdateTime());
+		Number id = jdbc.updateForGeneratedKey(sql, tradeDetail.getTradeNO(),tradeDetail.getTradeType(),tradeDetail.getTradeStatus(),tradeDetail.getOrderNO(),tradeDetail.getOrderName(),tradeDetail.getOrderDesc(),tradeDetail.getOrderAddress(),tradeDetail.getFeeType(),tradeDetail.getOriginalAmount(),tradeDetail.getPaymentAmount(),tradeDetail.getTradePartyID(),tradeDetail.getTradeCounterpartyID(),tradeDetail.getTradeChannelID(),tradeDetail.getTradeCreateTime(),tradeDetail.getTradePaymentTime(),tradeDetail.getCreateTime(),tradeDetail.getLastUpdateTime());
+		return id.longValue();
 	}
 
 	@Override

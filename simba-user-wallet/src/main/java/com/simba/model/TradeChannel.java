@@ -18,21 +18,21 @@ public class TradeChannel {
 	private long id;
 
    /**
-    * TradeAccount的逻辑外键
+    * 帐号ID
     * */
-   @DescAnnotation(desc = "TradeAccount的逻辑外键")
-	private long tradeAccountID;
+   @DescAnnotation(desc = "帐号ID")
+	private String tradeAccountID;
 
    /**
-    * 渠道名称：微信/支付宝
+    * 渠道名称：微信支付/支付宝支付
     * */
-   @DescAnnotation(desc = "渠道名称：微信/支付宝")
+   @DescAnnotation(desc = "渠道名称：微信支付/支付宝支付")
 	private String channelName;
 
    /**
-    * 渠道类型：WX/ALIPAY
+    * 渠道类型：WXPAY/ALIPAY
     * */
-   @DescAnnotation(desc = "渠道类型：WX/ALIPAY")
+   @DescAnnotation(desc = "渠道类型：WXPAY/ALIPAY")
 	private String channelType;
 
    /**
@@ -62,20 +62,22 @@ public class TradeChannel {
    /**
     * 错误信息
     * */
-   @DescAnnotation(desc = "错误信息")
-	private String errorMsg;
-
+   private String errorMsg = "";
    /**
     * 错误代号
     * */
-   @DescAnnotation(desc = "错误代号")
-	private String errorCode;
-
+   private String errorCode = "";
    /**
     * 创建时间
     * */
-   @DescAnnotation(desc = "创建时间")
+   @DescAnnotation(desc = "错误信息")
 	private Date createTime;
+
+   /**
+    * 最后更新时间
+    * */
+   @DescAnnotation(desc = "错误代号")
+	private Date lastUpdateTime;
 
 
     public long getId() {
@@ -86,11 +88,11 @@ public class TradeChannel {
         this.id = id;
     }
 
-    public long getTradeAccountID() {
+    public String getTradeAccountID() {
         return tradeAccountID;
     }
 
-    public void setTradeAccountID(long tradeAccountID) {
+    public void setTradeAccountID(String tradeAccountID) {
         this.tradeAccountID = tradeAccountID;
     }
 
@@ -142,22 +144,6 @@ public class TradeChannel {
         this.openID = openID;
     }
 
-    public String getErrorMsg() {
-        return errorMsg;
-    }
-
-    public void setErrorMsg(String errorMsg) {
-        this.errorMsg = errorMsg;
-    }
-
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -166,20 +152,44 @@ public class TradeChannel {
         this.createTime = createTime;
     }
 
-    @Override
+    public Date getLastUpdateTime() {
+        return lastUpdateTime;
+    }
+
+    public void setLastUpdateTime(Date lastUpdateTime) {
+        this.lastUpdateTime = lastUpdateTime;
+    }
+    
+
+    public String getErrorMsg() {
+		return errorMsg;
+	}
+
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg = errorMsg;
+	}
+
+	public String getErrorCode() {
+		return errorCode;
+	}
+
+	public void setErrorCode(String errorCode) {
+		this.errorCode = errorCode;
+	}
+
+	@Override
     public String toString() {
         return "TradeChannel{" +
 		"id=" + id +
-		", tradeAccountID=" + tradeAccountID + 
+		", tradeAccountID='" + tradeAccountID + '\'' + 
 		", channelName='" + channelName + '\'' + 
 		", channelType='" + channelType + '\'' + 
 		", orderCreateTime=" + orderCreateTime + 
 		", paymentTime=" + paymentTime + 
 		", orderNO='" + orderNO + '\'' + 
 		", openID='" + openID + '\'' + 
-		", errorMsg='" + errorMsg + '\'' + 
-		", errorCode='" + errorCode + '\'' + 
 		", createTime=" + createTime + 
+		", lastUpdateTime=" + lastUpdateTime + 
 		'}';
     }
 

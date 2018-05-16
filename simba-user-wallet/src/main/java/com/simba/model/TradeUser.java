@@ -18,15 +18,15 @@ public class TradeUser {
 	private long id;
 
    /**
-    * 用户的ID/系统用户的ID
+    * 用户ID/部门ID
     * */
-   @DescAnnotation(desc = "用户的ID/系统用户的ID")
+   @DescAnnotation(desc = "用户ID/部门ID")
 	private String userID;
 
    /**
-    * 用户名称
+    * 用户/部门名称
     * */
-   @DescAnnotation(desc = "用户名称")
+   @DescAnnotation(desc = "用户/部门名称")
 	private String name;
 
    /**

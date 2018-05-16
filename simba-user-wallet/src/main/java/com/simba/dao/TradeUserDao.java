@@ -12,7 +12,7 @@ import com.simba.model.TradeUser;
  */
 public interface TradeUserDao {
 
-	void add(TradeUser tradeUser);
+	Long add(TradeUser tradeUser);
 
 	void update(TradeUser tradeUser);
 

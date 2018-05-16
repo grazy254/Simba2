@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping
 public class HomeController {
 
-	@Value("${pate.home}")
+	@Value("${page.home}")
 	private String homePage;
 
 	@PostConstruct

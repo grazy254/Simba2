@@ -25,8 +25,8 @@ public class TradeAccountServiceImpl implements TradeAccountService {
 	private TradeAccountDao tradeAccountDao;
 
 	@Override
-	public void add(TradeAccount tradeAccount) {
-		tradeAccountDao.add(tradeAccount);
+	public Long add(TradeAccount tradeAccount) {
+		return tradeAccountDao.add(tradeAccount);
 	}
 
 	@Override

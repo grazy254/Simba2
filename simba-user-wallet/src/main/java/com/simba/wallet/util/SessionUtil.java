@@ -7,11 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import com.simba.exception.BussException;
 import com.simba.model.SmartUser;
-import com.simba.model.TradeAccount;
-import com.simba.model.TradeUser;
 import com.simba.service.SmartUserService;
-import com.simba.service.TradeAccountService;
-import com.simba.service.TradeUserService;
+import com.simba.wallet.model.TradeAccount;
+import com.simba.wallet.model.TradeUser;
+import com.simba.wallet.service.TradeAccountService;
+import com.simba.wallet.service.TradeUserService;
 
 /**
  * Session工具类

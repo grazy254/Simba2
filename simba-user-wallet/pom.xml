@@ -25,6 +25,16 @@
 			<artifactId>simba-user-management</artifactId>
 			<version>${simba.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-wechatpay</artifactId>
+			<version>${simba.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-wechat-pay-bill</artifactId>
+			<version>${simba.version}</version>
+		</dependency>
 	</dependencies>
 
 	<distributionManagement>

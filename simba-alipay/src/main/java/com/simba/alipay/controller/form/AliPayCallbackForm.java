@@ -147,5 +147,10 @@ public class AliPayCallbackForm {
 	 * 该笔交易结束时间。格式为yyyy-MM-dd HH:mm:ss
 	 */
 	private String gmt_close;
+	
+	/**
+	 * 
+	 */
+	private String fund_bill_list;
 
 }

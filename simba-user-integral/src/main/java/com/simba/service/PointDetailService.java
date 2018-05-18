@@ -13,6 +13,8 @@ import com.simba.model.PointDetail;
  */
 public interface PointDetailService {
 
+	String pointDetailList();
+	
 	void add(PointDetail pointDetail);
 
 	void update(PointDetail pointDetail);

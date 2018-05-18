@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.simba.dao.ActivityDao;
 import com.simba.framework.util.jdbc.Pager;
@@ -30,6 +31,11 @@ public class ActivityServiceImpl implements ActivityService {
 	private ActivityDao activityDao;
 
 	private static final Log logger = LogFactory.getLog(ActivityServiceImpl.class);
+	
+	@RequestMapping("/list")
+	public String list() {
+		return "activity/list";
+	}
 
 	@Override
 	public void add(Activity activity) throws ParseException {

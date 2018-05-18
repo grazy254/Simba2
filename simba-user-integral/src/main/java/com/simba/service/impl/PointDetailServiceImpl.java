@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.simba.dao.PointDetailDao;
 import com.simba.framework.util.jdbc.Pager;
@@ -25,6 +26,13 @@ public class PointDetailServiceImpl implements PointDetailService {
 	@Autowired
 	private PointDetailDao pointDetailDao;
 
+	
+	@RequestMapping("/pointDetailList")
+	public String pointDetailList() {
+		return "pointDetail/list";
+	}
+	
+	
 	@Override
 	public void add(PointDetail pointDetail) {
 		//积分变动写入数据表

@@ -25,6 +25,7 @@ import com.alipay.api.response.AlipayTradeCancelResponse;
 import com.alipay.api.response.AlipayTradeCloseResponse;
 import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeOrderSettleResponse;
+import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.simba.alipay.cosntantData.AliPayConstantData;
@@ -217,4 +218,7 @@ public class AliPayUtil {
 		return response;
 	}
 
+	public AlipayTradePrecreateResponse precreate() {
+		return null;
+	}
 }

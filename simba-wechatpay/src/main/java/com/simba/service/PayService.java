@@ -1,15 +1,15 @@
-package com.simba.interfaces;
+package com.simba.service;
 
 import com.simba.model.pay.result.PayResult;
 import com.simba.model.pay.unifiedorder.UnifiedOrderReq;
 
 /**
- * 微信支付需要实现的接口
+ * 微信支付业务接口
  * 
  * @author caozhejun
  *
  */
-public interface PayInterface {
+public interface PayService {
 
 	/**
 	 * 处理支付通知结果

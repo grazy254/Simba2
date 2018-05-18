@@ -14,9 +14,9 @@ import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 
 import com.simba.framework.util.common.XmlUtil;
-import com.simba.interfaces.PayInterface;
 import com.simba.model.pay.result.PayResult;
 import com.simba.model.pay.result.PayResultRes;
+import com.simba.service.PayService;
 
 /**
  * 支付结果通用通知 (支付完成后，微信会把相关支付结果和用户信息发送给商户，商户需要接收处理，并返回应答。
@@ -38,8 +38,8 @@ import com.simba.model.pay.result.PayResultRes;
 @RequestMapping("/payCallback")
 public class PayCallbackController {
 
-	@Autowired(required = false)
-	private PayInterface payService;
+	@Autowired
+	private PayService payService;
 
 	/**
 	 * 接收微信支付结果通知
@@ -57,9 +57,7 @@ public class PayCallbackController {
 	public String receive(@RequestBody String body, ModelMap model) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		PayResult payResult = XmlUtil.toOject(body, PayResult.class);
 		payResult.composeCoupons(body);
-		if (payService != null) {
-			payService.updateResult(payResult);
-		}
+		payService.dealResult(payResult);
 		PayResultRes res = new PayResultRes();
 		res.setReturn_code("SUCCESS");
 		res.setReturn_msg("OK");

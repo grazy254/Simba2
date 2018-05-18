@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.simba.framework.util.common.ServerUtil;
 import com.simba.framework.util.data.RandomUtil;
 import com.simba.framework.util.json.FastJsonUtil;
-import com.simba.interfaces.PayInterface;
 import com.simba.model.pay.unifiedorder.UnifiedOrderReq;
 import com.simba.model.pay.unifiedorder.UnifiedOrderRes;
+import com.simba.service.PayService;
 import com.simba.util.common.SignUtil;
 import com.simba.util.send.WxPayUtil;
 
@@ -45,8 +45,8 @@ public class PayController {
 	@Value("${wx.pay.key}")
 	private String key;
 
-	@Autowired(required = false)
-	private PayInterface payService;
+	@Autowired
+	private PayService payService;
 
 	/**
 	 * 产生订单
@@ -71,9 +71,7 @@ public class PayController {
 			String openid = (String) request.getSession().getAttribute("openid");
 			req.setOpenid(openid);
 		}
-		if (payService != null) {
-			payService.create(req);
-		}
+		payService.dealOrder(req);
 		UnifiedOrderRes res = WxPayUtil.getInstance().unifiedOrder(req);
 		String prePayId = res.getPrepay_id();
 		String codeUrl = res.getCode_url();

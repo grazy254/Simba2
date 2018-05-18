@@ -14,11 +14,15 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayDataDataserviceBillDownloadurlQueryRequest;
+import com.alipay.api.request.AlipayTradeCancelRequest;
+import com.alipay.api.request.AlipayTradeCloseRequest;
 import com.alipay.api.request.AlipayTradeFastpayRefundQueryRequest;
 import com.alipay.api.request.AlipayTradeOrderSettleRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayDataDataserviceBillDownloadurlQueryResponse;
+import com.alipay.api.response.AlipayTradeCancelResponse;
+import com.alipay.api.response.AlipayTradeCloseResponse;
 import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeOrderSettleResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
@@ -57,7 +61,9 @@ public class AliPayUtil {
 	}
 
 	/**
-	 * 交易查询
+	 * 交易查询(该接口提供所有支付宝支付订单的查询，商户可以通过该接口主动查询订单状态，完成下一步的业务逻辑。 需要调用查询接口的情况：
+	 * 当商户后台、网络、服务器等出现异常，商户系统最终未接收到支付通知； 调用支付接口后，返回系统错误或未知交易状态情况；
+	 * 调用alipay.trade.pay，返回INPROCESS的状态； 调用alipay.trade.cancel之前，需确认支付状态)
 	 * 
 	 * @param out_trade_no
 	 *            支付时传入的商户订单号，与trade_no必填一个
@@ -82,7 +88,9 @@ public class AliPayUtil {
 	}
 
 	/**
-	 * 交易退款
+	 * 交易退款(当交易发生之后一段时间内，由于买家或者卖家的原因需要退款时，卖家可以通过退款接口将支付款退还给买家，支付宝将在收到退款请求并且验证成功之后，按照退款规则将支付款按原路退到买家帐号上。
+	 * 交易超过约定时间（签约时设置的可退款时间）的订单无法进行退款
+	 * 支付宝退款支持单笔交易分多次退款，多次退款需要提交原支付订单的商户订单号和设置不同的退款单号。一笔退款失败后重新提交，要采用原来的退款单号。总退款金额不能超过用户实际支付金额)
 	 * 
 	 * @param out_trade_no
 	 *            支付时传入的商户订单号，与trade_no必填一个
@@ -122,7 +130,8 @@ public class AliPayUtil {
 	}
 
 	/**
-	 * 统一收单交易退款查询
+	 * 统一收单交易退款查询(商户可使用该接口查询自已通过alipay.trade.refund提交的退款请求是否执行成功。
+	 * 该接口的返回码10000，仅代表本次查询操作成功，不代表退款成功。如果该接口返回了查询数据，则代表退款成功，如果没有查询到则代表未退款成功，可以调用退款接口进行重试。重试时请务必保证退款请求号一致)
 	 * 
 	 * @param trade_no
 	 *            支付宝交易号，和商户订单号不能同时为空
@@ -144,7 +153,7 @@ public class AliPayUtil {
 	}
 
 	/**
-	 * 统一收单交易结算
+	 * 统一收单交易结算(用于在线下场景交易支付后，进行结算)
 	 * 
 	 * @param out_request_no
 	 *            结算请求流水号 开发者自行生成并保证唯一性
@@ -163,6 +172,48 @@ public class AliPayUtil {
 				+ "      \"royalty_parameters\":" + FastJsonUtil.toJson(royalty_parameters) + "," + "\"operator_id\":\"" + StringUtils.defaultString(operator_id) + "\"" + "  }");
 		AlipayTradeOrderSettleResponse response = alipayClient.execute(request);
 		logger.info("统一收单交易结算返回结果:" + response.getBody());
+		return response;
+	}
+
+	/**
+	 * 统一收单交易关闭(用于交易创建后，用户在一定时间内未进行支付，可调用该接口直接将未付款的交易进行关闭)
+	 * 
+	 * @param out_trade_no
+	 *            订单支付时传入的商户订单号,和支付宝交易号不能同时为空。
+	 *            trade_no,out_trade_no如果同时存在优先取trade_no
+	 * @param trade_no
+	 *            该交易在支付宝系统中的交易流水号。最短 16 位，最长 64 位。和out_trade_no不能同时为空，如果同时传了
+	 *            out_trade_no和 trade_no，则以 trade_no为准
+	 * @param operator_id
+	 *            卖家端自定义的的操作员 ID
+	 * @return
+	 * @throws AlipayApiException
+	 */
+	public AlipayTradeCloseResponse close(String out_trade_no, String trade_no, String operator_id) throws AlipayApiException {
+		AlipayTradeCloseRequest request = new AlipayTradeCloseRequest();
+		request.setBizContent("{" + "\"trade_no\":\"" + StringUtils.defaultString(trade_no) + "\"," + "\"out_trade_no\":\"" + StringUtils.defaultString(out_trade_no) + "\"," + "\"operator_id\":\""
+				+ StringUtils.defaultString(operator_id) + "\"" + "  }");
+		AlipayTradeCloseResponse response = alipayClient.execute(request);
+		logger.info("统一收单交易关闭返回结果:" + response.getBody());
+		return response;
+	}
+
+	/**
+	 * 统一收单交易撤销(支付交易返回失败或支付系统超时，调用该接口撤销交易。如果此订单用户支付失败，支付宝系统会将此订单关闭；如果用户支付成功，支付宝系统会将此订单资金退还给用户。
+	 * 注意：只有发生支付系统超时或者支付结果未知时可调用撤销，其他正常支付的单如需实现相同功能请调用申请退款API。提交支付交易后调用【查询订单API】，没有明确的支付结果再调用【撤销订单API】)
+	 * 
+	 * @param out_trade_no
+	 *            原支付请求的商户订单号,和支付宝交易号不能同时为空
+	 * @param trade_no
+	 *            支付宝交易号，和商户订单号不能同时为空
+	 * @return
+	 * @throws AlipayApiException
+	 */
+	public AlipayTradeCancelResponse cancel(String out_trade_no, String trade_no) throws AlipayApiException {
+		AlipayTradeCancelRequest request = new AlipayTradeCancelRequest();
+		request.setBizContent("{" + "\"out_trade_no\":\"" + StringUtils.defaultString(out_trade_no) + "\"," + "\"trade_no\":\"" + StringUtils.defaultString(trade_no) + "\"" + "  }");
+		AlipayTradeCancelResponse response = alipayClient.execute(request);
+		logger.info("统一收单交易撤销返回结果:" + response.getBody());
 		return response;
 	}
 

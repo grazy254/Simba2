@@ -1483,8 +1483,8 @@ Shadow=0</a:DisplayPreferences>
 </o:TitleSymbol>
 <o:TableSymbol Id="o6">
 <a:CreationDate>1524732456</a:CreationDate>
-<a:ModificationDate>1524792342</a:ModificationDate>
-<a:Rect>((-1203,11448), (10921,18403))</a:Rect>
+<a:ModificationDate>1526454524</a:ModificationDate>
+<a:Rect>((-1953,7848), (10171,14803))</a:Rect>
 <a:AutoAdjustToText>0</a:AutoAdjustToText>
 <a:LineColor>12615680</a:LineColor>
 <a:FillColor>16570034</a:FillColor>
@@ -1508,8 +1508,8 @@ TableComment 0 新宋体,8,N</a:FontList>
 </o:TableSymbol>
 <o:TableSymbol Id="o8">
 <a:CreationDate>1524732892</a:CreationDate>
-<a:ModificationDate>1524795863</a:ModificationDate>
-<a:Rect>((-15815,5935), (-2967,16359))</a:Rect>
+<a:ModificationDate>1526454523</a:ModificationDate>
+<a:Rect>((-20390,6385), (-7542,16809))</a:Rect>
 <a:AutoAdjustToText>0</a:AutoAdjustToText>
 <a:LineColor>12615680</a:LineColor>
 <a:FillColor>16570034</a:FillColor>
@@ -1533,8 +1533,8 @@ TableComment 0 新宋体,8,N</a:FontList>
 </o:TableSymbol>
 <o:TableSymbol Id="o10">
 <a:CreationDate>1524789243</a:CreationDate>
-<a:ModificationDate>1524793731</a:ModificationDate>
-<a:Rect>((-1127,3419), (10877,9849))</a:Rect>
+<a:ModificationDate>1526454524</a:ModificationDate>
+<a:Rect>((-377,-5281), (11627,1149))</a:Rect>
 <a:AutoAdjustToText>0</a:AutoAdjustToText>
 <a:LineColor>12615680</a:LineColor>
 <a:FillColor>16570034</a:FillColor>
@@ -1601,9 +1601,10 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>activityID</a:Code>
 <a:CreationDate>1524732876</a:CreationDate>
 <a:Creator>zhangfenghua</a:Creator>
-<a:ModificationDate>1524742254</a:ModificationDate>
-<a:Modifier>zhangfenghua</a:Modifier>
-<a:DataType>bigint</a:DataType>
+<a:ModificationDate>1526459162</a:ModificationDate>
+<a:Modifier>lilei</a:Modifier>
+<a:DataType>varchar(64)</a:DataType>
+<a:Length>64</a:Length>
 </o:Column>
 <o:Column Id="o15">
 <a:ObjectID>440D8DCF-C6F3-4034-A19D-7E0264717B23</a:ObjectID>

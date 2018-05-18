@@ -58,7 +58,7 @@ public class PayCallbackController {
 		PayResult payResult = XmlUtil.toOject(body, PayResult.class);
 		payResult.composeCoupons(body);
 		if (payService != null) {
-			payService.dealResult(payResult);
+			payService.updateResult(payResult);
 		}
 		PayResultRes res = new PayResultRes();
 		res.setReturn_code("SUCCESS");

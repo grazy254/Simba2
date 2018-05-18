@@ -14,6 +14,9 @@ import com.simba.model.Activity;
  */
 public interface ActivityService {
 
+	
+	String list();
+	
 	void add(Activity activity) throws ParseException;
 	
 	boolean isExistedActivityID(String activityID); 

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.simba.dao.PointSummaryDao;
 import com.simba.framework.util.jdbc.Pager;
@@ -25,6 +25,12 @@ public class PointSummaryServiceImpl implements PointSummaryService {
 	@Autowired
 	private PointSummaryDao pointSummaryDao;
 
+	@RequestMapping("/pointSummaryList")
+	public String pointSummaryList() {
+		return "pointSummary/list";
+	}
+	
+	
 	@Override
 	public void add(PointSummary pointSummary) {
 		pointSummaryDao.add(pointSummary);

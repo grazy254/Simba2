@@ -12,6 +12,8 @@ import com.simba.model.PointSummary;
  * 
  */
 public interface PointSummaryService {
+	
+	String pointSummaryList();
 
 	void add(PointSummary pointSummary);
 

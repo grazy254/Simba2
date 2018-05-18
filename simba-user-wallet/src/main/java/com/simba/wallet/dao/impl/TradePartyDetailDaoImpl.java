@@ -10,6 +10,7 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.jdbc.StatementParameter;
 import com.simba.wallet.dao.TradePartyDetailDao;
 import com.simba.wallet.model.TradePartyDetail;
+import com.simba.wallet.model.vo.TradePartyVO;
 /**
  * 交易主体 Dao实现类
  * 
@@ -23,11 +24,16 @@ public class TradePartyDetailDaoImpl implements TradePartyDetailDao {
 	private Jdbc jdbc;
 
 	private static final String table = "tradePartyDetail";
+	private static final String tradeDetailTable = "tradeDetail";
 
 	@Override
-	public void add(TradePartyDetail tradePartyDetail) {
+	public Long add(TradePartyDetail tradePartyDetail) {
 		String sql = "insert into " + table + "( tradeUserID, partyName, partyType, tradeAccountID, ip, mobileNumber, device, noticeMail, location, createTime) values(?,?,?,?,?,?,?,?,?,?)";
-		jdbc.updateForBoolean(sql, tradePartyDetail.getTradeUserID(),tradePartyDetail.getPartyName(),tradePartyDetail.getPartyType(),tradePartyDetail.getTradeAccountID(),tradePartyDetail.getIp(),tradePartyDetail.getMobileNumber(),tradePartyDetail.getDevice(),tradePartyDetail.getNoticeMail(),tradePartyDetail.getLocation(),tradePartyDetail.getCreateTime());
+		Number id = jdbc.updateForGeneratedKey(sql, tradePartyDetail.getTradeUserID(), tradePartyDetail.getPartyName(),
+				tradePartyDetail.getPartyType(), tradePartyDetail.getTradeAccountID(), tradePartyDetail.getIp(),
+				tradePartyDetail.getMobileNumber(), tradePartyDetail.getDevice(), tradePartyDetail.getNoticeMail(),
+				tradePartyDetail.getLocation(), tradePartyDetail.getCreateTime());
+		return id.longValue();
 	}
 
 	@Override
@@ -53,6 +59,7 @@ public class TradePartyDetailDaoImpl implements TradePartyDetailDao {
 		return jdbc.queryForList(sql, TradePartyDetail.class);
 	}
 	
+	@Override
 	public Long count(){
 		String sql = "select count(*) from " + table;
 		return jdbc.queryForLong(sql); 
@@ -101,11 +108,12 @@ public class TradePartyDetailDaoImpl implements TradePartyDetailDao {
 	}
 
 	@Override
-	public List<TradePartyDetail> pageBy(String field, Object value, Pager page) {
-		String sql = "select * from " + table + " where " + field + " = ? ";
+	public List<TradePartyVO> pageBy(String field, Object value, Pager page) {
+		String sql = "select d.tradeType, d.paymentAmount, d.tradePaymentTime, d.tradeStatus from " + table + " p join "
+				+ tradeDetailTable + " d on p.id = d.tradePartyID where p." + field + " = ?";
 		StatementParameter param = new StatementParameter();
 		param.set(value);
-		return jdbc.queryForPage(sql, TradePartyDetail.class, page, param);
+		return jdbc.queryForPage(sql, TradePartyVO.class, page, param);
 	}
 
 	@Override

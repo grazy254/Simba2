@@ -25,9 +25,14 @@ public class TradeChannelDetailDaoImpl implements TradeChannelDetailDao {
 	private static final String table = "tradeChannelDetail";
 
 	@Override
-	public void add(TradeChannelDetail tradeChannelDetail) {
+	public Long add(TradeChannelDetail tradeChannelDetail) {
 		String sql = "insert into " + table + "( tradeAccountID, channelID, orderCreateTime, paymentTime, orderNO, openID, errorMsg, errorCode, createTime, lastUpdateTime) values(?,?,?,?,?,?,?,?,?,?)";
-		jdbc.updateForBoolean(sql, tradeChannelDetail.getTradeAccountID(),tradeChannelDetail.getChannelID(),tradeChannelDetail.getOrderCreateTime(),tradeChannelDetail.getPaymentTime(),tradeChannelDetail.getOrderNO(),tradeChannelDetail.getOpenID(),tradeChannelDetail.getErrorMsg(),tradeChannelDetail.getErrorCode(),tradeChannelDetail.getCreateTime(),tradeChannelDetail.getLastUpdateTime());
+		Number id = jdbc.updateForGeneratedKey(sql, tradeChannelDetail.getTradeAccountID(),
+				tradeChannelDetail.getChannelID(), tradeChannelDetail.getOrderCreateTime(),
+				tradeChannelDetail.getPaymentTime(), tradeChannelDetail.getOrderNO(), tradeChannelDetail.getOpenID(),
+				tradeChannelDetail.getErrorMsg(), tradeChannelDetail.getErrorCode(), tradeChannelDetail.getCreateTime(),
+				tradeChannelDetail.getLastUpdateTime());
+		return id.longValue();
 	}
 
 	@Override
@@ -53,6 +58,7 @@ public class TradeChannelDetailDaoImpl implements TradeChannelDetailDao {
 		return jdbc.queryForList(sql, TradeChannelDetail.class);
 	}
 	
+	@Override
 	public Long count(){
 		String sql = "select count(*) from " + table;
 		return jdbc.queryForLong(sql); 

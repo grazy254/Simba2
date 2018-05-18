@@ -9,6 +9,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.model.TradeDepartment;
 import com.simba.wallet.service.TradeDepartmentService;
@@ -26,31 +27,47 @@ public class TradeDepartmentController {
 	@Autowired
 	private TradeDepartmentService tradeDepartmentService;
 
-	@ResponseBody
 	@RequestMapping("/list")
-	public List<TradeDepartment> list() {
-		List<TradeDepartment> list = tradeDepartmentService.listAll();
-		return list;
+	public String list() {
+		return "tradeDepartment/list";
 	}
 
-	/**
-	 * 新增收款部门
-	 * 
-	 * @param tradeDepartment
-	 * @return
-	 */
+	@RequestMapping("/getList")
+	public String getList(Pager pager, ModelMap model) {
+		List<TradeDepartment> list = tradeDepartmentService.page(pager);
+		model.put("list", list);
+		return "tradeDepartment/table";
+	}
+
 	@ResponseBody
+	@RequestMapping("/count")
+	public JsonResult count() {
+		Long count = tradeDepartmentService.count();
+		return new JsonResult(count, "", 200);
+	}
+
+	@RequestMapping("/toAdd")
+	public String toAdd() {
+		return "tradeDepartment/add";
+	}
+
 	@RequestMapping("/add")
-	public JsonResult add(TradeDepartment tradeDepartment) {
+	public String add(TradeDepartment tradeDepartment) {
 		tradeDepartmentService.add(tradeDepartment);
-		return new JsonResult("添加成功");
+		return "redirect:/tradeDepartment/list";
 	}
 
-	@ResponseBody
+	@RequestMapping("/toUpdate")
+	public String toUpdate(Long id, ModelMap model) {
+		TradeDepartment tradeDepartment = tradeDepartmentService.get(id);
+		model.put("tradeDepartment", tradeDepartment);
+		return "tradeDepartment/update";
+	}
+
 	@RequestMapping("/update")
-	public JsonResult update(TradeDepartment tradeDepartment) {
+	public String update(TradeDepartment tradeDepartment) {
 		tradeDepartmentService.update(tradeDepartment);
-		return new JsonResult();
+		return "redirect:/tradeDepartment/list";
 	}
 
 	@ResponseBody
@@ -66,4 +83,5 @@ public class TradeDepartmentController {
 		tradeDepartmentService.batchDelete(Arrays.asList(id));
 		return new JsonResult();
 	}
+
 }

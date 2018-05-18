@@ -9,6 +9,7 @@ import com.simba.model.SmartUser;
 import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.TradePartyDetail;
 import com.simba.wallet.model.enums.ChannelType;
+import com.simba.wallet.model.form.TradeDetailSearchForm;
 /**
  *交易详情信息 Service
  * 
@@ -26,6 +27,8 @@ public interface TradeDetailService {
 	List<TradeDetail> listAll();
 		
 	Long count();
+
+	Long count(TradeDetailSearchForm tradeDetailSearchForm);
 	
 	Long countBy(String field, Object value);
 	
@@ -41,6 +44,8 @@ public interface TradeDetailService {
 	
 	List<TradeDetail> page(Pager page);
 	
+	List<TradeDetail> page(Pager page, TradeDetailSearchForm tradeDetailSearchForm);
+
 	TradeDetail get(Long id);
 	
 	void batchDelete(List<Long> idList);

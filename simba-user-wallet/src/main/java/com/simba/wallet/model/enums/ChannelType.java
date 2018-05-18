@@ -2,23 +2,23 @@ package com.simba.wallet.model.enums;
 
 public enum ChannelType {
 
-	WXPAY("微信支付", "WXPAY"),
+	WXPAY("WXPAY", "01"),
 
-	ALIPAY("支付宝", "ALIPAY");
+	ALIPAY("ALIPAY", "02");
 	
 	private String name;
-	private String type;
-	
-	private ChannelType(String name, String type) {
+	private String no;
+
+	private ChannelType(String name, String no) {
+		this.no = no;
 		this.name = name;
-		this.type = type;
 	}
 	
 	public String getName() {
 		return name;
 	}
-	
-	public String getType() {
-		return type;
+
+	public String getNo() {
+		return no;
 	}
 }

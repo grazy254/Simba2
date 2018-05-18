@@ -9,6 +9,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.model.TradeChannel;
 import com.simba.wallet.service.TradeChannelService;
@@ -26,31 +27,47 @@ public class TradeChannelController {
 	@Autowired
 	private TradeChannelService tradeChannelService;
 
-	@ResponseBody
 	@RequestMapping("/list")
-	public List<TradeChannel> list() {
-		List<TradeChannel> list = tradeChannelService.listAll();
-		return list;
+	public String list() {
+		return "tradeChannel/list";
 	}
 
-	/**
-	 * 新增渠道信息
-	 * 
-	 * @param tradeChannel
-	 * @return
-	 */
+	@RequestMapping("/getList")
+	public String getList(Pager pager, ModelMap model) {
+		List<TradeChannel> list = tradeChannelService.page(pager);
+		model.put("list", list);
+		return "tradeChannel/table";
+	}
+
 	@ResponseBody
+	@RequestMapping("/count")
+	public JsonResult count() {
+		Long count = tradeChannelService.count();
+		return new JsonResult(count, "", 200);
+	}
+
+	@RequestMapping("/toAdd")
+	public String toAdd() {
+		return "tradeChannel/add";
+	}
+
 	@RequestMapping("/add")
-	public JsonResult add(TradeChannel tradeChannel) {
+	public String add(TradeChannel tradeChannel) {
 		tradeChannelService.add(tradeChannel);
-		return new JsonResult("添加成功");
+		return "redirect:/tradeChannel/list";
 	}
 
-	@ResponseBody
+	@RequestMapping("/toUpdate")
+	public String toUpdate(Long id, ModelMap model) {
+		TradeChannel tradeChannel = tradeChannelService.get(id);
+		model.put("tradeChannel", tradeChannel);
+		return "tradeChannel/update";
+	}
+
 	@RequestMapping("/update")
-	public JsonResult update(TradeChannel tradeChannel) {
+	public String update(TradeChannel tradeChannel) {
 		tradeChannelService.update(tradeChannel);
-		return new JsonResult();
+		return "redirect:/tradeChannel/list";
 	}
 
 	@ResponseBody
@@ -66,4 +83,5 @@ public class TradeChannelController {
 		tradeChannelService.batchDelete(Arrays.asList(id));
 		return new JsonResult();
 	}
+
 }

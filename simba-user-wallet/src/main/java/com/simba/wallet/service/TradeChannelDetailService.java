@@ -12,7 +12,7 @@ import com.simba.wallet.model.TradeChannelDetail;
  */
 public interface TradeChannelDetailService {
 
-	void add(TradeChannelDetail tradeChannelDetail);
+	Long add(TradeChannelDetail tradeChannelDetail);
 
 	void update(TradeChannelDetail tradeChannelDetail);
 

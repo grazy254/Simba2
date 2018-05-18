@@ -24,8 +24,8 @@ public class TradeChannelDetailServiceImpl implements TradeChannelDetailService 
 	private TradeChannelDetailDao tradeChannelDetailDao;
 
 	@Override
-	public void add(TradeChannelDetail tradeChannelDetail) {
-		tradeChannelDetailDao.add(tradeChannelDetail);
+	public Long add(TradeChannelDetail tradeChannelDetail) {
+		return tradeChannelDetailDao.add(tradeChannelDetail);
 	}
 
 	@Override

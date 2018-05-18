@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.wallet.model.TradeDetail;
+import com.simba.wallet.model.form.TradeDetailSearchForm;
 /**
  * 交易详情信息 Dao
  * 
@@ -22,6 +23,7 @@ public interface TradeDetailDao {
 	
 	Long count();
 	
+	Long count(TradeDetailSearchForm tradeDetailSearchForm);
 	Long countBy(String field, Object value);
 	
 	Long countByAnd(String field1, Object value1, String field2, Object value2);
@@ -36,6 +38,7 @@ public interface TradeDetailDao {
 	
 	List<TradeDetail> page(Pager page);
 	
+	List<TradeDetail> page(Pager page, TradeDetailSearchForm tradeDetailSearchForm);
 	TradeDetail get(Long id);
 	
 	TradeDetail getBy(String field, Object value);

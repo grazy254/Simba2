@@ -2,6 +2,7 @@ package com.simba.wallet.dao.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +11,7 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.jdbc.StatementParameter;
 import com.simba.wallet.dao.TradeDetailDao;
 import com.simba.wallet.model.TradeDetail;
+import com.simba.wallet.model.form.TradeDetailSearchForm;
 /**
  * 交易详情信息 Dao实现类
  * 
@@ -49,16 +51,31 @@ public class TradeDetailDaoImpl implements TradeDetailDao {
 		return jdbc.queryForPage(sql, TradeDetail.class, page);
 	}
 	@Override
+	public List<TradeDetail> page(Pager page, TradeDetailSearchForm tradeDetailSearchForm) {
+		String sql = "select * from " + table;
+		StatementParameter param = new StatementParameter();
+		return jdbc.queryForPage(buildCondition(sql, tradeDetailSearchForm, param), TradeDetail.class, page, param);
+	}
+
+	@Override
 	public List<TradeDetail> listAll(){
 		String sql = "select * from " + table;
 		return jdbc.queryForList(sql, TradeDetail.class);
 	}
 	
+	@Override
 	public Long count(){
 		String sql = "select count(*) from " + table;
 		return jdbc.queryForLong(sql); 
 	}
 	
+	@Override
+	public Long count(TradeDetailSearchForm tradeDetailSearchForm) {
+		String sql = "select count(*) from " + table;
+		StatementParameter param = new StatementParameter();
+		return jdbc.queryForLong(buildCondition(sql, tradeDetailSearchForm, param), param);
+	}
+
 	@Override
 	public TradeDetail get(Long id) {
 		String sql = "select * from " + table + " where id = ? ";
@@ -161,5 +178,35 @@ public class TradeDetailDaoImpl implements TradeDetailDao {
 	public void deleteByOr(String field1, Object value1, String field2, Object value2){
 		String sql = "delete from " + table + " where " + field1 + " = ? or " + field2 + " = ? ";
 		jdbc.updateForBoolean(sql, value1, value2);
+	}
+
+	private String buildCondition(String sql, TradeDetailSearchForm tradeDetailSearchForm, StatementParameter param) {
+		sql += " where 1 = 1";
+		if (tradeDetailSearchForm.getStartTime() != null
+				&& StringUtils.isNotEmpty(tradeDetailSearchForm.getStartTime() + "")) {
+			sql += " and tradePaymentTime  >= ?";
+			param.set(tradeDetailSearchForm.getStartTime());
+		}
+		if (tradeDetailSearchForm.getEndTime() != null
+				&& StringUtils.isNotEmpty(tradeDetailSearchForm.getEndTime() + "")) {
+			sql += " and tradePaymentTime  < ?";
+			param.set(tradeDetailSearchForm.getEndTime());
+		}
+		if (tradeDetailSearchForm.getTradeNO() != null
+				&& StringUtils.isNotEmpty(tradeDetailSearchForm.getTradeNO() + "")) {
+			sql += " and tradeNO  = ?";
+			param.set(tradeDetailSearchForm.getTradeNO());
+		}
+		if (tradeDetailSearchForm.getTradeType() != null
+				&& StringUtils.isNotEmpty(tradeDetailSearchForm.getTradeType() + "")) {
+			sql += " and tradeType  = ?";
+			param.set(tradeDetailSearchForm.getTradeType());
+		}
+		if (tradeDetailSearchForm.getTradeStatus() != null
+				&& StringUtils.isNotEmpty(tradeDetailSearchForm.getTradeStatus() + "")) {
+			sql += " and tradeStatus  = ?";
+			param.set(tradeDetailSearchForm.getTradeStatus());
+		}
+		return sql;
 	}
 }

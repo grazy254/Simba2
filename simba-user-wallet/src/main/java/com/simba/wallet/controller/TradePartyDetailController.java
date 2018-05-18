@@ -3,15 +3,20 @@ package com.simba.wallet.controller;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.model.TradePartyDetail;
+import com.simba.wallet.model.vo.TradePartyVO;
 import com.simba.wallet.service.TradePartyDetailService;
+import com.simba.wallet.util.SessionUtil;
 
 /**
  * 交易主体控制器
@@ -26,10 +31,14 @@ public class TradePartyDetailController {
 	@Autowired
 	private TradePartyDetailService tradePartyDetailService;
 
+	@Autowired
+	private SessionUtil sessionUtil;
 	@ResponseBody
 	@RequestMapping("/list")
-	public List<TradePartyDetail> list() {
-		List<TradePartyDetail> list = tradePartyDetailService.listAll();
+	public List<TradePartyVO> list(Integer pageStart, HttpSession session) {
+
+		List<TradePartyVO> list = tradePartyDetailService.pageBy("tradeUserID",
+				sessionUtil.getTradeUser(session).getId(), new Pager(pageStart, 10));
 		return list;
 	}
 

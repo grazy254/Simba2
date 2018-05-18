@@ -5,11 +5,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.simba.framework.util.code.DesUtil;
 import com.simba.framework.util.code.EncryptUtil;
+import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.SmartUser;
 import com.simba.service.UserProjectService;
@@ -54,11 +57,47 @@ public class TradeAccountController {
 	private SessionUtil sessionUtil;
 	
 	
-	@ResponseBody
 	@RequestMapping("/list")
-	public List<TradeAccount> list() {
-		List<TradeAccount> list = tradeAccountService.listAll();
-		return list;
+	public String list() {
+		return "tradeAccount/list";
+	}
+
+	@RequestMapping("/getList")
+	public String getList(Pager pager, ModelMap model) {
+		List<TradeAccount> list = tradeAccountService.page(pager);
+		model.put("list", list);
+		return "tradeAccount/table";
+	}
+
+	@ResponseBody
+	@RequestMapping("/count")
+	public JsonResult count() {
+		Long count = tradeAccountService.count();
+		return new JsonResult(count, "", 200);
+	}
+
+	@RequestMapping("/toAdd")
+	public String toAdd() {
+		return "tradeAccount/add";
+	}
+
+	@RequestMapping("/add")
+	public String add(TradeAccount tradeAccount) {
+		tradeAccountService.add(tradeAccount);
+		return "redirect:/tradeAccount/list";
+	}
+
+	@RequestMapping("/toUpdate")
+	public String toUpdate(Long id, ModelMap model) {
+		TradeAccount tradeAccount = tradeAccountService.get(id);
+		model.put("tradeAccount", tradeAccount);
+		return "tradeAccount/update";
+	}
+
+	@RequestMapping("/update")
+	public String update(TradeAccount tradeAccount) {
+		tradeAccountService.update(tradeAccount);
+		return "redirect:/tradeAccount/list";
 	}
 	
 	/**
@@ -69,19 +108,21 @@ public class TradeAccountController {
 	 * @throws
 	 */
 	@ResponseBody
-	@RequestMapping("/showPersonalAccount")
+	@RequestMapping("/showBalance")
 	public JsonResult showPersonalAccount(HttpSession session) {
-		return new JsonResult(sessionUtil.getTradeAccount(session));
+		SmartUser smartUser = sessionUtil.getSmartUser(session);
+		return new JsonResult(sessionUtil.getTradeAccount(smartUser.getAccount()));
 		
 	}
 	
-	private String generateAccountID(AccountType accountType, String userID) {
+	private String generateAccountID(AccountType accountType) {
 		String accountID = accountType.getShortName();
 		LocalDateTime now = LocalDateTime.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 		accountID += now.format(formatter);
-		accountID += EncryptUtil.md5(userID);
-		return accountID;
+		Random random = new Random();
+
+		return accountID + random.ints(100000, 999999).limit(1).findFirst().getAsInt() + StringUtils.EMPTY;
 	}
 	
 	@ResponseBody
@@ -126,13 +167,13 @@ public class TradeAccountController {
 		AccountType accountType = null;
 		
 		if (tradeUserType.equals(TradeUserType.PERSION)) {
-			//通过session的userId获取smart用户信息
+			// 通过session的userId获取smart用户信息
 			smartUser = sessionUtil.getSmartUser(session);
 			userID = smartUser.getAccount();
-			accountID = generateAccountID(AccountType.PERSIONAL_ACCOUNT, smartUser.getAccount());
+			accountID = generateAccountID(AccountType.PERSIONAL_ACCOUNT);
 			accountType = AccountType.PERSIONAL_ACCOUNT;
 		} else {
-			accountID = generateAccountID(AccountType.COMPANY_ACCOUNT, deptID);
+			accountID = generateAccountID(AccountType.COMPANY_ACCOUNT);
 			accountType = AccountType.COMPANY_ACCOUNT;
 		}
 		Long tradeUserID = 0L;
@@ -206,27 +247,6 @@ public class TradeAccountController {
 	@ResponseBody
 	@RequestMapping("/getTradeAccount")
 	public JsonResult getTradeAccount() {
-		return new JsonResult();
-	}
-
-	
-	/**
-	 * 新增支付账号
-	 * 
-	 * @param tradeAccount
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping("/add")
-	public JsonResult add(TradeAccount tradeAccount) {
-		tradeAccountService.add(tradeAccount);
-		return new JsonResult();
-	}
-
-	@ResponseBody
-	@RequestMapping("/update")
-	public JsonResult update(TradeAccount tradeAccount) {
-		tradeAccountService.update(tradeAccount);
 		return new JsonResult();
 	}
 

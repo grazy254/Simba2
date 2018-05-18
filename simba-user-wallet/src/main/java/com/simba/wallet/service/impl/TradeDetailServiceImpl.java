@@ -1,16 +1,14 @@
 package com.simba.wallet.service.impl;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.simba.exception.BussException;
-import com.simba.framework.util.code.EncryptUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.SmartUser;
@@ -21,17 +19,17 @@ import com.simba.wallet.model.TradeChannelDetail;
 import com.simba.wallet.model.TradeDepartment;
 import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.TradePartyDetail;
-import com.simba.wallet.model.TradeUser;
 import com.simba.wallet.model.enums.ChannelType;
 import com.simba.wallet.model.enums.FeeType;
 import com.simba.wallet.model.enums.TradeStatus;
 import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.model.enums.TradeUserType;
+import com.simba.wallet.model.form.TradeDetailSearchForm;
 import com.simba.wallet.service.TradeAccountService;
-import com.simba.wallet.service.TradeChannelService;
-import com.simba.wallet.service.TradeDepartmentService;
+import com.simba.wallet.service.TradeChannelDetailService;
 import com.simba.wallet.service.TradeDetailService;
-import com.simba.wallet.service.TradeUserService;
+import com.simba.wallet.service.TradePartyDetailService;
+import com.simba.wallet.util.SessionUtil;
 /**
  * 交易详情信息 Service实现类
  * 
@@ -52,14 +50,14 @@ public class TradeDetailServiceImpl implements TradeDetailService {
 	private TradeAccountService tradeAccountService;
 	
 	@Autowired
-	private TradeDepartmentService tradeDepartmentService;
-	
+	private TradePartyDetailService tradePartyDetailService;
+
 	@Autowired
-	private TradeUserService tradeUserService;
-	
+	private TradeChannelDetailService tradeChannelDetailService;
+
 	@Autowired
-	private TradeChannelService tradeChannelService;
-	
+	private SessionUtil sessionUtil;
+
 	@Override
 	public Long add(TradeDetail tradeDetail) {
 		return tradeDetailDao.add(tradeDetail);
@@ -81,13 +79,25 @@ public class TradeDetailServiceImpl implements TradeDetailService {
 	public List<TradeDetail> page(Pager page) {
 		return tradeDetailDao.page(page);
 	}
-	
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<TradeDetail> page(Pager page, TradeDetailSearchForm tradeDetailSearchForm) {
+		return tradeDetailDao.page(page, tradeDetailSearchForm);
+	}
+
 	@Override
 	@Transactional(readOnly = true)
 	public Long count() {
 		return tradeDetailDao.count();
 	}
-	
+
+	@Override
+	@Transactional(readOnly = true)
+	public Long count(TradeDetailSearchForm tradeDetailSearchForm) {
+		return tradeDetailDao.count(tradeDetailSearchForm);
+	}
+
 	@Override
 	@Transactional(readOnly = true)
 	public Long countBy(String field, Object value){
@@ -193,42 +203,8 @@ public class TradeDetailServiceImpl implements TradeDetailService {
 		return tradeDetailDao.countByOr(field1,value1,field2,value2);
 	}
 
-	private String generateTradeNO(String userID) {
-		String tradeNO = "";
-		LocalDateTime now = LocalDateTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-		tradeNO += now.format(formatter);
-		tradeNO += EncryptUtil.md5(userID);
-		return tradeNO;
-	}
-	
-	private TradeDepartment getTradeDepartment(String deptNO) {
-		TradeDepartment tradeDepartment = tradeDepartmentService.getBy("deptNO", deptNO);
-		if (tradeDepartment == null) {
-			throw new BussException("交易部门不存在");
-		}
-		return tradeDepartment;
-	}
-	private TradeAccount getTradeAccount(String userID) {		
-		TradeAccount tradeAccount = tradeAccountService.getBy("tradeUserID", getTradeUser(userID).getId());
-		if (tradeAccount == null) {
-			throw new BussException("用户账号不存在");
-		}
-		return tradeAccount;
-	}
-	private TradeUser getTradeUser(String userID) {
-		TradeUser tradeUser = tradeUserService.getBy("userID", userID);
-		if (tradeUser == null) {
-			throw new BussException("交易用户不存在");
-		}
-		return tradeUser;
-	}
-	private TradeChannel getTradeChannel(ChannelType channelType) {
-		TradeChannel tradeChannel = tradeChannelService.getBy("type", channelType.getType());
-		if (tradeChannel == null) {
-			throw new BussException("未找到交易渠道");
-		}
-		return tradeChannel;
+	private String generateTradeNO() {
+		return UUID.randomUUID().toString();
 	}
 
 	@Override
@@ -241,28 +217,45 @@ public class TradeDetailServiceImpl implements TradeDetailService {
 		tradePartyDetail.setPartyName(smartUser.getName());
 		tradePartyDetail.setPartyType(TradeUserType.PERSION.getName());
 		tradePartyDetail.setNoticeMail(smartUser.getEmail());
-		
+		tradePartyDetail.setIp("");
+		tradePartyDetail.setLocation("");
 		tradePartyDetail.setMobileNumber(smartUser.getTelNo());
-		tradePartyDetail.setTradeAccountID(getTradeAccount(smartUser.getAccount()).getAccountID());
-		tradePartyDetail.setTradeUserID(getTradeUser(smartUser.getAccount()).getId());
-		
-		TradeDepartment tradeDepartment = getTradeDepartment(tradeDeptNO);
+		tradePartyDetail.setTradeAccountID(sessionUtil.getTradeAccount(smartUser.getAccount()).getAccountID());
+		tradePartyDetail.setTradeUserID(sessionUtil.getTradeUser(smartUser.getAccount()).getId());
+		Long tradePartyID = tradePartyDetailService.add(tradePartyDetail);
+		tradePartyDetail.setId(tradePartyID);
+
+		TradeDepartment tradeDepartment = sessionUtil.getTradeDepartment(tradeDeptNO);
 
 		TradePartyDetail counterPartyDetail = new TradePartyDetail();
 		counterPartyDetail.setCreateTime(new Date());
 		counterPartyDetail.setPartyName(tradeDepartment.getDeptName());
 		counterPartyDetail.setPartyType(TradeUserType.DEPARTMENT.getName());
-		counterPartyDetail.setTradeAccountID(getTradeAccount(tradeDepartment.getDeptNO()).getAccountID());
-		counterPartyDetail.setTradeUserID(getTradeUser(tradeDepartment.getDeptNO()).getId());
-		
-		TradeChannel tradeChannel = getTradeChannel(channelType);
+		counterPartyDetail.setTradeAccountID(sessionUtil.getTradeAccount(tradeDepartment.getDeptNO()).getAccountID());
+		counterPartyDetail.setTradeUserID(sessionUtil.getTradeUser(tradeDepartment.getDeptNO()).getId());
+		counterPartyDetail.setIp("");
+		counterPartyDetail.setLocation("");
+		counterPartyDetail.setMobileNumber("");
+		counterPartyDetail.setNoticeMail("");
+		Long counterPartyID = tradePartyDetailService.add(counterPartyDetail);
+		counterPartyDetail.setId(counterPartyID);
+
+		TradeChannel tradeChannel = sessionUtil.getTradeChannel(channelType);
 
 		TradeChannelDetail tradeChannelDetail = new TradeChannelDetail();
 		tradeChannelDetail.setChannelID(tradeChannel.getId());
 		tradeChannelDetail.setCreateTime(new Date());
+		tradeChannelDetail.setErrorCode("");
+		tradeChannelDetail.setErrorMsg("");
+		tradeChannelDetail.setOpenID("");
+		tradeChannelDetail.setOrderCreateTime(new Date());
+		tradeChannelDetail.setOrderNO("000");
+		tradeChannelDetail.setPaymentTime(new Date());
 		tradeChannelDetail.setLastUpdateTime(new Date());
-		tradeChannelDetail.setTradeAccountID(getTradeAccount(tradeChannel.getType()).getAccountID());
-		
+		tradeChannelDetail.setTradeAccountID(sessionUtil.getTradeAccount(tradeChannel.getType()).getAccountID());
+		Long tradeChannelDetailID = tradeChannelDetailService.add(tradeChannelDetail);
+		tradeChannelDetail.setId(tradeChannelDetailID);
+
 		return dealOrder(tradePartyDetail, counterPartyDetail, tradeChannelDetail, orderNO, 
 				orderName, orderDesc, "", originalAmount, paymentAmount, 
 				tradeCreateTime, TradeType.RECHARGE);
@@ -310,7 +303,7 @@ public class TradeDetailServiceImpl implements TradeDetailService {
 		tradeDetail.setTradeChannelID(tradeChannelDetail.getId());
 		tradeDetail.setTradeCounterpartyID(counterPartyDetail.getId());
 		tradeDetail.setTradeCreateTime(tradeCreateTime);
-		tradeDetail.setTradeNO(generateTradeNO("123"));
+		tradeDetail.setTradeNO(generateTradeNO());
 		tradeDetail.setTradePartyID(tradePartyDetail.getId());
 		tradeDetail.setTradePaymentTime(new Date());
 		tradeDetail.setTradeStatus(TradeStatus.INPROCESS.getName());

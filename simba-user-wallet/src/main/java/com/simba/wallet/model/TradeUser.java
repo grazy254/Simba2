@@ -5,15 +5,22 @@ package com.simba.wallet.model;
  * Purpose: Defines the Class TradeUser
  ***********************************************************************/
 
+import java.io.Serializable;
+import java.util.Date;
+
 import com.simba.annotation.DescAnnotation;
-import java.util.*;
 
 /**
  * 钱包用户信息
  * */
 @DescAnnotation(desc = "钱包用户信息")
-public class TradeUser {
-   /** */
+public class TradeUser implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/** */
    @DescAnnotation(desc = "")
 	private long id;
 

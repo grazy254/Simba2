@@ -5,8 +5,9 @@ package com.simba.wallet.model;
  * Purpose: Defines the Class TradeDetail
  ***********************************************************************/
 
+import java.util.Date;
+
 import com.simba.annotation.DescAnnotation;
-import java.util.*;
 
 /**
  * 交易详情信息
@@ -50,63 +51,68 @@ public class TradeDetail {
    /**
     * 订单描述
     * */
+	@DescAnnotation(desc = "订单描述")
    private String orderDesc = "";
    /**
     * 订单地址
     * */
+	@DescAnnotation(desc = "订单地址")
    private String orderAddress = "";
    /**
     * 货币类型
     * */
+	@DescAnnotation(desc = "货币类型")
    private String feeType = "CNY";
    /**
     * 原始费用
     * */
+	@DescAnnotation(desc = "原始费用")
    private long originalAmount = 0;
    /**
     * 实际费用
     * */
+	@DescAnnotation(desc = "实际费用")
    private long paymentAmount = 0;
    /**
     * 交易主体ID
     * */
-   @DescAnnotation(desc = "订单描述")
+	@DescAnnotation(desc = "主交易方")
 	private long tradePartyID;
 
    /**
     * 交易对手ID
     * */
-   @DescAnnotation(desc = "订单地址")
+	@DescAnnotation(desc = "对手交易方")
 	private long tradeCounterpartyID;
 
    /**
     * 交易渠道ID
     * */
-   @DescAnnotation(desc = "货币类型")
+	@DescAnnotation(desc = "交易渠道")
 	private long tradeChannelID;
 
    /**
     * 请求支付时间
     * */
-   @DescAnnotation(desc = "原始费用")
+	@DescAnnotation(desc = "请求支付时间")
 	private Date tradeCreateTime;
 
    /**
     * 支付创建时间
     * */
-   @DescAnnotation(desc = "实际费用")
+	@DescAnnotation(desc = "支付创建时间")
 	private Date tradePaymentTime;
 
    /**
     * 创建时间
     * */
-   @DescAnnotation(desc = "交易主体ID")
+	@DescAnnotation(desc = "创建时间")
 	private Date createTime;
 
    /**
     * 最后更新时间
     * */
-   @DescAnnotation(desc = "交易对手ID")
+	@DescAnnotation(desc = "最后更新时间")
 	private Date lastUpdateTime;
 
 

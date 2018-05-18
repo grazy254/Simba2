@@ -5,8 +5,9 @@ package com.simba.wallet.model;
  * Purpose: Defines the Class TradeChannelDetail
  ***********************************************************************/
 
+import java.util.Date;
+
 import com.simba.annotation.DescAnnotation;
-import java.util.*;
 
 /**
  * 交易的渠道信息

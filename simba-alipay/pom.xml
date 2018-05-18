@@ -26,6 +26,11 @@
 			<version>${simba.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-json</artifactId>
+			<version>${simba.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.alipay.sdk</groupId>
 			<artifactId>alipay-sdk-java</artifactId>
 			<version>3.0.52.ALL</version>

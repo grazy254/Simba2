@@ -22,6 +22,9 @@ public interface PayService {
 	 * 处理订单
 	 * 
 	 * @param req
+	 * @param prePayId
+	 * @param codeUrl
+	 * @param mwebUrl
 	 */
-	void dealOrder(UnifiedOrderReq req);
+	void dealOrder(UnifiedOrderReq req, String prePayId, String codeUrl, String mwebUrl);
 }

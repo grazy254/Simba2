@@ -38,14 +38,14 @@ public class PayServiceImpl implements PayService {
 	}
 
 	@Override
-	public void dealOrder(UnifiedOrderReq req) {
+	public void dealOrder(UnifiedOrderReq req, String prePayId, String codeUrl, String mwebUrl) {
 		List<PayInterface> pays = this.getPayImpls();
 		if (pays == null || pays.isEmpty()) {
 			logger.warn("微信支付业务没有实现类");
 			return;
 		}
 		pays.forEach((PayInterface pay) -> {
-			pay.dealOrder(req);
+			pay.dealOrder(req, prePayId, codeUrl, mwebUrl);
 		});
 	}
 

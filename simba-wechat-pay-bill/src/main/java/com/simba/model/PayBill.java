@@ -7,6 +7,8 @@ package com.simba.model;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.simba.annotation.DescAnnotation;
 
 /**
@@ -34,25 +36,25 @@ public class PayBill {
 	 * 设备号
 	 */
 	@DescAnnotation(desc = "设备号")
-	private String deviceInfo;
+	private String deviceInfo = StringUtils.EMPTY;
 
 	/**
 	 * 商品描述
 	 */
 	@DescAnnotation(desc = "商品描述")
-	private String productDesc;
+	private String productDesc = StringUtils.EMPTY;
 
 	/**
 	 * 商品详情
 	 */
 	@DescAnnotation(desc = "商品详情")
-	private String detail;
+	private String detail = StringUtils.EMPTY;
 
 	/**
 	 * 附加数据
 	 */
 	@DescAnnotation(desc = "附加数据")
-	private String attach;
+	private String attach = StringUtils.EMPTY;
 
 	/**
 	 * 商户订单号
@@ -70,43 +72,43 @@ public class PayBill {
 	 * 终端IP
 	 */
 	@DescAnnotation(desc = "终端IP")
-	private String clientIp;
+	private String clientIp = StringUtils.EMPTY;
 
 	/**
 	 * 交易起始时间
 	 */
 	@DescAnnotation(desc = "交易起始时间")
-	private String startTime;
+	private String startTime = StringUtils.EMPTY;
 
 	/**
 	 * 交易结束时间
 	 */
 	@DescAnnotation(desc = "交易结束时间")
-	private String endTime;
+	private String endTime = StringUtils.EMPTY;
 
 	/**
 	 * 订单优惠标记
 	 */
 	@DescAnnotation(desc = "订单优惠标记")
-	private String goodsTag;
+	private String goodsTag = StringUtils.EMPTY;
 
 	/**
 	 * 通知地址
 	 */
 	@DescAnnotation(desc = "通知地址")
-	private String notifyUrl;
+	private String notifyUrl = StringUtils.EMPTY;
 
 	/**
 	 * 交易类型
 	 */
 	@DescAnnotation(desc = "交易类型")
-	private String tradeType;
+	private String tradeType = StringUtils.EMPTY;
 
 	/**
 	 * 商品ID
 	 */
 	@DescAnnotation(desc = "商品ID")
-	private String productId;
+	private String productId = StringUtils.EMPTY;
 
 	/**
 	 * 用户标识
@@ -115,7 +117,19 @@ public class PayBill {
 	private String openid;
 
 	/**
-	 * 状态
+	 * 状态(SUCCESS—支付成功
+	 * 
+	 * REFUND—转入退款
+	 * 
+	 * NOTPAY—未支付
+	 * 
+	 * CLOSED—已关闭
+	 * 
+	 * REVOKED—已撤销（刷卡支付）
+	 * 
+	 * USERPAYING--用户支付中
+	 * 
+	 * PAYERROR--支付失败 )
 	 */
 	@DescAnnotation(desc = "状态")
 	private String status;
@@ -124,7 +138,7 @@ public class PayBill {
 	 * 错误信息
 	 */
 	@DescAnnotation(desc = "错误信息")
-	private String errMsg;
+	private String errMsg = StringUtils.EMPTY;
 
 	/**
 	 * 预支付交易会话标识
@@ -136,13 +150,13 @@ public class PayBill {
 	 * 二维码链接
 	 */
 	@DescAnnotation(desc = "二维码链接")
-	private String codeUrl;
+	private String codeUrl = StringUtils.EMPTY;
 
 	/**
 	 * H5支付链接
 	 */
 	@DescAnnotation(desc = "H5支付链接")
-	private String mwebUrl;
+	private String mwebUrl = StringUtils.EMPTY;
 
 	/**
 	 * 时间

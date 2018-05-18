@@ -71,10 +71,10 @@ public class PayController {
 			String openid = (String) request.getSession().getAttribute("openid");
 			req.setOpenid(openid);
 		}
-		payService.dealOrder(req);
 		UnifiedOrderRes res = WxPayUtil.getInstance().unifiedOrder(req);
 		String prePayId = res.getPrepay_id();
 		String codeUrl = res.getCode_url();
+		String mwebUrl = res.getMweb_url();
 		Map<String, String> params = new HashMap<>();
 		params.put("appId", appid);
 		params.put("timeStamp", now.getTime() / 1000 + "");
@@ -85,8 +85,10 @@ public class PayController {
 		params.put("paySign", sign);
 		params.put("prePayId", prePayId);
 		params.put("codeUrl", codeUrl);
+		params.put("mwebUrl", mwebUrl);
 		String json = FastJsonUtil.toJson(params);
 		model.put("message", json);
+		payService.dealOrder(req, prePayId, codeUrl, mwebUrl);
 		return "message";
 	}
 }

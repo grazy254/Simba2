@@ -16,19 +16,27 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayDataDataserviceBillDownloadurlQueryRequest;
 import com.alipay.api.request.AlipayTradeCancelRequest;
 import com.alipay.api.request.AlipayTradeCloseRequest;
+import com.alipay.api.request.AlipayTradeCreateRequest;
 import com.alipay.api.request.AlipayTradeFastpayRefundQueryRequest;
 import com.alipay.api.request.AlipayTradeOrderSettleRequest;
+import com.alipay.api.request.AlipayTradePayRequest;
+import com.alipay.api.request.AlipayTradePrecreateRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayDataDataserviceBillDownloadurlQueryResponse;
 import com.alipay.api.response.AlipayTradeCancelResponse;
 import com.alipay.api.response.AlipayTradeCloseResponse;
+import com.alipay.api.response.AlipayTradeCreateResponse;
 import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeOrderSettleResponse;
+import com.alipay.api.response.AlipayTradePayResponse;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.simba.alipay.cosntantData.AliPayConstantData;
+import com.simba.alipay.model.CreateOrder;
+import com.simba.alipay.model.PayOrder;
+import com.simba.alipay.model.Precreate;
 import com.simba.alipay.model.RoyaltyParameter;
 import com.simba.exception.BussException;
 import com.simba.framework.util.json.FastJsonUtil;
@@ -218,7 +226,48 @@ public class AliPayUtil {
 		return response;
 	}
 
-	public AlipayTradePrecreateResponse precreate() {
-		return null;
+	/**
+	 * 统一收单线下交易预创建(收银员通过收银台或商户后台调用支付宝接口，生成二维码后，展示给用户，由用户扫描二维码完成订单支付)
+	 * 
+	 * @param precreate
+	 * @return
+	 * @throws AlipayApiException
+	 */
+	public AlipayTradePrecreateResponse precreate(Precreate precreate) throws AlipayApiException {
+		AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
+		request.setBizContent(FastJsonUtil.toJson(precreate));
+		AlipayTradePrecreateResponse response = alipayClient.execute(request);
+		logger.info("统一收单线下交易预创建返回结果:" + response.getBody());
+		return response;
+	}
+
+	/**
+	 * 统一收单交易创建(商户通过该接口进行交易的创建下单)
+	 * 
+	 * @param order
+	 * @return
+	 * @throws AlipayApiException
+	 */
+	public AlipayTradeCreateResponse create(CreateOrder order) throws AlipayApiException {
+		AlipayTradeCreateRequest request = new AlipayTradeCreateRequest();
+		request.setBizContent(FastJsonUtil.toJson(order));
+		AlipayTradeCreateResponse response = alipayClient.execute(request);
+		logger.info("统一收单交易创建返回结果:" + response.getBody());
+		return response;
+	}
+
+	/**
+	 * 统一收单交易支付(收银员使用扫码设备读取用户手机支付宝“付款码”/声波获取设备（如麦克风）读取用户手机支付宝的声波信息后，将二维码或条码信息/声波信息通过本接口上送至支付宝发起支付)
+	 * 
+	 * @param order
+	 * @return
+	 * @throws AlipayApiException
+	 */
+	public AlipayTradePayResponse pay(PayOrder order) throws AlipayApiException {
+		AlipayTradePayRequest request = new AlipayTradePayRequest();
+		request.setBizContent(FastJsonUtil.toJson(order));
+		AlipayTradePayResponse response = alipayClient.execute(request);
+		logger.info("统一收单交易支付返回结果:" + response.getBody());
+		return response;
 	}
 }

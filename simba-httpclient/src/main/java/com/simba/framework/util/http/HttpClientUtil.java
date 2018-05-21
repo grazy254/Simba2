@@ -121,8 +121,8 @@ public class HttpClientUtil {
 			method = dealRedirect(method);
 			response = method.getResponseBodyAsString();
 		} catch (Exception e) {
-			logger.error("发情get请求失败", e);
-			throw new BussException("发情get请求失败");
+			logger.error("发送get请求失败", e);
+			throw new BussException("发送get请求失败");
 		} finally {
 			// 释放连接
 			method.releaseConnection();
@@ -149,8 +149,8 @@ public class HttpClientUtil {
 			method = dealRedirect(method);
 			response = method.getResponseBody();
 		} catch (Exception e) {
-			logger.error("发情get请求失败", e);
-			throw new BussException("发情get请求失败");
+			logger.error("发送get请求失败", e);
+			throw new BussException("发送get请求失败");
 		} finally {
 			// 释放连接
 			method.releaseConnection();
@@ -159,7 +159,7 @@ public class HttpClientUtil {
 	}
 
 	/**
-	 * 发情get请求(参数不能为中文，如果要使用中文参数，请使用post提交)
+	 * 发送get请求(参数不能为中文，如果要使用中文参数，请使用post提交)
 	 * 
 	 * @param url
 	 *            地址
@@ -174,7 +174,7 @@ public class HttpClientUtil {
 	}
 
 	/**
-	 * 发情get请求
+	 * 发送get请求
 	 * 
 	 * @param url
 	 *            地址

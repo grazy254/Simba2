@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.simba.alipay.controller.form.AliPayCallbackForm;
+import com.simba.alipay.controller.form.AliPayCancelForm;
 import com.simba.alipay.controller.form.AliPayCloseForm;
 import com.simba.alipay.controller.form.AppPayForm;
 import com.simba.alipay.interfaces.AliPayInterface;
@@ -71,4 +72,16 @@ public class AliPayServiceImpl implements AliPayService {
 		}
 		aliPayUtil.close(closeForm.getOutTradeNo(), closeForm.getTradeNo(), closeForm.getOperatorId());
 	}
+
+	@Override
+	public void cancel(AliPayCancelForm cancelForm) throws AlipayApiException {
+		List<AliPayInterface> impls = getImpls();
+		if (impls != null && !impls.isEmpty()) {
+			impls.forEach((AliPayInterface imp) -> {
+				imp.cancel(cancelForm);
+			});
+		}
+		aliPayUtil.cancel(cancelForm.getOutTradeNo(), cancelForm.getTradeNo());
+	}
+
 }

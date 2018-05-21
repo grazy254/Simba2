@@ -2,6 +2,7 @@ package com.simba.alipay.service;
 
 import com.alipay.api.AlipayApiException;
 import com.simba.alipay.controller.form.AliPayCallbackForm;
+import com.simba.alipay.controller.form.AliPayCancelForm;
 import com.simba.alipay.controller.form.AliPayCloseForm;
 import com.simba.alipay.controller.form.AppPayForm;
 
@@ -33,4 +34,11 @@ public interface AliPayService {
 	 * @param closeForm
 	 */
 	void close(AliPayCloseForm closeForm) throws AlipayApiException;
+
+	/**
+	 * 撤销订单
+	 * 
+	 * @param cancelForm
+	 */
+	void cancel(AliPayCancelForm cancelForm) throws AlipayApiException;
 }

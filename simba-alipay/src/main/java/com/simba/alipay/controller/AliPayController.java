@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alipay.api.AlipayApiException;
+import com.simba.alipay.controller.form.AliPayCancelForm;
 import com.simba.alipay.controller.form.AliPayCloseForm;
 import com.simba.alipay.controller.form.AppPayForm;
 import com.simba.alipay.service.AliPayService;
@@ -50,4 +51,16 @@ public class AliPayController {
 		return new JsonResult();
 	}
 
+	/**
+	 * 撤销订单
+	 * 
+	 * @param cancelForm
+	 * @return
+	 * @throws AlipayApiException
+	 */
+	@RequestMapping
+	public JsonResult cancel(AliPayCancelForm cancelForm) throws AlipayApiException {
+		aliPayService.cancel(cancelForm);
+		return new JsonResult();
+	}
 }

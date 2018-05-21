@@ -1,7 +1,9 @@
 package com.simba.permission.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -193,7 +195,8 @@ public class OrgServiceImpl implements OrgService {
 	@Override
 	public void assignRoles(int orgID, List<String> roleNameList) {
 		orgRoleDao.deleteByOrgID(orgID);
-		for (String roleName : roleNameList) {
+		Set<String> roleNameSet = new HashSet<>(roleNameList);
+		for (String roleName : roleNameSet) {
 			if (StringUtils.isNotEmpty(roleName)) {
 				OrgRole orgRole = new OrgRole();
 				orgRole.setOrgID(orgID);

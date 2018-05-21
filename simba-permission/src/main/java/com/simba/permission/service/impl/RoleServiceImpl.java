@@ -1,7 +1,9 @@
 package com.simba.permission.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,7 +71,8 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public void assignPermission(String roleName, List<Integer> permissionIDList) {
 		rolePermissionDao.deleteByRoleName(roleName);
-		for (Integer permissionID : permissionIDList) {
+		Set<Integer> idSet = new HashSet<>(permissionIDList);
+		for (Integer permissionID : idSet) {
 			if (permissionID != null) {
 				rolePermissionDao.add(new RolePermission(roleName, permissionID));
 			}

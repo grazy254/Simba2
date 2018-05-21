@@ -1,6 +1,7 @@
 package com.simba.alipay.util;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -13,7 +14,10 @@ import org.springframework.stereotype.Component;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayDataDataserviceBillDownloadurlQueryRequest;
+import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradeCancelRequest;
 import com.alipay.api.request.AlipayTradeCloseRequest;
 import com.alipay.api.request.AlipayTradeCreateRequest;
@@ -24,6 +28,7 @@ import com.alipay.api.request.AlipayTradePrecreateRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayDataDataserviceBillDownloadurlQueryResponse;
+import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.alipay.api.response.AlipayTradeCancelResponse;
 import com.alipay.api.response.AlipayTradeCloseResponse;
 import com.alipay.api.response.AlipayTradeCreateResponse;
@@ -62,11 +67,20 @@ public class AliPayUtil {
 	@Value("${alipay.public.key}")
 	private String publicKey;
 
+	@Value("${alipay.domain}")
+	private String domain;
+
 	private AlipayClient alipayClient;
+
+	/**
+	 * 回调通知url
+	 */
+	private String callbackUrl;
 
 	@PostConstruct
 	private void init() {
 		alipayClient = new DefaultAlipayClient(AliPayConstantData.payUrl, appId, privateKey, AliPayConstantData.format, ConstantData.DEFAULT_CHARSET, publicKey, AliPayConstantData.signType);
+		callbackUrl = domain + "/alipay/callback";
 	}
 
 	/**
@@ -269,5 +283,38 @@ public class AliPayUtil {
 		AlipayTradePayResponse response = alipayClient.execute(request);
 		logger.info("统一收单交易支付返回结果:" + response.getBody());
 		return response;
+	}
+
+	/**
+	 * 生成APP支付订单
+	 * 
+	 * @param model
+	 * @return
+	 * @throws AlipayApiException
+	 */
+	public AlipayTradeAppPayResponse appPay(AlipayTradeAppPayModel model) throws AlipayApiException {
+		AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
+		request.setBizModel(model);
+		request.setNotifyUrl(callbackUrl);
+		// 这里和普通的接口调用不同，使用的是sdkExecute
+		AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
+		logger.info("生成APP支付订单返回结果:" + response.getBody());// 就是orderString,可以直接给客户端请求，无需再做处理。
+		return response;
+	}
+
+	/**
+	 * 检查支付宝支付回调通知的参数是否正确
+	 * 
+	 * @param params
+	 * @throws AlipayApiException
+	 */
+	public void checkSign(Map<String, String> params) throws AlipayApiException {
+		// 切记alipaypublickey是支付宝的公钥，请去open.alipay.com对应应用下查看。
+		// boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String
+		// publicKey, String charset, String sign_type)
+		boolean flag = AlipaySignature.rsaCheckV1(params, publicKey, ConstantData.DEFAULT_CHARSET, "RSA2");
+		if (!flag) {
+			throw new BussException("支付宝支付回调url签名错误，可能有人攻击");
+		}
 	}
 }

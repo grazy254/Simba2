@@ -32,6 +32,7 @@ import com.simba.wallet.model.enums.FeeType;
 import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeUserService;
+import com.simba.wallet.util.FmtUtil;
 import com.simba.wallet.util.SessionUtil;
 
 /**
@@ -109,9 +110,10 @@ public class TradeAccountController {
 	 */
 	@ResponseBody
 	@RequestMapping("/showBalance")
-	public JsonResult showPersonalAccount(HttpSession session) {
+	public JsonResult showBalance(HttpSession session) {
 		SmartUser smartUser = sessionUtil.getSmartUser(session);
-		return new JsonResult(sessionUtil.getTradeAccount(smartUser.getAccount()));
+		return new JsonResult(
+				FmtUtil.transToCNYType(sessionUtil.getTradeAccount(smartUser.getAccount()).getAccountBalance()));
 		
 	}
 	

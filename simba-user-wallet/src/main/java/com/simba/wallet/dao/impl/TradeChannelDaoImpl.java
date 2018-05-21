@@ -32,8 +32,8 @@ public class TradeChannelDaoImpl implements TradeChannelDao {
 
 	@Override
 	public void update(TradeChannel tradeChannel) {
-		String sql = "update " + table + " set  name = ? , type = ? , createTime = ? , lastUpdateTime = ?  where id = ?  ";
-		jdbc.updateForBoolean(sql,tradeChannel.getName(),tradeChannel.getType(),tradeChannel.getCreateTime(),tradeChannel.getLastUpdateTime(), tradeChannel.getId());
+		String sql = "update " + table + " set  name = ? , type = ? where id = ?  ";
+		jdbc.updateForBoolean(sql, tradeChannel.getName(), tradeChannel.getType(), tradeChannel.getId());
 	}
 
 	@Override

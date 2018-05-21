@@ -25,20 +25,12 @@
 								<form role="form" onsubmit="return TradeChannel.checkForm();" id="form" action="${base}/tradeChannel/add">
 									<div class="box-body">
 										<div class="form-group">
-											<label for="name">渠道名称：微信支付/支付宝支付</label>
+											<label for="name">渠道名称</label>
 											<input type="text" class="form-control" id="name" name="name" placeholder="请输入渠道名称：微信支付/支付宝支付">
 										</div>
 										<div class="form-group">
-											<label for="type">渠道类型：WXPAY/ALIPAY</label>
+											<label for="type">渠道类型</label>
 											<input type="text" class="form-control" id="type" name="type" placeholder="请输入渠道类型：WXPAY/ALIPAY">
-										</div>
-										<div class="form-group">
-											<label for="createTime">创建时间</label>
-											<input type="text" class="form-control" id="createTime" name="createTime" placeholder="请输入创建时间">
-										</div>
-										<div class="form-group">
-											<label for="lastUpdateTime">最后更新时间</label>
-											<input type="text" class="form-control" id="lastUpdateTime" name="lastUpdateTime" placeholder="请输入最后更新时间">
 										</div>
 									</div>
 									<!-- /.box-body -->

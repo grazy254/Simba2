@@ -26,20 +26,12 @@
 									<input type="hidden" id="id" name="id" value="${tradeChannel.id}" />
 									<div class="box-body">
 										<div class="form-group">
-											<label for="name">渠道名称：微信支付/支付宝支付</label>
-											<input type="text" class="form-control" id="name" name="name" value="${tradeChannel.name}" placeholder="请输入渠道名称：微信支付/支付宝支付">
+											<label for="name">渠道名称</label>
+											<input type="text" class="form-control" id="name" name="name" value="${tradeChannel.name}" placeholder="请输入渠道名称">
 										</div>
 										<div class="form-group">
-											<label for="type">渠道类型：WXPAY/ALIPAY</label>
-											<input type="text" class="form-control" id="type" name="type" value="${tradeChannel.type}" placeholder="请输入渠道类型：WXPAY/ALIPAY">
-										</div>
-										<div class="form-group">
-											<label for="createTime">创建时间</label>
-											<input type="text" class="form-control" id="createTime" name="createTime" value="${tradeChannel.createTime}" placeholder="请输入创建时间">
-										</div>
-										<div class="form-group">
-											<label for="lastUpdateTime">最后更新时间</label>
-											<input type="text" class="form-control" id="lastUpdateTime" name="lastUpdateTime" value="${tradeChannel.lastUpdateTime}" placeholder="请输入最后更新时间">
+											<label for="type">渠道类型</label>
+											<input type="text" class="form-control" id="type" name="type" value="${tradeChannel.type}" placeholder="请输入渠道类型">
 										</div>
 									</div>
 									<!-- /.box-body -->

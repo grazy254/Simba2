@@ -31,15 +31,7 @@
 										<div class="form-group">
 											<label for="deptName">部门名称</label>
 											<input type="text" class="form-control" id="deptName" name="deptName" placeholder="请输入部门名称">
-										</div>
-										<div class="form-group">
-											<label for="createTime"></label>
-											<input type="text" class="form-control" id="createTime" name="createTime" placeholder="请输入">
-										</div>
-										<div class="form-group">
-											<label for="lastUpdateTime"></label>
-											<input type="text" class="form-control" id="lastUpdateTime" name="lastUpdateTime" placeholder="请输入">
-										</div>
+										</div>										
 									</div>
 									<!-- /.box-body -->
 

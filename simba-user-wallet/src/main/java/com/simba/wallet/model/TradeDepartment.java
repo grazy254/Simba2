@@ -33,11 +33,11 @@ public class TradeDepartment {
 	private String deptName;
 
    /** */
-   @DescAnnotation(desc = "")
+	@DescAnnotation(desc = "创建时间")
 	private Date createTime;
 
    /** */
-   @DescAnnotation(desc = "")
+	@DescAnnotation(desc = "最后更新时间")
 	private Date lastUpdateTime;
 
 

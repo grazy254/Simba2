@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.simba.exception.BussException;
+import com.simba.framework.util.date.DateUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.SmartUser;
@@ -213,7 +214,9 @@ public class TradeDetailServiceImpl implements TradeDetailService {
 			TradePartyDetail tradePartyDetail, String orderNO, String orderName, String orderDesc, long originalAmount,
 			long paymentAmount, Date tradeCreateTime) {
 		
-		tradePartyDetail.setCreateTime(new Date());
+		Date now = new Date();
+		tradePartyDetail.setCreateTime(now);
+		tradePartyDetail.setCreateDate(DateUtil.getOnlyDate(now));
 		tradePartyDetail.setPartyName(smartUser.getName());
 		tradePartyDetail.setPartyType(TradeUserType.PERSION.getName());
 		tradePartyDetail.setNoticeMail(smartUser.getEmail());
@@ -228,7 +231,8 @@ public class TradeDetailServiceImpl implements TradeDetailService {
 		TradeDepartment tradeDepartment = sessionUtil.getTradeDepartment(tradeDeptNO);
 
 		TradePartyDetail counterPartyDetail = new TradePartyDetail();
-		counterPartyDetail.setCreateTime(new Date());
+		counterPartyDetail.setCreateTime(now);
+		counterPartyDetail.setCreateDate(DateUtil.getOnlyDate(now));
 		counterPartyDetail.setPartyName(tradeDepartment.getDeptName());
 		counterPartyDetail.setPartyType(TradeUserType.DEPARTMENT.getName());
 		counterPartyDetail.setTradeAccountID(sessionUtil.getTradeAccount(tradeDepartment.getDeptNO()).getAccountID());
@@ -244,14 +248,14 @@ public class TradeDetailServiceImpl implements TradeDetailService {
 
 		TradeChannelDetail tradeChannelDetail = new TradeChannelDetail();
 		tradeChannelDetail.setChannelID(tradeChannel.getId());
-		tradeChannelDetail.setCreateTime(new Date());
+		tradeChannelDetail.setCreateTime(now);
 		tradeChannelDetail.setErrorCode("");
 		tradeChannelDetail.setErrorMsg("");
 		tradeChannelDetail.setOpenID("");
 		tradeChannelDetail.setOrderCreateTime(new Date());
 		tradeChannelDetail.setOrderNO("000");
-		tradeChannelDetail.setPaymentTime(new Date());
-		tradeChannelDetail.setLastUpdateTime(new Date());
+		tradeChannelDetail.setPaymentTime(now);
+		tradeChannelDetail.setLastUpdateTime(now);
 		tradeChannelDetail.setTradeAccountID(sessionUtil.getTradeAccount(tradeChannel.getType()).getAccountID());
 		Long tradeChannelDetailID = tradeChannelDetailService.add(tradeChannelDetail);
 		tradeChannelDetail.setId(tradeChannelDetailID);

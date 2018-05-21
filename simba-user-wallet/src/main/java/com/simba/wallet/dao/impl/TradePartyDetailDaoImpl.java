@@ -10,7 +10,6 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.jdbc.StatementParameter;
 import com.simba.wallet.dao.TradePartyDetailDao;
 import com.simba.wallet.model.TradePartyDetail;
-import com.simba.wallet.model.vo.TradePartyVO;
 /**
  * 交易主体 Dao实现类
  * 
@@ -24,15 +23,15 @@ public class TradePartyDetailDaoImpl implements TradePartyDetailDao {
 	private Jdbc jdbc;
 
 	private static final String table = "tradePartyDetail";
-	private static final String tradeDetailTable = "tradeDetail";
 
 	@Override
 	public Long add(TradePartyDetail tradePartyDetail) {
-		String sql = "insert into " + table + "( tradeUserID, partyName, partyType, tradeAccountID, ip, mobileNumber, device, noticeMail, location, createTime) values(?,?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into " + table
+				+ "( tradeUserID, partyName, partyType, tradeAccountID, ip, mobileNumber, device, noticeMail, location, createTime, createDate) values(?,?,?,?,?,?,?,?,?,?,?)";
 		Number id = jdbc.updateForGeneratedKey(sql, tradePartyDetail.getTradeUserID(), tradePartyDetail.getPartyName(),
 				tradePartyDetail.getPartyType(), tradePartyDetail.getTradeAccountID(), tradePartyDetail.getIp(),
 				tradePartyDetail.getMobileNumber(), tradePartyDetail.getDevice(), tradePartyDetail.getNoticeMail(),
-				tradePartyDetail.getLocation(), tradePartyDetail.getCreateTime());
+				tradePartyDetail.getLocation(), tradePartyDetail.getCreateTime(), tradePartyDetail.getCreateDate());
 		return id.longValue();
 	}
 
@@ -108,12 +107,11 @@ public class TradePartyDetailDaoImpl implements TradePartyDetailDao {
 	}
 
 	@Override
-	public List<TradePartyVO> pageBy(String field, Object value, Pager page) {
-		String sql = "select d.tradeType, d.paymentAmount, d.tradePaymentTime, d.tradeStatus from " + table + " p join "
-				+ tradeDetailTable + " d on p.id = d.tradePartyID where p." + field + " = ?";
+	public List<TradePartyDetail> pageBy(String field, Object value, Pager page) {
+		String sql = "select * from " + table + " where " + field + " = ?";
 		StatementParameter param = new StatementParameter();
 		param.set(value);
-		return jdbc.queryForPage(sql, TradePartyVO.class, page, param);
+		return jdbc.queryForPage(sql, TradePartyDetail.class, page, param);
 	}
 
 	@Override

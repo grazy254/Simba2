@@ -1,11 +1,9 @@
 package com.simba.wallet.model.vo;
 
-import java.util.Date;
-
 public class TradePartyVO {
 	private String tradeType;
-	private Long paymentAmount;
-	private Date tradePaymentTime;
+	private String tradeAmount;
+	private String tradeTime;
 	private String tradeStatus;
 
 	public String getTradeType() {
@@ -16,20 +14,20 @@ public class TradePartyVO {
 		this.tradeType = tradeType;
 	}
 
-	public Long getPaymentAmount() {
-		return paymentAmount;
+	public String getTradeAmount() {
+		return tradeAmount;
 	}
 
-	public void setPaymentAmount(Long paymentAmount) {
-		this.paymentAmount = paymentAmount;
+	public void setTradeAmount(String tradeAmount) {
+		this.tradeAmount = tradeAmount;
 	}
 
-	public Date getTradePaymentTime() {
-		return tradePaymentTime;
+	public String getTradeTime() {
+		return tradeTime;
 	}
 
-	public void setTradePaymentTime(Date tradePaymentTime) {
-		this.tradePaymentTime = tradePaymentTime;
+	public void setTradeTime(String tradeTime) {
+		this.tradeTime = tradeTime;
 	}
 
 	public String getTradeStatus() {

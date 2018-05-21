@@ -32,8 +32,8 @@ public class TradeDepartmentDaoImpl implements TradeDepartmentDao {
 
 	@Override
 	public void update(TradeDepartment tradeDepartment) {
-		String sql = "update " + table + " set  deptNO = ? , deptName = ? , createTime = ? , lastUpdateTime = ?  where id = ?  ";
-		jdbc.updateForBoolean(sql,tradeDepartment.getDeptNO(),tradeDepartment.getDeptName(),tradeDepartment.getCreateTime(),tradeDepartment.getLastUpdateTime(), tradeDepartment.getId());
+		String sql = "update " + table + " set  deptNO = ? , deptName = ? where id = ?  ";
+		jdbc.updateForBoolean(sql, tradeDepartment.getDeptNO(), tradeDepartment.getDeptName(), tradeDepartment.getId());
 	}
 
 	@Override

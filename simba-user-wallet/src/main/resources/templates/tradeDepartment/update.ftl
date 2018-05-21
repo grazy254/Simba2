@@ -33,14 +33,6 @@
 											<label for="deptName">部门名称</label>
 											<input type="text" class="form-control" id="deptName" name="deptName" value="${tradeDepartment.deptName}" placeholder="请输入部门名称">
 										</div>
-										<div class="form-group">
-											<label for="createTime"></label>
-											<input type="text" class="form-control" id="createTime" name="createTime" value="${tradeDepartment.createTime}" placeholder="请输入">
-										</div>
-										<div class="form-group">
-											<label for="lastUpdateTime"></label>
-											<input type="text" class="form-control" id="lastUpdateTime" name="lastUpdateTime" value="${tradeDepartment.lastUpdateTime}" placeholder="请输入">
-										</div>
 									</div>
 									<!-- /.box-body -->
 

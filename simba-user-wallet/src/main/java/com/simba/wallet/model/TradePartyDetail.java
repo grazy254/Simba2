@@ -27,13 +27,13 @@ public class TradePartyDetail {
    /**
     * 主体名称：买家姓名/部门名称
     * */
-   @DescAnnotation(desc = "主体名称：买家姓名/部门名称")
+	@DescAnnotation(desc = "主体名称")
 	private String partyName;
 
    /**
     * 主体类型：个人/公司部门
     * */
-   @DescAnnotation(desc = "主体类型：个人/公司部门")
+	@DescAnnotation(desc = "主体类型")
 	private String partyType;
 
    /**
@@ -45,10 +45,12 @@ public class TradePartyDetail {
    /**
     * 交易的设备IP信息（对手主体可选填）
     * */
+	@DescAnnotation(desc = "交易的设备IP信息")
    private String ip = "";
    /**
     * 用户的电话信息（对手主体可选填）
     * */
+	@DescAnnotation(desc = "用户的电话信息")
    private String mobileNumber = "";
    /**
     * 手机的平台： IOS/Android（ 对手主体可选填）
@@ -57,7 +59,6 @@ public class TradePartyDetail {
    /**
     * 通知的邮箱
     * */
-   @DescAnnotation(desc = "交易的设备IP信息（对手主体可选填）")
 	private String noticeMail;
 
    /**
@@ -67,9 +68,11 @@ public class TradePartyDetail {
    /**
     * 创建时间
     * */
-   @DescAnnotation(desc = "用户的电话信息（对手主体可选填）")
+	@DescAnnotation(desc = "创建时间")
 	private Date createTime;
 
+	@DescAnnotation(desc = "创建日期")
+	private Date createDate;
 
     public long getId() {
         return id;
@@ -159,7 +162,15 @@ public class TradePartyDetail {
         this.createTime = createTime;
     }
 
-    @Override
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	@Override
     public String toString() {
         return "TradePartyDetail{" +
 		"id=" + id +

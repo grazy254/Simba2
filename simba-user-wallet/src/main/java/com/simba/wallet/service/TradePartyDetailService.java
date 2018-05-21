@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.wallet.model.TradePartyDetail;
-import com.simba.wallet.model.vo.TradePartyVO;
 /**
  *交易主体 Service
  * 
@@ -53,7 +52,7 @@ public interface TradePartyDetailService {
 
 	List<TradePartyDetail> listByOr(String field1, Object value1, String field2, Object value2);
 
-	List<TradePartyVO> pageBy(String field, Object value, Pager page);
+	List<TradePartyDetail> pageBy(String field, Object value, Pager page);
 
 	List<TradePartyDetail> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
 

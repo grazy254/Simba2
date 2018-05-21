@@ -25,37 +25,23 @@
 									<h3 class="box-title">支付账号管理</h3>
 								</div>
 								<!-- /.box-header -->
-								<div class="box-body no-padding">
-									<div class="mailbox-controls">
-										<!-- Check all button -->
-										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="TradeAccount.toAdd();"><i class="fa fa-plus"></i>
-                新增</button>
-										<button type="button" class="btn btn-default btn-sm" onclick="TradeAccount.batchDelete();"><i class="fa fa-remove"></i>删除</button>
-										<div class="pull-right">
-
-										</div>
-									</div>
-									<!-- /.pull-right -->
-								</div>
 								<div class="table-responsive">
 									<table class="table table-hover table-striped table-bordered" id="table">
 										<thead>
 											<tr>
-												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
-												<th>支付用户ID</th>
+												<th>用户账号</th>
 												<th>账号ID</th>
-												<th>账户类型：部门资产账户/个人账户/渠道账号</th>
-												<th>feeType</th>
-												<th>isAllowRecharge</th>
-												<th>isAllowPay</th>
-												<th>isActive</th>
-												<th>isFrozen</th>
-												<th>accountBalance</th>
-												<th>availableBalance</th>
-												<th>frozenBalance</th>
-												<th>货币类型：人民币为CNY</th>
-												<th>是否允许充值：0不允许，1允许</th>
-												<th>操作</th>
+												<th>账户类型</th>
+												<th>货币类型</th>
+												<th>是否允许充值</th>
+												<th>日否允许转账</th>
+												<th>是否激活</th>
+												<th>是否冻结</th>
+												<th>账户余额</th>
+												<th>可用余额</th>
+												<th>冻结余额</th>
+												<th>创建时间</th>
+												<th>最后更新时间</th>
 											</tr>
 										</thead>
 										<tbody>

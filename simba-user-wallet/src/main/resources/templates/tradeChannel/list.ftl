@@ -42,8 +42,8 @@
 										<thead>
 											<tr>
 												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
-												<th>渠道名称：微信支付/支付宝支付</th>
-												<th>渠道类型：WXPAY/ALIPAY</th>
+												<th>渠道名称</th>
+												<th>渠道类型</th>
 												<th>创建时间</th>
 												<th>最后更新时间</th>
 												<th>操作</th>

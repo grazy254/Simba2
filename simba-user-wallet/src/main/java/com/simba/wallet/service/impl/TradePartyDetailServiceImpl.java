@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.wallet.dao.TradePartyDetailDao;
 import com.simba.wallet.model.TradePartyDetail;
-import com.simba.wallet.model.vo.TradePartyVO;
 import com.simba.wallet.service.TradePartyDetailService;
 /**
  * 交易主体 Service实现类
@@ -119,7 +118,7 @@ public class TradePartyDetailServiceImpl implements TradePartyDetailService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<TradePartyVO> pageBy(String field, Object value, Pager page) {
+	public List<TradePartyDetail> pageBy(String field, Object value, Pager page) {
 		return tradePartyDetailDao.pageBy(field, value, page);
 	}
 

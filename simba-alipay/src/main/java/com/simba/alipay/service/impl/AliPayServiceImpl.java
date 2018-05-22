@@ -11,6 +11,7 @@ import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.simba.alipay.controller.form.AliPayCallbackForm;
 import com.simba.alipay.controller.form.AliPayCancelForm;
 import com.simba.alipay.controller.form.AliPayCloseForm;
+import com.simba.alipay.controller.form.AliPayRefundForm;
 import com.simba.alipay.controller.form.AppPayForm;
 import com.simba.alipay.interfaces.AliPayInterface;
 import com.simba.alipay.service.AliPayService;
@@ -82,6 +83,11 @@ public class AliPayServiceImpl implements AliPayService {
 			});
 		}
 		aliPayUtil.cancel(cancelForm.getOutTradeNo(), cancelForm.getTradeNo());
+	}
+
+	@Override
+	public void refund(AliPayRefundForm refundForm) {
+
 	}
 
 }

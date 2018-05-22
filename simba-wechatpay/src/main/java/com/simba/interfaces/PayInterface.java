@@ -1,5 +1,6 @@
 package com.simba.interfaces;
 
+import com.simba.model.pay.refund.RefundReq;
 import com.simba.model.pay.result.PayResult;
 import com.simba.model.pay.unifiedorder.UnifiedOrderReq;
 
@@ -27,4 +28,18 @@ public interface PayInterface {
 	 * @param mwebUrl
 	 */
 	void dealOrder(UnifiedOrderReq req, String prePayId, String codeUrl, String mwebUrl);
+
+	/**
+	 * 关闭订单
+	 * 
+	 * @param outTradeNo
+	 */
+	void close(String outTradeNo);
+
+	/**
+	 * 退款
+	 * 
+	 * @param refundReq
+	 */
+	void refund(RefundReq refundReq);
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.simba.interfaces.PayInterface;
 import com.simba.model.PayBill;
+import com.simba.model.pay.refund.RefundReq;
 import com.simba.model.pay.result.PayResult;
 import com.simba.model.pay.unifiedorder.UnifiedOrderReq;
 import com.simba.service.PayBillService;
@@ -62,6 +63,23 @@ public class PayBillImpl implements PayInterface {
 		bill.setCodeUrl(StringUtils.defaultString(codeUrl));
 		bill.setMwebUrl(StringUtils.defaultString(mwebUrl));
 		payBillService.add(bill);
+	}
+
+	@Override
+	public void close(String outTradeNo) {
+		PayBill bill = payBillService.getBy("outTradeNo", outTradeNo);
+		bill.setCreateTime(new Date());
+		bill.setStatus("CLOSED");
+		payBillService.update(bill);
+	}
+
+	@Override
+	public void refund(RefundReq refundReq) {
+		PayBill bill = payBillService.getBy("outTradeNo", refundReq.getOut_trade_no());
+		bill.setCreateTime(new Date());
+		bill.setStatus("REFUND");
+		bill.setAttach(bill.getAttach() + "(退款金额:" + refundReq.getRefund_fee() + "分)");
+		payBillService.update(bill);
 	}
 
 }

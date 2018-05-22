@@ -70,4 +70,9 @@ public class PayCallbackController {
 		return "message";
 	}
 
+	@RequestMapping("/refundReceive")
+	public String refundReceive() {
+		return "message";
+	}
+
 }

@@ -1,16 +1,17 @@
 package com.simba.service.impl;
 
-import com.simba.dao.NotifyUserDao;
-import com.simba.framework.util.jdbc.Pager;
-import com.simba.model.NotifyUser;
-import com.simba.service.NotifyUserService;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
 
+import com.simba.dao.NotifyUserDao;
+import com.simba.framework.util.jdbc.Pager;
+import com.simba.model.NotifyUser;
+import com.simba.service.NotifyUserService;
 /**
  * 通知表和用户表的关联 Service实现类
  * 

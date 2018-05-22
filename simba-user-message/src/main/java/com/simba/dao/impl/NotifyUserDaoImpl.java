@@ -1,15 +1,17 @@
 package com.simba.dao.impl;
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.simba.dao.NotifyUserDao;
 import com.simba.framework.util.jdbc.Jdbc;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.jdbc.StatementParameter;
 import com.simba.model.NotifyUser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
-
 /**
  * 通知表和用户表的关联 Dao实现类
  * 

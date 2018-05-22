@@ -30,15 +30,14 @@
 										</div>
 										<div class="form-group">
 											<label for="content">通知内容</label>
-											<input type="text" class="form-control" id="content" name="content" placeholder="请输入通知内容">
+											<textarea class="form-control"  rows="7" id="content" name="content" placeholder="请输入通知内容"></textarea>
 										</div>
 										<div class="form-group">
-											<label for="type">0: 紧急通知 1:普通通知</label>
-											<input type="text" class="form-control" id="type" name="type" placeholder="请输入0: 紧急通知 1:普通通知">
-										</div>
-										<div class="form-group">
-											<label for="createTime">创建时间</label>
-											<input type="text" class="form-control" id="createTime" name="createTime" placeholder="请输入创建时间">
+											<label for="type">类型</label>
+                                            <select class="form-control" id="type" name="type" value=1>
+                                                <option value=0>紧急通知</option>
+                                                <option value=1>普通通知</option>
+                                            </select>
 										</div>
 									</div>
 									<!-- /.box-body -->

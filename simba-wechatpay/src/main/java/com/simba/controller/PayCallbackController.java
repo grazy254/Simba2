@@ -57,8 +57,8 @@ public class PayCallbackController {
 	 * @throws XPathExpressionException
 	 * @throws DOMException
 	 */
-	@RequestMapping("/receive")
-	public String receive(@RequestBody String body, ModelMap model) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+	@RequestMapping("/orderReceive")
+	public String orderReceive(@RequestBody String body, ModelMap model) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		logger.info("*****************************接收微信支付结果通知:" + body);
 		PayResult payResult = XmlUtil.toOject(body, PayResult.class);
 		payResult.composeCoupons(body);

@@ -1,10 +1,9 @@
 package com.simba.dao;
 
-import com.simba.framework.util.jdbc.Pager;
-import com.simba.model.Notify;
-
 import java.util.List;
 
+import com.simba.framework.util.jdbc.Pager;
+import com.simba.model.Notify;
 /**
  * 通知表 Dao
  * 
@@ -13,7 +12,7 @@ import java.util.List;
  */
 public interface NotifyDao {
 
-	void add(Notify notify);
+	long add(Notify notify);
 
 	void update(Notify notify);
 

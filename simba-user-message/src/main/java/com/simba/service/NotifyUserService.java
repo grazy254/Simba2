@@ -1,10 +1,9 @@
-package com.simba.service;
-
-import com.simba.framework.util.jdbc.Pager;
-import com.simba.model.NotifyUser;
+package  com.simba.service;
 
 import java.util.List;
 
+import com.simba.framework.util.jdbc.Pager;
+import com.simba.model.NotifyUser;
 /**
  *通知表和用户表的关联 Service
  * 

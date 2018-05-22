@@ -1,10 +1,9 @@
-package com.simba.service;
-
-import com.simba.framework.util.jdbc.Pager;
-import com.simba.model.Notify;
+package  com.simba.service;
 
 import java.util.List;
 
+import com.simba.framework.util.jdbc.Pager;
+import com.simba.model.Notify;
 /**
  *通知表 Service
  * 
@@ -61,7 +60,9 @@ public interface NotifyService {
 
     void sendNotify(String title, String content, Long[] smartUserId, int type);
 
-	List<Notify> pullNotify(Long smartUserId, int status);
+    void sendNotify2AllUser(String title, String content, int type);
+
+    List<Notify> pullNotify(Long smartUserId, int status);
 
 	List<Notify> pullNotify(Long smartUserId);
 

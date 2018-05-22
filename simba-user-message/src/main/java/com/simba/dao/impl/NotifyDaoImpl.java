@@ -1,15 +1,17 @@
 package com.simba.dao.impl;
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.simba.dao.NotifyDao;
 import com.simba.framework.util.jdbc.Jdbc;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.jdbc.StatementParameter;
 import com.simba.model.Notify;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
-
 /**
  * 通知表 Dao实现类
  * 
@@ -25,9 +27,9 @@ public class NotifyDaoImpl implements NotifyDao {
 	private static final String table = "notify";
 
 	@Override
-	public void add(Notify notify) {
+	public long add(Notify notify) {
 		String sql = "insert into " + table + "( title, content, type, createTime) values(?,?,?,?)";
-		jdbc.updateForBoolean(sql, notify.getTitle(),notify.getContent(),notify.getType(),notify.getCreateTime());
+		return jdbc.updateForGeneratedKey(sql, notify.getTitle(),notify.getContent(),notify.getType(),notify.getCreateTime()).longValue();
 	}
 
 	@Override

@@ -16,6 +16,7 @@ import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 
 import com.simba.common.EnvironmentUtil;
+import com.simba.exception.BussException;
 import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.framework.util.common.BeanUtils;
 import com.simba.framework.util.common.XmlUtil;
@@ -91,7 +92,10 @@ public class WxPayUtil {
 		String resp = HttpClientUtil.postXML(WxPayConstantData.unifiedorderUrl, xml);
 		logger.info("统一下单返回结果:" + resp);
 		UnifiedOrderRes result = XmlUtil.toOject(resp, UnifiedOrderRes.class);
-		checkResult(result);
+		checkSign(result);
+		if (!"SUCCESS".equals(result.getReturn_code()) || !"SUCCESS".equals(result.getResult_code())) {
+			throw new BussException("微信统一下单发生异常");
+		}
 		return result;
 	}
 
@@ -172,7 +176,10 @@ public class WxPayUtil {
 		logger.info("查询订单返回结果:" + resp);
 		OrderQueryRes result = XmlUtil.toOject(resp, OrderQueryRes.class);
 		result.composeCoupons(resp);
-		checkResult(result);
+		checkSign(result);
+		if (!"SUCCESS".equals(result.getReturn_code()) || !"SUCCESS".equals(result.getResult_code())) {
+			throw new BussException("微信查询订单发生异常");
+		}
 		return result;
 	}
 
@@ -204,7 +211,10 @@ public class WxPayUtil {
 		String resp = HttpClientUtil.postXML(WxPayConstantData.closeorderUrl, xml);
 		logger.info("关闭订单返回结果:" + resp);
 		CloseOrderRes result = XmlUtil.toOject(resp, CloseOrderRes.class);
-		checkResult(result);
+		checkSign(result);
+		if (!"SUCCESS".equals(result.getReturn_code()) || !"SUCCESS".equals(result.getResult_code())) {
+			throw new BussException("微信关闭订单发生异常");
+		}
 		return result;
 	}
 
@@ -322,7 +332,10 @@ public class WxPayUtil {
 		logger.info("查询退款返回结果:" + resp);
 		RefundQueryRes result = XmlUtil.toOject(resp, RefundQueryRes.class);
 		result.composeRefundRecords(resp);
-		checkResult(result);
+		checkSign(result);
+		if (!"SUCCESS".equals(result.getReturn_code()) || !"SUCCESS".equals(result.getResult_code())) {
+			throw new BussException("微信查询退款发生异常");
+		}
 		return result;
 	}
 
@@ -392,7 +405,10 @@ public class WxPayUtil {
 		String xml = request.toXML();
 		String resp = CertRequestUrl.getInstance().executeWithKey(WxPayConstantData.refundUrl, xml);
 		RefundRes result = XmlUtil.toOject(resp, RefundRes.class);
-		checkResult(result);
+		checkSign(result);
+		if (!"SUCCESS".equals(result.getReturn_code()) || !"SUCCESS".equals(result.getResult_code())) {
+			throw new BussException("微信申请退款发生异常");
+		}
 		return result;
 	}
 
@@ -416,7 +432,7 @@ public class WxPayUtil {
 		}
 	}
 
-	private void checkResult(Object result) {
+	private void checkSign(Object result) {
 		Map<String, String> params = BeanUtils.xmlBean2Map(result);
 		if (params.get("sign") != null && !checkSign(params)) {
 			throw new RuntimeException("微信支付服务器返回签名错误");

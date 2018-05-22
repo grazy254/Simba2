@@ -230,4 +230,15 @@ public class PayBillDaoImpl implements PayBillDao {
 		}
 		return sql;
 	}
+
+	@Override
+	public List<PayBill> listUnfinish() {
+		String sql = "select * from " + table + " where status not in (?,?,?,?)";
+		StatementParameter params = new StatementParameter();
+		params.setString("SUCCESS");
+		params.setString("CLOSED");
+		params.setString("REVOKED");
+		params.setString("PAYERROR");
+		return jdbc.queryForList(sql, PayBill.class, params);
+	}
 }

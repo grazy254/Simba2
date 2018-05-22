@@ -5,6 +5,8 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -38,6 +40,8 @@ import com.simba.service.PayService;
 @RequestMapping("/payCallback")
 public class PayCallbackController {
 
+	private static final Log logger = LogFactory.getLog(PayCallbackController.class);
+
 	@Autowired
 	private PayService payService;
 
@@ -55,6 +59,7 @@ public class PayCallbackController {
 	 */
 	@RequestMapping("/receive")
 	public String receive(@RequestBody String body, ModelMap model) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+		logger.info("*****************************接收微信支付结果通知:" + body);
 		PayResult payResult = XmlUtil.toOject(body, PayResult.class);
 		payResult.composeCoupons(body);
 		payService.dealResult(payResult);

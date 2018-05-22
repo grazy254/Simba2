@@ -86,8 +86,14 @@ public class AliPayServiceImpl implements AliPayService {
 	}
 
 	@Override
-	public void refund(AliPayRefundForm refundForm) {
-
+	public void refund(AliPayRefundForm refundForm) throws AlipayApiException {
+		List<AliPayInterface> impls = getImpls();
+		if (impls != null && !impls.isEmpty()) {
+			impls.forEach((AliPayInterface imp) -> {
+				imp.refund(refundForm);
+			});
+		}
+		aliPayUtil.refund(refundForm.getOutTradeNo(), refundForm.getTradeNo(), refundForm.getOutRequestNo(), refundForm.getRefundAmount());
 	}
 
 }

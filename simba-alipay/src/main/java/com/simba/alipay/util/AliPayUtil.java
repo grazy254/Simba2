@@ -126,11 +126,12 @@ public class AliPayUtil {
 	 * @return
 	 * @throws AlipayApiException
 	 */
-	public AlipayTradeRefundResponse refund(String out_trade_no, String trade_no, String out_request_no, int refund_amount) throws AlipayApiException {
+	public AlipayTradeRefundResponse refund(String out_trade_no, String trade_no, String out_request_no, Integer refund_amount) throws AlipayApiException {
 		checkParams(out_trade_no, trade_no);
 		AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();// 创建API对应的request类
 		request.setBizContent("{" + "    \"out_trade_no\":\"" + StringUtils.defaultString(out_trade_no) + "\"," + "    \"trade_no\":\"" + StringUtils.defaultString(trade_no) + "\","
-				+ "    \"out_request_no\":\"" + StringUtils.defaultString(out_request_no) + "\"," + "    \"refund_amount\":\"" + refund_amount + "\"" + "  }");// 设置业务参数
+				+ "    \"out_request_no\":\"" + StringUtils.defaultString(out_request_no) + "\"," + "    \"refund_amount\":\""
+				+ (refund_amount != null && refund_amount > 0 ? refund_amount : StringUtils.EMPTY) + "\"" + "  }");// 设置业务参数
 		AlipayTradeRefundResponse response = alipayClient.execute(request);// 通过alipayClient调用API，获得对应的response类
 		logger.info("交易退款返回结果:" + response.getBody());
 		return response;

@@ -48,5 +48,5 @@ public interface AliPayService {
 	 * 
 	 * @param refundForm
 	 */
-	void refund(AliPayRefundForm refundForm);
+	void refund(AliPayRefundForm refundForm) throws AlipayApiException;
 }

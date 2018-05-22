@@ -3,6 +3,7 @@ package com.simba.alipay.interfaces;
 import com.simba.alipay.controller.form.AliPayCallbackForm;
 import com.simba.alipay.controller.form.AliPayCancelForm;
 import com.simba.alipay.controller.form.AliPayCloseForm;
+import com.simba.alipay.controller.form.AliPayRefundForm;
 import com.simba.alipay.controller.form.AppPayForm;
 
 /**
@@ -40,4 +41,11 @@ public interface AliPayInterface {
 	 * @param cancelForm
 	 */
 	void cancel(AliPayCancelForm cancelForm);
+
+	/**
+	 * 退款
+	 * 
+	 * @param refundForm
+	 */
+	void refund(AliPayRefundForm refundForm);
 }

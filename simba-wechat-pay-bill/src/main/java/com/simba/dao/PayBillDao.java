@@ -62,4 +62,11 @@ public interface PayBillDao {
 
 	Long count(PayBillSearchForm searchForm);
 
+	/**
+	 * 查询所有没有结束的订单信息
+	 * 
+	 * @return
+	 */
+	List<PayBill> listUnfinish();
+
 }

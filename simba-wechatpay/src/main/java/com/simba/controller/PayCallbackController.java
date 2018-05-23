@@ -5,6 +5,8 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -14,8 +16,10 @@ import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 
 import com.simba.framework.util.common.XmlUtil;
+import com.simba.model.pay.result.CallbackResultRes;
 import com.simba.model.pay.result.PayResult;
-import com.simba.model.pay.result.PayResultRes;
+import com.simba.model.pay.result.RefundCallbackInfo;
+import com.simba.model.pay.result.RefundResult;
 import com.simba.service.PayService;
 
 /**
@@ -38,6 +42,8 @@ import com.simba.service.PayService;
 @RequestMapping("/payCallback")
 public class PayCallbackController {
 
+	private static final Log logger = LogFactory.getLog(PayCallbackController.class);
+
 	@Autowired
 	private PayService payService;
 
@@ -53,16 +59,50 @@ public class PayCallbackController {
 	 * @throws XPathExpressionException
 	 * @throws DOMException
 	 */
-	@RequestMapping("/receive")
-	public String receive(@RequestBody String body, ModelMap model) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+	@RequestMapping("/orderReceive")
+	public String orderReceive(@RequestBody String body, ModelMap model) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+		logger.info("*****************************接收微信支付结果通知:" + body);
 		PayResult payResult = XmlUtil.toOject(body, PayResult.class);
 		payResult.composeCoupons(body);
 		payService.dealResult(payResult);
-		PayResultRes res = new PayResultRes();
+		CallbackResultRes res = new CallbackResultRes();
 		res.setReturn_code("SUCCESS");
 		res.setReturn_msg("OK");
 		model.put("message", res.toXML());
 		return "message";
+	}
+
+	/**
+	 * 接收微信退款结果通知
+	 * 
+	 * @param body
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/refundReceive")
+	public String refundReceive(@RequestBody String body, ModelMap model) {
+		logger.info("*****************************接收微信退款结果通知:" + body);
+		RefundResult refundResult = XmlUtil.toOject(body, RefundResult.class);
+		String info = refundResult.getReq_info();
+		String deInfo = decode(info);
+		RefundCallbackInfo callbackInfo = XmlUtil.toOject(deInfo, RefundCallbackInfo.class);
+		payService.dealRefundCallback(refundResult, callbackInfo);
+		CallbackResultRes res = new CallbackResultRes();
+		res.setReturn_code("SUCCESS");
+		res.setReturn_msg("OK");
+		model.put("message", res.toXML());
+		return "message";
+	}
+
+	/**
+	 * 解密
+	 * 
+	 * @param info
+	 * @return
+	 */
+	private String decode(String info) {
+		
+		return null;
 	}
 
 }

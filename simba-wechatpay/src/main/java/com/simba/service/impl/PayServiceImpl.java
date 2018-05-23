@@ -14,6 +14,8 @@ import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.interfaces.PayInterface;
 import com.simba.model.pay.refund.RefundReq;
 import com.simba.model.pay.result.PayResult;
+import com.simba.model.pay.result.RefundCallbackInfo;
+import com.simba.model.pay.result.RefundResult;
 import com.simba.model.pay.unifiedorder.UnifiedOrderReq;
 import com.simba.service.PayService;
 import com.simba.util.send.WxPayUtil;
@@ -81,5 +83,17 @@ public class PayServiceImpl implements PayService {
 			});
 		}
 		wxPayUtil.refund(refundReq);
+	}
+
+	@Override
+	public void dealRefundCallback(RefundResult refundResult, RefundCallbackInfo callbackInfo) {
+		List<PayInterface> pays = this.getPayImpls();
+		if (pays == null || pays.isEmpty()) {
+			logger.warn("微信支付业务没有实现类");
+			return;
+		}
+		pays.forEach((PayInterface pay) -> {
+			pay.dealRefundCallback(refundResult, callbackInfo);
+		});
 	}
 }

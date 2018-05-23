@@ -270,8 +270,7 @@ public class RefundQueryRes {
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
 	 */
-	public void composeRefundRecords(String xml)
-			throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+	public void composeRefundRecords(String xml) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		if (this.refund_count != null && this.refund_count > 0) {
 			this.refundRecords = new ArrayList<>();
 			Document doc = XmlUtil.parseXMLContent(xml);
@@ -279,38 +278,23 @@ public class RefundQueryRes {
 			for (int i = 0; i < this.refund_count; i++) {
 				RefundRecord refundRecord = new RefundRecord();
 				this.refundRecords.add(refundRecord);
-				refundRecord.setOut_refund_no(
-						((Element) XmlUtil.selectSingleNode("/xml/out_refund_no_" + i, root)).getTextContent());
-				refundRecord.setRefund_id(
-						((Element) XmlUtil.selectSingleNode("/xml/refund_id_" + i, root)).getTextContent());
-				refundRecord.setRefund_channel(
-						((Element) XmlUtil.selectSingleNode("/xml/refund_channel_" + i, root)).getTextContent());
-				refundRecord.setRefund_fee(NumberUtils
-						.toInt(((Element) XmlUtil.selectSingleNode("/xml/refund_fee_" + i, root)).getTextContent()));
-				refundRecord.setSettlement_refund_fee(
-						NumberUtils.toInt(((Element) XmlUtil.selectSingleNode("/xml/settlement_refund_fee_" + i, root))
-								.getTextContent()));
-				refundRecord.setCoupon_type(
-						((Element) XmlUtil.selectSingleNode("/xml/coupon_type_" + i, root)).getTextContent());
-				refundRecord.setCoupon_refund_fee(NumberUtils.toInt(
-						((Element) XmlUtil.selectSingleNode("/xml/coupon_refund_fee_" + i, root)).getTextContent()));
-				refundRecord.setCoupon_refund_count(NumberUtils.toInt(
-						((Element) XmlUtil.selectSingleNode("/xml/coupon_refund_count_" + i, root)).getTextContent()));
-				refundRecord.setRefund_status(
-						((Element) XmlUtil.selectSingleNode("/xml/refund_status_" + i, root)).getTextContent());
-				refundRecord.setRefund_recv_accout(
-						((Element) XmlUtil.selectSingleNode("/xml/refund_recv_accout_" + i, root)).getTextContent());
+				refundRecord.setOut_refund_no(((Element) XmlUtil.selectSingleNode("/xml/out_refund_no_" + i, root)).getTextContent());
+				refundRecord.setRefund_id(((Element) XmlUtil.selectSingleNode("/xml/refund_id_" + i, root)).getTextContent());
+				refundRecord.setRefund_channel(((Element) XmlUtil.selectSingleNode("/xml/refund_channel_" + i, root)).getTextContent());
+				refundRecord.setRefund_fee(NumberUtils.toInt(((Element) XmlUtil.selectSingleNode("/xml/refund_fee_" + i, root)).getTextContent()));
+				refundRecord.setSettlement_refund_fee(NumberUtils.toInt(((Element) XmlUtil.selectSingleNode("/xml/settlement_refund_fee_" + i, root)).getTextContent()));
+				refundRecord.setCoupon_type(((Element) XmlUtil.selectSingleNode("/xml/coupon_type_" + i, root)).getTextContent());
+				refundRecord.setCoupon_refund_fee(NumberUtils.toInt(((Element) XmlUtil.selectSingleNode("/xml/coupon_refund_fee_" + i, root)).getTextContent()));
+				refundRecord.setCoupon_refund_count(NumberUtils.toInt(((Element) XmlUtil.selectSingleNode("/xml/coupon_refund_count_" + i, root)).getTextContent()));
+				refundRecord.setRefund_status(((Element) XmlUtil.selectSingleNode("/xml/refund_status_" + i, root)).getTextContent());
+				refundRecord.setRefund_recv_accout(((Element) XmlUtil.selectSingleNode("/xml/refund_recv_accout_" + i, root)).getTextContent());
 				if (refundRecord.getCoupon_refund_count() == 0) {
 					continue;
 				}
 				List<RefundRecord.RefundCoupon> coupons = new ArrayList<>();
 				for (int j = 0; j < refundRecord.getCoupon_refund_count(); j++) {
-					coupons.add(new RefundRecord.RefundCoupon(
-							((Element) XmlUtil.selectSingleNode("/xml/coupon_refund_id_" + i + "_" + j, root))
-									.getTextContent(),
-							NumberUtils.toInt(
-									((Element) XmlUtil.selectSingleNode("/xml/coupon_refund_fee_" + i + "_" + j, root))
-											.getTextContent())));
+					coupons.add(new RefundRecord.RefundCoupon(((Element) XmlUtil.selectSingleNode("/xml/coupon_refund_id_" + i + "_" + j, root)).getTextContent(),
+							NumberUtils.toInt(((Element) XmlUtil.selectSingleNode("/xml/coupon_refund_fee_" + i + "_" + j, root)).getTextContent())));
 				}
 			}
 		}
@@ -604,4 +588,48 @@ public class RefundQueryRes {
 		}
 
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("RefundQueryRes [return_code=");
+		builder.append(return_code);
+		builder.append(", return_msg=");
+		builder.append(return_msg);
+		builder.append(", result_code=");
+		builder.append(result_code);
+		builder.append(", err_code=");
+		builder.append(err_code);
+		builder.append(", err_code_des=");
+		builder.append(err_code_des);
+		builder.append(", appid=");
+		builder.append(appid);
+		builder.append(", device_info=");
+		builder.append(device_info);
+		builder.append(", mch_id=");
+		builder.append(mch_id);
+		builder.append(", nonce_str=");
+		builder.append(nonce_str);
+		builder.append(", sign=");
+		builder.append(sign);
+		builder.append(", transaction_id=");
+		builder.append(transaction_id);
+		builder.append(", out_trade_no=");
+		builder.append(out_trade_no);
+		builder.append(", total_fee=");
+		builder.append(total_fee);
+		builder.append(", settlement_total_fee=");
+		builder.append(settlement_total_fee);
+		builder.append(", fee_type=");
+		builder.append(fee_type);
+		builder.append(", cash_fee=");
+		builder.append(cash_fee);
+		builder.append(", refund_count=");
+		builder.append(refund_count);
+		builder.append(", refundRecords=");
+		builder.append(refundRecords);
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

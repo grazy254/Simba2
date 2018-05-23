@@ -2,6 +2,8 @@ package com.simba.alipay.controller;
 
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,8 @@ import com.simba.framework.util.common.BeanUtils;
 @RequestMapping("/alipay")
 public class AliPayCallbackController {
 
+	private static final Log logger = LogFactory.getLog(AliPayCallbackController.class);
+
 	@Autowired
 	private AliPayUtil aliPayUtil;
 
@@ -38,6 +42,7 @@ public class AliPayCallbackController {
 	 */
 	@PostMapping("/callback")
 	public String callback(AliPayCallbackForm callbackForm) throws AlipayApiException {
+		logger.info("================================接收到阿里支付的回调:" + callbackForm.toString());
 		checkSign(callbackForm);
 		deal(callbackForm);
 		return "success";

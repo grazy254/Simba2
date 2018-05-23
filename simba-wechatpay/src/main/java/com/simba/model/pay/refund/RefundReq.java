@@ -1,7 +1,7 @@
 package com.simba.model.pay.refund;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.simba.framework.util.common.XmlUtil;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  * 申请退款请求对象
@@ -88,6 +88,18 @@ public class RefundReq {
 	 * 
 	 */
 	private String refund_account;
+
+	/**
+	 * 退款原因(若商户传入，会在下发给用户的退款消息中体现退款原因)
+	 */
+	private String refund_desc;
+
+	/**
+	 * 退款结果通知url(异步接收微信支付退款结果通知的回调地址，通知URL必须为外网可访问的url，不允许带参数
+	 * 
+	 * 如果参数中传了notify_url，则商户平台上配置的回调地址将不会生效。 )
+	 */
+	private String notify_url;
 
 	public String getAppid() {
 		return appid;
@@ -201,6 +213,22 @@ public class RefundReq {
 		this.refund_account = refund_account;
 	}
 
+	public String getRefund_desc() {
+		return refund_desc;
+	}
+
+	public void setRefund_desc(String refund_desc) {
+		this.refund_desc = refund_desc;
+	}
+
+	public String getNotify_url() {
+		return notify_url;
+	}
+
+	public void setNotify_url(String notify_url) {
+		this.notify_url = notify_url;
+	}
+
 	public String toXML() {
 		return XmlUtil.fromObject(this);
 	}
@@ -209,4 +237,5 @@ public class RefundReq {
 	public String toString() {
 		return toXML();
 	}
+
 }

@@ -62,6 +62,34 @@ public class RefundForm {
 	 */
 	private String refund_account;
 
+	/**
+	 * 退款原因(若商户传入，会在下发给用户的退款消息中体现退款原因)
+	 */
+	private String refund_desc;
+
+	/**
+	 * 退款结果通知url(异步接收微信支付退款结果通知的回调地址，通知URL必须为外网可访问的url，不允许带参数
+	 * 
+	 * 如果参数中传了notify_url，则商户平台上配置的回调地址将不会生效。 )
+	 */
+	private String notify_url;
+
+	public String getRefund_desc() {
+		return refund_desc;
+	}
+
+	public void setRefund_desc(String refund_desc) {
+		this.refund_desc = refund_desc;
+	}
+
+	public String getNotify_url() {
+		return notify_url;
+	}
+
+	public void setNotify_url(String notify_url) {
+		this.notify_url = notify_url;
+	}
+
 	public String getDevice_info() {
 		return device_info;
 	}
@@ -144,10 +172,33 @@ public class RefundForm {
 
 	@Override
 	public String toString() {
-		return "RefundForm [device_info=" + device_info + ", sign_type=" + sign_type + ", transaction_id=" + transaction_id + ", out_trade_no=" + out_trade_no + ", out_refund_no=" + out_refund_no
-				+ ", total_fee=" + total_fee + ", refund_fee=" + refund_fee + ", refund_fee_type=" + refund_fee_type + ", op_user_id=" + op_user_id + ", refund_account=" + refund_account + "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append("RefundForm [device_info=");
+		builder.append(device_info);
+		builder.append(", sign_type=");
+		builder.append(sign_type);
+		builder.append(", transaction_id=");
+		builder.append(transaction_id);
+		builder.append(", out_trade_no=");
+		builder.append(out_trade_no);
+		builder.append(", out_refund_no=");
+		builder.append(out_refund_no);
+		builder.append(", total_fee=");
+		builder.append(total_fee);
+		builder.append(", refund_fee=");
+		builder.append(refund_fee);
+		builder.append(", refund_fee_type=");
+		builder.append(refund_fee_type);
+		builder.append(", op_user_id=");
+		builder.append(op_user_id);
+		builder.append(", refund_account=");
+		builder.append(refund_account);
+		builder.append(", refund_desc=");
+		builder.append(refund_desc);
+		builder.append(", notify_url=");
+		builder.append(notify_url);
+		builder.append("]");
+		return builder.toString();
 	}
-	
-	
-	
+
 }

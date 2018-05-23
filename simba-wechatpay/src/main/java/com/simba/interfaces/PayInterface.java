@@ -2,6 +2,8 @@ package com.simba.interfaces;
 
 import com.simba.model.pay.refund.RefundReq;
 import com.simba.model.pay.result.PayResult;
+import com.simba.model.pay.result.RefundCallbackInfo;
+import com.simba.model.pay.result.RefundResult;
 import com.simba.model.pay.unifiedorder.UnifiedOrderReq;
 
 /**
@@ -42,4 +44,12 @@ public interface PayInterface {
 	 * @param refundReq
 	 */
 	void refund(RefundReq refundReq);
+
+	/**
+	 * 处理退款结果通知
+	 * 
+	 * @param refundResult
+	 * @param callbackInfo
+	 */
+	void dealRefundCallback(RefundResult refundResult, RefundCallbackInfo callbackInfo);
 }

@@ -18,6 +18,7 @@ import org.xml.sax.SAXException;
 import com.simba.framework.util.common.XmlUtil;
 import com.simba.model.pay.result.CallbackResultRes;
 import com.simba.model.pay.result.PayResult;
+import com.simba.model.pay.result.RefundCallbackInfo;
 import com.simba.model.pay.result.RefundResult;
 import com.simba.service.PayService;
 
@@ -82,12 +83,26 @@ public class PayCallbackController {
 	public String refundReceive(@RequestBody String body, ModelMap model) {
 		logger.info("*****************************接收微信退款结果通知:" + body);
 		RefundResult refundResult = XmlUtil.toOject(body, RefundResult.class);
-
+		String info = refundResult.getReq_info();
+		String deInfo = decode(info);
+		RefundCallbackInfo callbackInfo = XmlUtil.toOject(deInfo, RefundCallbackInfo.class);
+		payService.dealRefundCallback(refundResult, callbackInfo);
 		CallbackResultRes res = new CallbackResultRes();
 		res.setReturn_code("SUCCESS");
 		res.setReturn_msg("OK");
 		model.put("message", res.toXML());
 		return "message";
+	}
+
+	/**
+	 * 解密
+	 * 
+	 * @param info
+	 * @return
+	 */
+	private String decode(String info) {
+		
+		return null;
 	}
 
 }

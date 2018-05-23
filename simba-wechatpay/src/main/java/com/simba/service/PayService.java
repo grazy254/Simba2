@@ -6,6 +6,8 @@ import org.apache.http.ParseException;
 
 import com.simba.model.pay.refund.RefundReq;
 import com.simba.model.pay.result.PayResult;
+import com.simba.model.pay.result.RefundCallbackInfo;
+import com.simba.model.pay.result.RefundResult;
 import com.simba.model.pay.unifiedorder.UnifiedOrderReq;
 
 /**
@@ -46,4 +48,12 @@ public interface PayService {
 	 * @param refundReq
 	 */
 	void refund(RefundReq refundReq) throws ParseException, IOException;
+
+	/**
+	 * 处理退款结果通知
+	 * 
+	 * @param refundResult
+	 * @param callbackInfo
+	 */
+	void dealRefundCallback(RefundResult refundResult, RefundCallbackInfo callbackInfo);
 }

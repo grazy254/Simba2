@@ -11,7 +11,6 @@ import com.simba.service.DayAmountService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -169,15 +168,13 @@ public class DayAmountServiceImpl implements DayAmountService {
     @Override
     @Transactional(readOnly = true)
     public List<TotalDayAmountBean> getSendAmountEachDay(Date startTime, Date endTime) {
-        List<TotalDayAmountBean> dayAmountList = dayAmountDao.getTotalAmountList(startTime, endTime);
-        return dayAmountList;
+        return dayAmountDao.getTotalAmountList(startTime, endTime);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<DayAmount> getSendAmountEachDay(Date startTime, Date endTime, int projectId) {
-        List<DayAmount> dayAmountList = dayAmountDao.getProjectAmountList(startTime, endTime, projectId);
-        return dayAmountList;
+        return dayAmountDao.getProjectAmountList(startTime, endTime, projectId);
     }
 
     private Date getDate(Date date, int offset) {
@@ -198,6 +195,19 @@ public class DayAmountServiceImpl implements DayAmountService {
         return yesterDayFormat;
     }
 
+    /**
+     * 获取前一天
+     *
+     * @param day
+     * @return
+     */
+    private Date getYesterday(Date day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(day);
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        return calendar.getTime();
+    }
+
 
     /**
      * 每天的1点执行, 保存当天的用量, 并将计数器清零
@@ -212,7 +222,7 @@ public class DayAmountServiceImpl implements DayAmountService {
             for (Integer projectId : projectIdToAmount.keySet()) {
                 DayAmount newDayAmount = new DayAmount();
                 newDayAmount.setAmount(projectIdToAmount.get(projectId));
-                newDayAmount.setDayDate(DateUtil.getTime());
+                newDayAmount.setDayDate(getYesterday(DateUtil.getTime()));
                 newDayAmount.setProjectId(projectId);
                 dayAmountService.add(newDayAmount);
             }

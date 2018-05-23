@@ -11,6 +11,7 @@
 		<script type="text/javascript" src="${base}/js/common/checkbox.js"></script>
 		<script type="text/javascript" src="${base}/js/common/page.js"></script>
 		<script type="text/javascript" src="${base}/js/tradeChannel/tradeChannel.js"></script>
+		
 	</head>
 
 	<body>
@@ -44,6 +45,7 @@
 												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
 												<th>渠道名称</th>
 												<th>渠道类型</th>
+												<th>账户状态</th>												
 												<th>创建时间</th>
 												<th>最后更新时间</th>
 												<th>操作</th>

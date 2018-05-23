@@ -98,6 +98,5 @@ var TradeAccount = {
 	"toList": function() {
 		window.self.location.href = contextPath + "/tradeAccount/list";
 	},
-
 	"end": null
 };

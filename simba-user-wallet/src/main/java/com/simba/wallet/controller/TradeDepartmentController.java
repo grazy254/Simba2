@@ -1,5 +1,6 @@
 package com.simba.wallet.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,10 +10,17 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.simba.framework.util.date.DateUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
+import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeDepartment;
+import com.simba.wallet.model.enums.AccountStatus;
+import com.simba.wallet.model.enums.AccountType;
+import com.simba.wallet.model.vo.TradeDepartmentVO;
 import com.simba.wallet.service.TradeDepartmentService;
+import com.simba.wallet.util.FmtUtil;
+import com.simba.wallet.util.SessionUtil;
 
 /**
  * 收款部门控制器
@@ -27,6 +35,9 @@ public class TradeDepartmentController {
 	@Autowired
 	private TradeDepartmentService tradeDepartmentService;
 
+	@Autowired
+	private SessionUtil sessionUtil;
+
 	@RequestMapping("/list")
 	public String list() {
 		return "tradeDepartment/list";
@@ -35,7 +46,33 @@ public class TradeDepartmentController {
 	@RequestMapping("/getList")
 	public String getList(Pager pager, ModelMap model) {
 		List<TradeDepartment> list = tradeDepartmentService.page(pager);
-		model.put("list", list);
+		List<TradeDepartmentVO> tradeDepartmentVOList = new ArrayList<>();
+		for (TradeDepartment dept : list) {
+			String accountStatus = AccountStatus.NOTEXIST.getName();
+			TradeAccount tradeAccount = null;
+			try {
+				tradeAccount = sessionUtil.getTradeAccount(dept.getDeptNO(), AccountType.COMPANY_ACCOUNT);
+				accountStatus = FmtUtil.getAccountStatus(tradeAccount).getName();
+			} catch (Exception e) {
+
+			}
+			// 不显示注销的账户
+			if (AccountStatus.CLOSED.getName().equals(accountStatus)) {
+				continue;
+			}
+			TradeDepartmentVO vo = new TradeDepartmentVO();
+			vo.setId(dept.getId());
+			vo.setDeptName(dept.getDeptName());
+			vo.setDeptNO(dept.getDeptNO());
+			if (tradeAccount != null) {
+				vo.setAccountID(tradeAccount.getAccountID());
+			}
+			vo.setCreateTime(DateUtil.date2String(dept.getCreateTime()));
+			vo.setLastUpdateTime(DateUtil.date2String(dept.getLastUpdateTime()));
+			vo.setAccountStatus(accountStatus);
+			tradeDepartmentVOList.add(vo);
+		}
+		model.put("list", tradeDepartmentVOList);
 		return "tradeDepartment/table";
 	}
 
@@ -52,7 +89,7 @@ public class TradeDepartmentController {
 	}
 
 	@RequestMapping("/add")
-	public String add(TradeDepartment tradeDepartment) {
+	public String add(TradeDepartment tradeDepartment) throws Exception {
 		tradeDepartmentService.add(tradeDepartment);
 		return "redirect:/tradeDepartment/list";
 	}
@@ -72,8 +109,8 @@ public class TradeDepartmentController {
 
 	@ResponseBody
 	@RequestMapping("/delete")
-	public JsonResult delete(Long id, ModelMap model) {
-		tradeDepartmentService.delete(id);
+	public JsonResult delete(Long id, String departmentAccountID, ModelMap model) {
+		tradeDepartmentService.delete(id, departmentAccountID);
 		return new JsonResult();
 	}
 

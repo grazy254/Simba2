@@ -20,6 +20,7 @@ import com.simba.wallet.model.TradeChannelDetail;
 import com.simba.wallet.model.TradeDepartment;
 import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.TradePartyDetail;
+import com.simba.wallet.model.enums.AccountType;
 import com.simba.wallet.model.enums.ChannelType;
 import com.simba.wallet.model.enums.FeeType;
 import com.simba.wallet.model.enums.TradeStatus;
@@ -223,7 +224,8 @@ public class TradeDetailServiceImpl implements TradeDetailService {
 		tradePartyDetail.setIp("");
 		tradePartyDetail.setLocation("");
 		tradePartyDetail.setMobileNumber(smartUser.getTelNo());
-		tradePartyDetail.setTradeAccountID(sessionUtil.getTradeAccount(smartUser.getAccount()).getAccountID());
+		tradePartyDetail.setTradeAccountID(
+				sessionUtil.getTradeAccount(smartUser.getAccount(), AccountType.PERSIONAL_ACCOUNT).getAccountID());
 		tradePartyDetail.setTradeUserID(sessionUtil.getTradeUser(smartUser.getAccount()).getId());
 		Long tradePartyID = tradePartyDetailService.add(tradePartyDetail);
 		tradePartyDetail.setId(tradePartyID);
@@ -235,7 +237,8 @@ public class TradeDetailServiceImpl implements TradeDetailService {
 		counterPartyDetail.setCreateDate(DateUtil.getOnlyDate(now));
 		counterPartyDetail.setPartyName(tradeDepartment.getDeptName());
 		counterPartyDetail.setPartyType(TradeUserType.DEPARTMENT.getName());
-		counterPartyDetail.setTradeAccountID(sessionUtil.getTradeAccount(tradeDepartment.getDeptNO()).getAccountID());
+		counterPartyDetail.setTradeAccountID(
+				sessionUtil.getTradeAccount(tradeDepartment.getDeptNO(), AccountType.COMPANY_ACCOUNT).getAccountID());
 		counterPartyDetail.setTradeUserID(sessionUtil.getTradeUser(tradeDepartment.getDeptNO()).getId());
 		counterPartyDetail.setIp("");
 		counterPartyDetail.setLocation("");
@@ -256,7 +259,8 @@ public class TradeDetailServiceImpl implements TradeDetailService {
 		tradeChannelDetail.setOrderNO("000");
 		tradeChannelDetail.setPaymentTime(now);
 		tradeChannelDetail.setLastUpdateTime(now);
-		tradeChannelDetail.setTradeAccountID(sessionUtil.getTradeAccount(tradeChannel.getType()).getAccountID());
+		tradeChannelDetail.setTradeAccountID(
+				sessionUtil.getTradeAccount(tradeChannel.getType(), AccountType.CHANNEL_ACCOUNT).getAccountID());
 		Long tradeChannelDetailID = tradeChannelDetailService.add(tradeChannelDetail);
 		tradeChannelDetail.setId(tradeChannelDetailID);
 

@@ -12,11 +12,13 @@ import com.simba.wallet.model.TradeChannel;
  */
 public interface TradeChannelService {
 
-	void add(TradeChannel tradeChannel);
+	void add(TradeChannel tradeChannel) throws Exception;
 
 	void update(TradeChannel tradeChannel);
 
 	void delete(Long id);
+
+	void delete(Long chanId, String chanAcctID);
 
 	List<TradeChannel> listAll();
 		

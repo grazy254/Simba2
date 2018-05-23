@@ -3,7 +3,9 @@ package  com.simba.wallet.service;
 import java.util.List;
 
 import com.simba.framework.util.jdbc.Pager;
+import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.model.TradeAccount;
+import com.simba.wallet.model.enums.TradeUserType;
 /**
  *支付账号 Service
  * 
@@ -58,4 +60,9 @@ public interface TradeAccountService {
 
 	List<TradeAccount> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
 
+	JsonResult openAccount(String userID, String name, String password, String payPhone, String payEmail,
+			TradeUserType tradeUserType, int isAllowPay, int isAllowRecharge, int isActive)
+			throws Exception;
+
+	JsonResult frozeAccount(String userID, TradeUserType tradeUserType);
 }

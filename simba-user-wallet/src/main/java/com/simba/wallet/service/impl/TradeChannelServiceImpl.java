@@ -6,8 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Strings;
+import com.simba.exception.BussException;
 import com.simba.framework.util.jdbc.Pager;
+import com.simba.wallet.dao.TradeAccountDao;
 import com.simba.wallet.dao.TradeChannelDao;
+import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeChannel;
 import com.simba.wallet.service.TradeChannelService;
 /**
@@ -23,14 +27,33 @@ public class TradeChannelServiceImpl implements TradeChannelService {
 	@Autowired
 	private TradeChannelDao tradeChannelDao;
 
+	@Autowired
+	private TradeAccountDao tradeAccountDao;
+
 	@Override
-	public void add(TradeChannel tradeChannel) {
+	public void add(TradeChannel tradeChannel) throws Exception {
 		tradeChannelDao.add(tradeChannel);
 	}
 
 	@Override
 	public void delete(Long id) {
 		tradeChannelDao.delete(id);
+	}
+
+	@Override
+	@Transactional
+	public void delete(Long chanId, String chanAcctID) {
+		if (Strings.isNullOrEmpty(chanAcctID)) {
+			throw new BussException("参数错误");
+		}
+		tradeChannelDao.delete(chanId);
+		TradeAccount tradeAccount = tradeAccountDao.getBy("accountID", chanAcctID);
+		if (tradeAccount != null) {
+			tradeAccount.setIsActive(-1);
+			tradeAccountDao.update(tradeAccount);
+		} else {
+			throw new BussException("要注销的钱包账户不存在");
+		}
 	}
 
 	@Override

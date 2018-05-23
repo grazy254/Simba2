@@ -33,6 +33,13 @@
 											<label for="type">渠道类型</label>
 											<input type="text" class="form-control" id="type" name="type" value="${tradeChannel.type}" placeholder="请输入渠道类型">
 										</div>
+										<div class="form-group">
+											<lable for="openAccount">账户操作</label>
+											<select class="input-group-sm" id="openAccount" name="openAccount">
+												<option value ="1">激活</option> 
+  												<option value ="0">冻结</option>
+  											</select>
+										</div>
 									</div>
 									<!-- /.box-body -->
 

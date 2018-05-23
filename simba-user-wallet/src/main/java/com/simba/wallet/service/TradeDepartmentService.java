@@ -12,11 +12,13 @@ import com.simba.wallet.model.TradeDepartment;
  */
 public interface TradeDepartmentService {
 
-	void add(TradeDepartment tradeDepartment);
+	void add(TradeDepartment tradeDepartment) throws Exception;
 
 	void update(TradeDepartment tradeDepartment);
 
 	void delete(Long id);
+
+	void delete(Long deptId, String deptAcctID);
 
 	List<TradeDepartment> listAll();
 		

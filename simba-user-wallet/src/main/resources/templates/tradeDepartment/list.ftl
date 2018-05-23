@@ -44,6 +44,7 @@
 												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
 												<th>部门编号</th>
 												<th>部门名称</th>
+												<th>账户状态</th>
 												<th>创建时间</th>
 												<th>最后修改时间</th>
 												<th>操作</th>

@@ -12,6 +12,7 @@ import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeChannel;
 import com.simba.wallet.model.TradeDepartment;
 import com.simba.wallet.model.TradeUser;
+import com.simba.wallet.model.enums.AccountType;
 import com.simba.wallet.model.enums.ChannelType;
 import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeChannelService;
@@ -59,8 +60,9 @@ public class SessionUtil {
 		return tradeDepartment;
 	}
 
-	public TradeAccount getTradeAccount(String userID) {
-		TradeAccount tradeAccount = tradeAccountService.getBy("tradeUserID", getTradeUser(userID).getId());
+	public TradeAccount getTradeAccount(String userID, AccountType accountType) {
+		TradeAccount tradeAccount = tradeAccountService.getByAnd("tradeUserID", getTradeUser(userID).getId(),
+				"accountType", accountType.getName());
 		if (tradeAccount == null) {
 			throw new BussException("用户账号不存在");
 		}

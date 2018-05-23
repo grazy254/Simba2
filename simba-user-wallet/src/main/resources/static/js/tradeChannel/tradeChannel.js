@@ -72,12 +72,13 @@ var TradeChannel = {
 		window.self.location.href = contextPath + "/tradeChannel/toUpdate?id=" + id;
 	},
 
-	"deleteTradeChannel": function(id) {
+	"deleteTradeChannel": function(id, channelAccountID) {
 		$.ajax({
 			type: "post",
-			url: contextPath + "/tradeChannel/batchDelete",
+			url: contextPath + "/tradeChannel/delete",
 			data: {
-				"id": id
+				"id": id,
+				"channelAccountID":channelAccountID,
 			},
 			async: true,
 			dataType: "json",
@@ -98,6 +99,49 @@ var TradeChannel = {
 	"toList": function() {
 		window.self.location.href = contextPath + "/tradeChannel/list";
 	},
-
+	"openChannelAccount":function(type, name, phone) {
+		var data = {}
+		method = "openChannelAccount"
+		data["type"] = type
+		data["name"] = name
+		data["password"] = ""
+		data["payPhone"] = "" || phone
+		data["payEmail"] = ""
+						
+		$.ajax({
+			type: "get",
+			url: contextPath + "/tradeAccount/" + method,
+			data: data,
+			async: true,
+			dataType: "json",
+			success: function(data) {
+				if(data.code == 200) {
+					TradeChannel.initTradeChannelList(0, Page.size);
+				} else {
+					parent.showInfo(data.msg);
+				}
+			}
+		});
+	},
+	"frozeChannelAccount":function(type) {
+		var data = {}
+		method = "frozeChannelAccount"
+		data["type"] = type
+		
+		$.ajax({
+			type: "get",
+			url: contextPath + "/tradeAccount/" + method,
+			data: data,
+			async: true,
+			dataType: "json",
+			success: function(data) {
+				if(data.code == 200) {
+					TradeChannel.initTradeChannelList(0, Page.size);
+				} else {
+					parent.showInfo(data.msg);
+				}
+			}
+		});
+	},
 	"end": null
 };

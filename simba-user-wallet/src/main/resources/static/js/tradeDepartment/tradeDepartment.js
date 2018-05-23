@@ -72,12 +72,13 @@ var TradeDepartment = {
 		window.self.location.href = contextPath + "/tradeDepartment/toUpdate?id=" + id;
 	},
 
-	"deleteTradeDepartment": function(id) {
+	"deleteTradeDepartment": function(id, departmentAccountID) {
 		$.ajax({
 			type: "post",
-			url: contextPath + "/tradeDepartment/batchDelete",
+			url: contextPath + "/tradeDepartment/delete",
 			data: {
-				"id": id
+				"id": id,
+				"departmentAccountID": departmentAccountID,
 			},
 			async: true,
 			dataType: "json",
@@ -98,6 +99,49 @@ var TradeDepartment = {
 	"toList": function() {
 		window.self.location.href = contextPath + "/tradeDepartment/list";
 	},
-
+	"openDepartmentAccount":function(deptNO, deptName, phone) {
+		var data = {}
+		method = "openInternalAccount"
+		data["userID"] = deptNO
+		data["name"] = deptName
+		data["password"] = ""
+		data["payPhone"] = "" || phone
+		data["payEmail"] = ""
+						
+		$.ajax({
+			type: "get",
+			url: contextPath + "/tradeAccount/" + method,
+			data: data,
+			async: true,
+			dataType: "json",
+			success: function(data) {
+				if(data.code == 200) {
+					TradeDepartment.initTradeDepartmentList(0, Page.size);
+				} else {
+					parent.showInfo(data.msg);
+				}
+			}
+		});
+	},	
+	"frozeDepartmentAccount":function(deptNO) {
+		var data = {}
+		method = "frozeDepartmentAccount"
+		data["deptNO"] = deptNO
+		
+		$.ajax({
+			type: "get",
+			url: contextPath + "/tradeAccount/" + method,
+			data: data,
+			async: true,
+			dataType: "json",
+			success: function(data) {
+				if(data.code == 200) {
+					TradeDepartment.initTradeDepartmentList(0, Page.size);
+				} else {
+					parent.showInfo(data.msg);
+				}
+			}
+		});
+	},
 	"end": null
 };

@@ -46,6 +46,7 @@ public class TradeUser implements Serializable {
    @DescAnnotation(desc = "是否允许支付：0不允许，1允许")
 	private int isAllowPay;
 
+	private int isActive;
    /**
     * 支付密码 
     * */
@@ -77,7 +78,23 @@ public class TradeUser implements Serializable {
 	private Date lastUpdateTime;
 
 
-    public long getId() {
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public int getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(int isActive) {
+		this.isActive = isActive;
+	}
+
+	public long getId() {
         return id;
     }
 

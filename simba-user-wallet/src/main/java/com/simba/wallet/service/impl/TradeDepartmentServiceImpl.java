@@ -6,8 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Strings;
+import com.simba.exception.BussException;
 import com.simba.framework.util.jdbc.Pager;
+import com.simba.wallet.dao.TradeAccountDao;
 import com.simba.wallet.dao.TradeDepartmentDao;
+import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeDepartment;
 import com.simba.wallet.service.TradeDepartmentService;
 /**
@@ -23,14 +27,34 @@ public class TradeDepartmentServiceImpl implements TradeDepartmentService {
 	@Autowired
 	private TradeDepartmentDao tradeDepartmentDao;
 
+	@Autowired
+	private TradeAccountDao tradeAccountDao;
+
 	@Override
-	public void add(TradeDepartment tradeDepartment) {
+	@Transactional
+	public void add(TradeDepartment tradeDepartment) throws Exception {
 		tradeDepartmentDao.add(tradeDepartment);
 	}
 
 	@Override
 	public void delete(Long id) {
 		tradeDepartmentDao.delete(id);
+	}
+
+	@Override
+	@Transactional
+	public void delete(Long deptId, String deptAcctID) {
+		if (Strings.isNullOrEmpty(deptAcctID)) {
+			throw new BussException("参数错误");
+		}
+		tradeDepartmentDao.delete(deptId);
+		TradeAccount tradeAccount = tradeAccountDao.getBy("accountID", deptAcctID);
+		if (tradeAccount != null) {
+			tradeAccount.setIsActive(-1);
+			tradeAccountDao.update(tradeAccount);
+		} else {
+			throw new BussException("要注销的钱包账户不存在");
+		}
 	}
 
 	@Override
@@ -155,4 +179,5 @@ public class TradeDepartmentServiceImpl implements TradeDepartmentService {
 	public Long countByOr(String field1, Object value1, String field2, Object value2){
 		return tradeDepartmentDao.countByOr(field1,value1,field2,value2);
 	}
+
 }

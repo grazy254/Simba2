@@ -101,6 +101,7 @@ var Notify = {
 
 
     "mysubmit": function () {
+        $("#sendBtn").attr("disabled","disabled");
         var $form = $("#form");
         var action = $form.attr("action");
         $.post(action, $form.serialize(), function (res) {
@@ -108,7 +109,7 @@ var Notify = {
                 parent.showSuccessInfo("发送成功!");
             }
             else {
-                parent.showInfo(data.msg);
+                parent.showInfo(res.msg);
             }
             top.hideModal();
         }, 'json');

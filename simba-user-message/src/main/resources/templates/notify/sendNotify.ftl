@@ -45,7 +45,7 @@
                             <!-- /.box-body -->
 
                             <div class="box-footer">
-                                <button type="button" class="btn btn-success" onclick="Notify.mysubmit();">发送</button>
+                                <button id="sendBtn" type="button" class="btn btn-success" onclick="Notify.mysubmit();">发送</button>
                             </div>
                         </form>
 

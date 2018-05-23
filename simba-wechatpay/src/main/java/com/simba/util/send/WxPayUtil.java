@@ -94,7 +94,7 @@ public class WxPayUtil {
 		UnifiedOrderRes result = XmlUtil.toOject(resp, UnifiedOrderRes.class);
 		checkSign(result);
 		if (!"SUCCESS".equals(result.getReturn_code()) || !"SUCCESS".equals(result.getResult_code())) {
-			throw new BussException("微信统一下单发生异常");
+			throw new BussException("微信统一下单发生异常:" + result.getReturn_msg() + "," + result.getErr_code_des());
 		}
 		return result;
 	}
@@ -178,7 +178,7 @@ public class WxPayUtil {
 		result.composeCoupons(resp);
 		checkSign(result);
 		if (!"SUCCESS".equals(result.getReturn_code()) || !"SUCCESS".equals(result.getResult_code())) {
-			throw new BussException("微信查询订单发生异常");
+			throw new BussException("微信查询订单发生异常:" + result.getReturn_msg() + "," + result.getErr_code_des());
 		}
 		return result;
 	}
@@ -213,7 +213,7 @@ public class WxPayUtil {
 		CloseOrderRes result = XmlUtil.toOject(resp, CloseOrderRes.class);
 		checkSign(result);
 		if (!"SUCCESS".equals(result.getReturn_code()) || !"SUCCESS".equals(result.getResult_code())) {
-			throw new BussException("微信关闭订单发生异常");
+			throw new BussException("微信关闭订单发生异常:" + result.getReturn_msg() + "," + result.getErr_code_des());
 		}
 		return result;
 	}
@@ -334,7 +334,7 @@ public class WxPayUtil {
 		result.composeRefundRecords(resp);
 		checkSign(result);
 		if (!"SUCCESS".equals(result.getReturn_code()) || !"SUCCESS".equals(result.getResult_code())) {
-			throw new BussException("微信查询退款发生异常");
+			throw new BussException("微信查询退款发生异常:" + result.getReturn_msg() + "," + result.getErr_code_des());
 		}
 		return result;
 	}
@@ -414,7 +414,7 @@ public class WxPayUtil {
 		RefundRes result = XmlUtil.toOject(resp, RefundRes.class);
 		checkSign(result);
 		if (!"SUCCESS".equals(result.getReturn_code()) || !"SUCCESS".equals(result.getResult_code())) {
-			throw new BussException("微信申请退款发生异常");
+			throw new BussException("微信申请退款发生异常:" + result.getReturn_msg() + "," + result.getErr_code_des());
 		}
 		return result;
 	}

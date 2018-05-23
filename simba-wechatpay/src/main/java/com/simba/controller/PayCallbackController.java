@@ -70,8 +70,20 @@ public class PayCallbackController {
 		return "message";
 	}
 
+	/**
+	 * 接收微信退款结果通知
+	 * 
+	 * @param body
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/refundReceive")
-	public String refundReceive() {
+	public String refundReceive(@RequestBody String body, ModelMap model) {
+		logger.info("*****************************接收微信退款结果通知:" + body);
+		PayResultRes res = new PayResultRes();
+		res.setReturn_code("SUCCESS");
+		res.setReturn_msg("OK");
+		model.put("message", res.toXML());
 		return "message";
 	}
 

@@ -137,3 +137,13 @@ function showSuccessInfo(info) {
 function hideSuccessInfo() {
 	$("#successDiv").fadeOut();
 }
+
+/**
+ * 中间主页面跳转
+ * 
+ * @param url
+ * @returns
+ */
+function changeContentFrameUrl(url) {
+	top.contentiframe.window.location.href = url;
+}

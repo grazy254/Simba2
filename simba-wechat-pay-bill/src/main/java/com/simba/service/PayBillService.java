@@ -1,6 +1,13 @@
 package com.simba.service;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+
+import org.w3c.dom.DOMException;
+import org.xml.sax.SAXException;
 
 import com.simba.controller.form.PayBillSearchForm;
 import com.simba.framework.util.jdbc.Pager;
@@ -64,4 +71,15 @@ public interface PayBillService {
 
 	Long count(PayBillSearchForm searchForm);
 
+	/**
+	 * 查询未完成的订单，更新其状态
+	 */
+	void checkUnfinishOrder()throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException ;
+
+	/**
+	 * 查询所有没有结束的订单信息
+	 * 
+	 * @return
+	 */
+	List<PayBill> listUnfinish();
 }

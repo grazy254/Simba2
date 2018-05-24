@@ -10,7 +10,7 @@ import com.simba.framework.util.common.XmlUtil;
  *
  */
 @XStreamAlias("xml")
-public class PayResultRes {
+public class CallbackResultRes {
 
 	/**
 	 * SUCCESS/FAIL

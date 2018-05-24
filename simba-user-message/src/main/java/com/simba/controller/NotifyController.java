@@ -3,7 +3,10 @@ package com.simba.controller;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.Notify;
+import com.simba.model.SmartUser;
+import com.simba.model.form.SmartUserSearchForm;
 import com.simba.service.NotifyService;
+import com.simba.service.SmartUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -26,6 +29,9 @@ public class NotifyController {
     @Autowired
     private NotifyService notifyService;
 
+    @Autowired
+    private SmartUserService smartUserService;
+
     @RequestMapping("/list")
     public String list() {
         return "notify/list";
@@ -41,7 +47,6 @@ public class NotifyController {
     @ResponseBody
     @RequestMapping("/count")
     public JsonResult count(HttpSession session) {
-        System.out.println(session.getAttribute("sessUser"));
         Long count = notifyService.count();
         return new JsonResult(count, "", 200);
     }
@@ -94,7 +99,11 @@ public class NotifyController {
     @ResponseBody
     @RequestMapping("/sendNotifies")
     public JsonResult sendNotifies(String title, String content, Long[] smartUserIds, int type) {
-        notifyService.sendNotify(title, content, smartUserIds, type);
+        if (smartUserIds[0] == -1) {
+            notifyService.sendNotify2AllUser(title, content, type);
+        } else {
+            notifyService.sendNotify(title, content, smartUserIds, type);
+        }
         return new JsonResult();
     }
 
@@ -115,6 +124,31 @@ public class NotifyController {
     public JsonResult setNotifyRead(Long smartUserId, Long notifyId) {
         notifyService.setNotifyRead(smartUserId, notifyId);
         return new JsonResult();
+    }
+
+    @RequestMapping("/toSendNotify2User")
+    public String toSendNotify2User() {
+        return "notify/listUser";
+    }
+
+    @RequestMapping("/toSendNotify")
+    public String toSendNotify(String smartUserIds, ModelMap model) {
+        model.put("smartUserIds", smartUserIds);
+        return "notify/sendNotify";
+    }
+
+    @RequestMapping("/getUserList")
+    public String getList(Pager pager, SmartUserSearchForm searchForm, ModelMap model) {
+        List<SmartUser> list = smartUserService.page(pager, searchForm);
+        model.put("list", list);
+        return "notify/userTable";
+    }
+
+    @ResponseBody
+    @RequestMapping("/userCount")
+    public JsonResult userCount(SmartUserSearchForm searchForm) {
+        Long count = smartUserService.count(searchForm);
+        return new JsonResult(count, "", 200);
     }
 
 }

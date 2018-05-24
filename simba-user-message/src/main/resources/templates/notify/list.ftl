@@ -28,7 +28,7 @@
 								<div class="box-body no-padding">
 									<div class="mailbox-controls">
 										<!-- Check all button -->
-										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="Notify.toAdd();"><i class="fa fa-plus"></i>
+										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="Notify.toAdd();" style="display: none"><i class="fa fa-plus"></i>
                 新增</button>
 										<button type="button" class="btn btn-default btn-sm" onclick="Notify.batchDelete();"><i class="fa fa-remove"></i>删除</button>
 										<div class="pull-right">
@@ -44,8 +44,8 @@
 												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
 												<th>通知标题</th>
 												<th>通知内容</th>
-												<th>0: 紧急通知 1:普通通知</th>
-												<th>创建时间</th>
+												<th>通知类型</th>
+												<th>发送时间</th>
 												<th>操作</th>
 											</tr>
 										</thead>

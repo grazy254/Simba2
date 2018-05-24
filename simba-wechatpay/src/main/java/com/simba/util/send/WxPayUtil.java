@@ -16,6 +16,7 @@ import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 
 import com.simba.common.EnvironmentUtil;
+import com.simba.exception.BussException;
 import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.framework.util.common.BeanUtils;
 import com.simba.framework.util.common.XmlUtil;
@@ -91,7 +92,10 @@ public class WxPayUtil {
 		String resp = HttpClientUtil.postXML(WxPayConstantData.unifiedorderUrl, xml);
 		logger.info("统一下单返回结果:" + resp);
 		UnifiedOrderRes result = XmlUtil.toOject(resp, UnifiedOrderRes.class);
-		checkResult(result);
+		checkSign(result);
+		if (!"SUCCESS".equals(result.getReturn_code()) || !"SUCCESS".equals(result.getResult_code())) {
+			throw new BussException("微信统一下单发生异常:" + result.getReturn_msg() + "," + result.getErr_code_des());
+		}
 		return result;
 	}
 
@@ -172,7 +176,10 @@ public class WxPayUtil {
 		logger.info("查询订单返回结果:" + resp);
 		OrderQueryRes result = XmlUtil.toOject(resp, OrderQueryRes.class);
 		result.composeCoupons(resp);
-		checkResult(result);
+		checkSign(result);
+		if (!"SUCCESS".equals(result.getReturn_code()) || !"SUCCESS".equals(result.getResult_code())) {
+			throw new BussException("微信查询订单发生异常:" + result.getReturn_msg() + "," + result.getErr_code_des());
+		}
 		return result;
 	}
 
@@ -204,7 +211,10 @@ public class WxPayUtil {
 		String resp = HttpClientUtil.postXML(WxPayConstantData.closeorderUrl, xml);
 		logger.info("关闭订单返回结果:" + resp);
 		CloseOrderRes result = XmlUtil.toOject(resp, CloseOrderRes.class);
-		checkResult(result);
+		checkSign(result);
+		if (!"SUCCESS".equals(result.getReturn_code()) || !"SUCCESS".equals(result.getResult_code())) {
+			throw new BussException("微信关闭订单发生异常:" + result.getReturn_msg() + "," + result.getErr_code_des());
+		}
 		return result;
 	}
 
@@ -322,7 +332,10 @@ public class WxPayUtil {
 		logger.info("查询退款返回结果:" + resp);
 		RefundQueryRes result = XmlUtil.toOject(resp, RefundQueryRes.class);
 		result.composeRefundRecords(resp);
-		checkResult(result);
+		checkSign(result);
+		if (!"SUCCESS".equals(result.getReturn_code()) || !"SUCCESS".equals(result.getResult_code())) {
+			throw new BussException("微信查询退款发生异常:" + result.getReturn_msg() + "," + result.getErr_code_des());
+		}
 		return result;
 	}
 
@@ -372,6 +385,13 @@ public class WxPayUtil {
 	 * 2、微信支付退款支持单笔交易分多次退款，多次退款需要提交原支付订单的商户订单号和设置不同的退款单号。总退款金额不能超过用户实际支付金额。
 	 * 一笔退款失败后重新提交，请不要更换退款单号，请使用原商户退款单号。
 	 * 
+	 * 3、请求频率限制：150qps，即每秒钟正常的申请退款请求次数不超过150次
+	 * 错误或无效请求频率限制：6qps，即每秒钟异常或错误的退款申请请求不超过6次
+	 * 
+	 * 4、每个支付订单的部分退款次数不能超过50次
+	 * 
+	 * 
+	 * 
 	 * 请求需要双向证书)
 	 * 
 	 * @param request
@@ -392,7 +412,10 @@ public class WxPayUtil {
 		String xml = request.toXML();
 		String resp = CertRequestUrl.getInstance().executeWithKey(WxPayConstantData.refundUrl, xml);
 		RefundRes result = XmlUtil.toOject(resp, RefundRes.class);
-		checkResult(result);
+		checkSign(result);
+		if (!"SUCCESS".equals(result.getReturn_code()) || !"SUCCESS".equals(result.getResult_code())) {
+			throw new BussException("微信申请退款发生异常:" + result.getReturn_msg() + "," + result.getErr_code_des());
+		}
 		return result;
 	}
 
@@ -416,7 +439,7 @@ public class WxPayUtil {
 		}
 	}
 
-	private void checkResult(Object result) {
+	private void checkSign(Object result) {
 		Map<String, String> params = BeanUtils.xmlBean2Map(result);
 		if (params.get("sign") != null && !checkSign(params)) {
 			throw new RuntimeException("微信支付服务器返回签名错误");

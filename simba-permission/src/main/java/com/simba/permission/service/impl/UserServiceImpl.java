@@ -1,7 +1,9 @@
 package com.simba.permission.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -165,7 +167,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void assignRoles(String userAccount, List<String> roleNames) {
 		userRoleDao.deleteByUserAccount(userAccount);
-		for (String roleName : roleNames) {
+		Set<String> roleNameSet = new HashSet<>(roleNames);
+		for (String roleName : roleNameSet) {
 			if (StringUtils.isNotEmpty(roleName)) {
 				userRoleDao.add(new UserRole(userAccount, roleName));
 			}

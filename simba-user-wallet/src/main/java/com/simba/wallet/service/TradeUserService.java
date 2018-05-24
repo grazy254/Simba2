@@ -38,6 +38,8 @@ public interface TradeUserService {
 	
 	TradeUser get(Long id);
 	
+	TradeUser get(String userID, String userType);
+
 	void batchDelete(List<Long> idList);
 
 	TradeUser getBy(String field, Object value);
@@ -57,5 +59,7 @@ public interface TradeUserService {
 	List<TradeUser> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
 
 	List<TradeUser> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
+
+	TradeUser getByAnd(String field1, Object value1, String field2, Object value2, String field3, Object value3);
 
 }

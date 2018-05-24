@@ -38,9 +38,13 @@ public interface TradeUserDao {
 	
 	TradeUser get(Long id);
 	
+	TradeUser get(String userID, String type);
+
 	TradeUser getBy(String field, Object value);
 
 	TradeUser getByAnd(String field1, Object value1, String field2, Object value2);
+
+	TradeUser getByAnd(String field1, Object value1, String field2, Object value2, String field3, Object value3);
 
 	TradeUser getByOr(String field1, Object value1, String field2, Object value2);
 

@@ -72,13 +72,12 @@ var TradeDepartment = {
 		window.self.location.href = contextPath + "/tradeDepartment/toUpdate?id=" + id;
 	},
 
-	"deleteTradeDepartment": function(id, departmentAccountID) {
+	"deleteTradeDepartment": function(deptNO) {
 		$.ajax({
 			type: "post",
 			url: contextPath + "/tradeDepartment/delete",
 			data: {
-				"id": id,
-				"departmentAccountID": departmentAccountID,
+				"deptNO": deptNO,
 			},
 			async: true,
 			dataType: "json",
@@ -101,9 +100,9 @@ var TradeDepartment = {
 	},
 	"openDepartmentAccount":function(deptNO, deptName, phone) {
 		var data = {}
-		method = "openInternalAccount"
-		data["userID"] = deptNO
-		data["name"] = deptName
+		method = "openDepartmentAccount"
+		data["deptNO"] = deptNO
+		data["deptName"] = deptName
 		data["password"] = ""
 		data["payPhone"] = "" || phone
 		data["payEmail"] = ""

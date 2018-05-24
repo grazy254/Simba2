@@ -72,13 +72,12 @@ var TradeChannel = {
 		window.self.location.href = contextPath + "/tradeChannel/toUpdate?id=" + id;
 	},
 
-	"deleteTradeChannel": function(id, channelAccountID) {
+	"deleteTradeChannel": function(type) {
 		$.ajax({
 			type: "post",
 			url: contextPath + "/tradeChannel/delete",
 			data: {
-				"id": id,
-				"channelAccountID":channelAccountID,
+				"type": type,
 			},
 			async: true,
 			dataType: "json",

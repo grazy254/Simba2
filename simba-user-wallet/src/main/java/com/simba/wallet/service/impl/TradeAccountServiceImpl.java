@@ -13,12 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.simba.dao.UserProjectDao;
 import com.simba.exception.BussException;
 import com.simba.framework.util.code.DesUtil;
 import com.simba.framework.util.code.EncryptUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
-import com.simba.service.UserProjectService;
 import com.simba.wallet.dao.TradeAccountDao;
 import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeUser;
@@ -27,8 +27,7 @@ import com.simba.wallet.model.enums.FeeType;
 import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeUserService;
-import com.simba.wallet.util.FmtUtil;
-import com.simba.wallet.util.SessionUtil;
+import com.simba.wallet.util.ErrConfig;
 /**
  * 支付账号 Service实现类
  * 
@@ -46,10 +45,7 @@ public class TradeAccountServiceImpl implements TradeAccountService {
 	private TradeUserService tradeUserDao;
 
 	@Autowired
-	private UserProjectService projectService;
-
-	@Autowired
-	private SessionUtil sessionUtil;
+	private UserProjectDao projectDao;
 
 	@Override
 	public Long add(TradeAccount tradeAccount) {
@@ -231,19 +227,22 @@ public class TradeAccountServiceImpl implements TradeAccountService {
 		Long tradeUserID = 0L;
 
 		// 检查数据库是否存在该记录
-		TradeUser tradeUserDB = tradeUserDao.getBy("userID", userID);
+		TradeUser tradeUserDB = tradeUserDao.getByAnd("userID", userID, "type", tradeUserType.getName(), "isActive", 1);
 		if (tradeUserDB == null) {
 			TradeUser tradeUser = new TradeUser();
 			tradeUser.setUserID(userID);
+			// TODO:1 不达意
 			tradeUser.setIsAllowPay(1);
+			tradeUser.setIsActive(1);
 			tradeUser.setName(name);
+			tradeUser.setType(tradeUserType.getName());
 			tradeUser.setPayEmail(payEmail);
 			String regex = "^1[3|4|5|7|8][0-9]\\d{4,8}$";
 			Pattern pat = Pattern.compile(regex);
 			Matcher m = pat.matcher(payPhone);
 			boolean isMatch = m.matches();
 			if (!isMatch) {
-				return new JsonResult("", "手机号格式不正确", 400);
+				throw new BussException("手机号格式不正确");
 			}
 			tradeUser.setPayPhone(payPhone);
 			tradeUser.setPayEmail(payEmail);
@@ -252,10 +251,10 @@ public class TradeAccountServiceImpl implements TradeAccountService {
 			String p = "";
 			// 给密码解密之后再md5。
 			String sk = "";
-			if (projectService.listBy("name", "wallet").size() > 0) {
-				sk = projectService.listBy("name", "wallet").get(0).getProjectKey();
+			if (projectDao.listBy("name", "wallet").size() > 0) {
+				sk = projectDao.listBy("name", "wallet").get(0).getProjectKey();
 			} else {
-				return new JsonResult("", "没有配置系统加密密钥，请联系管理员配置", 400);
+				throw new BussException("没有配置系统加密密钥，请联系管理员配置");
 			}
 			p = DesUtil.decrypt(password, sk);
 			p = EncryptUtil.md5(p);
@@ -263,16 +262,20 @@ public class TradeAccountServiceImpl implements TradeAccountService {
 
 			tradeUserID = tradeUserDao.add(tradeUser);
 			if (tradeUserID <= 0) {
-				return new JsonResult("", "保存支付用户信息失败", 400);
+				throw new BussException("保存支付用户信息失败");
 			}
 		} else {
 			tradeUserID = tradeUserDB.getId();
 		}
 		// 检查数据库是否存在该记录
-		long tradeAccountCount = tradeAccountDao.countByAnd("accountType", accountType.getName(), "tradeUserID",
-				tradeUserID);
-		if (tradeAccountCount > 0) {
-			return new JsonResult("", "支付账号已经存在", 400);
+		TradeAccount tradeAccountDB = tradeAccountDao.getByAnd("accountType", accountType.getName(), "tradeUserID",
+				tradeUserID, "isActive", 1);
+		if (tradeAccountDB != null) {
+			if (tradeAccountDB.getIsFrozen() == 1) {
+				throw new BussException("请解冻账户");
+			} else {
+				throw ErrConfig.ACCOUNT_EXIST_ERR;
+			}
 		}
 
 		TradeAccount tradeAccount = new TradeAccount();
@@ -291,27 +294,35 @@ public class TradeAccountServiceImpl implements TradeAccountService {
 		tradeAccount.setCreateTime(new Date());
 		Long tradeAccountID = tradeAccountDao.add(tradeAccount);
 		if (tradeAccountID <= 0) {
-			return new JsonResult("", "保存支付账号信息失败", 400);
+			throw new BussException("保存支付账号信息失败");
 		}
 		return new JsonResult("", "钱包功能开通成功", 200);
 	}
 
 	@Override
-	public JsonResult frozeAccount(String userID, TradeUserType tradeUserType) {
+	public JsonResult frozeAccount(String userID, TradeUserType userType) {
 		// TODO: 手机验证码 根据userID获取注册时的手机号
-		TradeUser tradeUserDB = tradeUserDao.getBy("userID", userID);
-		if (tradeUserDB == null) {
-			return new JsonResult("", "尚未开通钱包功能", 400);
-		}
-		TradeAccount tradeAccount = tradeAccountDao.getByAnd("accountType",
-				FmtUtil.getAccountType(tradeUserType).getName(),
-				"tradeUserID",
-				tradeUserDB.getId());
-		if (tradeAccount == null) {
-			return new JsonResult("", "尚未激活账户", 400);
-		}
+		TradeAccount tradeAccount = tradeAccountDao.get(userID, userType);
 		tradeAccount.setIsFrozen(1);
 		tradeAccountDao.update(tradeAccount);
 		return new JsonResult();
+	}
+
+	@Override
+	public JsonResult closeAccount(String userID, TradeUserType userType) {
+		TradeUser tradeUser = tradeUserDao.get(userID, userType.getName());
+		// TODO: -1用enum或者静态属性表示
+		tradeUser.setIsActive(-1);
+		tradeUserDao.update(tradeUser);
+
+		TradeAccount tradeAccount = tradeAccountDao.get(userID, userType);
+		tradeAccount.setIsActive(-1);
+		tradeAccountDao.update(tradeAccount);
+		return new JsonResult();
+	}
+
+	@Override
+	public TradeAccount get(String userID, TradeUserType userType) {
+		return tradeAccountDao.get(userID, userType);
 	}
 }

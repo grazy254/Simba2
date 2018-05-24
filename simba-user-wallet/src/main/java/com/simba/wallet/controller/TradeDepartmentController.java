@@ -16,11 +16,11 @@ import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeDepartment;
 import com.simba.wallet.model.enums.AccountStatus;
-import com.simba.wallet.model.enums.AccountType;
+import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.model.vo.TradeDepartmentVO;
+import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeDepartmentService;
 import com.simba.wallet.util.FmtUtil;
-import com.simba.wallet.util.SessionUtil;
 
 /**
  * 收款部门控制器
@@ -36,7 +36,7 @@ public class TradeDepartmentController {
 	private TradeDepartmentService tradeDepartmentService;
 
 	@Autowired
-	private SessionUtil sessionUtil;
+	private TradeAccountService tradeAccountService;
 
 	@RequestMapping("/list")
 	public String list() {
@@ -51,22 +51,16 @@ public class TradeDepartmentController {
 			String accountStatus = AccountStatus.NOTEXIST.getName();
 			TradeAccount tradeAccount = null;
 			try {
-				tradeAccount = sessionUtil.getTradeAccount(dept.getDeptNO(), AccountType.COMPANY_ACCOUNT);
+				tradeAccount = tradeAccountService.get(dept.getDeptNO(), TradeUserType.DEPARTMENT);
 				accountStatus = FmtUtil.getAccountStatus(tradeAccount).getName();
 			} catch (Exception e) {
 
 			}
-			// 不显示注销的账户
-			if (AccountStatus.CLOSED.getName().equals(accountStatus)) {
-				continue;
-			}
+
 			TradeDepartmentVO vo = new TradeDepartmentVO();
 			vo.setId(dept.getId());
 			vo.setDeptName(dept.getDeptName());
 			vo.setDeptNO(dept.getDeptNO());
-			if (tradeAccount != null) {
-				vo.setAccountID(tradeAccount.getAccountID());
-			}
 			vo.setCreateTime(DateUtil.date2String(dept.getCreateTime()));
 			vo.setLastUpdateTime(DateUtil.date2String(dept.getLastUpdateTime()));
 			vo.setAccountStatus(accountStatus);
@@ -109,8 +103,8 @@ public class TradeDepartmentController {
 
 	@ResponseBody
 	@RequestMapping("/delete")
-	public JsonResult delete(Long id, String departmentAccountID, ModelMap model) {
-		tradeDepartmentService.delete(id, departmentAccountID);
+	public JsonResult delete(String deptNO, ModelMap model) {
+		tradeDepartmentService.delete(deptNO);
 		return new JsonResult();
 	}
 

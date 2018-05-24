@@ -10,6 +10,7 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.wallet.dao.TradeUserDao;
 import com.simba.wallet.model.TradeUser;
 import com.simba.wallet.service.TradeUserService;
+
 /**
  * 钱包用户信息 Service实现类
  * 
@@ -44,22 +45,22 @@ public class TradeUserServiceImpl implements TradeUserService {
 	public List<TradeUser> page(Pager page) {
 		return tradeUserDao.page(page);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public Long count() {
 		return tradeUserDao.count();
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Long countBy(String field, Object value){
-		return tradeUserDao.countBy(field,value);
+	public Long countBy(String field, Object value) {
+		return tradeUserDao.countBy(field, value);
 	}
-	
+
 	@Override
-	public void deleteBy(String field, Object value){
-		tradeUserDao.deleteBy(field,value);
+	public void deleteBy(String field, Object value) {
+		tradeUserDao.deleteBy(field, value);
 	}
 
 	@Override
@@ -72,14 +73,14 @@ public class TradeUserServiceImpl implements TradeUserService {
 	public void update(TradeUser tradeUser) {
 		tradeUserDao.update(tradeUser);
 	}
-	
+
 	@Override
 	public void batchDelete(List<Long> idList) {
 		for (Long id : idList) {
 			this.delete(id);
 		}
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public TradeUser getBy(String field, Object value) {
@@ -91,6 +92,14 @@ public class TradeUserServiceImpl implements TradeUserService {
 	public TradeUser getByAnd(String field1, Object value1, String field2, Object value2) {
 		return tradeUserDao.getByAnd(field1, value1, field2, value2);
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public TradeUser getByAnd(String field1, Object value1, String field2, Object value2, String field3,
+			Object value3) {
+		return tradeUserDao.getByAnd(field1, value1, field2, value2, field3, value3);
+	}
+
 
 	@Override
 	@Transactional(readOnly = true)
@@ -133,26 +142,31 @@ public class TradeUserServiceImpl implements TradeUserService {
 	public List<TradeUser> pageByOr(String field1, Object value1, String field2, Object value2, Pager page) {
 		return tradeUserDao.pageByOr(field1, value1, field2, value2, page);
 	}
-	
+
 	@Override
-	public void deleteByAnd(String field1, Object value1, String field2, Object value2){
-		tradeUserDao.deleteByAnd(field1,value1,field2,value2);
+	public void deleteByAnd(String field1, Object value1, String field2, Object value2) {
+		tradeUserDao.deleteByAnd(field1, value1, field2, value2);
 	}
-	
+
 	@Override
-	public void deleteByOr(String field1, Object value1, String field2, Object value2){
-		tradeUserDao.deleteByOr(field1,value1,field2,value2);
+	public void deleteByOr(String field1, Object value1, String field2, Object value2) {
+		tradeUserDao.deleteByOr(field1, value1, field2, value2);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Long countByAnd(String field1, Object value1, String field2, Object value2){
-		return tradeUserDao.countByAnd(field1,value1,field2,value2);
+	public Long countByAnd(String field1, Object value1, String field2, Object value2) {
+		return tradeUserDao.countByAnd(field1, value1, field2, value2);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Long countByOr(String field1, Object value1, String field2, Object value2){
-		return tradeUserDao.countByOr(field1,value1,field2,value2);
+	public Long countByOr(String field1, Object value1, String field2, Object value2) {
+		return tradeUserDao.countByOr(field1, value1, field2, value2);
+	}
+
+	@Override
+	public TradeUser get(String userID, String userType) {
+		return tradeUserDao.get(userID, userType);
 	}
 }

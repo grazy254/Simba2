@@ -9,7 +9,11 @@ import com.simba.framework.util.jdbc.Jdbc;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.jdbc.StatementParameter;
 import com.simba.wallet.dao.TradeAccountDao;
+import com.simba.wallet.dao.TradeUserDao;
 import com.simba.wallet.model.TradeAccount;
+import com.simba.wallet.model.enums.TradeUserType;
+import com.simba.wallet.util.ErrConfig;
+import com.simba.wallet.util.FmtUtil;
 /**
  * 支付账号 Dao实现类
  * 
@@ -21,6 +25,9 @@ public class TradeAccountDaoImpl implements TradeAccountDao {
 
 	@Autowired
 	private Jdbc jdbc;
+
+	@Autowired
+	private TradeUserDao tradeUserDao;
 
 	private static final String table = "tradeAccount";
 
@@ -54,6 +61,7 @@ public class TradeAccountDaoImpl implements TradeAccountDao {
 		return jdbc.queryForList(sql, TradeAccount.class);
 	}
 	
+	@Override
 	public Long count(){
 		String sql = "select count(*) from " + table;
 		return jdbc.queryForLong(sql); 
@@ -69,6 +77,14 @@ public class TradeAccountDaoImpl implements TradeAccountDao {
 	public TradeAccount getBy(String field, Object value) {
 		String sql = "select * from " + table + " where " + field + " = ? ";
 		return jdbc.query(sql, TradeAccount.class, value);
+	}
+
+	@Override
+	public TradeAccount getByAnd(String field1, Object value1, String field2, Object value2, String field3,
+			Object value3) {
+		String sql = "select * from " + table + " where " + field1 + " = ? and " + field2 + " = ? and " + field3
+				+ " = ? ";
+		return jdbc.query(sql, TradeAccount.class, value1, value2, value3);
 	}
 
 	@Override
@@ -152,6 +168,13 @@ public class TradeAccountDaoImpl implements TradeAccountDao {
 	}
 	
 	@Override
+	public Long countByAnd(String field1, Object value1, String field2, Object value2, String field3, Object value3) {
+		String sql = "select count(*) from " + table + " where " + field1 + " = ? and " + field2 + " = ? and " + field3
+				+ " = ? ";
+		return jdbc.queryForLong(sql, value1, value2, value3);
+	}
+
+	@Override
 	public void deleteByAnd(String field1, Object value1, String field2, Object value2){
 		String sql = "delete from " + table + " where " + field1 + " = ? and " + field2 + " = ? ";
 		jdbc.updateForBoolean(sql, value1, value2);
@@ -162,4 +185,17 @@ public class TradeAccountDaoImpl implements TradeAccountDao {
 		String sql = "delete from " + table + " where " + field1 + " = ? or " + field2 + " = ? ";
 		jdbc.updateForBoolean(sql, value1, value2);
 	}
+
+	@Override
+	public TradeAccount get(String userID, TradeUserType userType) {
+
+		TradeAccount tradeAccount = getByAnd("tradeUserID", tradeUserDao.get(userID, userType.getName()).getId(),
+				"accountType", FmtUtil.getAccountType(userType).getName(),
+				"isActive", 1);
+		if (tradeAccount == null) {
+			throw ErrConfig.ACCOUNT_NOT_EXIST_ERR;
+		}
+		return tradeAccount;
+	}
+
 }

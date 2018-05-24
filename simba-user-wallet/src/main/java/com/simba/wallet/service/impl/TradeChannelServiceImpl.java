@@ -6,14 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.base.Strings;
 import com.simba.exception.BussException;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.wallet.dao.TradeAccountDao;
 import com.simba.wallet.dao.TradeChannelDao;
 import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeChannel;
+import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.service.TradeChannelService;
+import com.simba.wallet.util.ErrConfig;
 /**
  * 渠道信息 Service实现类
  * 
@@ -42,18 +43,26 @@ public class TradeChannelServiceImpl implements TradeChannelService {
 
 	@Override
 	@Transactional
-	public void delete(Long chanId, String chanAcctID) {
-		if (Strings.isNullOrEmpty(chanAcctID)) {
-			throw new BussException("参数错误");
+	public void delete(String type) {
+		TradeAccount tradeAccount = null;
+		try {
+			tradeAccount = tradeAccountDao.get(type, TradeUserType.CHANNEL);
+			if (tradeAccount.getAccountBalance() == 0) {
+				tradeAccount.setIsActive(-1);
+				tradeAccountDao.update(tradeAccount);
+			} else {
+				throw new BussException("删除失败：账户余额不为0");
+			}
+		} catch (Exception e) {
+			if (e == ErrConfig.USER_NOT_EXIST_ERR || e == ErrConfig.ACCOUNT_NOT_EXIST_ERR) {
+				// TODO: logger
+				System.out.println(e);
+			} else {
+				throw new BussException(e.getMessage());
+			}
 		}
-		tradeChannelDao.delete(chanId);
-		TradeAccount tradeAccount = tradeAccountDao.getBy("accountID", chanAcctID);
-		if (tradeAccount != null) {
-			tradeAccount.setIsActive(-1);
-			tradeAccountDao.update(tradeAccount);
-		} else {
-			throw new BussException("要注销的钱包账户不存在");
-		}
+		
+		tradeChannelDao.deleteBy("type", type);
 	}
 
 	@Override

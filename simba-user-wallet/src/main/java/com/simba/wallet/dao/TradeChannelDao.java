@@ -38,6 +38,8 @@ public interface TradeChannelDao {
 	
 	TradeChannel get(Long id);
 	
+	TradeChannel get(String type);
+
 	TradeChannel getBy(String field, Object value);
 
 	TradeChannel getByAnd(String field1, Object value1, String field2, Object value2);

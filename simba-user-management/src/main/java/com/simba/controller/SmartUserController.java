@@ -1,8 +1,11 @@
 package com.simba.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ArrayList;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -13,9 +16,13 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.SmartUser;
 import com.simba.model.ThirdSystemUser;
+import com.simba.model.UserGroup;
 import com.simba.model.form.SmartUserSearchForm;
 import com.simba.service.SmartUserService;
 import com.simba.service.ThirdSystemUserService;
+import com.simba.service.UserGroupService;
+
+import ch.qos.logback.classic.Logger;
 
 /**
  * 用户控制器
@@ -32,7 +39,13 @@ public class SmartUserController {
 	
 	@Autowired
 	private ThirdSystemUserService thirdSystemUserService;
+	
+	@Autowired
+	private UserGroupService userGroupService;
 
+	@Autowired
+	private static final Log logger = LogFactory.getLog(SmartUserController.class);
+	
 	@RequestMapping("/list")
 	public String list() {
 		return "smartUser/list";
@@ -54,7 +67,20 @@ public class SmartUserController {
 		}
 		return list;
 	}
-	
+	@ResponseBody
+	@RequestMapping("/group")
+	public JsonResult group(long groupId,long smartUserId){
+		List<SmartUser> smartUserList=smartUserService.listBy("id", smartUserId);
+		if(smartUserList.size()>0){
+			SmartUser smartUser=smartUserList.get(0);
+			smartUser.setGroupId(groupId);
+			smartUserService.update(smartUser);
+			return new JsonResult("分组成功",200);
+		}else{
+			return new JsonResult("此用户不存在",400);
+		}
+		
+	}
 
 	@RequestMapping("/getList")
 	public String getList(Pager pager, SmartUserSearchForm searchForm, ModelMap model) {
@@ -67,7 +93,14 @@ public class SmartUserController {
 				tsString+=tslist.get(i)+",";
 			}
 			smartuser.setThirdSystem(tsString);
+			String group="";
+			List <UserGroup> userGroupList =userGroupService.listBy("id", smartuser.getGroupId());
+			if(userGroupList.size()>0){
+				group=userGroupList.get(0).getName();
+			}
+			smartuser.setGroup(group);
 		});
+		logger.info("==============="+list);
 		model.put("list", list);
 		return "smartUser/table";
 	}

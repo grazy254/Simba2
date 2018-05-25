@@ -39,7 +39,7 @@ public interface PayInterface {
 	void close(String outTradeNo);
 
 	/**
-	 * 退款
+	 * 申请退款
 	 * 
 	 * @param refundReq
 	 */

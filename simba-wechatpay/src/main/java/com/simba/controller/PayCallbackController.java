@@ -1,13 +1,19 @@
 package com.simba.controller;
 
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 
+import com.itextpdf.text.pdf.codec.Base64;
+import com.simba.framework.util.code.AESUtil;
+import com.simba.framework.util.code.EncryptUtil;
 import com.simba.framework.util.common.XmlUtil;
 import com.simba.model.pay.result.CallbackResultRes;
 import com.simba.model.pay.result.PayResult;
@@ -47,6 +56,9 @@ public class PayCallbackController {
 	@Autowired
 	private PayService payService;
 
+	@Value("${wx.pay.key}")
+	private String key;
+
 	/**
 	 * 接收微信支付结果通知
 	 * 
@@ -78,9 +90,14 @@ public class PayCallbackController {
 	 * @param body
 	 * @param model
 	 * @return
+	 * @throws BadPaddingException
+	 * @throws IllegalBlockSizeException
+	 * @throws NoSuchPaddingException
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeyException
 	 */
 	@RequestMapping("/refundReceive")
-	public String refundReceive(@RequestBody String body, ModelMap model) {
+	public String refundReceive(@RequestBody String body, ModelMap model) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 		logger.info("*****************************接收微信退款结果通知:" + body);
 		RefundResult refundResult = XmlUtil.toOject(body, RefundResult.class);
 		String info = refundResult.getReq_info();
@@ -99,10 +116,14 @@ public class PayCallbackController {
 	 * 
 	 * @param info
 	 * @return
+	 * @throws BadPaddingException
+	 * @throws IllegalBlockSizeException
+	 * @throws NoSuchPaddingException
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeyException
 	 */
-	private String decode(String info) {
-		
-		return null;
+	private String decode(String info) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+		return new String(AESUtil.decrypt(Base64.decode(info), EncryptUtil.md5(key).toLowerCase().getBytes()));
 	}
 
 }

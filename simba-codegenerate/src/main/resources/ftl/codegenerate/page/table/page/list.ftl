@@ -8,7 +8,7 @@
 		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 		<title>系统首页</title>
 		<${pound}include "../adminlte.ftl"/>
-		<#if importDateJs==true><${pound}include "../datetimepicker.ftl"/></#if>
+		<${pound}include "../datetimepicker.ftl"/>
 		<${pound}include "../iCheck.ftl"/>
 		<script type="text/javascript" src="${dollar}{base}/js/common/checkbox.js"></script>
 		<script type="text/javascript" src="${dollar}{base}/js/common/page.js"></script>

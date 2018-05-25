@@ -3,6 +3,10 @@ var SmartUser = {
 	"toAdd": function() {
 		window.self.location.href = contextPath + "/smartUser/toAdd";
 	},
+	
+	"toGroup": function(smartUserId) {
+		 top.showModal("选择分组", contextPath + "/userGroup/toGroupList?smartUserId="+smartUserId, 600);
+	},
 
 	"batchDelete": function() {
 		var ids = new Array();

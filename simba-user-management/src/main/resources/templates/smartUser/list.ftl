@@ -40,12 +40,10 @@
 										<input type="text" class="datetimepicker" id="startTime" name="startTime" placeholder="请输入起始时间">
 										<label for="endTime">终止时间:</label>
 										<input type="text" class="datetimepicker" id="endTime" name="endTime" placeholder="请输入结束时间">
+										
+										<div class="pull-right">
 										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="SmartUser.search();"><i class="fa fa-search"></i>
                 						查询</button>
-										<div class="pull-right">
-										
-										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="SmartUser.toAdd();"><i class="fa fa-plus"></i>
-                新增</button>
 									</div>
 									<!-- /.pull-right -->
 								</div>
@@ -59,6 +57,7 @@
 												<th>邮箱</th>
 												<th>手机号</th>
 												<th>第三方系统</th>
+												<th>所在分组</th>
 												<th>时间</th>
 												<th>操作</th>
 											</tr>

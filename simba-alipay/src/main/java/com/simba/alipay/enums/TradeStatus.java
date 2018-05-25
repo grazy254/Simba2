@@ -17,7 +17,11 @@ public enum TradeStatus {
 
 	SUCCESS("TRADE_SUCCESS", "交易支付成功"),
 
-	FINISH("TRADE_FINISHED", "交易结束，不可退款");
+	FINISH("TRADE_FINISHED", "交易结束，不可退款"),
+
+	REFUND("REFUND", "退款中"),
+
+	REFUNDSUCCESS("REFUNDSUCCESS", "退款成功");
 
 	private String name;
 
@@ -35,16 +39,16 @@ public enum TradeStatus {
 		this.name = name;
 		this.description = description;
 	}
-	
-	private static final Map<String ,TradeStatus> maps = new HashMap<>();
-	
-	static{
-		for(TradeStatus status:TradeStatus.values()){
+
+	private static final Map<String, TradeStatus> maps = new HashMap<>();
+
+	static {
+		for (TradeStatus status : TradeStatus.values()) {
 			maps.put(status.getName(), status);
 		}
 	}
-	
-	public static TradeStatus get(String name){
+
+	public static TradeStatus get(String name) {
 		return maps.get(name);
 	}
 }

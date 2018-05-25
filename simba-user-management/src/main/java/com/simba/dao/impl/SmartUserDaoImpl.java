@@ -29,16 +29,16 @@ public class SmartUserDaoImpl implements SmartUserDao {
 
 	@Override
 	public long add(SmartUser smartUser) {
-		String sql = "insert into " + table + "( account, name, email, telNo, password, createTime, status) values(?,?,?,?,?,?,?)";
+		String sql = "insert into " + table + "( account, name, email, telNo, password, createTime, status,sex,groupId) values(?,?,?,?,?,?,?,?,?)";
 		Number id = jdbc.updateForGeneratedKey(sql, smartUser.getAccount(), smartUser.getName(), smartUser.getEmail(), smartUser.getTelNo(), smartUser.getPassword(), smartUser.getCreateTime(),
-				smartUser.getStatus());
+				smartUser.getStatus(),smartUser.getSex(),smartUser.getGroupId());
 		return id.longValue();
 	}
 
 	@Override
 	public void update(SmartUser smartUser) {
-		String sql = "update " + table + " set  account = ? , name = ? , email = ? , telNo = ? , password = ? , createTime = ? , status = ?  where id = ?  ";
-		jdbc.updateForBoolean(sql, smartUser.getAccount(), smartUser.getName(), smartUser.getEmail(), smartUser.getTelNo(), smartUser.getPassword(), smartUser.getCreateTime(), smartUser.getStatus(),
+		String sql = "update " + table + " set  account = ? , name = ? , email = ? , telNo = ? , password = ? , createTime = ? , status = ? , sex = ? , groupId = ?  where id = ?  ";
+		jdbc.updateForBoolean(sql, smartUser.getAccount(), smartUser.getName(), smartUser.getEmail(), smartUser.getTelNo(), smartUser.getPassword(), smartUser.getCreateTime(), smartUser.getStatus(),smartUser.getSex(),smartUser.getGroupId(),
 				smartUser.getId());
 	}
 

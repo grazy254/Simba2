@@ -1,11 +1,14 @@
 package com.simba.controller;
 
+import com.simba.controller.vo.NotifyVo;
 import com.simba.framework.util.jdbc.Pager;
+import com.simba.framework.util.json.FastJsonUtil;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.Notify;
 import com.simba.model.SmartUser;
 import com.simba.model.form.SmartUserSearchForm;
 import com.simba.service.NotifyService;
+import com.simba.service.NotifyUserService;
 import com.simba.service.SmartUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -28,6 +32,9 @@ public class NotifyController {
 
     @Autowired
     private NotifyService notifyService;
+
+    @Autowired
+    private NotifyUserService notifyUserService;
 
     @Autowired
     private SmartUserService smartUserService;
@@ -109,22 +116,35 @@ public class NotifyController {
 
     @ResponseBody
     @RequestMapping("/pullNotify")
-    public JsonResult pullNotify(Long smartUserId, int status) {
-        return new JsonResult(notifyService.pullNotify(smartUserId, status));
+    public JsonResult pullNotify(Long sessUserId, int status) {
+        List<Notify> notifyList = notifyService.pullNotify(sessUserId, status);
+        return new JsonResult(FastJsonUtil.toJson(toNotifyVoList(notifyList)));
     }
+
 
     @ResponseBody
     @RequestMapping("/pullAllNotify")
-    public JsonResult pullAllNotify(Long smartUserId) {
-        return new JsonResult(notifyService.pullNotify(smartUserId));
+    public JsonResult pullAllNotify(Long sessUserId) {
+        List<Notify> notifyList = notifyService.pullNotify(sessUserId);
+        return new JsonResult(FastJsonUtil.toJson(toNotifyVoList(notifyList)));
     }
 
     @ResponseBody
     @RequestMapping("/setNotifyRead")
-    public JsonResult setNotifyRead(Long smartUserId, Long notifyId) {
-        notifyService.setNotifyRead(smartUserId, notifyId);
+    public JsonResult setNotifyRead(Long sessUserId, Long notifyId) {
+        notifyService.setNotifyRead(sessUserId, notifyId);
         return new JsonResult();
     }
+
+    @ResponseBody
+    @RequestMapping("/setNotifiesRead")
+    public JsonResult setNotifiesRead(Long sessUserId, Long[] notifyIds) {
+        for (Long notifyId : notifyIds) {
+            notifyService.setNotifyRead(sessUserId, notifyId);
+        }
+        return new JsonResult();
+    }
+
 
     @RequestMapping("/toSendNotify2User")
     public String toSendNotify2User() {
@@ -149,6 +169,16 @@ public class NotifyController {
     public JsonResult userCount(SmartUserSearchForm searchForm) {
         Long count = smartUserService.count(searchForm);
         return new JsonResult(count, "", 200);
+    }
+
+    private List<NotifyVo> toNotifyVoList(List<Notify> notifyList) {
+        List<NotifyVo> notifyVoList = new LinkedList<>();
+        for (Notify notify : notifyList) {
+            int status = notifyUserService.getBy("notifyId", notify.getId()).getStatus();
+            NotifyVo notifyVo = new NotifyVo(notify.getId(), notify.getTitle(), notify.getContent(), notify.getType(), status, notify.getCreateTime());
+            notifyVoList.add(notifyVo);
+        }
+        return notifyVoList;
     }
 
 }

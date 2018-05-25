@@ -138,6 +138,10 @@
 			<groupId>com.simba</groupId>
 			<artifactId>simba-autoId</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-alipay-bill</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -32,9 +32,6 @@ public class PayServiceImpl implements PayService {
 
 	private static final Log logger = LogFactory.getLog(PayServiceImpl.class);
 
-	@Autowired
-	private WxPayUtil wxPayUtil;
-
 	@Override
 	public void dealResult(PayResult payResult) {
 		List<PayInterface> pays = this.getPayImpls();
@@ -71,7 +68,7 @@ public class PayServiceImpl implements PayService {
 				pay.close(outTradeNo);
 			});
 		}
-		wxPayUtil.closeOrder(outTradeNo);
+		WxPayUtil.getInstance().closeOrder(outTradeNo);
 	}
 
 	@Override
@@ -82,7 +79,7 @@ public class PayServiceImpl implements PayService {
 				pay.refund(refundReq);
 			});
 		}
-		wxPayUtil.refund(refundReq);
+		WxPayUtil.getInstance().refund(refundReq);
 	}
 
 	@Override

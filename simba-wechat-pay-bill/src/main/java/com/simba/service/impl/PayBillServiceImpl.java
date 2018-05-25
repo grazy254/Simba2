@@ -44,9 +44,6 @@ public class PayBillServiceImpl implements PayBillService {
 	@Resource
 	private Redis redisUtil;
 
-	@Autowired
-	private WxPayUtil wxPayUtil;
-
 	@Resource
 	private TaskExecutor taskExecutor;
 
@@ -238,7 +235,7 @@ public class PayBillServiceImpl implements PayBillService {
 	 * @throws DOMException
 	 */
 	private void dealUnpayOrder(PayBill bill) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
-		OrderQueryRes res = wxPayUtil.queryOrderByOutTradeNo(bill.getOutTradeNo());
+		OrderQueryRes res = WxPayUtil.getInstance().queryOrderByOutTradeNo(bill.getOutTradeNo());
 		String status = res.getTrade_state();
 		bill.setStatus(status);
 		bill.setCreateTime(new Date());
@@ -256,7 +253,7 @@ public class PayBillServiceImpl implements PayBillService {
 	 * @throws DOMException
 	 */
 	private void dealRefundOrder(PayBill bill) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
-		wxPayUtil.refundQueryByOutTradeNo(bill.getOutTradeNo());
+		WxPayUtil.getInstance().refundQueryByOutTradeNo(bill.getOutTradeNo());
 		bill.setStatus("REVOKED");
 		bill.setCreateTime(new Date());
 		this.update(bill);

@@ -68,10 +68,6 @@
 											<label for="timeoutExpress">最晚付款时间</label>
 											<input type="text" class="form-control" id="timeoutExpress" name="timeoutExpress" placeholder="请输入最晚付款时间">
 										</div>
-										<div class="form-group">
-											<label for="createTime">订单时间</label>
-											<input type="text" class="form-control" id="createTime" name="createTime" placeholder="请输入订单时间">
-										</div>
 									</div>
 									<!-- /.box-body -->
 

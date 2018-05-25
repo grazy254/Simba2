@@ -28,9 +28,6 @@
 								<div class="box-body no-padding">
 									<div class="mailbox-controls">
 										<!-- Check all button -->
-										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="AliPayBill.toAdd();"><i class="fa fa-plus"></i>
-                新增</button>
-										<button type="button" class="btn btn-default btn-sm" onclick="AliPayBill.batchDelete();"><i class="fa fa-remove"></i>删除</button>
 										<div class="pull-right">
 
 										</div>
@@ -47,10 +44,10 @@
 										<input type="text" id="tradeNo"  name="tradeNo" placeholder="请输入支付宝交易流水号">
 										&nbsp;&nbsp;
 										<label for="startCreateTime">开始时间:</label>
-										<input type="text" id="startCreateTime"  name="startCreateTime" placeholder="请输入开始时间">
+										<input type="text" id="startCreateTime"  name="startCreateTime"  class="datetimepicker"  placeholder="请输入开始时间">
 										&nbsp;&nbsp;
 										<label for="endCreateTime">结束时间:</label>
-										<input type="text" id="endCreateTime"  name="endCreateTime" placeholder="请输入结束时间">
+										<input type="text" id="endCreateTime"  name="endCreateTime"  class="datetimepicker" placeholder="请输入结束时间">
 										&nbsp;&nbsp;
 										<!-- Check all button -->
 										<button type="button" class="btn btn-default btn-sm" onclick="AliPayBill.toSearch();"><i class="fa fa-search"></i>查询</button>

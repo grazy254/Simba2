@@ -12,10 +12,12 @@
 		<td>${aliPayBill.storeId}</td>
 		<td>${aliPayBill.sellId}</td>
 		<td>${aliPayBill.timeoutExpress}</td>
-		<td>${aliPayBill.createTime}</td>
+		<td>${aliPayBill.createTime?string("yyyy-MM-dd HH:mm:ss")}</td>
 		<td>
+		<!--
 			<button type="button" class="btn btn-default btn-sm" onclick="AliPayBill.toUpdate(${aliPayBill.id});"><i class="fa fa-pencil-square-o"></i>修改</button>
 			<button type="button" class="btn btn-default btn-sm" onclick="AliPayBill.deleteAliPayBill(${aliPayBill.id});"><i class="fa fa-remove"></i>删除</button>
+		-->
 		</td>
 	</tr>
 </#list>

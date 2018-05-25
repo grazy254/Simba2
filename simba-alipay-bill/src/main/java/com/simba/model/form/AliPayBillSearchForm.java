@@ -25,6 +25,16 @@ public class AliPayBillSearchForm {
 	@DBFieldAnnotation(desc = "结束时间", oper = "<=", field = "createTime")
 	private String endCreateTime;
 
+	private String status;
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public String getProductCode() {
 		return productCode;
 	}

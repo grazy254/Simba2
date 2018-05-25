@@ -36,17 +36,18 @@ var AliPayBill = {
 		});
 	},
 	"initAliPayBillList": function(start, pageSize, method) {
-		var data = {}
-		var data2 = {}
-		method = method || "getList"
-		data["productCode"] = $("#productCode").val()
-		data["ourTradeNo"] = $("#ourTradeNo").val()
-		data["tradeNo"] = $("#tradeNo").val()
-		data["startCreateTime"] = $("#startCreateTime").val()
-		data["endCreateTime"] = $("#endCreateTime").val()
+		var data = {};
+		var data2 = {};
+		method = method || "getList";
+		data["productCode"] = $("#productCode").val();
+		data["ourTradeNo"] = $("#ourTradeNo").val();
+		data["tradeNo"] = $("#tradeNo").val();
+		data["startCreateTime"] = $("#startCreateTime").val();
+		data["endCreateTime"] = $("#endCreateTime").val();
+		data["status"] = $("#status").val();
 		$.extend(data2,data);
-		data["pageStart"] = start
-		data["pageSize"] = pageSize
+		data["pageStart"] = start;
+		data["pageSize"] = pageSize;
 		$.ajax({
 			type: "get",
 			url: contextPath + "/aliPayBill/" + method,

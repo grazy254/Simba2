@@ -69,6 +69,10 @@
 											<label for="timeoutExpress">最晚付款时间</label>
 											<input type="text" class="form-control" id="timeoutExpress" name="timeoutExpress" value="${aliPayBill.timeoutExpress}" placeholder="请输入最晚付款时间">
 										</div>
+										<div class="form-group">
+											<label for="status">状态</label>
+											<input type="text" class="form-control" id="status" name="status" placeholder="请输入状态" value="${aliPayBill.status}" >
+										</div>
 									</div>
 									<!-- /.box-body -->
 

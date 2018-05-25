@@ -5,6 +5,7 @@
 		<td>${aliPayBill.body}</td>
 		<td>${aliPayBill.totalAmount}</td>
 		<td>${aliPayBill.subject}</td>
+		<td>${aliPayBill.status}</td>
 		<td>${aliPayBill.outTradeNo}</td>
 		<td>${aliPayBill.tradeNo}</td>
 		<td>${aliPayBill.productCode}</td>

@@ -43,6 +43,14 @@
 										<label for="tradeNo">支付宝交易流水号:</label>
 										<input type="text" id="tradeNo"  name="tradeNo" placeholder="请输入支付宝交易流水号">
 										&nbsp;&nbsp;
+										<label for="status">状态:</label>
+										<select id="status"  name="status" >
+												<option value="">所有</option>	
+											<#list statuses as status>
+												<option value="${status.getName()}">${status.description}</option>	
+											</#list>
+										</select>
+										&nbsp;&nbsp;
 										<label for="startCreateTime">开始时间:</label>
 										<input type="text" id="startCreateTime"  name="startCreateTime"  class="datetimepicker"  placeholder="请输入开始时间">
 										&nbsp;&nbsp;
@@ -64,6 +72,7 @@
 												<th>描述</th>
 												<th>订单总金额</th>
 												<th>标题</th>
+												<th>状态</th>
 												<th>商户订单号</th>
 												<th>支付宝交易流水号</th>
 												<th>产品码</th>

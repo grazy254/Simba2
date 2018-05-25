@@ -38,17 +38,17 @@ var ${className} = {
 		});
 	},
 	"init${className}List": function(start, pageSize, method) {
-		var data = {}
-		var data2 = {}
-		method = method || "getList"
+		var data = {};
+		var data2 = {};
+		method = method || "getList";
 		<#if searchFormFields?exists>
 		<#list searchFormFields as tableField>
-		data["${tableField["key"]}"] = $("#${tableField["key"]}").val()
+		data["${tableField["key"]}"] = $("#${tableField["key"]}").val();
 		</#list>
 		</#if>
 		$.extend(data2,data);
-		data["pageStart"] = start
-		data["pageSize"] = pageSize
+		data["pageStart"] = start;
+		data["pageSize"] = pageSize;
 		$.ajax({
 			type: "get",
 			url: contextPath + "/${firstLower}/" + method,

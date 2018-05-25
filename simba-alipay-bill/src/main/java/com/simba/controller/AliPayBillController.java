@@ -9,11 +9,13 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.simba.alipay.enums.TradeStatus;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.AliPayBill;
-import com.simba.service.AliPayBillService;
 import com.simba.model.form.AliPayBillSearchForm;
+import com.simba.service.AliPayBillService;
+
 /**
  * 阿里支付账单控制器
  * 
@@ -28,31 +30,40 @@ public class AliPayBillController {
 	private AliPayBillService aliPayBillService;
 
 	@RequestMapping("/list")
-	public String list() {
+	public String list(ModelMap model) {
+		model.put("statuses", TradeStatus.values());
 		return "aliPayBill/list";
 	}
-	
+
 	@RequestMapping("/getList")
-	public String getList(Pager pager,ModelMap model){
+	public String getList(Pager pager, ModelMap model) {
 		List<AliPayBill> list = aliPayBillService.page(pager);
+		setStatusDescription(list);
 		model.put("list", list);
 		return "aliPayBill/table";
 	}
-	
+
+	private void setStatusDescription(List<AliPayBill> list) {
+		list.forEach((bill) -> {
+			bill.setStatus(TradeStatus.get(bill.getStatus()).getDescription() + "(" + bill.getStatus() + ")");
+		});
+	}
+
 	@RequestMapping("/doSearch")
-	public String getList(Pager pager, AliPayBillSearchForm aliPayBillSearchForm, ModelMap model){
+	public String getList(Pager pager, AliPayBillSearchForm aliPayBillSearchForm, ModelMap model) {
 		List<AliPayBill> list = aliPayBillService.page(pager, aliPayBillSearchForm);
+		setStatusDescription(list);
 		model.put("list", list);
 		return "aliPayBill/table";
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/count")
 	public JsonResult count(AliPayBillSearchForm aliPayBillSearchForm) {
 		Long count = aliPayBillService.count(aliPayBillSearchForm);
 		return new JsonResult(count, "", 200);
 	}
-	
+
 	@RequestMapping("/toAdd")
 	public String toAdd() {
 		return "aliPayBill/add";
@@ -90,7 +101,5 @@ public class AliPayBillController {
 		aliPayBillService.batchDelete(Arrays.asList(id));
 		return new JsonResult();
 	}
-
-	
 
 }

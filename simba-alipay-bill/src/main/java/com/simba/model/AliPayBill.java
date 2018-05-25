@@ -5,212 +5,242 @@ package com.simba.model;
  * Purpose: Defines the Class AliPayBill
  ***********************************************************************/
 
+import java.util.Date;
+
 import com.simba.annotation.DescAnnotation;
-import java.util.*;
 
 /**
  * 阿里支付账单
- * */
+ */
 @DescAnnotation(desc = "阿里支付账单")
 public class AliPayBill {
-   /** */
-   @DescAnnotation(desc = "")
+	/** */
+	@DescAnnotation(desc = "")
 	private long id;
 
-   /**
-    * 应用ID
-    * */
-   @DescAnnotation(desc = "应用ID")
+	/**
+	 * 应用ID
+	 */
+	@DescAnnotation(desc = "应用ID")
 	private String appid;
 
-   /**
-    * 描述
-    * */
-   @DescAnnotation(desc = "描述")
+	/**
+	 * 描述
+	 */
+	@DescAnnotation(desc = "描述")
 	private String body;
 
-   /**
-    * 订单总金额
-    * */
-   @DescAnnotation(desc = "订单总金额")
+	/**
+	 * 订单总金额
+	 */
+	@DescAnnotation(desc = "订单总金额")
 	private String totalAmount;
 
-   /**
-    * 标题
-    * */
-   @DescAnnotation(desc = "标题")
+	/**
+	 * 标题
+	 */
+	@DescAnnotation(desc = "标题")
 	private String subject;
 
-   /**
-    * 商户订单号
-    * */
-   @DescAnnotation(desc = "商户订单号")
+	/**
+	 * 商户订单号
+	 */
+	@DescAnnotation(desc = "商户订单号")
 	private String outTradeNo;
 
-   /**
-    * 支付宝交易流水号
-    * */
-   @DescAnnotation(desc = "支付宝交易流水号")
+	/**
+	 * 支付宝交易流水号
+	 */
+	@DescAnnotation(desc = "支付宝交易流水号")
 	private String tradeNo;
 
-   /**
-    * 产品码
-    * */
-   @DescAnnotation(desc = "产品码")
+	/**
+	 * 产品码
+	 */
+	@DescAnnotation(desc = "产品码")
 	private String productCode;
 
-   /**
-    * 商品主类型
-    * */
-   @DescAnnotation(desc = "商品主类型")
+	/**
+	 * 商品主类型
+	 */
+	@DescAnnotation(desc = "商品主类型")
 	private String goodType;
 
-   /**
-    * 商户门店编号
-    * */
-   @DescAnnotation(desc = "商户门店编号")
+	/**
+	 * 商户门店编号
+	 */
+	@DescAnnotation(desc = "商户门店编号")
 	private String storeId;
 
-   /**
-    * 收款支付宝账号ID
-    * */
-   @DescAnnotation(desc = "收款支付宝账号ID")
+	/**
+	 * 收款支付宝账号ID
+	 */
+	@DescAnnotation(desc = "收款支付宝账号ID")
 	private String sellId;
 
-   /**
-    * 最晚付款时间
-    * */
-   @DescAnnotation(desc = "最晚付款时间")
+	/**
+	 * 最晚付款时间
+	 */
+	@DescAnnotation(desc = "最晚付款时间")
 	private String timeoutExpress;
 
-   /**
-    * 订单时间
-    * */
-   @DescAnnotation(desc = "订单时间")
+	/**
+	 * 订单时间
+	 */
+	@DescAnnotation(desc = "订单时间")
 	private Date createTime;
 
+	/**
+	 * 状态(TradeStatus)
+	 */
+	@DescAnnotation(desc = "状态")
+	private String status;
 
-    public long getId() {
-        return id;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public void setId(long id) {
-        this.id = id;
-    }
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
-    public String getAppid() {
-        return appid;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public void setAppid(String appid) {
-        this.appid = appid;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public String getBody() {
-        return body;
-    }
+	public String getAppid() {
+		return appid;
+	}
 
-    public void setBody(String body) {
-        this.body = body;
-    }
+	public void setAppid(String appid) {
+		this.appid = appid;
+	}
 
-    public String getTotalAmount() {
-        return totalAmount;
-    }
+	public String getBody() {
+		return body;
+	}
 
-    public void setTotalAmount(String totalAmount) {
-        this.totalAmount = totalAmount;
-    }
+	public void setBody(String body) {
+		this.body = body;
+	}
 
-    public String getSubject() {
-        return subject;
-    }
+	public String getTotalAmount() {
+		return totalAmount;
+	}
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
+	public void setTotalAmount(String totalAmount) {
+		this.totalAmount = totalAmount;
+	}
 
-    public String getOutTradeNo() {
-        return outTradeNo;
-    }
+	public String getSubject() {
+		return subject;
+	}
 
-    public void setOutTradeNo(String outTradeNo) {
-        this.outTradeNo = outTradeNo;
-    }
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
 
-    public String getTradeNo() {
-        return tradeNo;
-    }
+	public String getOutTradeNo() {
+		return outTradeNo;
+	}
 
-    public void setTradeNo(String tradeNo) {
-        this.tradeNo = tradeNo;
-    }
+	public void setOutTradeNo(String outTradeNo) {
+		this.outTradeNo = outTradeNo;
+	}
 
-    public String getProductCode() {
-        return productCode;
-    }
+	public String getTradeNo() {
+		return tradeNo;
+	}
 
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
-    }
+	public void setTradeNo(String tradeNo) {
+		this.tradeNo = tradeNo;
+	}
 
-    public String getGoodType() {
-        return goodType;
-    }
+	public String getProductCode() {
+		return productCode;
+	}
 
-    public void setGoodType(String goodType) {
-        this.goodType = goodType;
-    }
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
+	}
 
-    public String getStoreId() {
-        return storeId;
-    }
+	public String getGoodType() {
+		return goodType;
+	}
 
-    public void setStoreId(String storeId) {
-        this.storeId = storeId;
-    }
+	public void setGoodType(String goodType) {
+		this.goodType = goodType;
+	}
 
-    public String getSellId() {
-        return sellId;
-    }
+	public String getStoreId() {
+		return storeId;
+	}
 
-    public void setSellId(String sellId) {
-        this.sellId = sellId;
-    }
+	public void setStoreId(String storeId) {
+		this.storeId = storeId;
+	}
 
-    public String getTimeoutExpress() {
-        return timeoutExpress;
-    }
+	public String getSellId() {
+		return sellId;
+	}
 
-    public void setTimeoutExpress(String timeoutExpress) {
-        this.timeoutExpress = timeoutExpress;
-    }
+	public void setSellId(String sellId) {
+		this.sellId = sellId;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public String getTimeoutExpress() {
+		return timeoutExpress;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public void setTimeoutExpress(String timeoutExpress) {
+		this.timeoutExpress = timeoutExpress;
+	}
 
-    @Override
-    public String toString() {
-        return "AliPayBill{" +
-		"id=" + id +
-		", appid='" + appid + '\'' + 
-		", body='" + body + '\'' + 
-		", totalAmount='" + totalAmount + '\'' + 
-		", subject='" + subject + '\'' + 
-		", outTradeNo='" + outTradeNo + '\'' + 
-		", tradeNo='" + tradeNo + '\'' + 
-		", productCode='" + productCode + '\'' + 
-		", goodType='" + goodType + '\'' + 
-		", storeId='" + storeId + '\'' + 
-		", sellId='" + sellId + '\'' + 
-		", timeoutExpress='" + timeoutExpress + '\'' + 
-		", createTime=" + createTime + 
-		'}';
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("AliPayBill [id=");
+		builder.append(id);
+		builder.append(", appid=");
+		builder.append(appid);
+		builder.append(", body=");
+		builder.append(body);
+		builder.append(", totalAmount=");
+		builder.append(totalAmount);
+		builder.append(", subject=");
+		builder.append(subject);
+		builder.append(", outTradeNo=");
+		builder.append(outTradeNo);
+		builder.append(", tradeNo=");
+		builder.append(tradeNo);
+		builder.append(", productCode=");
+		builder.append(productCode);
+		builder.append(", goodType=");
+		builder.append(goodType);
+		builder.append(", storeId=");
+		builder.append(storeId);
+		builder.append(", sellId=");
+		builder.append(sellId);
+		builder.append(", timeoutExpress=");
+		builder.append(timeoutExpress);
+		builder.append(", createTime=");
+		builder.append(createTime);
+		builder.append(", status=");
+		builder.append(status);
+		builder.append("]");
+		return builder.toString();
+	}
 
 }

@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2018/5/25 星期五 8:12:01                        */
+/* Created on:     2018/5/25 星期五 14:39:29                       */
 /*==============================================================*/
 
 
@@ -23,6 +23,7 @@ create table aliPayBill
    storeId              varchar(16) comment '商户门店编号',
    sellId               varchar(64) comment '收款支付宝账号ID',
    timeoutExpress       varchar(16) comment '最晚付款时间',
+   status               varchar(64) comment '状态',
    createTime           datetime comment '订单时间',
    primary key (id)
 );

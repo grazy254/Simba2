@@ -10,11 +10,13 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.jdbc.StatementParameter;
 import com.simba.wallet.dao.TradeUserDao;
 import com.simba.wallet.model.TradeUser;
+import com.simba.wallet.util.ErrConfig;
+
 /**
  * 钱包用户信息 Dao实现类
  * 
  * @author caozj
- *  
+ * 
  */
 @Repository
 public class TradeUserDaoImpl implements TradeUserDao {
@@ -26,15 +28,21 @@ public class TradeUserDaoImpl implements TradeUserDao {
 
 	@Override
 	public long add(TradeUser tradeUser) {
-		String sql = "insert into " + table + "( userID, name, isAllowPay, payPassword, payPhone, payEmail, createTime, lastUpdateTime) values(?,?,?,?,?,?,?,?)";
-		Number id = jdbc.updateForGeneratedKey(sql, tradeUser.getUserID(),tradeUser.getName(),tradeUser.getIsAllowPay(),tradeUser.getPayPassword(),tradeUser.getPayPhone(),tradeUser.getPayEmail(),tradeUser.getCreateTime(),tradeUser.getLastUpdateTime());
+		String sql = "insert into " + table
+				+ "( userID, name, type, isAllowPay, isActive, payPassword, payPhone, payEmail, createTime, lastUpdateTime) values(?,?,?,?,?,?,?,?,?,?)";
+		Number id = jdbc.updateForGeneratedKey(sql, tradeUser.getUserID(), tradeUser.getName(), tradeUser.getType(),
+				tradeUser.getIsAllowPay(), tradeUser.getIsActive(), tradeUser.getPayPassword(), tradeUser.getPayPhone(),
+				tradeUser.getPayEmail(), tradeUser.getCreateTime(), tradeUser.getLastUpdateTime());
 		return id.longValue();
 	}
 
 	@Override
 	public void update(TradeUser tradeUser) {
-		String sql = "update " + table + " set  userID = ? , name = ? , isAllowPay = ? , payPassword = ? , payPhone = ? , payEmail = ? , createTime = ? , lastUpdateTime = ?  where id = ?  ";
-		jdbc.updateForBoolean(sql,tradeUser.getUserID(),tradeUser.getName(),tradeUser.getIsAllowPay(),tradeUser.getPayPassword(),tradeUser.getPayPhone(),tradeUser.getPayEmail(),tradeUser.getCreateTime(),tradeUser.getLastUpdateTime(), tradeUser.getId());
+		String sql = "update " + table
+				+ " set  userID = ? , name = ? , type = ?, isAllowPay = ? , payPassword = ? , payPhone = ? , payEmail = ? , createTime = ? , lastUpdateTime = ?  where id = ?  ";
+		jdbc.updateForBoolean(sql, tradeUser.getUserID(), tradeUser.getName(), tradeUser.getType(),
+				tradeUser.getIsAllowPay(), tradeUser.getPayPassword(), tradeUser.getPayPhone(), tradeUser.getPayEmail(),
+				tradeUser.getCreateTime(), tradeUser.getLastUpdateTime(), tradeUser.getId());
 	}
 
 	@Override
@@ -48,23 +56,25 @@ public class TradeUserDaoImpl implements TradeUserDao {
 		String sql = "select * from " + table;
 		return jdbc.queryForPage(sql, TradeUser.class, page);
 	}
+
 	@Override
-	public List<TradeUser> listAll(){
+	public List<TradeUser> listAll() {
 		String sql = "select * from " + table;
 		return jdbc.queryForList(sql, TradeUser.class);
 	}
-	
-	public Long count(){
+
+	@Override
+	public Long count() {
 		String sql = "select count(*) from " + table;
-		return jdbc.queryForLong(sql); 
+		return jdbc.queryForLong(sql);
 	}
-	
+
 	@Override
 	public TradeUser get(Long id) {
 		String sql = "select * from " + table + " where id = ? ";
 		return jdbc.query(sql, TradeUser.class, id);
 	}
-	
+
 	@Override
 	public TradeUser getBy(String field, Object value) {
 		String sql = "select * from " + table + " where " + field + " = ? ";
@@ -75,6 +85,14 @@ public class TradeUserDaoImpl implements TradeUserDao {
 	public TradeUser getByAnd(String field1, Object value1, String field2, Object value2) {
 		String sql = "select * from " + table + " where " + field1 + " = ? and " + field2 + " = ? ";
 		return jdbc.query(sql, TradeUser.class, value1, value2);
+	}
+
+	@Override
+	public TradeUser getByAnd(String field1, Object value1, String field2, Object value2, String field3,
+			Object value3) {
+		String sql = "select * from " + table + " where " + field1 + " = ? and " + field2 + " = ? and " + field3
+				+ " = ?";
+		return jdbc.query(sql, TradeUser.class, value1, value2, value3);
 	}
 
 	@Override
@@ -132,7 +150,7 @@ public class TradeUserDaoImpl implements TradeUserDao {
 		String sql = "select count(*) from " + table + " where " + field + " = ? ";
 		return jdbc.queryForLong(sql, value);
 	}
-	
+
 	@Override
 	public void deleteBy(String field, Object value) {
 		String sql = "delete from " + table + " where " + field + " = ? ";
@@ -140,26 +158,36 @@ public class TradeUserDaoImpl implements TradeUserDao {
 	}
 
 	@Override
-	public Long countByOr(String field1, Object value1, String field2, Object value2){
+	public Long countByOr(String field1, Object value1, String field2, Object value2) {
 		String sql = "select count(*) from " + table + " where " + field1 + " = ? or " + field2 + " = ? ";
 		return jdbc.queryForLong(sql, value1, value2);
 	}
-	
+
 	@Override
-	public Long countByAnd(String field1, Object value1, String field2, Object value2){
+	public Long countByAnd(String field1, Object value1, String field2, Object value2) {
 		String sql = "select count(*) from " + table + " where " + field1 + " = ? and " + field2 + " = ? ";
 		return jdbc.queryForLong(sql, value1, value2);
 	}
-	
+
 	@Override
-	public void deleteByAnd(String field1, Object value1, String field2, Object value2){
+	public void deleteByAnd(String field1, Object value1, String field2, Object value2) {
 		String sql = "delete from " + table + " where " + field1 + " = ? and " + field2 + " = ? ";
 		jdbc.updateForBoolean(sql, value1, value2);
 	}
-	
+
 	@Override
-	public void deleteByOr(String field1, Object value1, String field2, Object value2){
+	public void deleteByOr(String field1, Object value1, String field2, Object value2) {
 		String sql = "delete from " + table + " where " + field1 + " = ? or " + field2 + " = ? ";
 		jdbc.updateForBoolean(sql, value1, value2);
 	}
+
+	@Override
+	public TradeUser get(String userID, String type) {
+		TradeUser tradeUser = getByAnd("userID", userID, "type", type, "isActive", 1);
+		if (tradeUser == null) {
+			throw ErrConfig.USER_NOT_EXIST_ERR;
+		}
+		return tradeUser;
+	}
+
 }

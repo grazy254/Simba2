@@ -6,14 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.base.Strings;
 import com.simba.exception.BussException;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.wallet.dao.TradeAccountDao;
 import com.simba.wallet.dao.TradeDepartmentDao;
 import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeDepartment;
+import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.service.TradeDepartmentService;
+
 /**
  * 收款部门 Service实现类
  * 
@@ -43,18 +44,17 @@ public class TradeDepartmentServiceImpl implements TradeDepartmentService {
 
 	@Override
 	@Transactional
-	public void delete(Long deptId, String deptAcctID) {
-		if (Strings.isNullOrEmpty(deptAcctID)) {
-			throw new BussException("参数错误");
-		}
-		tradeDepartmentDao.delete(deptId);
-		TradeAccount tradeAccount = tradeAccountDao.getBy("accountID", deptAcctID);
-		if (tradeAccount != null) {
+	public void delete(String deptNO) {
+		TradeAccount tradeAccount = tradeAccountDao.get(deptNO, TradeUserType.DEPARTMENT);
+
+		if (tradeAccount.getAccountBalance() == 0) {
 			tradeAccount.setIsActive(-1);
 			tradeAccountDao.update(tradeAccount);
 		} else {
-			throw new BussException("要注销的钱包账户不存在");
+			throw new BussException("删除失败：账户余额不为0");
 		}
+
+		tradeDepartmentDao.deleteBy("deptNO", deptNO);
 	}
 
 	@Override
@@ -68,22 +68,22 @@ public class TradeDepartmentServiceImpl implements TradeDepartmentService {
 	public List<TradeDepartment> page(Pager page) {
 		return tradeDepartmentDao.page(page);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public Long count() {
 		return tradeDepartmentDao.count();
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Long countBy(String field, Object value){
-		return tradeDepartmentDao.countBy(field,value);
+	public Long countBy(String field, Object value) {
+		return tradeDepartmentDao.countBy(field, value);
 	}
-	
+
 	@Override
-	public void deleteBy(String field, Object value){
-		tradeDepartmentDao.deleteBy(field,value);
+	public void deleteBy(String field, Object value) {
+		tradeDepartmentDao.deleteBy(field, value);
 	}
 
 	@Override
@@ -96,14 +96,14 @@ public class TradeDepartmentServiceImpl implements TradeDepartmentService {
 	public void update(TradeDepartment tradeDepartment) {
 		tradeDepartmentDao.update(tradeDepartment);
 	}
-	
+
 	@Override
 	public void batchDelete(List<Long> idList) {
 		for (Long id : idList) {
 			this.delete(id);
 		}
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public TradeDepartment getBy(String field, Object value) {
@@ -157,27 +157,36 @@ public class TradeDepartmentServiceImpl implements TradeDepartmentService {
 	public List<TradeDepartment> pageByOr(String field1, Object value1, String field2, Object value2, Pager page) {
 		return tradeDepartmentDao.pageByOr(field1, value1, field2, value2, page);
 	}
-	
+
 	@Override
-	public void deleteByAnd(String field1, Object value1, String field2, Object value2){
-		tradeDepartmentDao.deleteByAnd(field1,value1,field2,value2);
+	public void deleteByAnd(String field1, Object value1, String field2, Object value2) {
+		tradeDepartmentDao.deleteByAnd(field1, value1, field2, value2);
 	}
-	
+
 	@Override
-	public void deleteByOr(String field1, Object value1, String field2, Object value2){
-		tradeDepartmentDao.deleteByOr(field1,value1,field2,value2);
+	public void deleteByOr(String field1, Object value1, String field2, Object value2) {
+		tradeDepartmentDao.deleteByOr(field1, value1, field2, value2);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Long countByAnd(String field1, Object value1, String field2, Object value2){
-		return tradeDepartmentDao.countByAnd(field1,value1,field2,value2);
+	public Long countByAnd(String field1, Object value1, String field2, Object value2) {
+		return tradeDepartmentDao.countByAnd(field1, value1, field2, value2);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Long countByOr(String field1, Object value1, String field2, Object value2){
-		return tradeDepartmentDao.countByOr(field1,value1,field2,value2);
+	public Long countByOr(String field1, Object value1, String field2, Object value2) {
+		return tradeDepartmentDao.countByOr(field1, value1, field2, value2);
+	}
+
+	@Override
+	public TradeDepartment get(String deptNO) {
+		TradeDepartment tradeDepartment = tradeDepartmentDao.getBy("deptNO", deptNO);
+		if (tradeDepartment == null) {
+			throw new BussException("交易部门不存在");
+		}
+		return tradeDepartment;
 	}
 
 }

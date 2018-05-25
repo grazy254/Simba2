@@ -5,7 +5,6 @@ public class TradeChannelVO {
 	private String name;
 	private String type;
 	private String accountStatus;
-	private String accountID;
 	private String createTime;
 	private String lastUpdateTime;
 
@@ -25,13 +24,6 @@ public class TradeChannelVO {
 		this.name = name;
 	}
 
-	public String getAccountID() {
-		return accountID;
-	}
-
-	public void setAccountID(String accountID) {
-		this.accountID = accountID;
-	}
 
 	public String getType() {
 		return type;

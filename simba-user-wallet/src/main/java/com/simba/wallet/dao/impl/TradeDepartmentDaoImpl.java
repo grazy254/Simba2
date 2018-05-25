@@ -10,6 +10,7 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.jdbc.StatementParameter;
 import com.simba.wallet.dao.TradeDepartmentDao;
 import com.simba.wallet.model.TradeDepartment;
+import com.simba.wallet.util.ErrConfig;
 /**
  * 收款部门 Dao实现类
  * 
@@ -161,5 +162,14 @@ public class TradeDepartmentDaoImpl implements TradeDepartmentDao {
 	public void deleteByOr(String field1, Object value1, String field2, Object value2){
 		String sql = "delete from " + table + " where " + field1 + " = ? or " + field2 + " = ? ";
 		jdbc.updateForBoolean(sql, value1, value2);
+	}
+
+	@Override
+	public TradeDepartment get(String deptNO) {
+		TradeDepartment tradeDepartment = getBy("deptNO", deptNO);
+		if (tradeDepartment == null) {
+			throw ErrConfig.DEPARTMENT_NOT_EXIST_ERR;
+		}
+		return tradeDepartment;
 	}
 }

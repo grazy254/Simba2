@@ -8,9 +8,9 @@
 		<td>${tradeDepartmentVO.lastUpdateTime}</td>
 		<td>
 			<button type="button" class="btn btn-default btn-sm" onclick="TradeDepartment.toUpdate(${tradeDepartmentVO.id});"><i class="fa fa-pencil-square-o"></i>修改</button>
-			<button type="button" class="btn btn-default btn-sm" onclick="TradeDepartment.deleteTradeDepartment(${tradeDepartmentVO.id}, '${tradeDepartmentVO.accountID!}');"><i class="fa fa-remove"></i>删除</button>
+			<button type="button" class="btn btn-default btn-sm" onclick="TradeDepartment.deleteTradeDepartment('${tradeDepartmentVO.deptNO}');"><i class="fa fa-remove"></i>删除</button>
 			<button type="button" class="btn btn-default btn-sm" onclick="TradeDepartment.openDepartmentAccount('${tradeDepartmentVO.deptNO}', '${tradeDepartmentVO.deptName}', '18676459182');"><i class="fa fa-user"></i>开通账户</button>
-			<button type="button" class="btn btn-default btn-sm" onclick="TradeDepartment.frozeDepartmentAccount('${tradeDepartmentVO.type}', '${tradeDepartmentVO.name}', '18676459182');"><i class="fa fa-user"></i>冻结账户</button>
+			<button type="button" class="btn btn-default btn-sm" onclick="TradeDepartment.frozeDepartmentAccount('${tradeDepartmentVO.deptNO}', '${tradeDepartmentVO.deptName}', '18676459182');"><i class="fa fa-user"></i>冻结账户</button>
 		
 		</td>
 	</tr>

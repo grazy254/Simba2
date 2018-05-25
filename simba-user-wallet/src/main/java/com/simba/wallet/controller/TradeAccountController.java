@@ -16,7 +16,6 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.SmartUser;
 import com.simba.wallet.model.TradeAccount;
-import com.simba.wallet.model.enums.AccountType;
 import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.util.FmtUtil;
@@ -96,7 +95,7 @@ public class TradeAccountController {
 		SmartUser smartUser = sessionUtil.getSmartUser(session);
 		return new JsonResult(
 				FmtUtil.transToCNYType(
-						sessionUtil.getTradeAccount(smartUser.getAccount(), AccountType.PERSIONAL_ACCOUNT)
+						tradeAccountService.get(smartUser.getAccount(), TradeUserType.PERSION)
 								.getAccountBalance()));
 		
 	}

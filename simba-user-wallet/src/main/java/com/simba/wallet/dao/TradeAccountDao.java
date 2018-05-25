@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.wallet.model.TradeAccount;
+import com.simba.wallet.model.enums.TradeUserType;
 /**
  * 支付账号 Dao
  * 
@@ -38,9 +39,13 @@ public interface TradeAccountDao {
 	
 	TradeAccount get(Long id);
 	
+	TradeAccount get(String userID, TradeUserType userType);
+
 	TradeAccount getBy(String field, Object value);
 
 	TradeAccount getByAnd(String field1, Object value1, String field2, Object value2);
+
+	TradeAccount getByAnd(String field1, Object value1, String field2, Object value2, String field3, Object value3);
 
 	TradeAccount getByOr(String field1, Object value1, String field2, Object value2);
 
@@ -55,6 +60,7 @@ public interface TradeAccountDao {
 	List<TradeAccount> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
 
 	List<TradeAccount> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
-	
+
+	Long countByAnd(String field1, Object value1, String field2, Object value2, String field3, Object value3);
 
 }

@@ -10,6 +10,7 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.jdbc.StatementParameter;
 import com.simba.wallet.dao.TradeChannelDao;
 import com.simba.wallet.model.TradeChannel;
+import com.simba.wallet.util.ErrConfig;
 /**
  * 渠道信息 Dao实现类
  * 
@@ -161,5 +162,14 @@ public class TradeChannelDaoImpl implements TradeChannelDao {
 	public void deleteByOr(String field1, Object value1, String field2, Object value2){
 		String sql = "delete from " + table + " where " + field1 + " = ? or " + field2 + " = ? ";
 		jdbc.updateForBoolean(sql, value1, value2);
+	}
+
+	@Override
+	public TradeChannel get(String type) {
+		TradeChannel tradeChannel = getBy("type", type);
+		if (tradeChannel == null) {
+			throw ErrConfig.CHANNEL_NOT_EXIST_ERR;
+		}
+		return tradeChannel;
 	}
 }

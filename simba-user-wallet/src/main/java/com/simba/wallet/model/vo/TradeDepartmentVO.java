@@ -4,7 +4,6 @@ public class TradeDepartmentVO {
 	private Long id;
 	private String deptName;
 	private String deptNO;
-	private String accountID;
 	private String accountStatus;
 	private String createTime;
 	private String lastUpdateTime;
@@ -15,14 +14,6 @@ public class TradeDepartmentVO {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getAccountID() {
-		return accountID;
-	}
-
-	public void setAccountID(String accountID) {
-		this.accountID = accountID;
 	}
 
 	public String getDeptName() {

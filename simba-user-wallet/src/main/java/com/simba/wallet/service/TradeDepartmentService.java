@@ -18,7 +18,7 @@ public interface TradeDepartmentService {
 
 	void delete(Long id);
 
-	void delete(Long deptId, String deptAcctID);
+	void delete(String channelType);
 
 	List<TradeDepartment> listAll();
 		
@@ -60,4 +60,5 @@ public interface TradeDepartmentService {
 
 	List<TradeDepartment> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
 
+	TradeDepartment get(String deptNO);
 }

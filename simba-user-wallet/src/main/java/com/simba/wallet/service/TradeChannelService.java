@@ -18,8 +18,6 @@ public interface TradeChannelService {
 
 	void delete(Long id);
 
-	void delete(Long chanId, String chanAcctID);
-
 	List<TradeChannel> listAll();
 		
 	Long count();
@@ -59,5 +57,7 @@ public interface TradeChannelService {
 	List<TradeChannel> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
 
 	List<TradeChannel> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
+
+	void delete(String channelType);
 
 }

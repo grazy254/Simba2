@@ -40,6 +40,8 @@ public interface TradeAccountService {
 	
 	TradeAccount get(Long id);
 	
+	TradeAccount get(String userID, TradeUserType userType);
+
 	void batchDelete(List<Long> idList);
 
 	TradeAccount getBy(String field, Object value);
@@ -64,5 +66,8 @@ public interface TradeAccountService {
 			TradeUserType tradeUserType, int isAllowPay, int isAllowRecharge, int isActive)
 			throws Exception;
 
-	JsonResult frozeAccount(String userID, TradeUserType tradeUserType);
+	JsonResult frozeAccount(String userID, TradeUserType userType);
+
+	JsonResult closeAccount(String userID, TradeUserType userType);
+
 }

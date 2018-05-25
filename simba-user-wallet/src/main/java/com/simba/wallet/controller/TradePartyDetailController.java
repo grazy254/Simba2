@@ -20,9 +20,11 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.TradePartyDetail;
+import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.model.vo.TradePartyVO;
 import com.simba.wallet.service.TradeDetailService;
 import com.simba.wallet.service.TradePartyDetailService;
+import com.simba.wallet.service.TradeUserService;
 import com.simba.wallet.util.FmtUtil;
 import com.simba.wallet.util.SessionUtil;
 
@@ -43,6 +45,9 @@ public class TradePartyDetailController {
 	private TradeDetailService tradeDetailService;
 
 	@Autowired
+	private TradeUserService tradeUserService;
+
+	@Autowired
 	private SessionUtil sessionUtil;
 
 
@@ -56,12 +61,17 @@ public class TradePartyDetailController {
 		List<TradePartyDetail> tradePartyDetailList = null;
 		if (tradeDate != null) {
 			tradePartyDetailList = tradePartyDetailService.pageByAnd("tradeUserID",
-					sessionUtil.getTradeUser(sessionUtil.getSmartUser(session).getAccount()).getId(), "createDate",
+					tradeUserService
+							.get(sessionUtil.getSmartUser(session).getAccount(), TradeUserType.PERSION.getName())
+							.getId(),
+					"createDate",
 					tradeDate,
 					new Pager((pageStart - 1) * 10, 10));
 		} else {
 			tradePartyDetailList = tradePartyDetailService.pageBy("tradeUserID",
-					sessionUtil.getTradeUser(sessionUtil.getSmartUser(session).getAccount()).getId(),
+					tradeUserService
+							.get(sessionUtil.getSmartUser(session).getAccount(), TradeUserType.PERSION.getName())
+							.getId(),
 					new Pager((pageStart - 1) * 10, 10));
 		}
 

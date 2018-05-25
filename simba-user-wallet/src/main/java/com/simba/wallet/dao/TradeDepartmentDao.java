@@ -38,6 +38,8 @@ public interface TradeDepartmentDao {
 	
 	TradeDepartment get(Long id);
 	
+	TradeDepartment get(String deptNO);
+
 	TradeDepartment getBy(String field, Object value);
 
 	TradeDepartment getByAnd(String field1, Object value1, String field2, Object value2);

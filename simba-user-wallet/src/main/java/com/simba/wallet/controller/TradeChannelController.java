@@ -16,11 +16,11 @@ import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeChannel;
 import com.simba.wallet.model.enums.AccountStatus;
-import com.simba.wallet.model.enums.AccountType;
+import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.model.vo.TradeChannelVO;
+import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeChannelService;
 import com.simba.wallet.util.FmtUtil;
-import com.simba.wallet.util.SessionUtil;
 
 /**
  * 渠道信息控制器
@@ -36,7 +36,7 @@ public class TradeChannelController {
 	private TradeChannelService tradeChannelService;
 
 	@Autowired
-	private SessionUtil sessionUtil;
+	private TradeAccountService tradeAccountService;
 
 	@RequestMapping("/list")
 	public String list() {
@@ -51,22 +51,15 @@ public class TradeChannelController {
 			String accountStatus = AccountStatus.NOTEXIST.getName();
 			TradeAccount tradeAccount = null;
 			try {
-				tradeAccount = sessionUtil.getTradeAccount(channel.getType(), AccountType.CHANNEL_ACCOUNT);
+				tradeAccount = tradeAccountService.get(channel.getType(), TradeUserType.CHANNEL);
 				accountStatus = FmtUtil.getAccountStatus(tradeAccount).getName();
 			} catch (Exception e) {
 
-			}
-			// 不显示注销的账户
-			if (AccountStatus.CLOSED.getName().equals(accountStatus)) {
-				continue;
 			}
 			TradeChannelVO vo = new TradeChannelVO();
 			vo.setId(channel.getId());
 			vo.setName(channel.getName());
 			vo.setType(channel.getType());
-			if (tradeAccount != null) {
-				vo.setAccountID(tradeAccount.getAccountID());
-			}
 			vo.setCreateTime(DateUtil.date2String(channel.getCreateTime()));
 			vo.setLastUpdateTime(DateUtil.date2String(channel.getLastUpdateTime()));
 			vo.setAccountStatus(accountStatus);
@@ -109,8 +102,8 @@ public class TradeChannelController {
 
 	@ResponseBody
 	@RequestMapping("/delete")
-	public JsonResult delete(Long id, String channelAccountID, ModelMap model) {
-		tradeChannelService.delete(id, channelAccountID);
+	public JsonResult delete(String type, ModelMap model) {
+		tradeChannelService.delete(type);
 		return new JsonResult();
 	}
 

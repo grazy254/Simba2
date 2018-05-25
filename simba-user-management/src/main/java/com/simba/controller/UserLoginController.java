@@ -1,6 +1,5 @@
 package com.simba.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,8 +22,8 @@ import com.simba.framework.util.code.DesUtil;
 import com.simba.framework.util.code.EncryptUtil;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.SmartUser;
-import com.simba.service.UserProjectService;
 import com.simba.service.SmartUserService;
+import com.simba.service.UserProjectService;
 import com.simba.util.EmailUtil;
 
 /**
@@ -52,6 +51,7 @@ public class UserLoginController {
 
 	@Autowired
 	private RedisUtil redisUtil;
+	
 
 	@RequestMapping("/login")
 	public String login() {

@@ -345,6 +345,8 @@ public class SmartUserServiceImpl implements SmartUserService {
 			user.setName(mobile);
 			user.setPassword("");
 			user.setTelNo(mobile);
+			user.setSex(-1);
+			user.setGroupId(0);
 			user.setThirdSystem("");
 			user.setCreateTime(new Date());
 			user.setStatus(0);
@@ -414,6 +416,8 @@ public class SmartUserServiceImpl implements SmartUserService {
 		user.setName(account);
 		user.setTelNo(account);
 		user.setEmail("");
+		user.setSex(-1);
+		user.setGroupId(0);
 		// 给密码解密之后再md5。
 		String p = "";
 		p = DesUtil.decrypt(password, sk);

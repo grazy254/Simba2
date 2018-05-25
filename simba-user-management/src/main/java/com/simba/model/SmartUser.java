@@ -59,6 +59,18 @@ public class SmartUser {
 	 */
 	@DescAnnotation(desc = "状态")
 	private int status;
+	
+	/**
+	 * 分组id
+	 */
+	@DescAnnotation(desc = "分组id")
+	private long groupId;
+	
+	/**
+	 * 性别
+	 */
+	@DescAnnotation(desc = "性别")
+	private int sex;
 
 	
 	
@@ -67,8 +79,9 @@ public class SmartUser {
 	@DescAnnotation(desc = "第三方系统名称")
 	private String thirdSystem;
 	
-	
-	
+	@DescAnnotation(desc = "分组")
+	private  String  group;
+
 	public long getId() {
 		return id;
 	}
@@ -131,10 +144,24 @@ public class SmartUser {
 
 	public void setStatus(int status) {
 		this.status = status;
-	}	
-	
+	}
 
-	
+	public long getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(long groupId) {
+		this.groupId = groupId;
+	}
+
+	public int getSex() {
+		return sex;
+	}
+
+	public void setSex(int sex) {
+		this.sex = sex;
+	}
+
 	public String getThirdSystem() {
 		return thirdSystem;
 	}
@@ -143,10 +170,19 @@ public class SmartUser {
 		this.thirdSystem = thirdSystem;
 	}
 
+	public String getGroup() {
+		return group;
+	}
+
+	public void setGroup(String group) {
+		this.group = group;
+	}
+
 	@Override
 	public String toString() {
 		return "SmartUser [id=" + id + ", account=" + account + ", name=" + name + ", email=" + email + ", telNo=" + telNo + ", password=" + password + ", createTime=" + createTime + ", status="
-				+ status + ", thirdSystem=" + thirdSystem + "]";
+				+ status + ", groupId=" + groupId + ", sex=" + sex + ", thirdSystem=" + thirdSystem + ", group=" + group + "]";
 	}
 
+	
 }

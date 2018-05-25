@@ -10,6 +10,26 @@ drop table if exists smartUser;
 
 drop table if exists thirdSystemUser;
 
+drop table if exists userGroup;
+
+/*==============================================================*/
+/* Table: userGroup                                             */
+/*==============================================================*/
+create table userGroup
+(
+   id                   bigint not null auto_increment,
+   name                 varchar(64) comment '分组名称',
+   description          varchar(256) comment '分组描述',
+   status               int comment '分组状态',
+   type                 int comment '分组类型',
+   creater              varchar(64) comment '分组创建者',
+   createTime           datetime,
+   primary key (id)
+);
+
+alter table userGroup comment '用户分组';
+
+
 /*==============================================================*/
 /* Table: project                                               */
 /*==============================================================*/

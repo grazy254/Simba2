@@ -1,78 +1,76 @@
 package com.simba.wallet.model;
 /***********************************************************************
- * Module:  TradeChannelDetail.java
- * Author:  zhangfenghua
- * Purpose: Defines the Class TradeChannelDetail
+ * Module: TradeChannelDetail.java Author: zhangfenghua Purpose: Defines the Class
+ * TradeChannelDetail
  ***********************************************************************/
 
 import java.util.Date;
-
 import com.simba.annotation.DescAnnotation;
 
 /**
  * 交易的渠道信息
- * */
+ */
 @DescAnnotation(desc = "交易的渠道信息")
 public class TradeChannelDetail {
-   /** */
-   @DescAnnotation(desc = "")
-	private long id;
+    /** */
+    @DescAnnotation(desc = "")
+    private long id;
 
-   /**
-    * 帐号ID
-    * */
-   @DescAnnotation(desc = "帐号ID")
-	private String tradeAccountID;
+    /**
+     * 帐号ID
+     */
+    @DescAnnotation(desc = "帐号ID")
+    private String tradeAccountID;
 
-   /**
-    * 渠道ID
-    * */
-   @DescAnnotation(desc = "渠道ID")
-	private Long channelID;
+    /**
+     * 渠道ID
+     */
+    @DescAnnotation(desc = "渠道ID")
+    private Long channelID;
 
-   /**
-    * 渠道提交时间
-    * */
-   @DescAnnotation(desc = "渠道提交时间")
-	private Date orderCreateTime;
+    /**
+     * 渠道提交时间
+     */
+    @DescAnnotation(desc = "渠道提交时间")
+    private Date orderCreateTime;
 
-   /**
-    * 渠道支付时间
-    * */
-   @DescAnnotation(desc = "渠道支付时间")
-	private Date paymentTime;
+    /**
+     * 渠道支付时间
+     */
+    @DescAnnotation(desc = "渠道支付时间")
+    private Date paymentTime;
 
-   /**
-    * 渠道订单号
-    * */
-   @DescAnnotation(desc = "渠道订单号")
-	private String orderNO;
+    /**
+     * 渠道订单号
+     */
+    @DescAnnotation(desc = "渠道订单号")
+    private String orderNO;
 
-   /**
-    * 用户的openID
-    * */
-   @DescAnnotation(desc = "用户的openID")
-	private String openID;
+    /**
+     * 用户的openID
+     */
+    @DescAnnotation(desc = "用户的openID")
+    private String openID;
 
-   /**
-    * 错误信息
-    * */
-   private String errorMsg = "";
-   /**
-    * 错误代号
-    * */
-   private String errorCode = "";
-   /**
-    * 创建时间
-    * */
-   @DescAnnotation(desc = "错误信息")
-	private Date createTime;
+    /**
+     * 错误信息
+     */
+    private String errorMsg = "";
+    /**
+     * 错误代号
+     */
+    private String errorCode = "";
+    /**
+     * 创建时间
+     */
+    @DescAnnotation(desc = "错误信息")
+    private Date createTime;
 
-   /**
-    * 最后更新时间
-    * */
-   @DescAnnotation(desc = "错误代号")
-	private Date lastUpdateTime;
+    /**
+     * 最后更新时间
+     */
+    @DescAnnotation(desc = "错误代号")
+    private Date lastUpdateTime;
 
 
     public long getId() {
@@ -148,34 +146,28 @@ public class TradeChannelDetail {
     }
 
     public String getErrorMsg() {
-		return errorMsg;
-	}
+        return errorMsg;
+    }
 
-	public void setErrorMsg(String errorMsg) {
-		this.errorMsg = errorMsg;
-	}
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
+    }
 
-	public String getErrorCode() {
-		return errorCode;
-	}
+    public String getErrorCode() {
+        return errorCode;
+    }
 
-	public void setErrorCode(String errorCode) {
-		this.errorCode = errorCode;
-	}
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
+    }
 
-	@Override
+    @Override
     public String toString() {
-        return "TradeChannelDetail{" +
-		"id=" + id +
-		", tradeAccountID='" + tradeAccountID + '\'' + 
-		", channelID='" + channelID + '\'' + 
-		", orderCreateTime=" + orderCreateTime + 
-		", paymentTime=" + paymentTime + 
-		", orderNO='" + orderNO + '\'' + 
-		", openID='" + openID + '\'' + 
-		", createTime=" + createTime + 
-		", lastUpdateTime=" + lastUpdateTime + 
-		'}';
+        return "TradeChannelDetail{" + "id=" + id + ", tradeAccountID='" + tradeAccountID + '\''
+                + ", channelID='" + channelID + '\'' + ", orderCreateTime=" + orderCreateTime
+                + ", paymentTime=" + paymentTime + ", orderNO='" + orderNO + '\'' + ", openID='"
+                + openID + '\'' + ", createTime=" + createTime + ", lastUpdateTime="
+                + lastUpdateTime + '}';
     }
 
 }

@@ -1,44 +1,41 @@
 package com.simba.wallet.model;
 /***********************************************************************
- * Module:  TradeDepartment.java
- * Author:  zhangfenghua
- * Purpose: Defines the Class TradeDepartment
+ * Module: TradeDepartment.java Author: zhangfenghua Purpose: Defines the Class TradeDepartment
  ***********************************************************************/
 
 import java.util.Date;
-
 import com.simba.annotation.DescAnnotation;
 
 /**
-    * 收款部门
- * */
+ * 收款部门
+ */
 @DescAnnotation(desc = "收款部门")
 public class TradeDepartment {
-   /**
+    /**
     * 
     * */
-   @DescAnnotation(desc = "收款部门")
-	private long id;
+    @DescAnnotation(desc = "收款部门")
+    private long id;
 
-   /**
-    * 部门编号
-    * */
-   @DescAnnotation(desc = "部门编号")
-	private String deptNO;
+    /**
+     * 部门编号
+     */
+    @DescAnnotation(desc = "部门编号")
+    private String deptNO;
 
-   /**
-    * 部门名称
-    * */
-   @DescAnnotation(desc = "部门名称")
-	private String deptName;
+    /**
+     * 部门名称
+     */
+    @DescAnnotation(desc = "部门名称")
+    private String deptName;
 
-   /** */
-	@DescAnnotation(desc = "创建时间")
-	private Date createTime;
+    /** */
+    @DescAnnotation(desc = "创建时间")
+    private Date createTime;
 
-   /** */
-	@DescAnnotation(desc = "最后更新时间")
-	private Date lastUpdateTime;
+    /** */
+    @DescAnnotation(desc = "最后更新时间")
+    private Date lastUpdateTime;
 
 
     public long getId() {
@@ -83,13 +80,9 @@ public class TradeDepartment {
 
     @Override
     public String toString() {
-        return "TradeDepartment{" +
-		"id=" + id +
-		", deptNO='" + deptNO + '\'' + 
-		", deptName='" + deptName + '\'' + 
-		", createTime=" + createTime + 
-		", lastUpdateTime=" + lastUpdateTime + 
-		'}';
+        return "TradeDepartment{" + "id=" + id + ", deptNO='" + deptNO + '\'' + ", deptName='"
+                + deptName + '\'' + ", createTime=" + createTime + ", lastUpdateTime="
+                + lastUpdateTime + '}';
     }
 
 }

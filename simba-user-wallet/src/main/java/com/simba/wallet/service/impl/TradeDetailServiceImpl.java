@@ -3,11 +3,9 @@ package com.simba.wallet.service.impl;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.simba.exception.BussException;
 import com.simba.framework.util.date.DateUtil;
 import com.simba.framework.util.jdbc.Pager;
@@ -44,294 +42,356 @@ import com.simba.wallet.service.TradeDetailService;
 @Transactional
 public class TradeDetailServiceImpl implements TradeDetailService {
 
-	@Autowired
-	private TradeDetailDao tradeDetailDao;
+    @Autowired
+    private TradeDetailDao tradeDetailDao;
 
-	@Autowired
-	private TradePartyDetailDao tradePartyDetailDao;
+    @Autowired
+    private TradePartyDetailDao tradePartyDetailDao;
 
-	@Autowired
-	private TradeChannelDetailDao tradeChannelDetailDao;
+    @Autowired
+    private TradeChannelDetailDao tradeChannelDetailDao;
 
-	@Autowired
-	private TradeDepartmentDao tradeDepartmentDao;
+    @Autowired
+    private TradeDepartmentDao tradeDepartmentDao;
 
-	@Autowired
-	private TradeUserDao tradeUserDao;
+    @Autowired
+    private TradeUserDao tradeUserDao;
 
-	@Autowired
-	private TradeAccountDao tradeAccountDao;
+    @Autowired
+    private TradeAccountDao tradeAccountDao;
 
-	@Autowired
-	private TradeChannelDao tradeChannelDao;
+    @Autowired
+    private TradeChannelDao tradeChannelDao;
 
-	@Override
-	public Long add(TradeDetail tradeDetail) {
-		return tradeDetailDao.add(tradeDetail);
-	}
+    @Override
+    public Long add(TradeDetail tradeDetail) {
+        return tradeDetailDao.add(tradeDetail);
+    }
 
-	@Override
-	public void delete(Long id) {
-		tradeDetailDao.delete(id);
-	}
+    @Override
+    public void delete(Long id) {
+        tradeDetailDao.delete(id);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public TradeDetail get(Long id) {
-		return tradeDetailDao.get(id);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public TradeDetail get(Long id) {
+        return tradeDetailDao.get(id);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public List<TradeDetail> page(Pager page) {
-		return tradeDetailDao.page(page);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public List<TradeDetail> page(Pager page) {
+        return tradeDetailDao.page(page);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public List<TradeDetail> page(Pager page, TradeDetailSearchForm tradeDetailSearchForm) {
-		return tradeDetailDao.page(page, tradeDetailSearchForm);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public List<TradeDetail> page(Pager page, TradeDetailSearchForm tradeDetailSearchForm) {
+        return tradeDetailDao.page(page, tradeDetailSearchForm);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public Long count() {
-		return tradeDetailDao.count();
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public Long count() {
+        return tradeDetailDao.count();
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public Long count(TradeDetailSearchForm tradeDetailSearchForm) {
-		return tradeDetailDao.count(tradeDetailSearchForm);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public Long count(TradeDetailSearchForm tradeDetailSearchForm) {
+        return tradeDetailDao.count(tradeDetailSearchForm);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public Long countBy(String field, Object value) {
-		return tradeDetailDao.countBy(field, value);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public Long countBy(String field, Object value) {
+        return tradeDetailDao.countBy(field, value);
+    }
 
-	@Override
-	public void deleteBy(String field, Object value) {
-		tradeDetailDao.deleteBy(field, value);
-	}
+    @Override
+    public void deleteBy(String field, Object value) {
+        tradeDetailDao.deleteBy(field, value);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public List<TradeDetail> listAll() {
-		return tradeDetailDao.listAll();
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public List<TradeDetail> listAll() {
+        return tradeDetailDao.listAll();
+    }
 
-	@Override
-	public void update(TradeDetail tradeDetail) {
-		tradeDetailDao.update(tradeDetail);
-	}
+    @Override
+    public void update(TradeDetail tradeDetail) {
+        tradeDetailDao.update(tradeDetail);
+    }
 
-	@Override
-	public void batchDelete(List<Long> idList) {
-		for (Long id : idList) {
-			this.delete(id);
-		}
-	}
+    @Override
+    public void batchDelete(List<Long> idList) {
+        for (Long id : idList) {
+            this.delete(id);
+        }
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public TradeDetail getBy(String field, Object value) {
-		return tradeDetailDao.getBy(field, value);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public TradeDetail getBy(String field, Object value) {
+        return tradeDetailDao.getBy(field, value);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public TradeDetail getByAnd(String field1, Object value1, String field2, Object value2) {
-		return tradeDetailDao.getByAnd(field1, value1, field2, value2);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public TradeDetail getByAnd(String field1, Object value1, String field2, Object value2) {
+        return tradeDetailDao.getByAnd(field1, value1, field2, value2);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public TradeDetail getByOr(String field1, Object value1, String field2, Object value2) {
-		return tradeDetailDao.getByOr(field1, value1, field2, value2);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public TradeDetail getByOr(String field1, Object value1, String field2, Object value2) {
+        return tradeDetailDao.getByOr(field1, value1, field2, value2);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public List<TradeDetail> listBy(String field, Object value) {
-		return tradeDetailDao.listBy(field, value);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public List<TradeDetail> listBy(String field, Object value) {
+        return tradeDetailDao.listBy(field, value);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public List<TradeDetail> listByAnd(String field1, Object value1, String field2, Object value2) {
-		return tradeDetailDao.listByAnd(field1, value1, field2, value2);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public List<TradeDetail> listByAnd(String field1, Object value1, String field2, Object value2) {
+        return tradeDetailDao.listByAnd(field1, value1, field2, value2);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public List<TradeDetail> listByOr(String field1, Object value1, String field2, Object value2) {
-		return tradeDetailDao.listByOr(field1, value1, field2, value2);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public List<TradeDetail> listByOr(String field1, Object value1, String field2, Object value2) {
+        return tradeDetailDao.listByOr(field1, value1, field2, value2);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public List<TradeDetail> pageBy(String field, Object value, Pager page) {
-		return tradeDetailDao.pageBy(field, value, page);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public List<TradeDetail> pageBy(String field, Object value, Pager page) {
+        return tradeDetailDao.pageBy(field, value, page);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public List<TradeDetail> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page) {
-		return tradeDetailDao.pageByAnd(field1, value1, field2, value2, page);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public List<TradeDetail> pageByAnd(String field1, Object value1, String field2, Object value2,
+            Pager page) {
+        return tradeDetailDao.pageByAnd(field1, value1, field2, value2, page);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public List<TradeDetail> pageByOr(String field1, Object value1, String field2, Object value2, Pager page) {
-		return tradeDetailDao.pageByOr(field1, value1, field2, value2, page);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public List<TradeDetail> pageByOr(String field1, Object value1, String field2, Object value2,
+            Pager page) {
+        return tradeDetailDao.pageByOr(field1, value1, field2, value2, page);
+    }
 
-	@Override
-	public void deleteByAnd(String field1, Object value1, String field2, Object value2) {
-		tradeDetailDao.deleteByAnd(field1, value1, field2, value2);
-	}
+    @Override
+    public void deleteByAnd(String field1, Object value1, String field2, Object value2) {
+        tradeDetailDao.deleteByAnd(field1, value1, field2, value2);
+    }
 
-	@Override
-	public void deleteByOr(String field1, Object value1, String field2, Object value2) {
-		tradeDetailDao.deleteByOr(field1, value1, field2, value2);
-	}
+    @Override
+    public void deleteByOr(String field1, Object value1, String field2, Object value2) {
+        tradeDetailDao.deleteByOr(field1, value1, field2, value2);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public Long countByAnd(String field1, Object value1, String field2, Object value2) {
-		return tradeDetailDao.countByAnd(field1, value1, field2, value2);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public Long countByAnd(String field1, Object value1, String field2, Object value2) {
+        return tradeDetailDao.countByAnd(field1, value1, field2, value2);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public Long countByOr(String field1, Object value1, String field2, Object value2) {
-		return tradeDetailDao.countByOr(field1, value1, field2, value2);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public Long countByOr(String field1, Object value1, String field2, Object value2) {
+        return tradeDetailDao.countByOr(field1, value1, field2, value2);
+    }
 
-	private String generateTradeNO() {
-		return UUID.randomUUID().toString();
-	}
+    private String generateTradeNO() {
+        return UUID.randomUUID().toString();
+    }
 
-	@Override
-	@Transactional(readOnly = false)
-	public JsonResult recharge(SmartUser smartUser, String tradeDeptNO, ChannelType channelType,
-			TradePartyDetail tradePartyDetail, String orderNO, String orderName, String orderDesc, long originalAmount,
-			long paymentAmount, Date tradeCreateTime) {
+    @Override
+    @Transactional(readOnly = false)
+    public JsonResult startTrade(SmartUser smartUser, String tradeDeptNO, ChannelType channelType,
+            String ip, String location, String orderNO, String orderName, String orderDesc,
+            String orderAddress, long originalAmount, long paymentAmount, Date tradeCreateTime) {
 
-		Date now = new Date();
-		tradePartyDetail.setCreateTime(now);
-		tradePartyDetail.setCreateDate(DateUtil.getOnlyDate(now));
-		tradePartyDetail.setPartyName(smartUser.getName());
-		tradePartyDetail.setPartyType(TradeUserType.PERSION.getName());
-		tradePartyDetail.setNoticeMail(smartUser.getEmail());
-		tradePartyDetail.setIp("");
-		tradePartyDetail.setLocation("");
-		tradePartyDetail.setMobileNumber(smartUser.getTelNo());
-		tradePartyDetail.setTradeAccountID(
-				tradeAccountDao.get(smartUser.getAccount(), TradeUserType.PERSION).getAccountID());
-		tradePartyDetail
-				.setTradeUserID(tradeUserDao.get(smartUser.getAccount(), TradeUserType.PERSION.getName()).getId());
-		Long tradePartyID = tradePartyDetailDao.add(tradePartyDetail);
-		tradePartyDetail.setId(tradePartyID);
+        Date now = new Date();
+        TradePartyDetail tradePartyDetail = new TradePartyDetail();
+        tradePartyDetail.setCreateDate(DateUtil.getOnlyDate(now));
+        tradePartyDetail.setPartyName(smartUser.getName());
+        tradePartyDetail.setPartyType(TradeUserType.PERSION.getName());
+        tradePartyDetail.setNoticeMail(smartUser.getEmail());
+        tradePartyDetail.setIp(ip);
+        tradePartyDetail.setLocation(location);
+        tradePartyDetail.setMobileNumber(smartUser.getTelNo());
+        tradePartyDetail.setTradeAccountID(
+                tradeAccountDao.get(smartUser.getAccount(), TradeUserType.PERSION).getAccountID());
+        tradePartyDetail.setTradeUserID(
+                tradeUserDao.get(smartUser.getAccount(), TradeUserType.PERSION.getName()).getId());
+        Long tradePartyID = tradePartyDetailDao.add(tradePartyDetail);
+        tradePartyDetail.setId(tradePartyID);
 
-		TradeDepartment tradeDepartment = tradeDepartmentDao.get(tradeDeptNO);
+        TradeDepartment tradeDepartment = tradeDepartmentDao.get(tradeDeptNO);
 
-		TradePartyDetail counterPartyDetail = new TradePartyDetail();
-		counterPartyDetail.setCreateTime(now);
-		counterPartyDetail.setCreateDate(DateUtil.getOnlyDate(now));
-		counterPartyDetail.setPartyName(tradeDepartment.getDeptName());
-		counterPartyDetail.setPartyType(TradeUserType.DEPARTMENT.getName());
-		counterPartyDetail.setTradeAccountID(
-				tradeAccountDao.get(tradeDepartment.getDeptNO(), TradeUserType.DEPARTMENT).getAccountID());
-		counterPartyDetail.setTradeUserID(
-				tradeUserDao.get(tradeDepartment.getDeptNO(), TradeUserType.DEPARTMENT.getName()).getId());
-		counterPartyDetail.setIp("");
-		counterPartyDetail.setLocation("");
-		counterPartyDetail.setMobileNumber("");
-		counterPartyDetail.setNoticeMail("");
-		Long counterPartyID = tradePartyDetailDao.add(counterPartyDetail);
-		counterPartyDetail.setId(counterPartyID);
+        TradePartyDetail counterPartyDetail = new TradePartyDetail();
+        counterPartyDetail.setCreateDate(DateUtil.getOnlyDate(now));
+        counterPartyDetail.setPartyName(tradeDepartment.getDeptName());
+        counterPartyDetail.setPartyType(TradeUserType.DEPARTMENT.getName());
+        counterPartyDetail.setTradeAccountID(tradeAccountDao
+                .get(tradeDepartment.getDeptNO(), TradeUserType.DEPARTMENT).getAccountID());
+        counterPartyDetail.setTradeUserID(tradeUserDao
+                .get(tradeDepartment.getDeptNO(), TradeUserType.DEPARTMENT.getName()).getId());
+        counterPartyDetail.setIp("");
+        counterPartyDetail.setLocation("");
+        counterPartyDetail.setMobileNumber("");
+        counterPartyDetail.setNoticeMail("");
+        Long counterPartyID = tradePartyDetailDao.add(counterPartyDetail);
+        counterPartyDetail.setId(counterPartyID);
 
-		TradeChannel tradeChannel = tradeChannelDao.get(channelType.getName());
+        TradeChannel tradeChannel = tradeChannelDao.get(channelType.getName());
 
-		TradeChannelDetail tradeChannelDetail = new TradeChannelDetail();
-		tradeChannelDetail.setChannelID(tradeChannel.getId());
-		tradeChannelDetail.setCreateTime(now);
-		tradeChannelDetail.setErrorCode("");
-		tradeChannelDetail.setErrorMsg("");
-		tradeChannelDetail.setOpenID("");
-		tradeChannelDetail.setOrderCreateTime(new Date());
-		tradeChannelDetail.setOrderNO("000");
-		tradeChannelDetail.setPaymentTime(now);
-		tradeChannelDetail.setLastUpdateTime(now);
-		tradeChannelDetail.setTradeAccountID(
-				tradeAccountDao.get(tradeChannel.getType(), TradeUserType.CHANNEL).getAccountID());
-		Long tradeChannelDetailID = tradeChannelDetailDao.add(tradeChannelDetail);
-		tradeChannelDetail.setId(tradeChannelDetailID);
+        TradeChannelDetail tradeChannelDetail = new TradeChannelDetail();
+        tradeChannelDetail.setChannelID(tradeChannel.getId());
+        tradeChannelDetail.setTradeAccountID(
+                tradeAccountDao.get(tradeChannel.getType(), TradeUserType.CHANNEL).getAccountID());
 
-		return dealOrder(tradePartyDetail, counterPartyDetail, tradeChannelDetail, orderNO, orderName, orderDesc, "",
-				originalAmount, paymentAmount, tradeCreateTime, TradeType.RECHARGE);
-	}
+        Long tradeChannelDetailID = tradeChannelDetailDao.add(tradeChannelDetail);
 
-	public JsonResult dealOrder(TradePartyDetail tradePartyDetail, TradePartyDetail counterPartyDetail,
-			TradeChannelDetail tradeChannelDetail, String orderNO, String orderName, String orderDesc,
-			String orderAddress, long originalAmount, long paymentAmount, Date tradeCreateTime, TradeType tradeType) {
-		// String tradeAccountID =
-		// sessionUtil.getTradeAccount(session).getAccountID();
-		// SmartUser smartUser = sessionUtil.getSmartUser(session);
-		// TradeUser tradeUser = sessionUtil.getTradeUser(session);
+        tradeChannelDetail.setId(tradeChannelDetailID);
 
-		// ======插入的数据======
-		// TradePartyDetail信息
-		// 需要普通用户的ID， name，类型等
-		// 用户的TradeAccountID信息
-		// --可以通过userID信息获取到(userID +accountType -> TradeAccount)
+        return dealOrder(tradePartyDetail, counterPartyDetail, tradeChannelDetail, orderNO,
+                orderName, orderDesc, orderAddress, originalAmount, paymentAmount, tradeCreateTime,
+                TradeType.RECHARGE);
+    }
 
-		// CounterPartyDetail信息
-		// 需要收费部门的的ID， name
-		// 部门的AccountID信息
-		// --可以通过部门ID获取到(deptNO + accoutType -> TradeAccount)
+    public JsonResult dealOrder(TradePartyDetail tradePartyDetail,
+            TradePartyDetail counterPartyDetail, TradeChannelDetail tradeChannelDetail,
+            String orderNO, String orderName, String orderDesc, String orderAddress,
+            long originalAmount, long paymentAmount, Date tradeCreateTime, TradeType tradeType) {
 
-		// 渠道详情TradeChannelDetail
-		// 需要渠道的ID - 微信渠道的可以通过缓存整张渠道表获取
-		// 渠道的AccountID信息
-		// --可以通过渠道ID获取(ChannelID + accountType -> TradeAccount)
+        TradeDetail tradeDetail = new TradeDetail();
+        tradeDetail.setFeeType(FeeType.CNY.getName());
+        tradeDetail.setOrderAddress(orderAddress);
+        tradeDetail.setOrderDesc(orderDesc);
+        tradeDetail.setOrderName(orderName);
+        tradeDetail.setOrderNO(orderNO);
+        tradeDetail.setOriginalAmount(originalAmount);
+        tradeDetail.setPaymentAmount(paymentAmount);
+        tradeDetail.setTradeChannelID(tradeChannelDetail.getId());
+        tradeDetail.setTradeCounterpartyID(counterPartyDetail.getId());
+        tradeDetail.setTradeCreateTime(tradeCreateTime);
+        tradeDetail.setTradeNO(generateTradeNO());
+        tradeDetail.setTradePartyID(tradePartyDetail.getId());
+        tradeDetail.setTradePaymentTime(new Date());
+        tradeDetail.setTradeStatus(TradeStatus.INPROCESS.getName());
+        tradeDetail.setTradeType(tradeType.getName());
+        tradeDetail.setTradePaymentTime(new Date());
 
-		// 充值操作，在提交请求的时候不需要修改TradeAccount表的信息
-		// 如果是消费操作，则在每次操作的时候需要先把变动的金额冻结，然后在"商品出库"后再解冻金额
+        Long tradeDetailID = tradeDetailDao.add(tradeDetail);
 
-		TradeDetail tradeDetail = new TradeDetail();
-		tradeDetail.setCreateTime(new Date());
-		tradeDetail.setFeeType(FeeType.CNY.getName());
-		tradeDetail.setLastUpdateTime(new Date());
-		tradeDetail.setOrderAddress(orderAddress);
-		tradeDetail.setOrderDesc(orderDesc);
-		tradeDetail.setOrderName(orderName);
-		tradeDetail.setOrderNO(orderNO);
-		tradeDetail.setOriginalAmount(originalAmount);
-		tradeDetail.setPaymentAmount(paymentAmount);
-		tradeDetail.setTradeChannelID(tradeChannelDetail.getId());
-		tradeDetail.setTradeCounterpartyID(counterPartyDetail.getId());
-		tradeDetail.setTradeCreateTime(tradeCreateTime);
-		tradeDetail.setTradeNO(generateTradeNO());
-		tradeDetail.setTradePartyID(tradePartyDetail.getId());
-		tradeDetail.setTradePaymentTime(new Date());
-		tradeDetail.setTradeStatus(TradeStatus.INPROCESS.getName());
-		tradeDetail.setTradeType(tradeType.getName());
-		Long tradeDetailID = tradeDetailDao.add(tradeDetail);
+        if (tradeDetailID <= 0) {
+            throw new BussException("创建支付订单失败");
+        }
+        if (tradeType == TradeType.CONSUME) {
+            // 交易的操作需要先冻结PERSON用户的支付金额
+            TradeAccount tradeAccount =
+                    tradeAccountDao.getBy("accountID", tradePartyDetail.getTradeAccountID());
+            tradeAccount.setFrozenBalance(paymentAmount);
+            tradeAccount.setAvailableBalance(tradeAccount.getAvailableBalance() - paymentAmount);
+            tradeAccountDao.update(tradeAccount);
+        }
+        return new JsonResult("创建支付订单成功");
+    }
 
-		if (tradeDetailID <= 0) {
-			throw new BussException("创建支付订单失败");
-		}
-		if (tradeType == TradeType.CONSUME) {
-			// 交易的操作需要先冻结PERSON用户的支付金额
-			TradeAccount tradeAccount = tradeAccountDao.getBy("accountID", tradePartyDetail.getTradeAccountID());
-			tradeAccount.setFrozenBalance(paymentAmount);
-			tradeAccountDao.update(tradeAccount);
-		}
-		return new JsonResult("创建支付订单成功");
-	}
+    @Override
+    public JsonResult finishTrade(SmartUser smartUser, String tradeDeptNO, ChannelType channelType,
+            String orderNO, String channelOrderNO, String openID, Date channelOrderCreateTime,
+            Date channelPaymentTime, String channelErrorMsg, String channelErrorCode,
+            long channelPaymentAmount, TradeStatus tradeStatus, TradeType tradeType) {
+        // 更新tradeChannelDetail
+        // 更新tradeAccount
+        // 更新tradeDetail
+
+        TradeDetail tradeDetail = tradeDetailDao.getBy("orderNO", orderNO);
+        TradeChannelDetail tradeChannelDetail =
+                tradeChannelDetailDao.get(tradeDetail.getTradeChannelID());
+        TradeAccount smartUserTradeAccount =
+                tradeAccountDao.get(smartUser.getAccount(), TradeUserType.PERSION);
+        TradeAccount channelTradeAccount =
+                tradeAccountDao.get(tradeDeptNO, TradeUserType.DEPARTMENT);
+        TradeAccount departmentTradeAccount =
+                tradeAccountDao.get(channelType.getName(), TradeUserType.CHANNEL);
+
+        tradeDetail.setTradeStatus(tradeStatus.getName());
+        if (tradeType == TradeType.RECHARGE) {
+            tradeChannelDetail.setOrderCreateTime(channelOrderCreateTime);
+            tradeChannelDetail.setOrderNO(channelOrderNO);
+            tradeChannelDetail.setPaymentTime(channelPaymentTime);
+            tradeChannelDetail.setOpenID(openID);
+            tradeChannelDetail.setOrderNO(channelOrderNO);
+            tradeChannelDetail.setErrorCode(channelErrorCode);
+            tradeChannelDetail.setErrorMsg(channelErrorMsg);
+        }
+        if (tradeStatus == TradeStatus.SUCCESS) {
+            if (tradeType == TradeType.CONSUME) {
+                // 如果是消费 则需要把可用余额赋值给余额 并且冻结金额清零
+                // 单个人的两笔消费不能同时进行
+                // TODO: 检查是否还有冻结金额 , 检查账号是否冻结，检查个人是否allowpay，检查账号是否是allowpay
+                smartUserTradeAccount
+                        .setAccountBalance(smartUserTradeAccount.getAvailableBalance());
+
+                departmentTradeAccount.setAccountBalance(departmentTradeAccount.getAccountBalance()
+                        + smartUserTradeAccount.getFrozenBalance());
+                departmentTradeAccount
+                        .setAvailableBalance(departmentTradeAccount.getAvailableBalance()
+                                + smartUserTradeAccount.getFrozenBalance());
+                smartUserTradeAccount.setFrozenBalance(0);
+
+            } else if (tradeType == TradeType.RECHARGE) {
+                // 如果是充值 则需要在余额和可用余额上增加
+                smartUserTradeAccount.setAccountBalance(
+                        smartUserTradeAccount.getAccountBalance() + channelPaymentAmount);
+                smartUserTradeAccount.setAvailableBalance(
+                        smartUserTradeAccount.getAvailableBalance() + channelPaymentAmount);
+
+                departmentTradeAccount.setAccountBalance(
+                        departmentTradeAccount.getAccountBalance() + channelPaymentAmount);
+                departmentTradeAccount.setAvailableBalance(
+                        departmentTradeAccount.getAvailableBalance() + channelPaymentAmount);
+
+                channelTradeAccount.setAccountBalance(
+                        channelTradeAccount.getAccountBalance() + channelPaymentAmount);
+                channelTradeAccount.setAvailableBalance(
+                        channelTradeAccount.getAvailableBalance() + channelPaymentAmount);
+            }
+
+        }
+
+        return new JsonResult();
+    }
+
+    @Override
+    public JsonResult startRecharge(SmartUser smartUser, ChannelType channelType,
+            TradePartyDetail tradePartyDetail, long originalAmount, long paymentAmount,
+            Date tradeCreateTime) {
+
+        // startTrade(smartUser, tradeDeptNO,
+        // channelType, tradePartyDetail, orderNO,
+        // orderName, orderDesc, orderAddress, originalAmount,
+        // paymentAmount, tradeCreateTime)
+        return null;
+    }
+
+    @Override
+    public JsonResult finishRecharge() {
+        //
+
+        return null;
+    }
 
 }

@@ -7,12 +7,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.simba.dao.UserProjectDao;
 import com.simba.exception.BussException;
 import com.simba.framework.util.code.DesUtil;
@@ -189,6 +187,7 @@ public class TradeAccountServiceImpl implements TradeAccountService {
 
 		return accountID + random.ints(100000, 999999).limit(1).findFirst().getAsInt() + StringUtils.EMPTY;
 	}
+
 
 	/**
 	 * 创建支付用户

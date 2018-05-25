@@ -1,50 +1,46 @@
 package com.simba.wallet.model;
 /***********************************************************************
- * Module:  TradeChannel.java
- * Author:  zhangfenghua
- * Purpose: Defines the Class TradeChannel
+ * Module: TradeChannel.java Author: zhangfenghua Purpose: Defines the Class TradeChannel
  ***********************************************************************/
 
 import java.util.Date;
-
 import org.springframework.format.annotation.DateTimeFormat;
-
 import com.simba.annotation.DescAnnotation;
 
 /**
  * 渠道信息
- * */
+ */
 @DescAnnotation(desc = "渠道信息")
 public class TradeChannel {
-   /** */
-   @DescAnnotation(desc = "")
-	private long id;
+    /** */
+    @DescAnnotation(desc = "")
+    private long id;
 
-   /**
-    * 渠道名称：微信支付/支付宝支付
-    * */
-	@DescAnnotation(desc = "渠道名称")
-	private String name;
+    /**
+     * 渠道名称：微信支付/支付宝支付
+     */
+    @DescAnnotation(desc = "渠道名称")
+    private String name;
 
-   /**
-    * 渠道类型：WXPAY/ALIPAY
-    * */
-	@DescAnnotation(desc = "渠道类型")
-	private String type;
+    /**
+     * 渠道类型：WXPAY/ALIPAY
+     */
+    @DescAnnotation(desc = "渠道类型")
+    private String type;
 
-   /**
-    * 创建时间
-    * */
-   @DescAnnotation(desc = "创建时间")
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date createTime;
+    /**
+     * 创建时间
+     */
+    @DescAnnotation(desc = "创建时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 
-   /**
-    * 最后更新时间
-    * */
-   @DescAnnotation(desc = "最后更新时间")
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date lastUpdateTime;
+    /**
+     * 最后更新时间
+     */
+    @DescAnnotation(desc = "最后更新时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date lastUpdateTime;
 
 
     public long getId() {
@@ -89,13 +85,8 @@ public class TradeChannel {
 
     @Override
     public String toString() {
-        return "TradeChannel{" +
-		"id=" + id +
-		", name='" + name + '\'' + 
-		", type='" + type + '\'' + 
-		", createTime=" + createTime + 
-		", lastUpdateTime=" + lastUpdateTime + 
-		'}';
+        return "TradeChannel{" + "id=" + id + ", name='" + name + '\'' + ", type='" + type + '\''
+                + ", createTime=" + createTime + ", lastUpdateTime=" + lastUpdateTime + '}';
     }
 
 }

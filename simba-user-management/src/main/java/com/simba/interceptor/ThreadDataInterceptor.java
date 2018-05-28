@@ -3,6 +3,7 @@ package com.simba.interceptor;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -11,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -34,14 +36,13 @@ public class ThreadDataInterceptor implements HandlerInterceptor {
 
 	private List<String> excludeUrlList;
 	
-	@Autowired
-	private SmartUserService smartUserService;
+	private SmartUserService smartUserService=ApplicationContextUtil.getBean(SmartUserService.class);
 	
 	public ThreadDataInterceptor() {
 		super();
 		init();
 	}
-
+	@PostConstruct
 	private void init() {
 		EnvironmentUtil environmentUtil = ApplicationContextUtil.getBean(EnvironmentUtil.class);
 		excludeUrls = environmentUtil.get("user.threadData.interceptor.exclude.url");
@@ -71,6 +72,9 @@ public class ThreadDataInterceptor implements HandlerInterceptor {
 		if (userId == null && openid == null) {
 			logger.warn("您还未登录系统，无法set登录session进去" + request.getRequestURI());
 		}else{
+			logger.info("userId:" +userId.toString());
+			logger.info("userId:" +Long.parseLong(userId.toString()));
+			logger.info("userId:" +smartUserService);
 			ThreadDataUtil.set("account", smartUserService.get(Long.parseLong(userId.toString())));
 			logger.info("已写入线程变量 --key=account value="+smartUserService.get(Long.parseLong(userId.toString())));
 		}

@@ -8,6 +8,10 @@
 		<#include "../adminlte.ftl"/>
 		<#include "../datetimepicker.ftl"/>
 		<#include "../iCheck.ftl"/>
+        <#assign freeNotifyId="${notifyId}"/>
+    <script type="text/javascript">
+        var freeNotifyId = "${freeNotifyId}";
+    </script>
     <script type="text/javascript" src="${base}/js/common/checkbox.js"></script>
     <script type="text/javascript" src="${base}/js/common/page.js"></script>
     <script type="text/javascript" src="${base}/js/notify/smartUser.js"></script>
@@ -21,14 +25,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">发送通知</h3>
-                        </div>
                         <div class="table-responsive">
                             <table class="table table-hover table-striped table-bordered" id="table">
                                 <thead>
                                 <tr>
-                                    <th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
                                     <th>账号</th>
                                     <th>名称</th>
                                     <th>邮箱</th>
@@ -36,7 +36,6 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
                                 </tbody>
                             </table>
                             <!-- /.table -->

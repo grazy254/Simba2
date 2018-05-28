@@ -10,7 +10,7 @@ var SmartUser = {
                 "account": $("#account").val(),
                 "name": $("#name").val(),
                 "email": $("#email").val(),
-                "telNo": $("#telNo").val(),
+                "telNo": $("#telNo").val()
             },
             async: true,
             dataType: "html",
@@ -40,14 +40,13 @@ var SmartUser = {
     },
 
     "initReceiverList": function (start, pageSize) {
-        var notifyId = "${notifyId}";
         $.ajax({
             type: "get",
-            url: contextPath + "/notify/getReceiverList",
+            url: contextPath + "/notify/listReceiver",
             data: {
                 "pageStart": start,
                 "pageSize": pageSize,
-                "notifyId":notifyId
+                "notifyId":freeNotifyId
             },
             async: true,
             dataType: "html",
@@ -62,7 +61,7 @@ var SmartUser = {
             url: contextPath + "/notify/receiverCount",
             async: true,
             data: {
-                "notifyId": notifyId
+                "notifyId": freeNotifyId
             },
             dataType: "json",
             success: function (data) {

@@ -225,7 +225,9 @@ public class NotifyServiceImpl implements NotifyService {
             }
         } else {
             for (long i = pager.getPageStart(); i < pager.getPageStart() + pager.getPageSize() && i < notifyUsers.size(); i++) {
-                list.add(smartUserDao.get(notifyUsers.get((int) i).getSmartUserId()));
+                SmartUser smartUser = smartUserDao.get(notifyUsers.get((int) i).getSmartUserId());
+                if (smartUser == null) continue;
+                list.add(smartUser);
             }
         }
         return list;

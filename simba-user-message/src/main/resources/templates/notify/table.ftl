@@ -11,9 +11,7 @@
 		<td>${notify.createTime}</td>
 		<td>
 			<button type="button" class="btn btn-default btn-sm" onclick="Notify.deleteNotify(${notify.id});"><i class="fa fa-remove"></i>删除</button>
+            <button type="button" class="btn btn-default btn-sm" onclick="Notify.listReceiver(${notify.id});"><i class="fa fa-search"></i>查看接收用户</button>
 		</td>
-        <td>
-            <button type="button" class="btn btn-default btn-sm" onclick="Notify.listReceiver(${notify.id});"><i class="fa fa-remove"></i>查看接收用户</button>
-        </td>
 	</tr>
 </#list>

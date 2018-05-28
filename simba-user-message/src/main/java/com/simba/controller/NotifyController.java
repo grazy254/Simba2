@@ -184,6 +184,13 @@ public class NotifyController {
         return "notify/receiverTable";
     }
 
+    @ResponseBody
+    @RequestMapping("/receiverCount")
+    public JsonResult receiverCount(Long notifyId) {
+        int count = notifyUserService.listBy("notifyId", notifyId).size();
+        return new JsonResult(count, "", 200);
+    }
+
 
     private List<NotifyVo> toNotifyVoList(List<Notify> notifyList) {
         List<NotifyVo> notifyVoList = new LinkedList<>();

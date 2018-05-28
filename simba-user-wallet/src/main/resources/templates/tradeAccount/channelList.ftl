@@ -22,7 +22,7 @@
 						<div class="col-md-12">
 							<div class="box box-primary">
 								<div class="box-header with-border">
-									<h3 class="box-title">支付账号管理</h3>
+									<h3 class="box-title">渠道账户查询</h3>
 								</div>
 								<!-- /.box-header -->
 								<div class="table-responsive">
@@ -66,7 +66,7 @@
 	</body>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			TradeAccount.initTradeAccountList(0, Page.size);
+			TradeAccount.initTradeAccountList(0, Page.size, "getChannelList");
 		});
 	</script>
 

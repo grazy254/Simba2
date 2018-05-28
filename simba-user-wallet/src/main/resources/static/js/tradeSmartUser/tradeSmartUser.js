@@ -1,12 +1,12 @@
-var TradeChannel = {
+var TradeSmartUser = {
 	
 	"toAdd": function() {
-		window.self.location.href = contextPath + "/tradeChannel/toAdd";
+		window.self.location.href = contextPath + "/tradeSmartUser/toAdd";
 	},
 
 	"batchDelete": function() {
 		var ids = new Array();
-		$("input[name='tradeChannel']").each(function() {
+		$("input[name='tradeSmartUser']").each(function() {
 			if(true == $(this).is(':checked')) {
 				ids.push($(this).val());
 			}
@@ -17,7 +17,7 @@ var TradeChannel = {
 		}
 		$.ajax({
 			type: "post",
-			url: contextPath + "/tradeChannel/batchDelete",
+			url: contextPath + "/tradeSmartUser/batchDelete",
 			data: {
 				"id": ids.join(",")
 			},
@@ -25,14 +25,14 @@ var TradeChannel = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
-					TradeChannel.initTradeChannelList(0, Page.size);
+					TradeSmartUser.initTradeSmartUserList(0, Page.size);
 				} else {
 					parent.showInfo(data.msg);
 				}
 			}
 		});
 	},
-	"initTradeChannelList": function(start, pageSize, method) {
+	"initTradeSmartUserList": function(start, pageSize, method) {
 		var data = {}
 		var data2 = {}
 		method = method || "getList"
@@ -41,7 +41,7 @@ var TradeChannel = {
 		data["pageSize"] = pageSize
 		$.ajax({
 			type: "get",
-			url: contextPath + "/tradeChannel/" + method,
+			url: contextPath + "/tradeSmartUser/" + method,
 			data: data,
 			async: true,
 			dataType: "html",
@@ -53,42 +53,23 @@ var TradeChannel = {
 		});
 		$.ajax({
 			type: "get",
-			url: contextPath + "/tradeChannel/count",
+			url: contextPath + "/tradeSmartUser/count",
 			async: true,
 			data: data2,
 			dataType: "json",
 			success: function(data) {
 				var total = data.data;
-				var pageHtml = Page.init(total, start, pageSize, "TradeChannel.clickPager");
+				var pageHtml = Page.init(total, start, pageSize, "TradeSmartUser.clickPager");
 				$("#page").html(pageHtml);
 			}
 		});
 	},
 	"clickPager": function(start, pageSize) {
-		TradeChannel.initTradeChannelList(start, pageSize);
+		TradeSmartUser.initTradeSmartUserList(start, pageSize);
 	},
 
 	"toUpdate": function(id) {
-		window.self.location.href = contextPath + "/tradeChannel/toUpdate?id=" + id;
-	},
-
-	"deleteTradeChannel": function(type) {
-		$.ajax({
-			type: "post",
-			url: contextPath + "/tradeChannel/delete",
-			data: {
-				"type": type,
-			},
-			async: true,
-			dataType: "json",
-			success: function(data) {
-				if(data.code == 200) {
-					TradeChannel.initTradeChannelList(0, Page.size);
-				} else {
-					parent.showInfo(data.msg);
-				}
-			}
-		});
+		window.self.location.href = contextPath + "/tradeSmartUser/toUpdate?id=" + id;
 	},
 
 	"checkForm": function() {
@@ -98,34 +79,50 @@ var TradeChannel = {
 	"toList": function() {
 		window.self.location.href = contextPath + "/tradeChannel/list";
 	},
-	"openChannelAccount":function(type, name, phone) {
+	"frozeSmartUserPayment":function(account) {
 		var data = {}
-		method = "openChannelAccount"
-		data["type"] = type
-		data["name"] = name
-		data["password"] = ""
-		data["payPhone"] = "" || phone
-		data["payEmail"] = ""
-						
+		method = "frozeSmartUserPayment"
+		data["account"] = account
+		
 		$.ajax({
 			type: "get",
-			url: contextPath + "/tradeAccount/" + method,
+			url: contextPath + "/tradeSmartUser/" + method,
 			data: data,
 			async: true,
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
-					TradeChannel.initTradeChannelList(0, Page.size);
+					TradeSmartUser.initTradeSmartUserList(0, Page.size);
 				} else {
 					parent.showInfo(data.msg);
 				}
 			}
 		});
 	},
-	"frozeChannelAccount":function(type) {
+	"activateSmartUserPayment":function(account) {
 		var data = {}
-		method = "frozeChannelAccount"
-		data["type"] = type
+		method = "activateSmartUserPayment"
+		data["account"] = account
+		
+		$.ajax({
+			type: "get",
+			url: contextPath + "/tradeSmartUser/" + method,
+			data: data,
+			async: true,
+			dataType: "json",
+			success: function(data) {
+				if(data.code == 200) {
+					TradeSmartUser.initTradeSmartUserList(0, Page.size);
+				} else {
+					parent.showInfo(data.msg);
+				}
+			}
+		});
+	},
+	"frozeSmartUserAccount":function(account) {
+		var data = {}
+		method = "frozePersonalAccount"
+		data["account"] = account
 		
 		$.ajax({
 			type: "get",
@@ -135,17 +132,17 @@ var TradeChannel = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
-					TradeChannel.initTradeChannelList(0, Page.size);
+					TradeSmartUser.initTradeSmartUserList(0, Page.size);
 				} else {
 					parent.showInfo(data.msg);
 				}
 			}
 		});
 	},
-	"activateChannelAccount":function(type) {
+	"activateSmartUserAccount":function(account) {
 		var data = {}
-		method = "activateChannelAccount"
-		data["type"] = type
+		method = "activatePersonalAccount"
+		data["account"] = account
 		
 		$.ajax({
 			type: "get",
@@ -155,7 +152,7 @@ var TradeChannel = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
-					TradeChannel.initTradeChannelList(0, Page.size);
+					TradeSmartUser.initTradeSmartUserList(0, Page.size);
 				} else {
 					parent.showInfo(data.msg);
 				}

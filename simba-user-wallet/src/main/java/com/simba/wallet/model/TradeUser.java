@@ -83,6 +83,10 @@ public class TradeUser implements Serializable {
         this.type = type;
     }
 
+    public int getIsAllowPay() {
+        return isAllowPay;
+    }
+
     public long getId() {
         return id;
     }
@@ -107,7 +111,7 @@ public class TradeUser implements Serializable {
         this.name = name;
     }
 
-    public int getIsAllowPay() {
+    public int activate() {
         return isAllowPay;
     }
 

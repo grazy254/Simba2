@@ -12,6 +12,7 @@ import com.simba.model.pay.result.RefundResult;
 import com.simba.model.pay.unifiedorder.UnifiedOrderReq;
 import com.simba.registry.util.RegistryUtil;
 import com.simba.service.SmartUserService;
+import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.service.TradeDetailService;
 import com.simba.wallet.util.FmtUtil;
 
@@ -50,7 +51,8 @@ public class TradeByWechatPay implements PayInterface {
 
         tradeDetailService.startTrade(smartUser, tradeDeptNO, FmtUtil.getChannelType(chanelType),
                 req.getSpbill_create_ip(), "", req.getOut_trade_no(), "", "", "", 0, 0,
-                DateUtil.str2Date(req.getTime_start(), "yyyyMMddHHmmss", new Date()));
+                DateUtil.str2Date(req.getTime_start(), "yyyyMMddHHmmss", new Date()),
+                TradeType.RECHARGE);
     }
 
     @Override
@@ -61,7 +63,7 @@ public class TradeByWechatPay implements PayInterface {
 
     @Override
     public void refund(RefundReq refundReq) {
-        // TODO Auto-generated method stub
+
 
     }
 

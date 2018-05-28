@@ -3488,7 +3488,7 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>tradePartyID</a:Code>
 <a:CreationDate>1525744514</a:CreationDate>
 <a:Creator>zhangfenghua</a:Creator>
-<a:ModificationDate>1525856585</a:ModificationDate>
+<a:ModificationDate>1527235611</a:ModificationDate>
 <a:Modifier>zhangfenghua</a:Modifier>
 <a:Comment>交易主体ID</a:Comment>
 <a:DataType>bigint</a:DataType>
@@ -3500,7 +3500,7 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>tradeCounterpartyID</a:Code>
 <a:CreationDate>1525747915</a:CreationDate>
 <a:Creator>zhangfenghua</a:Creator>
-<a:ModificationDate>1525856889</a:ModificationDate>
+<a:ModificationDate>1527235611</a:ModificationDate>
 <a:Modifier>zhangfenghua</a:Modifier>
 <a:Comment>交易对手ID</a:Comment>
 <a:DataType>bigint</a:DataType>
@@ -3512,11 +3512,10 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>tradeChannelID</a:Code>
 <a:CreationDate>1525744514</a:CreationDate>
 <a:Creator>zhangfenghua</a:Creator>
-<a:ModificationDate>1526029175</a:ModificationDate>
+<a:ModificationDate>1527235611</a:ModificationDate>
 <a:Modifier>zhangfenghua</a:Modifier>
 <a:Comment>交易渠道ID</a:Comment>
 <a:DataType>bigint</a:DataType>
-<a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o67">
 <a:ObjectID>524355C8-1663-4AC1-AFE2-5DDC3F3FC1A5</a:ObjectID>

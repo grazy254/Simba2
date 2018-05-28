@@ -16,6 +16,8 @@ import com.simba.model.SmartUser;
 import com.simba.registry.util.RegistryUtil;
 import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.enums.ChannelType;
+import com.simba.wallet.model.enums.TradeStatus;
+import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.model.form.TradeDetailSearchForm;
 import com.simba.wallet.service.TradeDetailService;
 import com.simba.wallet.util.SessionUtil;
@@ -70,11 +72,37 @@ public class TradeDetailController {
             Long paymentAmount,
             @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss") Date tradeCreateTime,
             HttpSession session) {
+        // SmartUser smartUser = (SmartUser) ThreadDataUtil.get("account");
         SmartUser smartUser = sessionUtil.getSmartUser(session);
+
         JsonResult rs = tradeDetailService.startTrade(smartUser,
                 RegistryUtil.get("tradeAccount.department.recharge"), ChannelType.WXPAY, ip,
                 location, orderNO, orderName, orderDesc, orderAddress, originalAmount,
-                paymentAmount, tradeCreateTime);
+                paymentAmount, tradeCreateTime, TradeType.RECHARGE);
+        tradeDetailService.finishTrade(smartUser,
+                RegistryUtil.get("tradeAccount.department.recharge"), ChannelType.WXPAY, orderNO,
+                "123", "123", new Date(), new Date(), "", "", paymentAmount, TradeStatus.SUCCESS,
+                TradeType.RECHARGE);
+        return rs;
+    }
+
+    @ResponseBody
+    @RequestMapping("/refund")
+    public JsonResult refund(String orderNO, String orderName, String orderDesc,
+            String orderAddress, String ip, String location, Long originalAmount,
+            Long paymentAmount,
+            @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss") Date tradeCreateTime,
+            HttpSession session) {
+        SmartUser smartUser = sessionUtil.getSmartUser(session);
+
+        JsonResult rs = tradeDetailService.startTrade(smartUser,
+                RegistryUtil.get("tradeAccount.department.recharge"), ChannelType.WXPAY, ip,
+                location, orderNO, orderName, orderDesc, orderAddress, originalAmount,
+                paymentAmount, tradeCreateTime, TradeType.REFUND);
+        tradeDetailService.finishTrade(smartUser,
+                RegistryUtil.get("tradeAccount.department.recharge"), ChannelType.WXPAY, orderNO,
+                "123", "123", new Date(), new Date(), "", "", paymentAmount, TradeStatus.SUCCESS,
+                TradeType.REFUND);
         return rs;
     }
 

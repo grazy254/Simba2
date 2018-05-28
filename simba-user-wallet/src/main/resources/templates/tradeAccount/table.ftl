@@ -1,17 +1,23 @@
-<#list list as tradeAccount>
+<#list list as tradeAccountVO>
 	<tr>
-		<td>${tradeAccount.tradeUserID}</td>
-		<td>${tradeAccount.accountID}</td>
-		<td>${tradeAccount.accountType}</td>
-		<td>${tradeAccount.feeType}</td>
-		<td>${tradeAccount.isAllowRecharge}</td>
-		<td>${tradeAccount.isAllowPay}</td>
-		<td>${tradeAccount.isActive}</td>
-		<td>${tradeAccount.isFrozen}</td>
-		<td>${tradeAccount.accountBalance}</td>
-		<td>${tradeAccount.availableBalance}</td>
-		<td>${tradeAccount.frozenBalance}</td>
-		<td>${tradeAccount.createTime}</td>
-		<td>${tradeAccount.lastUpdateTime}</td>
+		<td>${tradeAccountVO.userID}</td>
+		<td>${tradeAccountVO.accountID}</td>
+		<td>${tradeAccountVO.accountStatus}</td>
+		<td>${tradeAccountVO.accountBalance}</td>
+		<td>${tradeAccountVO.availableBalance}</td>
+		<td>${tradeAccountVO.frozenBalance}</td>
+		<td>${tradeAccountVO.createTime}</td>
+		<td>${tradeAccountVO.lastUpdateTime} </td>
 	</tr>
 </#list>
+<tr>
+	<td></td>
+	<td></td> 
+	<td></td> 
+	<td></td> 
+	<td></td>
+	
+	<td>总余额：${accountBalance}</td> 
+	<td>总可用余额：${avaliableBalance} </td>
+	<td>总冻结余额：${frozenBalance}</td>
+</tr>

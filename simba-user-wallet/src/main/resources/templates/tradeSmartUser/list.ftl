@@ -10,7 +10,9 @@
 		<#include "../iCheck.ftl"/>
 		<script type="text/javascript" src="${base}/js/common/checkbox.js"></script>
 		<script type="text/javascript" src="${base}/js/common/page.js"></script>
+		<script type="text/javascript" src="${base}/js/tradeSmartUser/tradeSmartUser.js"></script>
 		<script type="text/javascript" src="${base}/js/tradeAccount/tradeAccount.js"></script>
+		
 	</head>
 
 	<body>
@@ -22,21 +24,22 @@
 						<div class="col-md-12">
 							<div class="box box-primary">
 								<div class="box-header with-border">
-									<h3 class="box-title">支付账号管理</h3>
+									<h3 class="box-title">用户信息管理</h3>
 								</div>
 								<!-- /.box-header -->
+
 								<div class="table-responsive">
 									<table class="table table-hover table-striped table-bordered" id="table">
 										<thead>
 											<tr>
+												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
+												<th>用户名称</th>
 												<th>用户账号</th>
-												<th>账号ID</th>
-												<th>账户状态</th>
-												<th>账户余额</th>
-												<th>可用余额</th>
-												<th>冻结余额</th>
+												<th>账户状态</th>		
+												<th>允许支付</th>										
 												<th>创建时间</th>
 												<th>最后更新时间</th>
+												<th>操作</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -66,7 +69,7 @@
 	</body>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			TradeAccount.initTradeAccountList(0, Page.size);
+			TradeSmartUser.initTradeSmartUserList(0, Page.size);
 		});
 	</script>
 

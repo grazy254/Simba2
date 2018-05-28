@@ -142,5 +142,25 @@ var TradeDepartment = {
 			}
 		});
 	},
+	"activateDepartmentAccount":function(deptNO) {
+		var data = {}
+		method = "activateDepartmentAccount"
+		data["deptNO"] = deptNO
+		
+		$.ajax({
+			type: "get",
+			url: contextPath + "/tradeAccount/" + method,
+			data: data,
+			async: true,
+			dataType: "json",
+			success: function(data) {
+				if(data.code == 200) {
+					TradeDepartment.initTradeDepartmentList(0, Page.size);
+				} else {
+					parent.showInfo(data.msg);
+				}
+			}
+		});
+	},
 	"end": null
 };

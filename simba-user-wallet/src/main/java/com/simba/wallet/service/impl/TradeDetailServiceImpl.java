@@ -218,7 +218,8 @@ public class TradeDetailServiceImpl implements TradeDetailService {
     @Transactional(readOnly = false)
     public JsonResult startTrade(SmartUser smartUser, String tradeDeptNO, ChannelType channelType,
             String ip, String location, String orderNO, String orderName, String orderDesc,
-            String orderAddress, long originalAmount, long paymentAmount, Date tradeCreateTime) {
+            String orderAddress, long originalAmount, long paymentAmount, Date tradeCreateTime,
+            TradeType tradeType) {
 
         Date now = new Date();
         TradePartyDetail tradePartyDetail = new TradePartyDetail();
@@ -246,6 +247,7 @@ public class TradeDetailServiceImpl implements TradeDetailService {
                 .get(tradeDepartment.getDeptNO(), TradeUserType.DEPARTMENT).getAccountID());
         counterPartyDetail.setTradeUserID(tradeUserDao
                 .get(tradeDepartment.getDeptNO(), TradeUserType.DEPARTMENT.getName()).getId());
+        // 对手实体默认不填
         counterPartyDetail.setIp("");
         counterPartyDetail.setLocation("");
         counterPartyDetail.setMobileNumber("");
@@ -266,7 +268,7 @@ public class TradeDetailServiceImpl implements TradeDetailService {
 
         return dealOrder(tradePartyDetail, counterPartyDetail, tradeChannelDetail, orderNO,
                 orderName, orderDesc, orderAddress, originalAmount, paymentAmount, tradeCreateTime,
-                TradeType.RECHARGE);
+                tradeType);
     }
 
     public JsonResult dealOrder(TradePartyDetail tradePartyDetail,
@@ -328,7 +330,9 @@ public class TradeDetailServiceImpl implements TradeDetailService {
                 tradeAccountDao.get(channelType.getName(), TradeUserType.CHANNEL);
 
         tradeDetail.setTradeStatus(tradeStatus.getName());
-        if (tradeType == TradeType.RECHARGE) {
+        tradeDetailDao.update(tradeDetail);
+
+        if (tradeType == TradeType.RECHARGE || tradeType == TradeType.REFUND) {
             tradeChannelDetail.setOrderCreateTime(channelOrderCreateTime);
             tradeChannelDetail.setOrderNO(channelOrderNO);
             tradeChannelDetail.setPaymentTime(channelPaymentTime);
@@ -336,6 +340,7 @@ public class TradeDetailServiceImpl implements TradeDetailService {
             tradeChannelDetail.setOrderNO(channelOrderNO);
             tradeChannelDetail.setErrorCode(channelErrorCode);
             tradeChannelDetail.setErrorMsg(channelErrorMsg);
+            tradeChannelDetailDao.update(tradeChannelDetail);
         }
         if (tradeStatus == TradeStatus.SUCCESS) {
             if (tradeType == TradeType.CONSUME) {
@@ -368,30 +373,38 @@ public class TradeDetailServiceImpl implements TradeDetailService {
                         channelTradeAccount.getAccountBalance() + channelPaymentAmount);
                 channelTradeAccount.setAvailableBalance(
                         channelTradeAccount.getAvailableBalance() + channelPaymentAmount);
-            }
+            } else if (tradeType == TradeType.REFUND) {
+                smartUserTradeAccount.setAccountBalance(
+                        smartUserTradeAccount.getAccountBalance() - channelPaymentAmount);
+                smartUserTradeAccount.setAvailableBalance(
+                        smartUserTradeAccount.getAvailableBalance() - channelPaymentAmount);
 
+                departmentTradeAccount.setAccountBalance(
+                        departmentTradeAccount.getAccountBalance() - channelPaymentAmount);
+                departmentTradeAccount.setAvailableBalance(
+                        departmentTradeAccount.getAvailableBalance() - channelPaymentAmount);
+
+                channelTradeAccount.setAccountBalance(
+                        channelTradeAccount.getAccountBalance() - channelPaymentAmount);
+                channelTradeAccount.setAvailableBalance(
+                        channelTradeAccount.getAvailableBalance() - channelPaymentAmount);
+
+            }
+            tradeAccountDao.update(smartUserTradeAccount);
+            tradeAccountDao.update(departmentTradeAccount);
+            tradeAccountDao.update(channelTradeAccount);
         }
+
 
         return new JsonResult();
     }
 
-    @Override
-    public JsonResult startRecharge(SmartUser smartUser, ChannelType channelType,
-            TradePartyDetail tradePartyDetail, long originalAmount, long paymentAmount,
-            Date tradeCreateTime) {
+    // @Override
+    // public JsonResult startRecharge(SmartUser smartUser, ChannelType channelType,
+    // TradePartyDetail tradePartyDetail, long originalAmount, long paymentAmount,
+    // Date tradeCreateTime) {
+    // return null;
+    // }
 
-        // startTrade(smartUser, tradeDeptNO,
-        // channelType, tradePartyDetail, orderNO,
-        // orderName, orderDesc, orderAddress, originalAmount,
-        // paymentAmount, tradeCreateTime)
-        return null;
-    }
-
-    @Override
-    public JsonResult finishRecharge() {
-        //
-
-        return null;
-    }
 
 }

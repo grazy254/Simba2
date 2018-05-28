@@ -39,6 +39,44 @@ var SmartUser = {
         });
     },
 
+    "initReceiverList": function (start, pageSize) {
+        var notifyId = "${notifyId}";
+        $.ajax({
+            type: "get",
+            url: contextPath + "/notify/getReceiverList",
+            data: {
+                "pageStart": start,
+                "pageSize": pageSize,
+                "notifyId":notifyId
+            },
+            async: true,
+            dataType: "html",
+            success: function (html) {
+                $("#table").find("tbody").html(html);
+                CheckBox.init();
+                setTimeout("CheckBox.bindCheckAll();", 1000);
+            }
+        });
+        $.ajax({
+            type: "get",
+            url: contextPath + "/notify/receiverCount",
+            async: true,
+            data: {
+                "notifyId": notifyId
+            },
+            dataType: "json",
+            success: function (data) {
+                var total = data.data;
+                var pageHtml = Page.init(total, start, pageSize, "SmartUser.clickPagerReceiver");
+                $("#page").html(pageHtml);
+            }
+        });
+    },
+
+    "clickPagerReceiver": function (start, pageSize) {
+        SmartUser.initReceiverList(start, pageSize);
+    },
+
     "clickPager": function (start, pageSize) {
         SmartUser.initSmartUserList(start, pageSize);
     },

@@ -91,6 +91,11 @@ var Notify = {
         });
     },
 
+    "listReceiver": function (id) {
+        var url = contextPath + "/notify/toUpdate?id=" + id;
+        parent.showModal("查看用户", url, 400);
+    },
+
     "checkForm": function () {
         return true;
     },

@@ -5,6 +5,7 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.FastJsonUtil;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.Notify;
+import com.simba.model.NotifyUser;
 import com.simba.model.SmartUser;
 import com.simba.model.form.SmartUserSearchForm;
 import com.simba.service.NotifyService;
@@ -170,6 +171,19 @@ public class NotifyController {
         Long count = smartUserService.count(searchForm);
         return new JsonResult(count, "", 200);
     }
+
+    @RequestMapping("/toListReceiver")
+    public String toListReceiver(Long notifyId, ModelMap model) {
+        model.put("notifyId", notifyId);
+        return "notify/listReceiver";
+    }
+
+    @RequestMapping("/listReceiver")
+    public String listReceiver(Long notifyId, Pager pager, ModelMap model) {
+        model.put("list", notifyService.listReceiver(notifyId, pager));
+        return "notify/receiverTable";
+    }
+
 
     private List<NotifyVo> toNotifyVoList(List<Notify> notifyList) {
         List<NotifyVo> notifyVoList = new LinkedList<>();

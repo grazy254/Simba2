@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.Notify;
+import com.simba.model.SmartUser;
+
 /**
  *通知表 Service
  * 
@@ -29,8 +31,10 @@ public interface NotifyService {
 	Long countByOr(String field1, Object value1, String field2, Object value2);
 	
 	void deleteBy(String field, Object value);
-	
-	void deleteByAnd(String field1, Object value1, String field2, Object value2);
+
+	List<SmartUser> listReceiver(Long notifyId, Pager pager);
+
+    void deleteByAnd(String field1, Object value1, String field2, Object value2);
 	
 	void deleteByOr(String field1, Object value1, String field2, Object value2);
 	

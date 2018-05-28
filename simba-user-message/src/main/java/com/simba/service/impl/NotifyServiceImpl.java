@@ -216,6 +216,22 @@ public class NotifyServiceImpl implements NotifyService {
     }
 
     @Override
+    public List<SmartUser> listReceiver(Long notifyId, Pager pager) {
+        List<NotifyUser> notifyUsers = notifyUserDao.listBy("notifyId", notifyId);
+        List<SmartUser> list = new LinkedList<>();
+        if (notifyUsers.size() <= pager.getPageSize()) {
+            for (NotifyUser notifyUser : notifyUsers) {
+                list.add(smartUserDao.get(notifyUser.getSmartUserId()));
+            }
+        } else {
+            for (long i = pager.getPageStart(); i < pager.getPageStart() + pager.getPageSize() && i < notifyUsers.size(); i++) {
+                list.add(smartUserDao.get(notifyUsers.get((int) i).getSmartUserId()));
+            }
+        }
+        return list;
+    }
+
+    @Override
     public void deleteByAnd(String field1, Object value1, String field2, Object value2) {
         notifyDao.deleteByAnd(field1, value1, field2, value2);
     }

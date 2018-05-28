@@ -1,6 +1,8 @@
 package com.simba.impls;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.simba.alipay.controller.form.AliPayCallbackForm;
@@ -24,6 +26,9 @@ public class AliPayBillImpl implements AliPayInterface {
 	@Autowired
 	private AliPayBillService aliPayBillService;
 
+	@Value("${alipay.appid}")
+	private String appId;
+
 	@Override
 	public void dealCallback(AliPayCallbackForm callbackForm) {
 
@@ -32,7 +37,15 @@ public class AliPayBillImpl implements AliPayInterface {
 	@Override
 	public void appPay(AppPayForm payForm) {
 		AliPayBill bill = new AliPayBill();
-
+		bill.setAppid(appId);
+		bill.setBody(payForm.getBody());
+		bill.setTotalAmount(payForm.getTotalAmount());
+		bill.setSubject(payForm.getSubject());
+		bill.setOutTradeNo(payForm.getOutTradeNo());
+		bill.setProductCode(payForm.getProductCode());
+		bill.setGoodType(StringUtils.EMPTY);
+		bill.setTradeNo(StringUtils.EMPTY);
+		
 		aliPayBillService.add(bill);
 	}
 

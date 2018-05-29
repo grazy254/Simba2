@@ -1,3 +1,6 @@
+cd simba-rule
+call mvn clean -U 
+cd ../
 cd simba-user-wallet
 call mvn clean -U 
 cd ../

@@ -190,6 +190,9 @@ cd ../
 cd simba-buss
 call mvn clean -U deploy
 cd ../
+cd simba-rule
+call mvn clean -U deploy
+cd ../
 cd simba-weather
 call mvn clean -U deploy
 cd ../

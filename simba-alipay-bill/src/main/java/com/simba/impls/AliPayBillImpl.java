@@ -45,7 +45,7 @@ public class AliPayBillImpl implements AliPayInterface {
 		bill.setProductCode(payForm.getProductCode());
 		bill.setGoodType(StringUtils.EMPTY);
 		bill.setTradeNo(StringUtils.EMPTY);
-		
+
 		aliPayBillService.add(bill);
 	}
 

@@ -1,8 +1,11 @@
 package com.simba.wallet.util;
 
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
 import com.simba.exception.BussException;
 import com.simba.wallet.model.TradeAccount;
+import com.simba.wallet.model.TradeUser;
 import com.simba.wallet.model.enums.AccountStatus;
 import com.simba.wallet.model.enums.AccountType;
 import com.simba.wallet.model.enums.ChannelType;
@@ -21,6 +24,8 @@ public class FmtUtil {
             return TradeType.CONSUME.getDesc();
         } else if (TradeType.RECHARGE.getName().equals(tradeType)) {
             return TradeType.RECHARGE.getDesc();
+        } else if (TradeType.REWARD.getName().equals(tradeType)) {
+            return TradeType.REWARD.getDesc();
         } else {
             throw new BussException("不支持的交易类型");
         }
@@ -49,13 +54,28 @@ public class FmtUtil {
                 if (tradeAccount.getIsFrozen() == 0) {
                     accountStatus = AccountStatus.ACTIVE;
                 } else {
-                    accountStatus = AccountStatus.FRONZON;
+                    accountStatus = AccountStatus.FRONZEN;
                 }
             } else if (tradeAccount.getIsActive() == -1) {
                 accountStatus = AccountStatus.CLOSED;
             }
         }
         return accountStatus;
+    }
+
+    public static AccountStatus getUserStatus(TradeUser tradeUser) {
+        AccountStatus accountStatus = AccountStatus.NOTEXIST;
+        if (tradeUser != null) {
+            if (tradeUser.getIsActive() == 0) {
+                accountStatus = AccountStatus.NOTACTIVE;
+            } else if (tradeUser.getIsActive() == 1) {
+                accountStatus = AccountStatus.ACTIVE;
+            } else if (tradeUser.getIsActive() == -1) {
+                accountStatus = AccountStatus.CLOSED;
+            }
+        }
+        return accountStatus;
+
     }
 
     public static AccountType getAccountType(TradeUserType tradeUserType) {
@@ -81,6 +101,17 @@ public class FmtUtil {
         } else {
             throw new BussException("不支持的渠道类型");
         }
+    }
+
+    public static Map<String, String> fmtBalance(Map<String, Object> balanceMap) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("accountBalance", FmtUtil
+                .transToCNYType(Long.parseLong(balanceMap.get("accountBalance").toString())));
+        map.put("availableBalance", FmtUtil
+                .transToCNYType(Long.parseLong(balanceMap.get("availableBalance").toString())));
+        map.put("frozenBalance",
+                FmtUtil.transToCNYType(Long.parseLong(balanceMap.get("frozenBalance").toString())));
+        return map;
     }
 
 }

@@ -87,4 +87,7 @@ public interface TradeDetailService {
             Date channelPaymentTime, String channelErrorMsg, String channelErrorCode,
             long paymentAmount, TradeStatus tradeStatus, TradeType tradeType);
 
+    JsonResult reward(String userID, long paymentAmount);
+
+    JsonResult recharge(String userID, long paymentAmount);
 }

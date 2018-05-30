@@ -2,7 +2,8 @@ package com.simba.wallet.model.enums;
 
 public enum TradeType {
 
-    RECHARGE("RECHARGE", "01", "充值"), CONSUME("CONSUME", "02", "消费"), REFUND("REFUND", "03", "退款");
+    RECHARGE("RECHARGE", "01", "充值"), CONSUME("CONSUME", "02", "消费"), REFUND("REFUND", "03",
+            "退款"), REWARD("REWARD", "04", "奖励");
 
     private String name;
     private String no;

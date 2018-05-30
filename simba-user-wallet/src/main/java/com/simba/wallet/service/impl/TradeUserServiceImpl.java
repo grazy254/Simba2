@@ -9,6 +9,7 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.dao.TradeUserDao;
 import com.simba.wallet.model.TradeUser;
+import com.simba.wallet.model.enums.AccountStatus;
 import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.service.TradeUserService;
 
@@ -177,14 +178,14 @@ public class TradeUserServiceImpl implements TradeUserService {
     public JsonResult activatePayment(String userID, TradeUserType userType) {
         TradeUser tradeUser = tradeUserDao.get(userID, userType.getName());
         // TODO: 1 0 可读性不强
-        if (tradeUser.getIsActive() == 1) {
+        if (tradeUser.getIsActive() == AccountStatus.ACTIVE.getValue()) {
             if (tradeUser.getIsAllowPay() == 0) {
                 tradeUser.setIsAllowPay(1);
                 tradeUserDao.update(tradeUser);
             }
-        } else if (tradeUser.getIsActive() == 0) {
+        } else if (tradeUser.getIsActive() == AccountStatus.NOTACTIVE.getValue()) {
             throw new BussException("账户未激活");
-        } else if (tradeUser.getIsActive() == -1) {
+        } else if (tradeUser.getIsActive() == AccountStatus.CLOSED.getValue()) {
             throw new BussException("账户已注销");
         }
         return new JsonResult();

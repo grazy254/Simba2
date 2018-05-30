@@ -1,30 +1,33 @@
 var TradeAccount = {
-	
-	"toAdd": function() {
+	"toSearch" : function() {
+		TradeAccount.initTradeAccountList(0, Page.size, "doSearch");
+	},
+
+	"toAdd" : function() {
 		window.self.location.href = contextPath + "/tradeAccount/toAdd";
 	},
 
-	"batchDelete": function() {
+	"batchDelete" : function() {
 		var ids = new Array();
 		$("input[name='tradeAccount']").each(function() {
-			if(true == $(this).is(':checked')) {
+			if (true == $(this).is(':checked')) {
 				ids.push($(this).val());
 			}
 		});
-		if(ids.length == 0) {
+		if (ids.length == 0) {
 			parent.showInfo("请选择要删除的记录");
 			return false;
 		}
 		$.ajax({
-			type: "post",
-			url: contextPath + "/tradeAccount/batchDelete",
-			data: {
-				"id": ids.join(",")
+			type : "post",
+			url : contextPath + "/tradeAccount/batchDelete",
+			data : {
+				"id" : ids.join(",")
 			},
-			async: true,
-			dataType: "json",
-			success: function(data) {
-				if(data.code == 200) {
+			async : true,
+			dataType : "json",
+			success : function(data) {
+				if (data.code == 200) {
 					TradeAccount.initTradeAccountList(0, Page.size);
 				} else {
 					parent.showInfo(data.msg);
@@ -32,57 +35,60 @@ var TradeAccount = {
 			}
 		});
 	},
-	"initTradeAccountList": function(start, pageSize, method) {
+	"initTradeAccountList" : function(start, pageSize, method) {
 		var data = {}
 		var data2 = {}
 		method = method || "getList"
-		$.extend(data2,data);
+		$.extend(data2, data);
 		data["pageStart"] = start
 		data["pageSize"] = pageSize
+		data["userID"] = $("#userID").val();
 		$.ajax({
-			type: "get",
-			url: contextPath + "/tradeAccount/" + method,
-			data: data,
-			async: true,
-			dataType: "html",
-			success: function(html) {
+			type : "get",
+			url : contextPath + "/tradeAccount/" + method,
+			data : data,
+			async : true,
+			dataType : "html",
+			success : function(html) {
 				$("#table").find("tbody").html(html);
 				CheckBox.init();
 				setTimeout("CheckBox.bindCheckAll();", 1000);
 			}
 		});
 		$.ajax({
-			type: "get",
-			url: contextPath + "/tradeAccount/count",
-			async: true,
-			data: data2,
-			dataType: "json",
-			success: function(data) {
+			type : "get",
+			url : contextPath + "/tradeAccount/count",
+			async : true,
+			data : data2,
+			dataType : "json",
+			success : function(data) {
 				var total = data.data;
-				var pageHtml = Page.init(total, start, pageSize, "TradeAccount.clickPager");
+				var pageHtml = Page.init(total, start, pageSize,
+						"TradeAccount.clickPager");
 				$("#page").html(pageHtml);
 			}
 		});
 	},
-	"clickPager": function(start, pageSize) {
+	"clickPager" : function(start, pageSize) {
 		TradeAccount.initTradeAccountList(start, pageSize);
 	},
 
-	"toUpdate": function(id) {
-		window.self.location.href = contextPath + "/tradeAccount/toUpdate?id=" + id;
+	"toUpdate" : function(id) {
+		window.self.location.href = contextPath + "/tradeAccount/toUpdate?id="
+				+ id;
 	},
 
-	"deleteTradeAccount": function(id) {
+	"deleteTradeAccount" : function(id) {
 		$.ajax({
-			type: "post",
-			url: contextPath + "/tradeAccount/batchDelete",
-			data: {
-				"id": id
+			type : "post",
+			url : contextPath + "/tradeAccount/batchDelete",
+			data : {
+				"id" : id
 			},
-			async: true,
-			dataType: "json",
-			success: function(data) {
-				if(data.code == 200) {
+			async : true,
+			dataType : "json",
+			success : function(data) {
+				if (data.code == 200) {
 					TradeAccount.initTradeAccountList(0, Page.size);
 				} else {
 					parent.showInfo(data.msg);
@@ -91,12 +97,12 @@ var TradeAccount = {
 		});
 	},
 
-	"checkForm": function() {
+	"checkForm" : function() {
 		return true;
 	},
 
-	"toList": function() {
+	"toList" : function() {
 		window.self.location.href = contextPath + "/tradeAccount/list";
 	},
-	"end": null
+	"end" : null
 };

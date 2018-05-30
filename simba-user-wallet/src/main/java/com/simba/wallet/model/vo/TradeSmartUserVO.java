@@ -6,9 +6,19 @@ public class TradeSmartUserVO {
     private String name;
     private String isAllowPay;
     private String isActive;
+    private String userStatus;
     private String accountStatus;
     private String createTime;
     private String lastUpdateTime;
+
+
+    public String getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(String userStatus) {
+        this.userStatus = userStatus;
+    }
 
     public Long getId() {
         return id;

@@ -24,6 +24,7 @@ import com.simba.wallet.model.TradeChannelDetail;
 import com.simba.wallet.model.TradeDepartment;
 import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.TradePartyDetail;
+import com.simba.wallet.model.TradeUser;
 import com.simba.wallet.model.enums.ChannelType;
 import com.simba.wallet.model.enums.FeeType;
 import com.simba.wallet.model.enums.TradeStatus;
@@ -214,12 +215,44 @@ public class TradeDetailServiceImpl implements TradeDetailService {
         return UUID.randomUUID().toString();
     }
 
+    private boolean checkUserBalance(Long tradeUserID, TradeUserType userType, long amount) {
+        TradeAccount tradeAccount = tradeAccountDao.get(tradeUserID, userType);
+        Long availableBalacne = tradeAccount.getAvailableBalance();
+        if (availableBalacne >= amount) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkSmartUserAccountStatus(Long tradeUserID) {
+        TradeAccount tradeAccount = tradeAccountDao.get(tradeUserID, TradeUserType.PERSION);
+        if (tradeAccount.getFrozenBalance() != 0) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     @Transactional(readOnly = false)
     public JsonResult startTrade(SmartUser smartUser, String tradeDeptNO, ChannelType channelType,
             String ip, String location, String orderNO, String orderName, String orderDesc,
             String orderAddress, long originalAmount, long paymentAmount, Date tradeCreateTime,
             TradeType tradeType) {
+        TradeUser tradeUser =
+                tradeUserDao.get(smartUser.getAccount(), TradeUserType.PERSION.getName());
+
+        if (tradeType == TradeType.REFUND) {
+            boolean canRefund =
+                    checkUserBalance(tradeUser.getId(), TradeUserType.PERSION, paymentAmount);
+            if (!canRefund) {
+                throw new BussException("余额不足");
+            }
+        }
+        if (tradeType == TradeType.CONSUME) {
+            if (!checkSmartUserAccountStatus(tradeUser.getId())) {
+                throw new BussException("有一笔未完成的支付");
+            }
+        }
 
         Date now = new Date();
         TradePartyDetail tradePartyDetail = new TradePartyDetail();
@@ -231,7 +264,7 @@ public class TradeDetailServiceImpl implements TradeDetailService {
         tradePartyDetail.setLocation(location);
         tradePartyDetail.setMobileNumber(smartUser.getTelNo());
         tradePartyDetail.setTradeAccountID(
-                tradeAccountDao.get(smartUser.getAccount(), TradeUserType.PERSION).getAccountID());
+                tradeAccountDao.get(tradeUser.getId(), TradeUserType.PERSION).getAccountID());
         tradePartyDetail.setTradeUserID(
                 tradeUserDao.get(smartUser.getAccount(), TradeUserType.PERSION.getName()).getId());
         Long tradePartyID = tradePartyDetailDao.add(tradePartyDetail);
@@ -307,6 +340,7 @@ public class TradeDetailServiceImpl implements TradeDetailService {
             tradeAccount.setAvailableBalance(tradeAccount.getAvailableBalance() - paymentAmount);
             tradeAccountDao.update(tradeAccount);
         }
+
         return new JsonResult("创建支付订单成功");
     }
 
@@ -315,11 +349,11 @@ public class TradeDetailServiceImpl implements TradeDetailService {
             String orderNO, String channelOrderNO, String openID, Date channelOrderCreateTime,
             Date channelPaymentTime, String channelErrorMsg, String channelErrorCode,
             long channelPaymentAmount, TradeStatus tradeStatus, TradeType tradeType) {
-        // 更新tradeChannelDetail
-        // 更新tradeAccount
-        // 更新tradeDetail
 
         TradeDetail tradeDetail = tradeDetailDao.getBy("orderNO", orderNO);
+        if (tradeDetail == null) {
+            throw new BussException("订单异常");
+        }
         TradeChannelDetail tradeChannelDetail =
                 tradeChannelDetailDao.get(tradeDetail.getTradeChannelID());
         TradeAccount smartUserTradeAccount =
@@ -389,6 +423,17 @@ public class TradeDetailServiceImpl implements TradeDetailService {
                 channelTradeAccount.setAvailableBalance(
                         channelTradeAccount.getAvailableBalance() - channelPaymentAmount);
 
+            } else if (tradeType == TradeType.REWARD) {
+                smartUserTradeAccount.setAccountBalance(
+                        smartUserTradeAccount.getAccountBalance() + channelPaymentAmount);
+                smartUserTradeAccount.setAvailableBalance(
+                        smartUserTradeAccount.getAvailableBalance() + channelPaymentAmount);
+
+                departmentTradeAccount.setAccountBalance(
+                        departmentTradeAccount.getAccountBalance() + channelPaymentAmount);
+                departmentTradeAccount.setAvailableBalance(
+                        departmentTradeAccount.getAvailableBalance() + channelPaymentAmount);
+
             }
             tradeAccountDao.update(smartUserTradeAccount);
             tradeAccountDao.update(departmentTradeAccount);
@@ -399,12 +444,16 @@ public class TradeDetailServiceImpl implements TradeDetailService {
         return new JsonResult();
     }
 
-    // @Override
-    // public JsonResult startRecharge(SmartUser smartUser, ChannelType channelType,
-    // TradePartyDetail tradePartyDetail, long originalAmount, long paymentAmount,
-    // Date tradeCreateTime) {
-    // return null;
-    // }
+    @Override
+    public JsonResult reward(String userID, long paymentAmount) {
+        return null;
+    }
+
+    @Override
+    public JsonResult recharge(String userID, long paymentAmount) {
+
+        return null;
+    }
 
 
 }

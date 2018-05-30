@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,16 +14,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.simba.dao.UserProjectDao;
 import com.simba.exception.BussException;
-import com.simba.framework.util.code.DesUtil;
-import com.simba.framework.util.code.EncryptUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.dao.TradeAccountDao;
 import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeUser;
+import com.simba.wallet.model.enums.AccountStatus;
 import com.simba.wallet.model.enums.AccountType;
 import com.simba.wallet.model.enums.FeeType;
 import com.simba.wallet.model.enums.TradeUserType;
+import com.simba.wallet.model.form.TradeAccountSearchForm;
 import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeUserService;
 import com.simba.wallet.util.ErrConfig;
@@ -65,6 +66,12 @@ public class TradeAccountServiceImpl implements TradeAccountService {
     @Override
     @Transactional(readOnly = true)
     public List<TradeAccount> page(Pager page) {
+        return tradeAccountDao.page(page);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<TradeAccount> page(Pager page, TradeAccountSearchForm tradeAccountSearchForm) {
         return tradeAccountDao.page(page);
     }
 
@@ -253,17 +260,17 @@ public class TradeAccountServiceImpl implements TradeAccountService {
             tradeUser.setPayEmail(payEmail);
             tradeUser.setCreateTime(new Date());
             tradeUser.setLastUpdateTime(new Date());
-            String p = "";
+            // String p = "";
             // 给密码解密之后再md5。
-            String sk = "";
-            if (projectDao.listBy("name", "wallet").size() > 0) {
-                sk = projectDao.listBy("name", "wallet").get(0).getProjectKey();
-            } else {
-                throw new BussException("没有配置系统加密密钥，请联系管理员配置");
-            }
-            p = DesUtil.decrypt(password, sk);
-            p = EncryptUtil.md5(p);
-            tradeUser.setPayPassword(p);
+            // String sk = "";
+            // if (projectDao.listBy("name", "wallet").size() > 0) {
+            // sk = projectDao.listBy("name", "wallet").get(0).getProjectKey();
+            // } else {
+            // throw new BussException("没有配置系统加密密钥，请联系管理员配置");
+            // }
+            // p = DesUtil.decrypt(password, sk);
+            // p = EncryptUtil.md5(p);
+            tradeUser.setPayPassword(password);
 
             tradeUserID = tradeUserDao.add(tradeUser);
             if (tradeUserID <= 0) {
@@ -308,7 +315,7 @@ public class TradeAccountServiceImpl implements TradeAccountService {
     public JsonResult frozeAccount(String userID, TradeUserType userType) {
         // TODO: 手机验证码 根据userID获取注册时的手机号
         TradeAccount tradeAccount = tradeAccountDao.get(userID, userType);
-        tradeAccount.setIsFrozen(1);
+        tradeAccount.setIsFrozen(AccountStatus.FRONZEN.getValue());
         tradeAccountDao.update(tradeAccount);
         return new JsonResult();
     }
@@ -316,13 +323,12 @@ public class TradeAccountServiceImpl implements TradeAccountService {
     @Override
     public JsonResult closeAccount(String userID, TradeUserType userType) {
         try {
-            TradeAccount tradeAccount = tradeAccountDao.get(userID, userType);
             TradeUser tradeUser = tradeUserDao.get(userID, userType.getName());
-            // TODO: -1 用enum或者静态属性代替
-            tradeUser.setIsActive(-1);
+            TradeAccount tradeAccount = tradeAccountDao.get(tradeUser.getId(), userType);
+            tradeUser.setIsActive(AccountStatus.CLOSED.getValue());
             tradeUserDao.update(tradeUser);
             if (tradeAccount.getAccountBalance() == 0) {
-                tradeAccount.setIsActive(-1);
+                tradeAccount.setIsActive(AccountStatus.CLOSED.getValue());
                 tradeAccountDao.update(tradeAccount);
             } else {
                 throw new BussException("删除失败：账户余额不为0");
@@ -341,12 +347,8 @@ public class TradeAccountServiceImpl implements TradeAccountService {
     @Override
     public JsonResult activeAccount(String userID, TradeUserType userType) {
         TradeAccount tradeAccount = tradeAccountDao.get(userID, userType);
-        // TODO: -1 指意不明确
-        if (tradeAccount.getIsActive() == -1) {
-            throw new BussException("账户已注销");
-        }
-        if (tradeAccount.getIsFrozen() == 1) {
-            tradeAccount.setIsFrozen(0);
+        if (tradeAccount.getIsFrozen() == AccountStatus.FRONZEN.getValue()) {
+            tradeAccount.setIsFrozen(AccountStatus.NOTFROZEN.getValue());
             tradeAccountDao.update(tradeAccount);
         }
         return new JsonResult();
@@ -355,6 +357,21 @@ public class TradeAccountServiceImpl implements TradeAccountService {
     @Override
     public TradeAccount get(String userID, TradeUserType userType) {
         return tradeAccountDao.get(userID, userType);
+    }
+
+    @Override
+    public TradeAccount get(Long tradeUserID, TradeUserType userType) {
+        return tradeAccountDao.get(tradeUserID, userType);
+    }
+
+    @Override
+    public Map<String, Object> getBalance(AccountType accountType) {
+        return tradeAccountDao.getBalance(accountType);
+    }
+
+    @Override
+    public Map<String, Object> getBalance(Long tradeUserID, AccountType accountType) {
+        return tradeAccountDao.getBalance(tradeUserID, accountType);
     }
 
 }

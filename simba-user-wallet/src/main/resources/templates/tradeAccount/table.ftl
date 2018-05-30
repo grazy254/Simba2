@@ -18,6 +18,6 @@
 	<td></td>
 	
 	<td>总余额：${accountBalance}</td> 
-	<td>总可用余额：${avaliableBalance} </td>
+	<td>总可用余额：${availableBalance} </td>
 	<td>总冻结余额：${frozenBalance}</td>
 </tr>

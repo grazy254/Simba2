@@ -1,10 +1,13 @@
 package com.simba.wallet.service;
 
 import java.util.List;
+import java.util.Map;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.model.TradeAccount;
+import com.simba.wallet.model.enums.AccountType;
 import com.simba.wallet.model.enums.TradeUserType;
+import com.simba.wallet.model.form.TradeAccountSearchForm;
 
 /**
  * 支付账号 Service
@@ -38,9 +41,13 @@ public interface TradeAccountService {
 
     List<TradeAccount> page(Pager page);
 
+    List<TradeAccount> page(Pager page, TradeAccountSearchForm tradeAccountSearchForm);
+
     TradeAccount get(Long id);
 
     TradeAccount get(String userID, TradeUserType userType);
+
+    TradeAccount get(Long tradeUserID, TradeUserType userType);
 
     void batchDelete(List<Long> idList);
 
@@ -73,5 +80,10 @@ public interface TradeAccountService {
     JsonResult closeAccount(String userID, TradeUserType userType);
 
     JsonResult activeAccount(String userID, TradeUserType userType);
+
+    Map<String, Object> getBalance(AccountType accountType);
+
+    Map<String, Object> getBalance(Long tradeUserID, AccountType accountType);
+
 
 }

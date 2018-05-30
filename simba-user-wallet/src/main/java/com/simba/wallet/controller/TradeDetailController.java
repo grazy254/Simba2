@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import com.simba.framework.util.data.ThreadDataUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.SmartUser;
@@ -20,7 +21,6 @@ import com.simba.wallet.model.enums.TradeStatus;
 import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.model.form.TradeDetailSearchForm;
 import com.simba.wallet.service.TradeDetailService;
-import com.simba.wallet.util.SessionUtil;
 
 /**
  * 交易详情信息控制器
@@ -34,9 +34,6 @@ public class TradeDetailController {
 
     @Autowired
     private TradeDetailService tradeDetailService;
-
-    @Autowired
-    private SessionUtil sessionUtil;
 
     @RequestMapping("/list")
     public String list() {
@@ -72,8 +69,8 @@ public class TradeDetailController {
             Long paymentAmount,
             @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss") Date tradeCreateTime,
             HttpSession session) {
-        // SmartUser smartUser = (SmartUser) ThreadDataUtil.get("account");
-        SmartUser smartUser = sessionUtil.getSmartUser(session);
+        SmartUser smartUser = (SmartUser) ThreadDataUtil.get("account");
+        // SmartUser smartUser = sessionUtil.getSmartUser(session);
 
         JsonResult rs = tradeDetailService.startTrade(smartUser,
                 RegistryUtil.get("tradeAccount.department.recharge"), ChannelType.WXPAY, ip,
@@ -93,7 +90,7 @@ public class TradeDetailController {
             Long paymentAmount,
             @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss") Date tradeCreateTime,
             HttpSession session) {
-        SmartUser smartUser = sessionUtil.getSmartUser(session);
+        SmartUser smartUser = (SmartUser) ThreadDataUtil.get("account");
 
         JsonResult rs = tradeDetailService.startTrade(smartUser,
                 RegistryUtil.get("tradeAccount.department.recharge"), ChannelType.WXPAY, ip,

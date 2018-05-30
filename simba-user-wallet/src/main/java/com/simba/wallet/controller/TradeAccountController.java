@@ -6,23 +6,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.simba.framework.util.date.DateUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.SmartUser;
 import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeUser;
+import com.simba.wallet.model.enums.AccountStatus;
 import com.simba.wallet.model.enums.AccountType;
 import com.simba.wallet.model.enums.TradeUserType;
+import com.simba.wallet.model.form.TradeAccountSearchForm;
 import com.simba.wallet.model.vo.TradeAccountVO;
 import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeUserService;
+import com.simba.wallet.util.ErrConfig;
 import com.simba.wallet.util.FmtUtil;
 import com.simba.wallet.util.SessionUtil;
 
@@ -45,6 +48,25 @@ public class TradeAccountController {
     @Autowired
     private SessionUtil sessionUtil;
 
+    @RequestMapping("/doSearch")
+    public String getSmartUserList(TradeAccountSearchForm tradeAccountSearchForm, ModelMap model) {
+
+        if (StringUtils.isEmpty(tradeAccountSearchForm.getUserID())) {
+            return "tradeAccount/smartUserList";
+        }
+        TradeAccount tradeAccount =
+                tradeAccountService.get(tradeAccountSearchForm.getUserID(), TradeUserType.PERSION);
+
+        TradeUser tradeUser = tradeUserService.get(tradeAccount.getTradeUserID());
+        List<TradeAccountVO> tradeAccountVOList = new ArrayList<>();
+        tradeAccountVOList.add(new TradeAccountVO(tradeAccount, tradeUser));
+
+        model.put("list", tradeAccountVOList);
+        Map<String, Object> balanceMap =
+                tradeAccountService.getBalance(tradeUser.getId(), AccountType.PERSIONAL_ACCOUNT);
+        model.putAll(FmtUtil.fmtBalance(balanceMap));
+        return "tradeAccount/table";
+    }
 
     @RequestMapping("/list")
     public String list() {
@@ -65,9 +87,22 @@ public class TradeAccountController {
 
     @RequestMapping("/getDepartmentList")
     public String getDepartmentList(ModelMap model) {
-        model.putAll(getList(AccountType.COMPANY_ACCOUNT));
+        model.putAll(getList(null, AccountType.COMPANY_ACCOUNT));
         return "tradeAccount/table";
     }
+
+    @RequestMapping("/smartUserList")
+    public String smartUserList() {
+        return "tradeAccount/smartUserList";
+    }
+
+    @RequestMapping("/getSmartUserList")
+    public String getSmartUserList(ModelMap model) {
+        model.putAll(getList(null, AccountType.PERSIONAL_ACCOUNT));
+        return "tradeAccount/table";
+    }
+
+
 
     @RequestMapping("/channelList")
     public String channelList() {
@@ -75,48 +110,43 @@ public class TradeAccountController {
     }
 
     @RequestMapping("/getChannelList")
-    public String getChannelList(ModelMap model) {
-        model.putAll(getList(AccountType.CHANNEL_ACCOUNT));
+    public String getChannelList(Pager page, ModelMap model) {
+        model.putAll(getList(page, AccountType.CHANNEL_ACCOUNT));
         return "tradeAccount/table";
     }
 
 
-    public Map<String, Object> getList(AccountType accountType) {
-        List<TradeAccount> list =
-                tradeAccountService.listByAnd("accountType", accountType.getName(), "isActive", 1);
+    public Map<String, Object> getList(Pager page, AccountType accountType) {
+        List<TradeAccount> list = null;
+        if (page != null) {
+            list = tradeAccountService.pageByAnd("accountType", accountType.getName(), "isActive",
+                    1, page);
+        } else {
+            list = tradeAccountService.listByAnd("accountType", accountType.getName(), "isActive",
+                    1);
+        }
+
         List<TradeAccountVO> tradeAccountVOList = new ArrayList<>();
-        Long accountBalance = 0L;
-        Long avaliableBalance = 0L;
-        Long frozenBalance = 0L;
+
         Map<String, Object> result = new HashMap<>();
         for (TradeAccount tradeAccount : list) {
-            TradeAccountVO tradeAccountVO = new TradeAccountVO();
-            tradeAccountVO
-                    .setAccountBalance(FmtUtil.transToCNYType(tradeAccount.getAccountBalance()));
-            tradeAccountVO.setAccountID(tradeAccount.getAccountID());
-            tradeAccountVO.setAvailableBalance(
-                    FmtUtil.transToCNYType(tradeAccount.getAvailableBalance()));
-            tradeAccountVO.setCreateTime(DateUtil.date2String(tradeAccount.getCreateTime()));
-            tradeAccountVO
-                    .setLastUpdateTime(DateUtil.date2String(tradeAccount.getLastUpdateTime()));
 
-            tradeAccountVO
-                    .setFrozenBalance(FmtUtil.transToCNYType(tradeAccount.getFrozenBalance()));
-            tradeAccountVO.setAccountStatus(FmtUtil.getAccountStatus(tradeAccount).getName());
+            if (tradeAccount.getIsActive() == AccountStatus.CLOSED.getValue()) {
+                // 不显示注销的账户信息
+                continue;
+            }
             TradeUser tradeUser = tradeUserService.get(tradeAccount.getTradeUserID());
-            tradeAccountVO.setUserID(tradeUser.getUserID());
-
-            accountBalance += tradeAccount.getAccountBalance();
-            avaliableBalance += tradeAccount.getAvailableBalance();
-            frozenBalance += tradeAccount.getFrozenBalance();
+            if (tradeUser.getIsActive() == AccountStatus.CLOSED.getValue()) {
+                // 不显示注销用户的账户信息
+                continue;
+            }
+            TradeAccountVO tradeAccountVO = new TradeAccountVO(tradeAccount, tradeUser);
             tradeAccountVOList.add(tradeAccountVO);
         }
 
         result.put("list", tradeAccountVOList);
-        result.put("accountBalance", FmtUtil.transToCNYType(accountBalance));
-        result.put("avaliableBalance", FmtUtil.transToCNYType(avaliableBalance));
-        result.put("frozenBalance", FmtUtil.transToCNYType(frozenBalance));
-
+        Map<String, Object> balanceMap = tradeAccountService.getBalance(accountType);
+        result.putAll(FmtUtil.fmtBalance(balanceMap));
         return result;
     }
 
@@ -157,11 +187,21 @@ public class TradeAccountController {
      * 展示余额
      * 
      * @param sessSmartUserAccount @param session @return @throws
+     * @throws Exception
      */
     @ResponseBody
     @RequestMapping("/showBalance")
-    public JsonResult showBalance(HttpSession session) {
+    public JsonResult showBalance(HttpSession session) throws Exception {
         SmartUser smartUser = sessionUtil.getSmartUser(session);
+        try {
+            tradeUserService.get(smartUser.getAccount(), TradeUserType.PERSION.getName());
+        } catch (Exception e) {
+            if (e == ErrConfig.USER_NOT_EXIST_ERR) {
+                tradeAccountService.openAccount(smartUser.getAccount(), smartUser.getName(),
+                        smartUser.getPassword(), smartUser.getTelNo(), smartUser.getEmail(),
+                        TradeUserType.PERSION, 1, 0, AccountStatus.ACTIVE.getValue());
+            }
+        }
         return new JsonResult(FmtUtil.transToCNYType(tradeAccountService
                 .get(smartUser.getAccount(), TradeUserType.PERSION).getAccountBalance()));
 

@@ -22,9 +22,18 @@
 						<div class="col-md-12">
 							<div class="box box-primary">
 								<div class="box-header with-border">
-									<h3 class="box-title">渠道账单</h3>
+									<h3 class="box-title">个人账单</h3>
 								</div>
 								<!-- /.box-header -->
+								<div class="mailbox-controls">
+									<label for="userID">用户账号:</label>
+									<input type="text" id="userID"  name="userID" placeholder="请输入用户账号">
+						
+									<!-- Check all button -->
+									<button type="button" class="btn btn-default btn-sm" onclick="TradeAccount.toSearch();"><i class="fa fa-search"></i>查询</button>
+									<div class="pull-right">
+									
+								</div>
 								<div class="table-responsive">
 									<table class="table table-hover table-striped table-bordered" id="table">
 										<thead>
@@ -66,7 +75,7 @@
 	</body>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			TradeAccount.initTradeAccountList(0, Page.size, "getChannelList");
+			TradeAccount.initTradeAccountList(0, Page.size, "getSmartUserList");
 		});
 	</script>
 

@@ -1,5 +1,10 @@
 package com.simba.wallet.model.vo;
 
+import com.simba.framework.util.date.DateUtil;
+import com.simba.wallet.model.TradeAccount;
+import com.simba.wallet.model.TradeUser;
+import com.simba.wallet.util.FmtUtil;
+
 public class TradeAccountVO {
     private String userID;
     private String accountID;
@@ -10,6 +15,18 @@ public class TradeAccountVO {
     private String frozenBalance;
     private String createTime;
     private String lastUpdateTime;
+
+    public TradeAccountVO(TradeAccount tradeAccount, TradeUser tradeUser) {
+        this.setAccountID(tradeAccount.getAccountID());
+        this.setCreateTime(DateUtil.date2String(tradeAccount.getCreateTime()));
+        this.setLastUpdateTime(DateUtil.date2String(tradeAccount.getLastUpdateTime()));
+        this.setAccountBalance(FmtUtil.transToCNYType(tradeAccount.getAccountBalance()));
+        this.setAvailableBalance(FmtUtil.transToCNYType(tradeAccount.getAvailableBalance()));
+        this.setFrozenBalance(FmtUtil.transToCNYType(tradeAccount.getFrozenBalance()));
+        this.setAccountStatus(FmtUtil.getAccountStatus(tradeAccount).getName());
+
+        this.setUserID(tradeUser.getUserID());
+    }
 
     public String getUserID() {
         return userID;
@@ -84,4 +101,5 @@ public class TradeAccountVO {
     public void setLastUpdateTime(String lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
     }
+
 }

@@ -36,17 +36,17 @@ var TradeDetail = {
 		});
 	},
 	"initTradeDetailList": function(start, pageSize, method) {
-		var data = {}
-		var data2 = {}
-		method = method || "getList"
-		data["startTime"] = $("#startTime").val()
-		data["endTime"] = $("#endTime").val()
-		data["tradeNO"] = $("#tradeNO").val()
-		data["tradeType"] = $("#tradeType").val()
-		data["tradeStatus"] = $("#tradeStatus").val()
+		var data = {};
+		var data2 = {};
+		method = method || "getList";
+		data["startTime"] = $("#startTime").val();
+		data["endTime"] = $("#endTime").val();
+		data["tradeNO"] = $("#tradeNO").val();
+		data["tradeType"] = $("#tradeType").val();
+		data["tradeStatus"] = $("#tradeStatus").val();
 		$.extend(data2,data);
-		data["pageStart"] = start
-		data["pageSize"] = pageSize
+		data["pageStart"] = start;
+		data["pageSize"] = pageSize;
 		$.ajax({
 			type: "get",
 			url: contextPath + "/tradeDetail/" + method,

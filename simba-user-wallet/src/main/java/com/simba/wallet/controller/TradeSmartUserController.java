@@ -60,7 +60,9 @@ public class TradeSmartUserController {
             vo.setId(tradeUser.getId());
             vo.setAccount(tradeUser.getUserID());
             vo.setAccountStatus(accountStatus);
+            // TODO: 判断账户的状态是否激活
             vo.setIsAllowPay(tradeUser.getIsAllowPay() == 1 ? "允许" : "不允许");
+            vo.setUserStatus(FmtUtil.getUserStatus(tradeUser).getName());
             vo.setName(tradeUser.getName());
             vo.setCreateTime(DateUtil.date2String(tradeUser.getCreateTime()));
             vo.setLastUpdateTime(DateUtil.date2String(tradeUser.getLastUpdateTime()));

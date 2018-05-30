@@ -3,6 +3,7 @@
 		<td><input type="checkbox" name="tradeSmartUser" value="${tradeSmartUserVO.id}"></td>
 		<td>${tradeSmartUserVO.name}</td>
 		<td>${tradeSmartUserVO.account}</td>
+		<td>${tradeSmartUserVO.userStatus}</td>
 		<td>${tradeSmartUserVO.accountStatus}</td>
 		<td>${tradeSmartUserVO.isAllowPay}</td>
 		<td>${tradeSmartUserVO.createTime}</td>

@@ -24,7 +24,7 @@
 						<div class="col-md-12">
 							<div class="box box-primary">
 								<div class="box-header with-border">
-									<h3 class="box-title">用户信息管理</h3>
+									<h3 class="box-title">用户账户管理</h3>
 								</div>
 								<!-- /.box-header -->
 
@@ -35,6 +35,7 @@
 												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
 												<th>用户名称</th>
 												<th>用户账号</th>
+												<th>用户状态</th>
 												<th>账户状态</th>		
 												<th>允许支付</th>										
 												<th>创建时间</th>

@@ -3,6 +3,7 @@ package com.simba.wallet.util;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import com.simba.exception.BussException;
 import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeUser;
@@ -112,6 +113,10 @@ public class FmtUtil {
         map.put("frozenBalance",
                 FmtUtil.transToCNYType(Long.parseLong(balanceMap.get("frozenBalance").toString())));
         return map;
+    }
+
+    public static String generateTradeNO() {
+        return UUID.randomUUID().toString();
     }
 
 }

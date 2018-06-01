@@ -19,10 +19,9 @@ public class RewardTrade extends BaseInnerTrade {
     private TradeAccountDao tradeAccountDao;
 
     @Override
-    public JsonResult trade(String userID, String orderNO, long paymentAmount,
-            Date tradeCreateTime) {
-        return trade(userID, "", "", orderNO, "", "", "", paymentAmount, paymentAmount,
-                tradeCreateTime, RegistryUtil.get("trade.department.reward"), TradeType.REWARD);
+    public JsonResult trade(String userID, String orderNO, long paymentAmount) {
+        return trade(userID, "", "", orderNO, "", "", "", paymentAmount, paymentAmount, new Date(),
+                RegistryUtil.get("trade.department.reward"), TradeType.REWARD);
     }
 
     @Override

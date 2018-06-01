@@ -116,7 +116,6 @@ public abstract class BaseInnerTrade implements InnerTradeInterface {
         tradeDetail.setTradeCreateTime(tradeCreateTime);
         tradeDetail.setTradeNO(FmtUtil.generateTradeNO());
         tradeDetail.setTradePartyID(tradePartyID);
-        tradeDetail.setTradePaymentTime(new Date());
         tradeDetail.setTradeStatus(TradeStatus.SUCCESS.getName());
         tradeDetail.setTradeType(tradeType.getName());
         tradeDetail.setTradePaymentTime(new Date());

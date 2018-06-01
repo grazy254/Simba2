@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import com.simba.exception.BussException;
+import com.simba.framework.util.common.UUIDUtil;
 import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeUser;
 import com.simba.wallet.model.enums.AccountStatus;
@@ -129,4 +130,7 @@ public class FmtUtil {
         return UUID.randomUUID().toString();
     }
 
+    public static String generateOrderNO() {
+        return "R" + UUIDUtil.get();
+    }
 }

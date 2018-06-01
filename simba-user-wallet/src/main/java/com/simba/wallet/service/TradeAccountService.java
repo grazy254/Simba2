@@ -75,6 +75,12 @@ public interface TradeAccountService {
             String payEmail, TradeUserType tradeUserType, int isAllowPay, int isAllowRecharge,
             int isActive) throws Exception;
 
+    /**
+     * 
+     * @param userID
+     * @param userType
+     * @return
+     */
     JsonResult frozeAccount(String userID, TradeUserType userType);
 
     JsonResult closeAccount(String userID, TradeUserType userType);

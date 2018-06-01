@@ -5,13 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.simba.framework.util.jdbc.Pager;
-import com.simba.wallet.dao.TradeAccountDao;
-import com.simba.wallet.dao.TradeChannelDao;
-import com.simba.wallet.dao.TradeChannelDetailDao;
-import com.simba.wallet.dao.TradeDepartmentDao;
 import com.simba.wallet.dao.TradeDetailDao;
-import com.simba.wallet.dao.TradePartyDetailDao;
-import com.simba.wallet.dao.TradeUserDao;
 import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.form.TradeDetailSearchForm;
 import com.simba.wallet.service.TradeDetailService;
@@ -28,24 +22,6 @@ public class TradeDetailServiceImpl implements TradeDetailService {
 
     @Autowired
     private TradeDetailDao tradeDetailDao;
-
-    @Autowired
-    private TradePartyDetailDao tradePartyDetailDao;
-
-    @Autowired
-    private TradeChannelDetailDao tradeChannelDetailDao;
-
-    @Autowired
-    private TradeDepartmentDao tradeDepartmentDao;
-
-    @Autowired
-    private TradeUserDao tradeUserDao;
-
-    @Autowired
-    private TradeAccountDao tradeAccountDao;
-
-    @Autowired
-    private TradeChannelDao tradeChannelDao;
 
     @Override
     public Long add(TradeDetail tradeDetail) {

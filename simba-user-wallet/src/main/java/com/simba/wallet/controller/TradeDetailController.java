@@ -3,17 +3,14 @@ package com.simba.wallet.controller;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.simba.framework.util.data.ThreadDataUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
-import com.simba.model.SmartUser;
 import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.form.TradeDetailSearchForm;
 import com.simba.wallet.service.TradeDetailService;
@@ -58,46 +55,6 @@ public class TradeDetailController {
         return new JsonResult(count, "", 200);
     }
 
-    @ResponseBody
-    @RequestMapping("/recharge")
-    public JsonResult recharge(String orderNO, String orderName, String orderDesc,
-            String orderAddress, String ip, String location, Long originalAmount,
-            Long paymentAmount,
-            @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss") Date tradeCreateTime,
-            HttpSession session) {
-        SmartUser smartUser = (SmartUser) ThreadDataUtil.get("account");
-        // SmartUser smartUser = sessionUtil.getSmartUser(session);
-
-        // JsonResult rs = tradeDetailService.startTrade(smartUser,
-        // RegistryUtil.get("tradeAccount.department.recharge"), ChannelType.WXPAY, ip,
-        // location, orderNO, orderName, orderDesc, orderAddress, originalAmount,
-        // paymentAmount, tradeCreateTime, TradeType.RECHARGE);
-        // tradeDetailService.finishTrade(smartUser,
-        // RegistryUtil.get("tradeAccount.department.recharge"), ChannelType.WXPAY, orderNO,
-        // "123", "123", new Date(), new Date(), "", "", paymentAmount, TradeStatus.SUCCESS,
-        // TradeType.RECHARGE);
-        return null;
-    }
-
-    @ResponseBody
-    @RequestMapping("/refund")
-    public JsonResult refund(String orderNO, String orderName, String orderDesc,
-            String orderAddress, String ip, String location, Long originalAmount,
-            Long paymentAmount,
-            @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss") Date tradeCreateTime,
-            HttpSession session) {
-        SmartUser smartUser = (SmartUser) ThreadDataUtil.get("account");
-
-        // JsonResult rs = tradeDetailService.startTrade(smartUser,
-        // RegistryUtil.get("tradeAccount.department.recharge"), ChannelType.WXPAY, ip,
-        // location, orderNO, orderName, orderDesc, orderAddress, originalAmount,
-        // paymentAmount, tradeCreateTime, TradeType.REFUND);
-        // tradeDetailService.finishTrade(smartUser,
-        // RegistryUtil.get("tradeAccount.department.recharge"), ChannelType.WXPAY, orderNO,
-        // "123", "123", new Date(), new Date(), "", "", paymentAmount, TradeStatus.SUCCESS,
-        // TradeType.REFUND);
-        return null;
-    }
 
     @ResponseBody
     @RequestMapping("getTradeList")

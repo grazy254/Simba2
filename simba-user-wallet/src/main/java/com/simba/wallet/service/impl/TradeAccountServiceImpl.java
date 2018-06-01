@@ -202,15 +202,17 @@ public class TradeAccountServiceImpl implements TradeAccountService {
 
 
     /**
-     * 创建支付用户
+     * 开通账户 包括smart用户，部门，渠道
      * 
-     * @param uid
-     * @param name
-     * @param password
-     * @param payPhone
-     * @param payEmail
-     * @param tradeUserType
-     * @param smartUser
+     * @param userID 用户id
+     * @param name 用户名称
+     * @param password 已加密的密码
+     * @param payPhone 移动电话
+     * @param payEmail 邮箱
+     * @param tradeUserType 用户类型
+     * @param isAllowPay 是否允许支付
+     * @param isAllowRecharge 是否允许充值
+     * @param isActive 是否激活
      * @return
      * @throws Exception
      */
@@ -311,6 +313,9 @@ public class TradeAccountServiceImpl implements TradeAccountService {
         return new JsonResult("", "钱包功能开通成功", 200);
     }
 
+    /**
+     * 
+     */
     @Override
     public JsonResult frozeAccount(String userID, TradeUserType userType) {
         // TODO: 手机验证码 根据userID获取注册时的手机号

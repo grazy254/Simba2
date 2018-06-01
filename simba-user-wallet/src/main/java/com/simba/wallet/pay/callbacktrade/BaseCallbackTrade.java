@@ -29,7 +29,10 @@ import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.util.FmtUtil;
 
 /**
- * 回调交易抽象类
+ * 回调交易基类
+ * 
+ * 实现了接口的{@code startTrade}和{@code finishTrade}方法，
+ * 子类可以根据自己的需要实现模板方法{@code checkUserAccount}和{@code postTrade}
  * 
  * @author zhangfenghua
  *
@@ -65,7 +68,7 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
      * 
      * @param userID smart用户account
      */
-    public void checkUserAccount(String userID) {
+    protected void checkUserAccount(String userID) {
 
     }
 
@@ -77,13 +80,15 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
      * @param channelTradeAccount 渠道账户
      * @param paymentAmount 金额 单位是分
      */
-    public void postTrade(TradeAccount smartUserTradeAccount, TradeAccount departmentAccount,
+    protected void postTrade(TradeAccount smartUserTradeAccount, TradeAccount departmentAccount,
             TradeAccount channelTradeAccount, long paymentAmount) {
 
     }
 
     /**
-     * 开始交易 一般在回调之前调用
+     * 开始交易
+     * 
+     * 一般在回调之前调用
      * 
      * @param userID smart用户的account
      * @param ip 交易时的ip信息
@@ -99,9 +104,12 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
      * @param tradeDeptNO 部门编号
      * @param channelType 渠道类型
      * @param tradeType 交易类型
+     * 
+     * @exception BussException 如果{@code paymentAmount <=0} 或者 {@code originalAmount<=0}会抛出非法金额异常
+     * @exception BussException 如果 {@code userID}没有开通钱包功能会抛用户不存在异常
      * @return
      */
-    public JsonResult startTrade(String userID, String ip, String location, String orderNO,
+    protected JsonResult startTrade(String userID, String ip, String location, String orderNO,
             String orderName, String orderDesc, String orderAddress, long originalAmount,
             long paymentAmount, Date tradeCreateTime, Date channelStartTime, String tradeDeptNO,
             ChannelType channelType, TradeType tradeType) {
@@ -208,7 +216,7 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
      * @param tradeDeptNO 部门编号
      * @return
      */
-    public JsonResult finishTrade(String userID, ChannelType channelType, String orderNO,
+    protected JsonResult finishTrade(String userID, ChannelType channelType, String orderNO,
             String channelOrderNO, String openID, Date channelPaymentTime, String channelErrorMsg,
             String channelErrorCode, long paymentAmount, TradeStatus tradeStatus,
             String tradeDeptNO) {

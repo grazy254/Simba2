@@ -32,6 +32,16 @@ public class FmtUtil {
         }
     }
 
+    public static ChannelType fmtChannel(String channel) {
+        if (ChannelType.ALIPAY.getName().equals(channel)) {
+            return ChannelType.ALIPAY;
+        } else if (ChannelType.WXPAY.getName().equals(channel)) {
+            return ChannelType.WXPAY;
+        } else {
+            throw new BussException("不支持的交易类型");
+        }
+    }
+
     public static String fmtTradeStatus(String tradeStatus) {
         if (TradeStatus.FAILED.getName().equals(tradeStatus)) {
             return TradeStatus.FAILED.getDesc();

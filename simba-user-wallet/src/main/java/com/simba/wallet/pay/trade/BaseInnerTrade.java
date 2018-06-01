@@ -1,4 +1,4 @@
-package com.simba.wallet.pay;
+package com.simba.wallet.pay.trade;
 
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ public abstract class BaseInnerTrade implements InnerTradeInterface {
 
     public JsonResult trade(String userID, String ip, String location, String orderNO,
             String orderName, String orderDesc, String orderAddress, long originalAmount,
-            long paymentAmount, Date tradeCreateTime, String tradeDeptNO) {
+            long paymentAmount, Date tradeCreateTime, String tradeDeptNO, TradeType tradeType) {
 
         if (paymentAmount <= 0 || originalAmount <= 0) {
             throw new BussException("非法金额");
@@ -118,7 +118,7 @@ public abstract class BaseInnerTrade implements InnerTradeInterface {
         tradeDetail.setTradePartyID(tradePartyID);
         tradeDetail.setTradePaymentTime(new Date());
         tradeDetail.setTradeStatus(TradeStatus.SUCCESS.getName());
-        tradeDetail.setTradeType(TradeType.CONSUME.getName());
+        tradeDetail.setTradeType(tradeType.getName());
         tradeDetail.setTradePaymentTime(new Date());
 
         Long tradeDetailID = tradeDetailDao.add(tradeDetail);

@@ -1,4 +1,4 @@
-package com.simba.wallet.pay;
+package com.simba.wallet.pay.callbacktrade;
 
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.util.FmtUtil;
 
-public abstract class ChannelCallbackTrade implements CallbackTradeInterface {
+public abstract class BaseCallbackTrade implements CallbackTradeInterface {
 
     @Autowired
     protected TradeDetailDao tradeDetailDao;
@@ -59,14 +59,15 @@ public abstract class ChannelCallbackTrade implements CallbackTradeInterface {
 
     }
 
-    public void postTrade(String smartUserAccountID, String departmentAccountID,
-            long paymentAmount) {
+    public void postTrade(TradeAccount smartUserTradeAccount, TradeAccount departmentAccount,
+            TradeAccount channelTradeAccount, long paymentAmount) {
 
     }
 
     public JsonResult startTrade(String userID, String ip, String location, String orderNO,
             String orderName, String orderDesc, String orderAddress, long originalAmount,
-            long paymentAmount, Date tradeCreateTime, String tradeDeptNO, ChannelType channelType) {
+            long paymentAmount, Date tradeCreateTime, Date channelStartTime, String tradeDeptNO,
+            ChannelType channelType, TradeType tradeType) {
 
         if (paymentAmount <= 0 || originalAmount <= 0) {
             throw new BussException("非法金额");
@@ -121,6 +122,7 @@ public abstract class ChannelCallbackTrade implements CallbackTradeInterface {
         tradeChannelDetail.setChannelID(tradeChannel.getId());
         tradeChannelDetail.setTradeAccountID(
                 tradeAccountDao.get(tradeChannel.getType(), TradeUserType.CHANNEL).getAccountID());
+        tradeChannelDetail.setOrderCreateTime(channelStartTime);
 
         Long tradeChannelDetailID = tradeChannelDetailDao.add(tradeChannelDetail);
 
@@ -141,7 +143,7 @@ public abstract class ChannelCallbackTrade implements CallbackTradeInterface {
         tradeDetail.setTradePartyID(tradePartyID);
         tradeDetail.setTradePaymentTime(new Date());
         tradeDetail.setTradeStatus(TradeStatus.SUCCESS.getName());
-        tradeDetail.setTradeType(TradeType.CONSUME.getName());
+        tradeDetail.setTradeType(tradeType.getName());
         tradeDetail.setTradePaymentTime(new Date());
 
         Long tradeDetailID = tradeDetailDao.add(tradeDetail);
@@ -154,10 +156,13 @@ public abstract class ChannelCallbackTrade implements CallbackTradeInterface {
     }
 
     public JsonResult finishTrade(String userID, ChannelType channelType, String orderNO,
-            String channelOrderNO, String openID, Date channelOrderCreateTime,
-            Date channelPaymentTime, String channelErrorMsg, String channelErrorCode,
-            long channelPaymentAmount, TradeStatus tradeStatus, String tradeDeptNO,
-            TradeType tradeType) {
+            String channelOrderNO, String openID, Date channelPaymentTime, String channelErrorMsg,
+            String channelErrorCode, long paymentAmount, TradeStatus tradeStatus,
+            String tradeDeptNO) {
+
+        if (channelType == null) {
+            throw new BussException("渠道信息不可以为空");
+        }
 
         SmartUser smartUser = smartUserDao.getBy("account", userID);
         TradeDetail tradeDetail = tradeDetailDao.getBy("orderNO", orderNO);
@@ -168,25 +173,36 @@ public abstract class ChannelCallbackTrade implements CallbackTradeInterface {
                 tradeChannelDetailDao.get(tradeDetail.getTradeChannelID());
         TradeAccount smartUserTradeAccount =
                 tradeAccountDao.get(smartUser.getAccount(), TradeUserType.PERSION);
-        TradeAccount channelTradeAccount =
-                tradeAccountDao.get(tradeDeptNO, TradeUserType.DEPARTMENT);
+        TradeAccount channelTradeAccount = tradeAccountDao.get(tradeDeptNO, TradeUserType.CHANNEL);
         TradeAccount departmentTradeAccount =
-                tradeAccountDao.get(channelType.getName(), TradeUserType.CHANNEL);
+                tradeAccountDao.get(channelType.getName(), TradeUserType.DEPARTMENT);
 
         tradeDetail.setTradeStatus(tradeStatus.getName());
         tradeDetailDao.update(tradeDetail);
 
-        if (channelType != null) {
-            tradeChannelDetail.setOrderCreateTime(channelOrderCreateTime);
-            tradeChannelDetail.setOrderNO(channelOrderNO);
-            tradeChannelDetail.setPaymentTime(channelPaymentTime);
-            tradeChannelDetail.setOpenID(openID);
-            tradeChannelDetail.setOrderNO(channelOrderNO);
-            tradeChannelDetail.setErrorCode(channelErrorCode);
-            tradeChannelDetail.setErrorMsg(channelErrorMsg);
-            tradeChannelDetailDao.update(tradeChannelDetail);
+        // tradeChannelDetail.setOrderCreateTime(channelOrderCreateTime);
+        tradeChannelDetail.setOrderNO(channelOrderNO);
+        tradeChannelDetail.setPaymentTime(channelPaymentTime);
+        tradeChannelDetail.setOpenID(openID);
+        tradeChannelDetail.setOrderNO(channelOrderNO);
+        tradeChannelDetail.setErrorCode(channelErrorCode);
+        tradeChannelDetail.setErrorMsg(channelErrorMsg);
+        tradeChannelDetailDao.update(tradeChannelDetail);
+
+        if (tradeStatus == TradeStatus.SUCCESS) {
+            postTrade(smartUserTradeAccount, departmentTradeAccount, channelTradeAccount,
+                    paymentAmount);
+            tradeAccountDao.update(smartUserTradeAccount);
+            tradeAccountDao.update(departmentTradeAccount);
+            tradeAccountDao.update(channelTradeAccount);
+
+            return new JsonResult("订单完成");
+        } else if (tradeStatus == TradeStatus.FAILED) {
+            return new JsonResult("订单失败");
+        } else if (tradeStatus == TradeStatus.OVERTIME) {
+            return new JsonResult("订单超时");
         }
-        return null;
+        return new JsonResult("未知订单完成状态");
     }
 
 }

@@ -1,4 +1,4 @@
-package com.simba.wallet.pay.trade;
+package com.simba.wallet.pay.trade.impl;
 
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +13,9 @@ import com.simba.wallet.dao.TradeAccountDao;
 import com.simba.wallet.dao.TradeUserDao;
 import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeUser;
+import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.model.enums.TradeUserType;
-import com.simba.wallet.pay.BaseInnerTrade;
+import com.simba.wallet.pay.trade.BaseInnerTrade;
 
 @Service
 @Transactional
@@ -41,7 +42,7 @@ public class ConsumeTrade extends BaseInnerTrade {
     }
 
     @Override
-    public void preTrade(String userID) {
+    public void checkUserAccount(String userID) {
         SmartUser smartUser = smartUserDao.getBy("account", userID);
         TradeUser tradeUser =
                 tradeUserDao.get(smartUser.getAccount(), TradeUserType.PERSION.getName());
@@ -78,7 +79,7 @@ public class ConsumeTrade extends BaseInnerTrade {
     public JsonResult trade(String userID, String orderNO, long paymentAmount,
             Date tradeCreateTime) {
         return trade(userID, "", "", orderNO, "", "", "", paymentAmount, paymentAmount,
-                tradeCreateTime, RegistryUtil.get("tradeAccount.department.consume"));
+                tradeCreateTime, RegistryUtil.get("trade.department.consume"), TradeType.CONSUME);
     }
 
 }

@@ -1,14 +1,8 @@
 package com.simba.wallet.service;
 
-import java.util.Date;
 import java.util.List;
 import com.simba.framework.util.jdbc.Pager;
-import com.simba.framework.util.json.JsonResult;
-import com.simba.model.SmartUser;
 import com.simba.wallet.model.TradeDetail;
-import com.simba.wallet.model.enums.ChannelType;
-import com.simba.wallet.model.enums.TradeStatus;
-import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.model.form.TradeDetailSearchForm;
 
 /**
@@ -71,23 +65,4 @@ public interface TradeDetailService {
     List<TradeDetail> pageByOr(String field1, Object value1, String field2, Object value2,
             Pager page);
 
-    // JsonResult startRecharge(SmartUser smartUser, ChannelType channelType,
-    // TradePartyDetail tradePartyDetail, long originalAmount, long paymentAmount,
-    // Date tradeCreateTime);
-    //
-    // JsonResult finishRecharge();
-
-    JsonResult startTrade(SmartUser smartUser, String tradeDeptNO, ChannelType channelType,
-            String ip, String location, String orderNO, String orderName, String orderDesc,
-            String orderAddress, long originalAmount, long paymentAmount, Date tradeCreateTime,
-            TradeType tradeType);
-
-    JsonResult finishTrade(SmartUser smartUser, String tradeDeptNO, ChannelType channelType,
-            String orderNO, String channelOrderNO, String openID, Date channelOrderCreateTime,
-            Date channelPaymentTime, String channelErrorMsg, String channelErrorCode,
-            long paymentAmount, TradeStatus tradeStatus, TradeType tradeType);
-
-    JsonResult reward(String userID, long paymentAmount);
-
-    JsonResult recharge(String userID, long paymentAmount);
 }

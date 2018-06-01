@@ -1,15 +1,18 @@
-package com.simba.wallet.pay.trade;
+package com.simba.wallet.pay.trade.impl;
 
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.registry.util.RegistryUtil;
 import com.simba.wallet.dao.TradeAccountDao;
 import com.simba.wallet.model.TradeAccount;
-import com.simba.wallet.pay.BaseInnerTrade;
+import com.simba.wallet.model.enums.TradeType;
+import com.simba.wallet.pay.trade.BaseInnerTrade;
 
-@Component
+@Service
+@Transactional
 public class RewardTrade extends BaseInnerTrade {
 
     @Autowired
@@ -19,7 +22,7 @@ public class RewardTrade extends BaseInnerTrade {
     public JsonResult trade(String userID, String orderNO, long paymentAmount,
             Date tradeCreateTime) {
         return trade(userID, "", "", orderNO, "", "", "", paymentAmount, paymentAmount,
-                tradeCreateTime, RegistryUtil.get("tradeAccount.department.reward"));
+                tradeCreateTime, RegistryUtil.get("trade.department.reward"), TradeType.REWARD);
     }
 
     @Override

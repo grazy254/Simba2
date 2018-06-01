@@ -2,57 +2,46 @@ package com.simba.wallet.pay.wechatpay;
 
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.simba.framework.util.data.ThreadDataUtil;
 import com.simba.framework.util.date.DateUtil;
 import com.simba.interfaces.PayInterface;
-import com.simba.model.SmartUser;
 import com.simba.model.pay.refund.RefundReq;
 import com.simba.model.pay.result.PayResult;
 import com.simba.model.pay.result.RefundCallbackInfo;
 import com.simba.model.pay.result.RefundResult;
 import com.simba.model.pay.unifiedorder.UnifiedOrderReq;
-import com.simba.registry.util.RegistryUtil;
-import com.simba.service.SmartUserService;
-import com.simba.wallet.model.enums.TradeType;
-import com.simba.wallet.service.TradeDetailService;
-import com.simba.wallet.util.FmtUtil;
+import com.simba.wallet.model.enums.TradeStatus;
+import com.simba.wallet.pay.callbacktrade.CallbackTradeContext;
+import com.simba.wallet.pay.callbacktrade.impl.WXRechargeTrade;
 
 public class TradeByWechatPay implements PayInterface {
 
     @Autowired
-    private TradeDetailService tradeDetailService;
+    private WXRechargeTrade rechargeTrade;
 
-    @Autowired
-    private SmartUserService smartUserService;
+    private CallbackTradeContext context = new CallbackTradeContext(rechargeTrade);
+    private String userID = (String) ThreadDataUtil.get("account");
 
     @Override
     public void dealResult(PayResult payResult) {
-        // ======修改的数据(针对充值操作)======
-        // 普通用户的TradeAccount
-        // AccountBalance = AccountBalance
-        // FrozonBalance = ${changedAmount}
-        // AvaliableBalance = AvaliableBalance
-
-        // 收费部门的TradeAccount
-        // AccountBalance = AccountBalance
-        // FrozonBalance = ${changedAmount}
-        // AvaliableBalance = AvaliableBalance
-        // 渠道的TradeAccount
+        TradeStatus status = null;
+        if ("FAIL".equals(payResult.getReturn_code())
+                || "FAIL".equals(payResult.getResult_code())) {
+            status = TradeStatus.FAILED;
+        }
+        context.finishTrade(userID, payResult.getOut_trade_no(), payResult.getTransaction_id(),
+                payResult.getOpenid(), DateUtil.str2Date(payResult.getTime_end(), "yyyyMMddHHmmss"),
+                payResult.getErr_code_des(), payResult.getErr_code(), payResult.getTotal_fee(),
+                status);
     }
 
 
 
     @Override
     public void dealOrder(UnifiedOrderReq req, String prePayId, String codeUrl, String mwebUrl) {
-
-        SmartUser smartUser = smartUserService.getBy("account", "18676459182");
-
-        String tradeDeptNO = RegistryUtil.get("tradeAccount.department.recharge");
-        String chanelType = RegistryUtil.get("tradeChannel.wxpay");
-
-        tradeDetailService.startTrade(smartUser, tradeDeptNO, FmtUtil.getChannelType(chanelType),
-                req.getSpbill_create_ip(), "", req.getOut_trade_no(), "", "", "", 0, 0,
-                DateUtil.str2Date(req.getTime_start(), "yyyyMMddHHmmss", new Date()),
-                TradeType.RECHARGE);
+        context.startTrade(userID, req.getSpbill_create_ip(), req.getOut_trade_no(),
+                req.getTotal_fee(), new Date(),
+                DateUtil.str2Date(req.getTime_start(), "yyyyMMddHHmmss"));
     }
 
     @Override

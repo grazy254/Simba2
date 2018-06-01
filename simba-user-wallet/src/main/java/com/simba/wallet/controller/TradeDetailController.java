@@ -14,11 +14,7 @@ import com.simba.framework.util.data.ThreadDataUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.SmartUser;
-import com.simba.registry.util.RegistryUtil;
 import com.simba.wallet.model.TradeDetail;
-import com.simba.wallet.model.enums.ChannelType;
-import com.simba.wallet.model.enums.TradeStatus;
-import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.model.form.TradeDetailSearchForm;
 import com.simba.wallet.service.TradeDetailService;
 
@@ -72,15 +68,15 @@ public class TradeDetailController {
         SmartUser smartUser = (SmartUser) ThreadDataUtil.get("account");
         // SmartUser smartUser = sessionUtil.getSmartUser(session);
 
-        JsonResult rs = tradeDetailService.startTrade(smartUser,
-                RegistryUtil.get("tradeAccount.department.recharge"), ChannelType.WXPAY, ip,
-                location, orderNO, orderName, orderDesc, orderAddress, originalAmount,
-                paymentAmount, tradeCreateTime, TradeType.RECHARGE);
-        tradeDetailService.finishTrade(smartUser,
-                RegistryUtil.get("tradeAccount.department.recharge"), ChannelType.WXPAY, orderNO,
-                "123", "123", new Date(), new Date(), "", "", paymentAmount, TradeStatus.SUCCESS,
-                TradeType.RECHARGE);
-        return rs;
+        // JsonResult rs = tradeDetailService.startTrade(smartUser,
+        // RegistryUtil.get("tradeAccount.department.recharge"), ChannelType.WXPAY, ip,
+        // location, orderNO, orderName, orderDesc, orderAddress, originalAmount,
+        // paymentAmount, tradeCreateTime, TradeType.RECHARGE);
+        // tradeDetailService.finishTrade(smartUser,
+        // RegistryUtil.get("tradeAccount.department.recharge"), ChannelType.WXPAY, orderNO,
+        // "123", "123", new Date(), new Date(), "", "", paymentAmount, TradeStatus.SUCCESS,
+        // TradeType.RECHARGE);
+        return null;
     }
 
     @ResponseBody
@@ -92,15 +88,15 @@ public class TradeDetailController {
             HttpSession session) {
         SmartUser smartUser = (SmartUser) ThreadDataUtil.get("account");
 
-        JsonResult rs = tradeDetailService.startTrade(smartUser,
-                RegistryUtil.get("tradeAccount.department.recharge"), ChannelType.WXPAY, ip,
-                location, orderNO, orderName, orderDesc, orderAddress, originalAmount,
-                paymentAmount, tradeCreateTime, TradeType.REFUND);
-        tradeDetailService.finishTrade(smartUser,
-                RegistryUtil.get("tradeAccount.department.recharge"), ChannelType.WXPAY, orderNO,
-                "123", "123", new Date(), new Date(), "", "", paymentAmount, TradeStatus.SUCCESS,
-                TradeType.REFUND);
-        return rs;
+        // JsonResult rs = tradeDetailService.startTrade(smartUser,
+        // RegistryUtil.get("tradeAccount.department.recharge"), ChannelType.WXPAY, ip,
+        // location, orderNO, orderName, orderDesc, orderAddress, originalAmount,
+        // paymentAmount, tradeCreateTime, TradeType.REFUND);
+        // tradeDetailService.finishTrade(smartUser,
+        // RegistryUtil.get("tradeAccount.department.recharge"), ChannelType.WXPAY, orderNO,
+        // "123", "123", new Date(), new Date(), "", "", paymentAmount, TradeStatus.SUCCESS,
+        // TradeType.REFUND);
+        return null;
     }
 
     @ResponseBody

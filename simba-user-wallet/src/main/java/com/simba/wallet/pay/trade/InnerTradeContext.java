@@ -1,13 +1,13 @@
-package com.simba.wallet.pay;
+package com.simba.wallet.pay.trade;
 
 import java.util.Date;
 import com.simba.framework.util.json.JsonResult;
 
-public class TradeContext {
+public class InnerTradeContext {
     private InnerTradeInterface trade;
 
 
-    public TradeContext(InnerTradeInterface trade) {
+    public InnerTradeContext(InnerTradeInterface trade) {
         this.trade = trade;
     }
 

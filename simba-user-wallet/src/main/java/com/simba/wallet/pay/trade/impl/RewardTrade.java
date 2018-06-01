@@ -11,6 +11,12 @@ import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.pay.trade.BaseInnerTrade;
 
+/**
+ * 奖励交易
+ * 
+ * @author zhangfenghua
+ *
+ */
 @Service
 @Transactional
 public class RewardTrade extends BaseInnerTrade {

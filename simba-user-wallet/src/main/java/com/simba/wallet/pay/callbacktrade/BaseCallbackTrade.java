@@ -28,6 +28,12 @@ import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.util.FmtUtil;
 
+/**
+ * 回调交易抽象类
+ * 
+ * @author zhangfenghua
+ *
+ */
 public abstract class BaseCallbackTrade implements CallbackTradeInterface {
 
     @Autowired
@@ -54,16 +60,47 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
     @Autowired
     protected TradeChannelDetailDao tradeChannelDetailDao;
 
-
+    /**
+     * 检查用户状态
+     * 
+     * @param userID smart用户account
+     */
     public void checkUserAccount(String userID) {
 
     }
 
+    /**
+     * 需要自己实现的后续交易操作
+     * 
+     * @param smartUserTradeAccount smart用户账户
+     * @param departmentAccount 部门账户
+     * @param channelTradeAccount 渠道账户
+     * @param paymentAmount 金额 单位是分
+     */
     public void postTrade(TradeAccount smartUserTradeAccount, TradeAccount departmentAccount,
             TradeAccount channelTradeAccount, long paymentAmount) {
 
     }
 
+    /**
+     * 开始交易 一般在回调之前调用
+     * 
+     * @param userID smart用户的account
+     * @param ip 交易时的ip信息
+     * @param location 交易时的地理位置
+     * @param orderNO 订单号
+     * @param orderName 订单名称
+     * @param orderDesc 订单描述
+     * @param orderAddress 订单地址
+     * @param originalAmount 原始金额
+     * @param paymentAmount 实际金额
+     * @param tradeCreateTime 订单时间
+     * @param channelStartTime 渠道开始时间
+     * @param tradeDeptNO 部门编号
+     * @param channelType 渠道类型
+     * @param tradeType 交易类型
+     * @return
+     */
     public JsonResult startTrade(String userID, String ip, String location, String orderNO,
             String orderName, String orderDesc, String orderAddress, long originalAmount,
             long paymentAmount, Date tradeCreateTime, Date channelStartTime, String tradeDeptNO,
@@ -155,6 +192,22 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
         return new JsonResult("订单创建成功");
     }
 
+    /**
+     * 回调方法用来结束交易
+     * 
+     * @param userID smart用户account
+     * @param channelType 渠道类型
+     * @param orderNO 订单号
+     * @param channelOrderNO 渠道订单号
+     * @param openID
+     * @param channelPaymentTime 渠道支付时间
+     * @param channelErrorMsg 渠道返回的错误信息
+     * @param channelErrorCode 渠道返回的错误码
+     * @param paymentAmount 交易金额 单位是分
+     * @param tradeStatus 交易状态
+     * @param tradeDeptNO 部门编号
+     * @return
+     */
     public JsonResult finishTrade(String userID, ChannelType channelType, String orderNO,
             String channelOrderNO, String openID, Date channelPaymentTime, String channelErrorMsg,
             String channelErrorCode, long paymentAmount, TradeStatus tradeStatus,

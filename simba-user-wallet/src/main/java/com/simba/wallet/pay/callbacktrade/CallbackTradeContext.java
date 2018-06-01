@@ -4,6 +4,12 @@ import java.util.Date;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.model.enums.TradeStatus;
 
+/**
+ * 回调交易调用接口
+ * 
+ * @author zhangfenghua
+ *
+ */
 public class CallbackTradeContext {
     private CallbackTradeInterface callbackTrade;
 

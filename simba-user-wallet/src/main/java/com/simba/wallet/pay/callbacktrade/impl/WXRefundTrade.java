@@ -11,6 +11,13 @@ import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.pay.callbacktrade.BaseCallbackTrade;
 import com.simba.wallet.util.FmtUtil;
 
+
+/**
+ * 微信提现交易
+ * 
+ * @author zhangfenghua
+ *
+ */
 @Service
 @Transactional
 public class WXRefundTrade extends BaseCallbackTrade {

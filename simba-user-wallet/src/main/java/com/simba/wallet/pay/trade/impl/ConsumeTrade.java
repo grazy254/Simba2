@@ -17,6 +17,12 @@ import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.pay.trade.BaseInnerTrade;
 
+/**
+ * 购买交易
+ * 
+ * @author zhangfenghua
+ *
+ */
 @Service
 @Transactional
 public class ConsumeTrade extends BaseInnerTrade {

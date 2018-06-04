@@ -80,7 +80,7 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
      * @param channelTradeAccount 渠道账户
      * @param paymentAmount 金额 单位是分
      */
-    protected void postTrade(TradeAccount smartUserTradeAccount, TradeAccount departmentAccount,
+    protected void updateBalance(TradeAccount smartUserTradeAccount, TradeAccount departmentAccount,
             TradeAccount channelTradeAccount, long paymentAmount) {
 
     }
@@ -251,7 +251,7 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
         tradeChannelDetailDao.update(tradeChannelDetail);
 
         if (tradeStatus == TradeStatus.SUCCESS) {
-            postTrade(smartUserTradeAccount, departmentTradeAccount, channelTradeAccount,
+            updateBalance(smartUserTradeAccount, departmentTradeAccount, channelTradeAccount,
                     paymentAmount);
             tradeAccountDao.update(smartUserTradeAccount);
             tradeAccountDao.update(departmentTradeAccount);

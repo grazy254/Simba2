@@ -1,20 +1,17 @@
 package com.simba.wallet.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.simba.framework.util.date.DateTime;
 import com.simba.framework.util.jdbc.Pager;
-import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.TradePartyDetail;
 import com.simba.wallet.model.enums.TradeUserType;
@@ -83,37 +80,32 @@ public class TradePartyDetailController {
         return result;
     }
 
-    /**
-     * 新增交易主体
-     * 
-     * @param tradePartyDetail
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping("/add")
-    public JsonResult add(TradePartyDetail tradePartyDetail) {
-        tradePartyDetailService.add(tradePartyDetail);
-        return new JsonResult();
-    }
 
-    @ResponseBody
-    @RequestMapping("/update")
-    public JsonResult update(TradePartyDetail tradePartyDetail) {
-        tradePartyDetailService.update(tradePartyDetail);
-        return new JsonResult();
-    }
+    // @ResponseBody
+    // @RequestMapping("/add")
+    // public JsonResult add(TradePartyDetail tradePartyDetail) {
+    // tradePartyDetailService.add(tradePartyDetail);
+    // return new JsonResult();
+    // }
 
-    @ResponseBody
-    @RequestMapping("/delete")
-    public JsonResult delete(Long id, ModelMap model) {
-        tradePartyDetailService.delete(id);
-        return new JsonResult();
-    }
+    // @ResponseBody
+    // @RequestMapping("/update")
+    // public JsonResult update(TradePartyDetail tradePartyDetail) {
+    // tradePartyDetailService.update(tradePartyDetail);
+    // return new JsonResult();
+    // }
 
-    @ResponseBody
-    @RequestMapping("/batchDelete")
-    public JsonResult batchDelete(Long[] id, ModelMap model) {
-        tradePartyDetailService.batchDelete(Arrays.asList(id));
-        return new JsonResult();
-    }
+    // @ResponseBody
+    // @RequestMapping("/delete")
+    // public JsonResult delete(Long id, ModelMap model) {
+    // tradePartyDetailService.delete(id);
+    // return new JsonResult();
+    // }
+    //
+    // @ResponseBody
+    // @RequestMapping("/batchDelete")
+    // public JsonResult batchDelete(Long[] id, ModelMap model) {
+    // tradePartyDetailService.batchDelete(Arrays.asList(id));
+    // return new JsonResult();
+    // }
 }

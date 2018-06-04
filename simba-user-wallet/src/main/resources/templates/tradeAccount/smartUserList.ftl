@@ -26,10 +26,7 @@
 								</div>
 								<!-- /.box-header -->
 								<div class="mailbox-controls">
-									<label for="userID">用户账号:</label>
 									<input type="text" id="userID"  name="userID" placeholder="请输入用户账号">
-						
-									<!-- Check all button -->
 									<button type="button" class="btn btn-default btn-sm" onclick="TradeAccount.toSearch();"><i class="fa fa-search"></i>查询</button>
 									<div class="pull-right">
 									

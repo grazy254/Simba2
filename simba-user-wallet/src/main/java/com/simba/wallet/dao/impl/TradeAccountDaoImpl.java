@@ -49,14 +49,13 @@ public class TradeAccountDaoImpl implements TradeAccountDao {
     @Override
     public void update(TradeAccount tradeAccount) {
         String sql = "update " + table
-                + " set  tradeUserID = ? , accountID = ? , accountType = ? , feeType = ? , isAllowRecharge = ? , isAllowPay = ? , isActive = ? , isFrozen = ? , accountBalance = ? , availableBalance = ? , frozenBalance = ? , createTime = ? , lastUpdateTime = ?  where id = ?  ";
+                + " set  tradeUserID = ? , accountID = ? , accountType = ? , feeType = ? , isAllowRecharge = ? , isAllowPay = ? , isActive = ? , isFrozen = ? , accountBalance = ? , availableBalance = ? , frozenBalance = ?  where id = ?  ";
         jdbc.updateForBoolean(sql, tradeAccount.getTradeUserID(), tradeAccount.getAccountID(),
                 tradeAccount.getAccountType(), tradeAccount.getFeeType(),
                 tradeAccount.getIsAllowRecharge(), tradeAccount.getIsAllowPay(),
                 tradeAccount.getIsActive(), tradeAccount.getIsFrozen(),
                 tradeAccount.getAccountBalance(), tradeAccount.getAvailableBalance(),
-                tradeAccount.getFrozenBalance(), tradeAccount.getCreateTime(),
-                tradeAccount.getLastUpdateTime(), tradeAccount.getId());
+                tradeAccount.getFrozenBalance(), tradeAccount.getId());
     }
 
     @Override

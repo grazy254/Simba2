@@ -12,6 +12,7 @@ import com.simba.wallet.dao.TradeDepartmentDao;
 import com.simba.wallet.dao.TradeDetailDao;
 import com.simba.wallet.dao.TradePartyDetailDao;
 import com.simba.wallet.dao.TradeUserDao;
+import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeDepartment;
 import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.TradePartyDetail;
@@ -61,11 +62,11 @@ public abstract class BaseInnerTrade implements InnerTradeInterface {
     /**
      * 交易后要执行的后续操作
      * 
-     * @param smartUserAccountID smart用户的交易账户id
-     * @param departmentAccountID 部门交易账户id
+     * @param smartUserAccount smart用户账户
+     * @param departmentAccount 部门账户
      * @param paymentAmount 金额 单位是分
      */
-    protected void postTrade(String smartUserAccountID, String departmentAccountID,
+    protected void updateBalance(TradeAccount smartUserAccount, TradeAccount departmentAccount,
             long paymentAmount) {
 
     }
@@ -161,8 +162,15 @@ public abstract class BaseInnerTrade implements InnerTradeInterface {
             throw new BussException("创建支付订单失败");
         }
 
-        postTrade(tradePartyDetail.getTradeAccountID(), counterPartyDetail.getTradeAccountID(),
-                paymentAmount);
+        TradeAccount smartUserTradeAccount =
+                tradeAccountDao.getBy("accountID", tradePartyDetail.getTradeAccountID());
+        TradeAccount departmentTradeAccount =
+                tradeAccountDao.getBy("accountID", counterPartyDetail.getTradeAccountID());
+        updateBalance(smartUserTradeAccount, departmentTradeAccount, paymentAmount);
+
+        tradeAccountDao.update(smartUserTradeAccount);
+        tradeAccountDao.update(departmentTradeAccount);
+
         return new JsonResult("订单创建成功");
     }
 

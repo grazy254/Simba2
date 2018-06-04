@@ -3,35 +3,6 @@ var TradeChannel = {
 	"toAdd": function() {
 		window.self.location.href = contextPath + "/tradeChannel/toAdd";
 	},
-
-	"batchDelete": function() {
-		var ids = new Array();
-		$("input[name='tradeChannel']").each(function() {
-			if(true == $(this).is(':checked')) {
-				ids.push($(this).val());
-			}
-		});
-		if(ids.length == 0) {
-			parent.showInfo("请选择要删除的记录");
-			return false;
-		}
-		$.ajax({
-			type: "post",
-			url: contextPath + "/tradeChannel/batchDelete",
-			data: {
-				"id": ids.join(",")
-			},
-			async: true,
-			dataType: "json",
-			success: function(data) {
-				if(data.code == 200) {
-					TradeChannel.initTradeChannelList(0, Page.size);
-				} else {
-					parent.showInfo(data.msg);
-				}
-			}
-		});
-	},
 	"initTradeChannelList": function(start, pageSize, method) {
 		var data = {}
 		var data2 = {}

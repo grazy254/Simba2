@@ -23,8 +23,9 @@ import com.simba.wallet.util.FmtUtil;
 public class WXRefundTrade extends BaseCallbackTrade {
 
     @Override
-    public void postTrade(TradeAccount smartUserTradeAccount, TradeAccount departmentTradeAccount,
-            TradeAccount channelTradeAccount, long paymentAmount) {
+    public void updateBalance(TradeAccount smartUserTradeAccount,
+            TradeAccount departmentTradeAccount, TradeAccount channelTradeAccount,
+            long paymentAmount) {
         smartUserTradeAccount
                 .setAccountBalance(smartUserTradeAccount.getAccountBalance() - paymentAmount);
         smartUserTradeAccount

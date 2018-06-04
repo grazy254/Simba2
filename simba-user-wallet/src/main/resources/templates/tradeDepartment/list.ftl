@@ -30,7 +30,7 @@
 										<!-- Check all button -->
 										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="TradeDepartment.toAdd();"><i class="fa fa-plus"></i>
                 新增</button>
-										<button type="button" class="btn btn-default btn-sm" onclick="TradeDepartment.batchDelete();"><i class="fa fa-remove"></i>删除</button>
+										<!-- <button type="button" class="btn btn-default btn-sm" onclick="TradeDepartment.batchDelete();"><i class="fa fa-remove"></i>删除</button> -->
 										<div class="pull-right">
 
 										</div>
@@ -41,7 +41,6 @@
 									<table class="table table-hover table-striped table-bordered" id="table">
 										<thead>
 											<tr>
-												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
 												<th>部门编号</th>
 												<th>部门名称</th>
 												<th>账户状态</th>

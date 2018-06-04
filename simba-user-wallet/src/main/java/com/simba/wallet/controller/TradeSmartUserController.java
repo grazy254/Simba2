@@ -1,8 +1,8 @@
 package com.simba.wallet.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -15,6 +15,7 @@ import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeUser;
 import com.simba.wallet.model.enums.AccountStatus;
 import com.simba.wallet.model.enums.TradeUserType;
+import com.simba.wallet.model.form.TradeSmartUserSearchForm;
 import com.simba.wallet.model.vo.TradeSmartUserVO;
 import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeUserService;
@@ -35,6 +36,42 @@ public class TradeSmartUserController {
 
     @Autowired
     private TradeAccountService tradeAccountService;
+
+    @RequestMapping("/doSearch")
+    public String getTradeSmartUser(TradeSmartUserSearchForm tradeSmartUserSearchForm,
+            ModelMap model) {
+
+        if (StringUtils.isEmpty(tradeSmartUserSearchForm.getUserID())) {
+            return "trade/list";
+        }
+
+        TradeUser tradeUser = tradeUserService.get(tradeSmartUserSearchForm.getUserID(),
+                TradeUserType.PERSION.getName());
+        List<TradeSmartUserVO> tradeSmartUserVOList = new ArrayList<>();
+        String accountStatus = AccountStatus.NOTEXIST.getName();
+        TradeAccount tradeAccount = null;
+        try {
+            tradeAccount = tradeAccountService.get(tradeUser.getId(), TradeUserType.PERSION);
+            accountStatus = FmtUtil.getAccountStatus(tradeAccount).getName();
+        } catch (Exception e) {
+
+        }
+        TradeSmartUserVO vo = new TradeSmartUserVO();
+        vo.setId(tradeUser.getId());
+        vo.setAccount(tradeUser.getUserID());
+        vo.setAccountStatus(accountStatus);
+        // TODO: 判断账户的状态是否激活
+        vo.setIsAllowPay(tradeUser.getIsAllowPay() == 1 ? "允许" : "不允许");
+        vo.setUserStatus(FmtUtil.getUserStatus(tradeUser).getName());
+        vo.setName(tradeUser.getName());
+        vo.setCreateTime(DateUtil.date2String(tradeUser.getCreateTime()));
+        vo.setLastUpdateTime(DateUtil.date2String(tradeUser.getLastUpdateTime()));
+        tradeSmartUserVOList.add(vo);
+
+        model.put("list", tradeSmartUserVOList);
+
+        return "tradeSmartUser/table";
+    }
 
     @RequestMapping("/list")
     public String list() {
@@ -84,26 +121,19 @@ public class TradeSmartUserController {
         return tradeUserService.frozePayment(account, TradeUserType.PERSION);
     }
 
+    // @ResponseBody
+    // @RequestMapping("/add")
+    // public JsonResult add(TradeUser tradeUser) {
+    // tradeUserService.add(tradeUser);
+    // return new JsonResult();
+    // }
 
-    /**
-     * 新增钱包用户信息
-     * 
-     * @param tradeUser
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping("/add")
-    public JsonResult add(TradeUser tradeUser) {
-        tradeUserService.add(tradeUser);
-        return new JsonResult();
-    }
-
-    @ResponseBody
-    @RequestMapping("/update")
-    public JsonResult update(TradeUser tradeUser) {
-        tradeUserService.update(tradeUser);
-        return new JsonResult();
-    }
+    // @ResponseBody
+    // @RequestMapping("/update")
+    // public JsonResult update(TradeUser tradeUser) {
+    // tradeUserService.update(tradeUser);
+    // return new JsonResult();
+    // }
 
     @ResponseBody
     @RequestMapping("/count")
@@ -112,17 +142,17 @@ public class TradeSmartUserController {
         return new JsonResult();
     }
 
-    @ResponseBody
-    @RequestMapping("/delete")
-    public JsonResult delete(Long id, ModelMap model) {
-        tradeUserService.delete(id);
-        return new JsonResult();
-    }
-
-    @ResponseBody
-    @RequestMapping("/batchDelete")
-    public JsonResult batchDelete(Long[] id, ModelMap model) {
-        tradeUserService.batchDelete(Arrays.asList(id));
-        return new JsonResult();
-    }
+    // @ResponseBody
+    // @RequestMapping("/delete")
+    // public JsonResult delete(Long id, ModelMap model) {
+    // tradeUserService.delete(id);
+    // return new JsonResult();
+    // }
+    //
+    // @ResponseBody
+    // @RequestMapping("/batchDelete")
+    // public JsonResult batchDelete(Long[] id, ModelMap model) {
+    // tradeUserService.batchDelete(Arrays.asList(id));
+    // return new JsonResult();
+    // }
 }

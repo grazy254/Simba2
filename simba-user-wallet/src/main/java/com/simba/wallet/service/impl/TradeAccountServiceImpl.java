@@ -12,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.simba.dao.UserProjectDao;
 import com.simba.exception.BussException;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
@@ -43,9 +42,6 @@ public class TradeAccountServiceImpl implements TradeAccountService {
 
     @Autowired
     private TradeUserService tradeUserDao;
-
-    @Autowired
-    private UserProjectDao projectDao;
 
     @Override
     public Long add(TradeAccount tradeAccount) {

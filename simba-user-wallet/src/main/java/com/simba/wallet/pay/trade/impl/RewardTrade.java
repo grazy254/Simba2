@@ -31,12 +31,8 @@ public class RewardTrade extends BaseInnerTrade {
     }
 
     @Override
-    public void postTrade(String smartUserAccountID, String departmentAccountID,
-            long paymentAmount) {
-        TradeAccount smartUserTradeAccount = tradeAccountDao.getBy("accountID", smartUserAccountID);
-
-        TradeAccount departmentTradeAccount =
-                tradeAccountDao.getBy("accountID", departmentAccountID);
+    public void updateBalance(TradeAccount smartUserTradeAccount,
+            TradeAccount departmentTradeAccount, long paymentAmount) {
 
         smartUserTradeAccount
                 .setAccountBalance(smartUserTradeAccount.getAccountBalance() + paymentAmount);
@@ -48,7 +44,6 @@ public class RewardTrade extends BaseInnerTrade {
         departmentTradeAccount
                 .setAvailableBalance(departmentTradeAccount.getAvailableBalance() + paymentAmount);
 
-        tradeAccountDao.update(smartUserTradeAccount);
-        tradeAccountDao.update(departmentTradeAccount);
+
     }
 }

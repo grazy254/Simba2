@@ -60,12 +60,9 @@ public class ConsumeTrade extends BaseInnerTrade {
 
 
     @Override
-    public void postTrade(String smartUserAccountID, String departmentAccountID,
-            long paymentAmount) {
+    public void updateBalance(TradeAccount smartUserTradeAccount,
+            TradeAccount departmentTradeAccount, long paymentAmount) {
 
-        TradeAccount smartUserTradeAccount = tradeAccountDao.getBy("accountID", smartUserAccountID);
-        TradeAccount departmentTradeAccount =
-                tradeAccountDao.getBy("accountID", departmentAccountID);
         smartUserTradeAccount
                 .setAccountBalance(smartUserTradeAccount.getAccountBalance() - paymentAmount);
         smartUserTradeAccount
@@ -75,9 +72,6 @@ public class ConsumeTrade extends BaseInnerTrade {
                 .setAccountBalance(departmentTradeAccount.getAccountBalance() + paymentAmount);
         departmentTradeAccount
                 .setAvailableBalance(departmentTradeAccount.getAvailableBalance() + paymentAmount);
-
-        tradeAccountDao.update(smartUserTradeAccount);
-        tradeAccountDao.update(departmentTradeAccount);
     }
 
 

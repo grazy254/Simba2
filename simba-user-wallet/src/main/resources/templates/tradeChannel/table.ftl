@@ -1,6 +1,5 @@
 <#list list as tradeChannelVO>
 	<tr>
-		<td><input type="checkbox" name="tradeChannel" value="${tradeChannelVO.id}"></td>
 		<td>${tradeChannelVO.name}</td>
 		<td>${tradeChannelVO.type}</td>
 		<td>${tradeChannelVO.accountStatus}</td>

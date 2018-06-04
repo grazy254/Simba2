@@ -1,7 +1,6 @@
 package com.simba.wallet.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +48,8 @@ public class TradeAccountController {
     private SessionUtil sessionUtil;
 
     @RequestMapping("/doSearch")
-    public String getSmartUserList(TradeAccountSearchForm tradeAccountSearchForm, ModelMap model) {
+    public String getSmartUserAccount(TradeAccountSearchForm tradeAccountSearchForm,
+            ModelMap model) {
 
         if (StringUtils.isEmpty(tradeAccountSearchForm.getUserID())) {
             return "tradeAccount/smartUserList";
@@ -68,17 +68,17 @@ public class TradeAccountController {
         return "tradeAccount/table";
     }
 
-    @RequestMapping("/list")
-    public String list() {
-        return "tradeAccount/list";
-    }
+    // @RequestMapping("/list")
+    // public String list() {
+    // return "tradeAccount/list";
+    // }
 
-    @RequestMapping("/getList")
-    public String getList(Pager pager, ModelMap model) {
-        List<TradeAccount> list = tradeAccountService.page(pager);
-        model.put("list", list);
-        return "tradeAccount/table";
-    }
+    // @RequestMapping("/getList")
+    // public String getList(Pager pager, ModelMap model) {
+    // List<TradeAccount> list = tradeAccountService.page(pager);
+    // model.put("list", list);
+    // return "tradeAccount/table";
+    // }
 
     @RequestMapping("/departmentList")
     public String departmentList() {
@@ -101,8 +101,6 @@ public class TradeAccountController {
         model.putAll(getList(null, AccountType.PERSIONAL_ACCOUNT));
         return "tradeAccount/table";
     }
-
-
 
     @RequestMapping("/channelList")
     public String channelList() {
@@ -159,29 +157,29 @@ public class TradeAccountController {
         return new JsonResult(count, "", 200);
     }
 
-    @RequestMapping("/toAdd")
-    public String toAdd() {
-        return "tradeAccount/add";
-    }
-
-    @RequestMapping("/add")
-    public String add(TradeAccount tradeAccount) {
-        tradeAccountService.add(tradeAccount);
-        return "redirect:/tradeAccount/list";
-    }
-
-    @RequestMapping("/toUpdate")
-    public String toUpdate(Long id, ModelMap model) {
-        TradeAccount tradeAccount = tradeAccountService.get(id);
-        model.put("tradeAccount", tradeAccount);
-        return "tradeAccount/update";
-    }
-
-    @RequestMapping("/update")
-    public String update(TradeAccount tradeAccount) {
-        tradeAccountService.update(tradeAccount);
-        return "redirect:/tradeAccount/list";
-    }
+    // @RequestMapping("/toAdd")
+    // public String toAdd() {
+    // return "tradeAccount/add";
+    // }
+    //
+    // @RequestMapping("/add")
+    // public String add(TradeAccount tradeAccount) {
+    // tradeAccountService.add(tradeAccount);
+    // return "redirect:/tradeAccount/list";
+    // }
+    //
+    // @RequestMapping("/toUpdate")
+    // public String toUpdate(Long id, ModelMap model) {
+    // TradeAccount tradeAccount = tradeAccountService.get(id);
+    // model.put("tradeAccount", tradeAccount);
+    // return "tradeAccount/update";
+    // }
+    //
+    // @RequestMapping("/update")
+    // public String update(TradeAccount tradeAccount) {
+    // tradeAccountService.update(tradeAccount);
+    // return "redirect:/tradeAccount/list";
+    // }
 
     /**
      * 展示余额
@@ -226,22 +224,34 @@ public class TradeAccountController {
                 password, payPhone, payEmail, TradeUserType.PERSION, 1, 1, 1);
     }
 
+    /**
+     * 冻结个人账户
+     * 
+     * @param account
+     * @return
+     * @throws Exception
+     */
     @ResponseBody
     @RequestMapping("/frozePersonalAccount")
     public JsonResult frozePersonalAccount(String account) throws Exception {
         return tradeAccountService.frozeAccount(account, TradeUserType.PERSION);
     }
 
+    /**
+     * 激活冻结的账户
+     * 
+     * @param account
+     * @return
+     * @throws Exception
+     */
     @ResponseBody
     @RequestMapping("/activatePersonalAccount")
     public JsonResult activatePersonAccount(String account) throws Exception {
         return tradeAccountService.activeAccount(account, TradeUserType.PERSION);
     }
 
-
-
     /**
-     * 开通公司支付账户
+     * 开通部门支付账户
      * 
      * @param deptID
      * @param name
@@ -261,18 +271,44 @@ public class TradeAccountController {
                 TradeUserType.DEPARTMENT, 0, 0, 1);
     }
 
+    /**
+     * 冻结部门账户
+     * 
+     * @param deptNO
+     * @return
+     * @throws Exception
+     */
     @ResponseBody
     @RequestMapping("/frozeDepartmentAccount")
     public JsonResult frozeCompanyAccount(String deptNO) throws Exception {
         return tradeAccountService.frozeAccount(deptNO, TradeUserType.DEPARTMENT);
     }
 
+    /**
+     * 激活冻结的账户
+     * 
+     * @param deptNO
+     * @return
+     * @throws Exception
+     */
     @ResponseBody
     @RequestMapping("/activateDepartmentAccount")
     public JsonResult activateDepartmentAccount(String deptNO) throws Exception {
         return tradeAccountService.activeAccount(deptNO, TradeUserType.DEPARTMENT);
     }
 
+    /**
+     * 开通渠道账户
+     * 
+     * @param type
+     * @param name
+     * @param password
+     * @param payPhone
+     * @param payEmail
+     * @param session
+     * @return
+     * @throws Exception
+     */
     @ResponseBody
     @RequestMapping("/openChannelAccount")
     public JsonResult openChannelAccount(String type, String name, String password, String payPhone,
@@ -281,35 +317,43 @@ public class TradeAccountController {
                 TradeUserType.CHANNEL, 0, 0, 1);
     }
 
+    /**
+     * 冻结渠道账户
+     * 
+     * @param type
+     * @return
+     * @throws Exception
+     */
     @ResponseBody
     @RequestMapping("/frozeChannelAccount")
     public JsonResult frozeChannelAccount(String type) throws Exception {
         return tradeAccountService.frozeAccount(type, TradeUserType.CHANNEL);
     }
 
+    /**
+     * 激活冻结的账户
+     * 
+     * @param type
+     * @return
+     * @throws Exception
+     */
     @ResponseBody
     @RequestMapping("/activateChannelAccount")
     public JsonResult activateChannelAccount(String type) throws Exception {
         return tradeAccountService.activeAccount(type, TradeUserType.CHANNEL);
     }
 
-    @ResponseBody
-    @RequestMapping("/getTradeAccount")
-    public JsonResult getTradeAccount() {
-        return new JsonResult();
-    }
-
-    @ResponseBody
-    @RequestMapping("/delete")
-    public JsonResult delete(Long id, ModelMap model) {
-        tradeAccountService.delete(id);
-        return new JsonResult();
-    }
-
-    @ResponseBody
-    @RequestMapping("/batchDelete")
-    public JsonResult batchDelete(Long[] id, ModelMap model) {
-        tradeAccountService.batchDelete(Arrays.asList(id));
-        return new JsonResult();
-    }
+    // @ResponseBody
+    // @RequestMapping("/delete")
+    // public JsonResult delete(Long id, ModelMap model) {
+    // tradeAccountService.delete(id);
+    // return new JsonResult();
+    // }
+    //
+    // @ResponseBody
+    // @RequestMapping("/batchDelete")
+    // public JsonResult batchDelete(Long[] id, ModelMap model) {
+    // tradeAccountService.batchDelete(Arrays.asList(id));
+    // return new JsonResult();
+    // }
 }

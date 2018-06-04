@@ -1,6 +1,5 @@
 <#list list as tradeDepartmentVO>
 	<tr>
-		<td><input type="checkbox" name="tradeDepartment" value="${tradeDepartmentVO.id}"></td>
 		<td>${tradeDepartmentVO.deptNO}</td>
 		<td>${tradeDepartmentVO.deptName}</td>
 		<td>${tradeDepartmentVO.accountStatus}</td>

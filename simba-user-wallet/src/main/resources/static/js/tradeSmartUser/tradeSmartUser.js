@@ -1,5 +1,7 @@
 var TradeSmartUser = {
-	
+	"toSearch" : function() {
+			TradeAccount.initTradeAccountList(0, Page.size, "doSearch");
+		},
 	"toAdd": function() {
 		window.self.location.href = contextPath + "/tradeSmartUser/toAdd";
 	},

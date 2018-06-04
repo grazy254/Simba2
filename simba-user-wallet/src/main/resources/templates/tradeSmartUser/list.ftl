@@ -27,12 +27,16 @@
 									<h3 class="box-title">用户账户管理</h3>
 								</div>
 								<!-- /.box-header -->
-
+								<div class="mailbox-controls">
+									<input type="text" id="userID"  name="userID" placeholder="请输入用户账号">
+									<button type="button" class="btn btn-default btn-sm" onclick="TradeSmartUser.toSearch();"><i class="fa fa-search"></i>查询</button>
+									<div class="pull-right">
+									
+								</div>
 								<div class="table-responsive">
 									<table class="table table-hover table-striped table-bordered" id="table">
 										<thead>
 											<tr>
-												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
 												<th>用户名称</th>
 												<th>用户账号</th>
 												<th>用户状态</th>

@@ -119,7 +119,7 @@ public class NotifyController {
     @RequestMapping("/pullNotify")
     public JsonResult pullNotify(Long sessUserId, int status) {
         List<Notify> notifyList = notifyService.pullNotify(sessUserId, status);
-        return new JsonResult(FastJsonUtil.toJson(toNotifyVoList(notifyList)));
+        return new JsonResult(toNotifyVoList(notifyList, sessUserId));
     }
 
 
@@ -127,7 +127,7 @@ public class NotifyController {
     @RequestMapping("/pullAllNotify")
     public JsonResult pullAllNotify(Long sessUserId) {
         List<Notify> notifyList = notifyService.pullNotify(sessUserId);
-        return new JsonResult(FastJsonUtil.toJson(toNotifyVoList(notifyList)));
+        return new JsonResult(toNotifyVoList(notifyList, sessUserId));
     }
 
     @ResponseBody
@@ -192,10 +192,10 @@ public class NotifyController {
     }
 
 
-    private List<NotifyVo> toNotifyVoList(List<Notify> notifyList) {
+    private List<NotifyVo> toNotifyVoList(List<Notify> notifyList, Long sessUserId) {
         List<NotifyVo> notifyVoList = new LinkedList<>();
         for (Notify notify : notifyList) {
-            int status = notifyUserService.getBy("notifyId", notify.getId()).getStatus();
+            int status = notifyUserService.getByAnd("notifyId", notify.getId(), "smartUserId", sessUserId).getStatus();
             NotifyVo notifyVo = new NotifyVo(notify.getId(), notify.getTitle(), notify.getContent(), notify.getType(), status, notify.getCreateTime());
             notifyVoList.add(notifyVo);
         }

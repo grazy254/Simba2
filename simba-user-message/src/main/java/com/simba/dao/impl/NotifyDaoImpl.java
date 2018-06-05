@@ -46,9 +46,10 @@ public class NotifyDaoImpl implements NotifyDao {
 
 	@Override
 	public List<Notify> page(Pager page) {
-		String sql = "select * from " + table;
+		String sql = "select * from " + table + " order by createTime desc ";
 		return jdbc.queryForPage(sql, Notify.class, page);
 	}
+
 	@Override
 	public List<Notify> listAll(){
 		String sql = "select * from " + table;

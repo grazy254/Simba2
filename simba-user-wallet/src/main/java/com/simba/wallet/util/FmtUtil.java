@@ -117,12 +117,18 @@ public class FmtUtil {
 
     public static Map<String, String> fmtBalance(Map<String, Object> balanceMap) {
         Map<String, String> map = new HashMap<String, String>();
-        map.put("accountBalance", FmtUtil
-                .transToCNYType(Long.parseLong(balanceMap.get("accountBalance").toString())));
-        map.put("availableBalance", FmtUtil
-                .transToCNYType(Long.parseLong(balanceMap.get("availableBalance").toString())));
-        map.put("frozenBalance",
-                FmtUtil.transToCNYType(Long.parseLong(balanceMap.get("frozenBalance").toString())));
+        if (balanceMap.get("accountBalance") != null) {
+            map.put("accountBalance", FmtUtil
+                    .transToCNYType(Long.parseLong(balanceMap.get("accountBalance").toString())));
+        }
+        if (balanceMap.get("availableBalance") != null) {
+            map.put("availableBalance", FmtUtil
+                    .transToCNYType(Long.parseLong(balanceMap.get("availableBalance").toString())));
+        }
+        if (balanceMap.get("frozenBalance") != null) {
+            map.put("frozenBalance", FmtUtil
+                    .transToCNYType(Long.parseLong(balanceMap.get("frozenBalance").toString())));
+        }
         return map;
     }
 

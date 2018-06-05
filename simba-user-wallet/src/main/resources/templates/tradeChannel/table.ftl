@@ -1,3 +1,4 @@
+<#if list??>
 <#list list as tradeChannelVO>
 	<tr>
 		<td>${tradeChannelVO.name}</td>
@@ -15,3 +16,4 @@
 		</td>
 	</tr>
 </#list>
+</#if>

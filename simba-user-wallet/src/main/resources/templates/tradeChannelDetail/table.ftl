@@ -1,3 +1,4 @@
+<#if list??>
 <#list list as tradeChannelDetail>
 	<tr>
 		<td><input type="checkbox" name="tradeChannelDetail" value="${tradeChannelDetail.id}"></td>
@@ -17,3 +18,4 @@
 		</td>
 	</tr>
 </#list>
+</#if>

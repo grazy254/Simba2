@@ -19,7 +19,7 @@ import com.simba.wallet.model.vo.TradePartyVO;
 import com.simba.wallet.service.TradeDetailService;
 import com.simba.wallet.service.TradePartyDetailService;
 import com.simba.wallet.service.TradeUserService;
-import com.simba.wallet.util.FmtUtil;
+import com.simba.wallet.util.CommonUtil;
 import com.simba.wallet.util.SessionUtil;
 
 /**
@@ -56,13 +56,14 @@ public class TradePartyDetailController {
         if (tradeDate != null) {
             tradePartyDetailList = tradePartyDetailService.pageByAnd("tradeUserID",
                     tradeUserService.get(sessionUtil.getSmartUser(session).getAccount(),
-                            TradeUserType.PERSION.getName()).getId(),
+                            TradeUserType.PERSION).getId(),
                     "createDate", tradeDate, new Pager((pageStart - 1) * 10, 10));
         } else {
-            tradePartyDetailList = tradePartyDetailService.pageBy("tradeUserID",
-                    tradeUserService.get(sessionUtil.getSmartUser(session).getAccount(),
-                            TradeUserType.PERSION.getName()).getId(),
-                    new Pager((pageStart - 1) * 10, 10));
+            tradePartyDetailList =
+                    tradePartyDetailService.pageBy("tradeUserID",
+                            tradeUserService.get(sessionUtil.getSmartUser(session).getAccount(),
+                                    TradeUserType.PERSION).getId(),
+                            new Pager((pageStart - 1) * 10, 10));
         }
 
         List<TradePartyVO> result = new ArrayList<>();
@@ -70,42 +71,14 @@ public class TradePartyDetailController {
             TradeDetail tradeDetail = tradeDetailService.getBy("tradePartyID", detail.getId());
             if (tradeDetail != null) {
                 TradePartyVO vo = new TradePartyVO();
-                vo.setTradeAmount(FmtUtil.transToCNYType(tradeDetail.getPaymentAmount()));
-                vo.setTradeStatus("充值" + FmtUtil.fmtTradeStatus(tradeDetail.getTradeStatus()));
+                vo.setTradeAmount(CommonUtil.transToCNYType(tradeDetail.getPaymentAmount()));
+                vo.setTradeStatus("充值" + CommonUtil.fmtTradeStatus(tradeDetail.getTradeStatus()));
                 vo.setTradeTime(DateTime.getTime(tradeDetail.getTradePaymentTime()));
-                vo.setTradeType(FmtUtil.fmtTradeType(tradeDetail.getTradeType()));
+                vo.setTradeType(CommonUtil.fmtTradeType(tradeDetail.getTradeType()));
                 result.add(vo);
             }
         }
         return result;
     }
 
-
-    // @ResponseBody
-    // @RequestMapping("/add")
-    // public JsonResult add(TradePartyDetail tradePartyDetail) {
-    // tradePartyDetailService.add(tradePartyDetail);
-    // return new JsonResult();
-    // }
-
-    // @ResponseBody
-    // @RequestMapping("/update")
-    // public JsonResult update(TradePartyDetail tradePartyDetail) {
-    // tradePartyDetailService.update(tradePartyDetail);
-    // return new JsonResult();
-    // }
-
-    // @ResponseBody
-    // @RequestMapping("/delete")
-    // public JsonResult delete(Long id, ModelMap model) {
-    // tradePartyDetailService.delete(id);
-    // return new JsonResult();
-    // }
-    //
-    // @ResponseBody
-    // @RequestMapping("/batchDelete")
-    // public JsonResult batchDelete(Long[] id, ModelMap model) {
-    // tradePartyDetailService.batchDelete(Arrays.asList(id));
-    // return new JsonResult();
-    // }
 }

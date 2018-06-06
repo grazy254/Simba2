@@ -1,7 +1,7 @@
 package com.simba.wallet.pay.trade;
 
 import com.simba.framework.util.json.JsonResult;
-import com.simba.wallet.util.FmtUtil;
+import com.simba.wallet.util.CommonUtil;
 
 /**
  * 支付调用接口
@@ -38,7 +38,7 @@ public class InnerTradeContext {
      * @return
      */
     public JsonResult trade(String userID, long paymentAmount) {
-        return trade.trade(userID, FmtUtil.generateOrderNO(), paymentAmount);
+        return trade.trade(userID, CommonUtil.generateOrderNO(), paymentAmount);
 
     }
 }

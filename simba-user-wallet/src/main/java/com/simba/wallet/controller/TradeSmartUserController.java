@@ -19,7 +19,7 @@ import com.simba.wallet.model.form.TradeSmartUserSearchForm;
 import com.simba.wallet.model.vo.TradeSmartUserVO;
 import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeUserService;
-import com.simba.wallet.util.FmtUtil;
+import com.simba.wallet.util.CommonUtil;
 
 /**
  * 钱包用户信息控制器
@@ -45,14 +45,14 @@ public class TradeSmartUserController {
             return "trade/list";
         }
 
-        TradeUser tradeUser = tradeUserService.get(tradeSmartUserSearchForm.getUserID(),
-                TradeUserType.PERSION.getName());
+        TradeUser tradeUser =
+                tradeUserService.get(tradeSmartUserSearchForm.getUserID(), TradeUserType.PERSION);
         List<TradeSmartUserVO> tradeSmartUserVOList = new ArrayList<>();
         String accountStatus = AccountStatus.NOTEXIST.getName();
         TradeAccount tradeAccount = null;
         try {
             tradeAccount = tradeAccountService.get(tradeUser.getId(), TradeUserType.PERSION);
-            accountStatus = FmtUtil.getAccountStatus(tradeAccount).getName();
+            accountStatus = CommonUtil.getAccountStatus(tradeAccount).getName();
         } catch (Exception e) {
 
         }
@@ -62,7 +62,7 @@ public class TradeSmartUserController {
         vo.setAccountStatus(accountStatus);
         // TODO: 判断账户的状态是否激活
         vo.setIsAllowPay(tradeUser.getIsAllowPay() == 1 ? "允许" : "不允许");
-        vo.setUserStatus(FmtUtil.getUserStatus(tradeUser).getName());
+        vo.setUserStatus(CommonUtil.getUserStatus(tradeUser).getName());
         vo.setName(tradeUser.getName());
         vo.setCreateTime(DateUtil.date2String(tradeUser.getCreateTime()));
         vo.setLastUpdateTime(DateUtil.date2String(tradeUser.getLastUpdateTime()));
@@ -86,20 +86,17 @@ public class TradeSmartUserController {
         for (TradeUser tradeUser : list) {
             String accountStatus = AccountStatus.NOTEXIST.getName();
             TradeAccount tradeAccount = null;
-            try {
-                tradeAccount =
-                        tradeAccountService.get(tradeUser.getUserID(), TradeUserType.PERSION);
-                accountStatus = FmtUtil.getAccountStatus(tradeAccount).getName();
-            } catch (Exception e) {
 
-            }
+            tradeAccount = tradeAccountService.get(tradeUser.getUserID(), TradeUserType.PERSION);
+            accountStatus = CommonUtil.getAccountStatus(tradeAccount).getName();
+
             TradeSmartUserVO vo = new TradeSmartUserVO();
             vo.setId(tradeUser.getId());
             vo.setAccount(tradeUser.getUserID());
             vo.setAccountStatus(accountStatus);
             // TODO: 判断账户的状态是否激活
             vo.setIsAllowPay(tradeUser.getIsAllowPay() == 1 ? "允许" : "不允许");
-            vo.setUserStatus(FmtUtil.getUserStatus(tradeUser).getName());
+            vo.setUserStatus(CommonUtil.getUserStatus(tradeUser).getName());
             vo.setName(tradeUser.getName());
             vo.setCreateTime(DateUtil.date2String(tradeUser.getCreateTime()));
             vo.setLastUpdateTime(DateUtil.date2String(tradeUser.getLastUpdateTime()));
@@ -141,18 +138,4 @@ public class TradeSmartUserController {
         tradeUserService.count();
         return new JsonResult();
     }
-
-    // @ResponseBody
-    // @RequestMapping("/delete")
-    // public JsonResult delete(Long id, ModelMap model) {
-    // tradeUserService.delete(id);
-    // return new JsonResult();
-    // }
-    //
-    // @ResponseBody
-    // @RequestMapping("/batchDelete")
-    // public JsonResult batchDelete(Long[] id, ModelMap model) {
-    // tradeUserService.batchDelete(Arrays.asList(id));
-    // return new JsonResult();
-    // }
 }

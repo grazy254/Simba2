@@ -17,7 +17,7 @@ import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.model.vo.TradeChannelVO;
 import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeChannelService;
-import com.simba.wallet.util.FmtUtil;
+import com.simba.wallet.util.CommonUtil;
 
 /**
  * 渠道信息控制器
@@ -46,13 +46,10 @@ public class TradeChannelController {
         List<TradeChannelVO> tradeChannelVOList = new ArrayList<>();
         for (TradeChannel channel : list) {
             String accountStatus = AccountStatus.NOTEXIST.getName();
-            TradeAccount tradeAccount = null;
-            try {
-                tradeAccount = tradeAccountService.get(channel.getType(), TradeUserType.CHANNEL);
-                accountStatus = FmtUtil.getAccountStatus(tradeAccount).getName();
-            } catch (Exception e) {
+            TradeAccount tradeAccount =
+                    tradeAccountService.get(channel.getType(), TradeUserType.CHANNEL);
+            accountStatus = CommonUtil.getAccountStatus(tradeAccount).getName();
 
-            }
             TradeChannelVO vo = new TradeChannelVO();
             vo.setId(channel.getId());
             vo.setName(channel.getName());
@@ -103,12 +100,4 @@ public class TradeChannelController {
         tradeChannelService.delete(type);
         return new JsonResult();
     }
-
-    // @ResponseBody
-    // @RequestMapping("/batchDelete")
-    // public JsonResult batchDelete(Long[] id, ModelMap model) {
-    // tradeChannelService.batchDelete(Arrays.asList(id));
-    // return new JsonResult();
-    // }
-
 }

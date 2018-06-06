@@ -40,7 +40,7 @@ public interface TradeUserService {
 
     TradeUser get(Long id);
 
-    TradeUser get(String userID, String userType);
+    TradeUser get(String userID, TradeUserType userType);
 
     void batchDelete(List<Long> idList);
 

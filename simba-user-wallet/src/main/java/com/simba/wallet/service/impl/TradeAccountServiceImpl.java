@@ -272,20 +272,16 @@ public class TradeAccountServiceImpl implements TradeAccountService {
 
             tradeUserID = tradeUserDao.add(tradeUser);
             if (tradeUserID <= 0) {
-                throw new BussException("保存支付用户信息失败");
+                throw ErrConfig.OPEN_WALLET_ACCOUNT_FAILED;
             }
         } else {
-            tradeUserID = tradeUserDB.getId();
+            throw ErrConfig.ACCOUNT_EXIST_ERR;
         }
         // 检查数据库是否存在该记录
         TradeAccount tradeAccountDB = tradeAccountDao.getByAnd("accountType", accountType.getName(),
                 "tradeUserID", tradeUserID, "isActive", 1);
         if (tradeAccountDB != null) {
-            if (tradeAccountDB.getIsFrozen() == 1) {
-                throw new BussException("请解冻账户");
-            } else {
-                throw ErrConfig.ACCOUNT_EXIST_ERR;
-            }
+            throw ErrConfig.ACCOUNT_EXIST_ERR;
         }
 
         TradeAccount tradeAccount = new TradeAccount();
@@ -304,7 +300,7 @@ public class TradeAccountServiceImpl implements TradeAccountService {
         tradeAccount.setCreateTime(new Date());
         Long tradeAccountID = tradeAccountDao.add(tradeAccount);
         if (tradeAccountID <= 0) {
-            throw new BussException("保存支付账号信息失败");
+            throw ErrConfig.OPEN_WALLET_ACCOUNT_FAILED;
         }
         return new JsonResult("", "钱包功能开通成功", 200);
     }
@@ -323,25 +319,18 @@ public class TradeAccountServiceImpl implements TradeAccountService {
 
     @Override
     public JsonResult closeAccount(String userID, TradeUserType userType) {
-        try {
-            TradeUser tradeUser = tradeUserDao.get(userID, userType.getName());
-            TradeAccount tradeAccount = tradeAccountDao.get(tradeUser.getId(), userType);
-            tradeUser.setIsActive(AccountStatus.CLOSED.getValue());
-            tradeUserDao.update(tradeUser);
-            if (tradeAccount.getAccountBalance() == 0) {
-                tradeAccount.setIsActive(AccountStatus.CLOSED.getValue());
-                tradeAccountDao.update(tradeAccount);
-            } else {
-                throw new BussException("删除失败：账户余额不为0");
-            }
-        } catch (Exception e) {
-            if (e == ErrConfig.USER_NOT_EXIST_ERR || e == ErrConfig.ACCOUNT_NOT_EXIST_ERR) {
-                // TODO: logger
-                System.out.println(e);
-            } else {
-                throw new BussException(e.getMessage());
-            }
+
+        TradeUser tradeUser = tradeUserDao.get(userID, userType);
+        TradeAccount tradeAccount = tradeAccountDao.get(tradeUser.getId(), userType);
+        tradeUser.setIsActive(AccountStatus.CLOSED.getValue());
+        tradeUserDao.update(tradeUser);
+        if (tradeAccount.getAccountBalance() == 0) {
+            tradeAccount.setIsActive(AccountStatus.CLOSED.getValue());
+            tradeAccountDao.update(tradeAccount);
+        } else {
+            throw new BussException("注销失败：账户余额不为0");
         }
+
         return new JsonResult();
     }
 

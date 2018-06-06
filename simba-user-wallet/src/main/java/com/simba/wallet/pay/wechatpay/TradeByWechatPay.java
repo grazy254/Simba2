@@ -1,6 +1,5 @@
 package com.simba.wallet.pay.wechatpay;
 
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.simba.framework.util.data.ThreadDataUtil;
 import com.simba.framework.util.date.DateUtil;
@@ -40,8 +39,7 @@ public class TradeByWechatPay implements PayInterface {
     @Override
     public void dealOrder(UnifiedOrderReq req, String prePayId, String codeUrl, String mwebUrl) {
         context.startTrade(userID, req.getSpbill_create_ip(), req.getOut_trade_no(),
-                req.getTotal_fee(), new Date(),
-                DateUtil.str2Date(req.getTime_start(), "yyyyMMddHHmmss"));
+                req.getTotal_fee(), DateUtil.str2Date(req.getTime_start(), "yyyyMMddHHmmss"));
     }
 
     @Override

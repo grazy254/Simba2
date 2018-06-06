@@ -21,7 +21,7 @@ import com.simba.wallet.model.enums.FeeType;
 import com.simba.wallet.model.enums.TradeStatus;
 import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.model.enums.TradeUserType;
-import com.simba.wallet.util.FmtUtil;
+import com.simba.wallet.util.CommonUtil;
 
 /**
  * 内部交易抽象类
@@ -53,11 +53,12 @@ public abstract class BaseInnerTrade implements InnerTradeInterface {
     /**
      * 检查用户账户状态
      * 
-     * @param userID smart用户account
+     * @param tradeAccount smart用户account
      */
-    protected void checkUserAccount(String userID) {
+    protected void checkUserAccount(TradeAccount tradeAccount, Long amount) {
 
     }
+
 
     /**
      * 交易后要执行的后续操作
@@ -96,11 +97,15 @@ public abstract class BaseInnerTrade implements InnerTradeInterface {
             throw new BussException("非法金额");
         }
 
-        checkUserAccount(userID);
-
         SmartUser smartUser = smartUserDao.getBy("account", userID);
-        TradeUser tradeUser =
-                tradeUserDao.get(smartUser.getAccount(), TradeUserType.PERSION.getName());
+        TradeUser smartTradeUser = tradeUserDao.get(smartUser.getAccount(), TradeUserType.PERSION);
+
+        TradeAccount smartUserTradeAccount =
+                tradeAccountDao.get(smartTradeUser.getId(), TradeUserType.PERSION);
+        CommonUtil.checkWalletAutority(smartTradeUser, smartUserTradeAccount,
+                TradeUserType.PERSION);
+
+        checkUserAccount(smartUserTradeAccount, paymentAmount);
 
         Date now = new Date();
         TradePartyDetail tradePartyDetail = new TradePartyDetail();
@@ -111,23 +116,26 @@ public abstract class BaseInnerTrade implements InnerTradeInterface {
         tradePartyDetail.setIp(ip);
         tradePartyDetail.setLocation(location);
         tradePartyDetail.setMobileNumber(smartUser.getTelNo());
-        tradePartyDetail.setTradeAccountID(
-                tradeAccountDao.get(tradeUser.getId(), TradeUserType.PERSION).getAccountID());
-        tradePartyDetail.setTradeUserID(tradeUser.getId());
+        tradePartyDetail.setTradeAccountID(smartUserTradeAccount.getAccountID());
+        tradePartyDetail.setTradeUserID(smartTradeUser.getId());
         Long tradePartyID = tradePartyDetailDao.add(tradePartyDetail);
         tradePartyDetail.setId(tradePartyID);
 
         TradeDepartment tradeDepartment = tradeDepartmentDao.get(tradeDeptNO);
 
         TradeUser departmentTradeUser =
-                tradeUserDao.get(tradeDepartment.getDeptNO(), TradeUserType.DEPARTMENT.getName());
+                tradeUserDao.get(tradeDepartment.getDeptNO(), TradeUserType.DEPARTMENT);
+
+        TradeAccount departmentTradeAccount =
+                tradeAccountDao.get(departmentTradeUser.getId(), TradeUserType.DEPARTMENT);
+        CommonUtil.checkWalletAutority(departmentTradeUser, departmentTradeAccount,
+                TradeUserType.DEPARTMENT);
 
         TradePartyDetail counterPartyDetail = new TradePartyDetail();
         counterPartyDetail.setCreateDate(DateUtil.getOnlyDate(now));
         counterPartyDetail.setPartyName(tradeDepartment.getDeptName());
         counterPartyDetail.setPartyType(TradeUserType.DEPARTMENT.getName());
-        counterPartyDetail.setTradeAccountID(tradeAccountDao
-                .get(departmentTradeUser.getId(), TradeUserType.DEPARTMENT).getAccountID());
+        counterPartyDetail.setTradeAccountID(departmentTradeAccount.getAccountID());
         counterPartyDetail.setTradeUserID(departmentTradeUser.getId());
 
         // 对手实体默认不填
@@ -150,7 +158,7 @@ public abstract class BaseInnerTrade implements InnerTradeInterface {
         tradeDetail.setTradeChannelID(-1);
         tradeDetail.setTradeCounterpartyID(counterPartyID);
         tradeDetail.setTradeCreateTime(tradeCreateTime);
-        tradeDetail.setTradeNO(FmtUtil.generateTradeNO());
+        tradeDetail.setTradeNO(CommonUtil.generateTradeNO());
         tradeDetail.setTradePartyID(tradePartyID);
         tradeDetail.setTradeStatus(TradeStatus.SUCCESS.getName());
         tradeDetail.setTradeType(tradeType.getName());
@@ -162,10 +170,6 @@ public abstract class BaseInnerTrade implements InnerTradeInterface {
             throw new BussException("创建支付订单失败");
         }
 
-        TradeAccount smartUserTradeAccount =
-                tradeAccountDao.getBy("accountID", tradePartyDetail.getTradeAccountID());
-        TradeAccount departmentTradeAccount =
-                tradeAccountDao.getBy("accountID", counterPartyDetail.getTradeAccountID());
         updateBalance(smartUserTradeAccount, departmentTradeAccount, paymentAmount);
 
         tradeAccountDao.update(smartUserTradeAccount);

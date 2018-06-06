@@ -18,7 +18,7 @@ public interface CallbackTradeInterface {
      * @return
      */
     JsonResult startTrade(String userID, String ip, String orderNO, long paymentAmount,
-            Date tradeCreateTime, Date channelStartTime);
+            Date channelStartTime);
 
     /**
      * 回调接口结束交易

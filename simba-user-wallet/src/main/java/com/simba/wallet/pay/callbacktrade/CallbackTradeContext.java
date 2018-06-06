@@ -18,9 +18,8 @@ public class CallbackTradeContext {
     }
 
     public JsonResult startTrade(String userID, String ip, String orderNO, long paymentAmount,
-            Date tradeCreateTime, Date channelStartTime) {
-        return callbackTrade.startTrade(userID, ip, orderNO, paymentAmount, tradeCreateTime,
-                channelStartTime);
+            Date channelStartTime) {
+        return callbackTrade.startTrade(userID, ip, orderNO, paymentAmount, channelStartTime);
     }
 
     public JsonResult finishTrade(String userID, String orderNO, String channelOrderNO,

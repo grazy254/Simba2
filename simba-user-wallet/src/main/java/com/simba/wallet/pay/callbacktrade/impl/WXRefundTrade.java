@@ -9,7 +9,7 @@ import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.enums.TradeStatus;
 import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.pay.callbacktrade.BaseCallbackTrade;
-import com.simba.wallet.util.FmtUtil;
+import com.simba.wallet.util.CommonUtil;
 
 
 /**
@@ -47,7 +47,7 @@ public class WXRefundTrade extends BaseCallbackTrade {
             String openID, Date channelPaymentTime, String channelErrorMsg, String channelErrorCode,
             long paymentAmount, TradeStatus tradeStatus) {
 
-        return finishTrade(userID, FmtUtil.fmtChannel(RegistryUtil.get("trade.channel.weixin")),
+        return finishTrade(userID, CommonUtil.fmtChannel(RegistryUtil.get("trade.channel.weixin")),
                 orderNO, channelOrderNO, openID, channelPaymentTime, channelErrorMsg,
                 channelErrorCode, paymentAmount, tradeStatus,
                 RegistryUtil.get("trade.department.refund"));
@@ -55,10 +55,10 @@ public class WXRefundTrade extends BaseCallbackTrade {
 
     @Override
     public JsonResult startTrade(String userID, String ip, String orderNO, long paymentAmount,
-            Date tradeCreateTime, Date channelStartTime) {
+            Date channelStartTime) {
         return startTrade(userID, ip, "", orderNO, "", "", "", paymentAmount, paymentAmount,
-                tradeCreateTime, channelStartTime, RegistryUtil.get("trade.department.refund"),
-                FmtUtil.fmtChannel(RegistryUtil.get("trade.channel.weixin")), TradeType.REFUND);
+                new Date(), channelStartTime, RegistryUtil.get("trade.department.refund"),
+                CommonUtil.fmtChannel(RegistryUtil.get("trade.channel.weixin")), TradeType.REFUND);
     }
 
 }

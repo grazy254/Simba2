@@ -15,7 +15,7 @@ import com.simba.wallet.model.enums.TradeStatus;
 import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.model.enums.TradeUserType;
 
-public class FmtUtil {
+public class CommonUtil {
     public static String transToCNYType(Long amount) {
         DecimalFormat fmt = new DecimalFormat("0.00");
         return fmt.format(amount * 1.0 / 100) + "元";
@@ -118,15 +118,15 @@ public class FmtUtil {
     public static Map<String, String> fmtBalance(Map<String, Object> balanceMap) {
         Map<String, String> map = new HashMap<String, String>();
         if (balanceMap.get("accountBalance") != null) {
-            map.put("accountBalance", FmtUtil
+            map.put("accountBalance", CommonUtil
                     .transToCNYType(Long.parseLong(balanceMap.get("accountBalance").toString())));
         }
         if (balanceMap.get("availableBalance") != null) {
-            map.put("availableBalance", FmtUtil
+            map.put("availableBalance", CommonUtil
                     .transToCNYType(Long.parseLong(balanceMap.get("availableBalance").toString())));
         }
         if (balanceMap.get("frozenBalance") != null) {
-            map.put("frozenBalance", FmtUtil
+            map.put("frozenBalance", CommonUtil
                     .transToCNYType(Long.parseLong(balanceMap.get("frozenBalance").toString())));
         }
         return map;
@@ -139,4 +139,35 @@ public class FmtUtil {
     public static String generateOrderNO() {
         return "R" + UUIDUtil.get();
     }
+
+    public static void checkWalletAutority(TradeUser tradeUser, TradeAccount tradeAccount,
+            TradeUserType tradeUserType) {
+        if (tradeAccount.getIsActive() != AccountStatus.ACTIVE.getValue()
+                || tradeUser.getIsActive() != AccountStatus.ACTIVE.getValue()) {
+            if (tradeUserType == TradeUserType.PERSION) {
+                throw ErrConfig.INVALID_WALLET_USER;
+            } else {
+                throw ErrConfig.WALLET_UNAVAILABLE;
+            }
+        }
+        if (tradeAccount.getIsFrozen() == AccountStatus.FRONZEN.getValue()) {
+            if (tradeUserType == TradeUserType.PERSION) {
+                throw ErrConfig.WALLET_FROZEN;
+            } else {
+                throw ErrConfig.WALLET_UNAVAILABLE;
+            }
+        }
+
+        if (tradeUserType == TradeUserType.PERSION) {
+            if (tradeUser.getIsAllowPay() == 0 || tradeAccount.getIsAllowPay() == 0) {
+                throw ErrConfig.WALLET_NOT_ALLOWPAY;
+            }
+            if (tradeAccount.getIsAllowRecharge() == 0) {
+                {
+                    throw ErrConfig.WALLET_NOT_ALLOWRECHARGE;
+                }
+            }
+        }
+    }
+
 }

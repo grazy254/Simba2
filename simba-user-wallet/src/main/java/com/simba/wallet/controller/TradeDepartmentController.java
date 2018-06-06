@@ -17,7 +17,7 @@ import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.model.vo.TradeDepartmentVO;
 import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeDepartmentService;
-import com.simba.wallet.util.FmtUtil;
+import com.simba.wallet.util.CommonUtil;
 
 /**
  * 收款部门控制器
@@ -46,13 +46,9 @@ public class TradeDepartmentController {
         List<TradeDepartmentVO> tradeDepartmentVOList = new ArrayList<>();
         for (TradeDepartment dept : list) {
             String accountStatus = AccountStatus.NOTEXIST.getName();
-            TradeAccount tradeAccount = null;
-            try {
-                tradeAccount = tradeAccountService.get(dept.getDeptNO(), TradeUserType.DEPARTMENT);
-                accountStatus = FmtUtil.getAccountStatus(tradeAccount).getName();
-            } catch (Exception e) {
-
-            }
+            TradeAccount tradeAccount =
+                    tradeAccountService.get(dept.getDeptNO(), TradeUserType.DEPARTMENT);
+            accountStatus = CommonUtil.getAccountStatus(tradeAccount).getName();
 
             TradeDepartmentVO vo = new TradeDepartmentVO();
             vo.setId(dept.getId());
@@ -104,12 +100,4 @@ public class TradeDepartmentController {
         tradeDepartmentService.delete(deptNO);
         return new JsonResult();
     }
-
-    // @ResponseBody
-    // @RequestMapping("/batchDelete")
-    // public JsonResult batchDelete(Long[] id, ModelMap model) {
-    // tradeDepartmentService.batchDelete(Arrays.asList(id));
-    // return new JsonResult();
-    // }
-
 }

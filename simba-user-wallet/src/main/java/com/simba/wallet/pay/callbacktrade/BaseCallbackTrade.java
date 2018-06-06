@@ -26,7 +26,8 @@ import com.simba.wallet.model.enums.FeeType;
 import com.simba.wallet.model.enums.TradeStatus;
 import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.model.enums.TradeUserType;
-import com.simba.wallet.util.FmtUtil;
+import com.simba.wallet.util.CommonUtil;
+import com.simba.wallet.util.ErrConfig;
 
 /**
  * 回调交易基类
@@ -121,8 +122,16 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
         checkUserAccount(userID);
 
         SmartUser smartUser = smartUserDao.getBy("account", userID);
-        TradeUser tradeUser =
-                tradeUserDao.get(smartUser.getAccount(), TradeUserType.PERSION.getName());
+        TradeUser smartTradeUser = tradeUserDao.get(smartUser.getAccount(), TradeUserType.PERSION);
+
+
+        TradeAccount smartUserTradeAccount =
+                tradeAccountDao.get(smartTradeUser.getId(), TradeUserType.PERSION);
+        if (smartUserTradeAccount == null) {
+            throw ErrConfig.INVALID_WALLET_USER;
+        }
+        CommonUtil.checkWalletAutority(smartTradeUser, smartUserTradeAccount,
+                TradeUserType.PERSION);
 
         Date now = new Date();
         TradePartyDetail tradePartyDetail = new TradePartyDetail();
@@ -133,23 +142,32 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
         tradePartyDetail.setIp(ip);
         tradePartyDetail.setLocation(location);
         tradePartyDetail.setMobileNumber(smartUser.getTelNo());
-        tradePartyDetail.setTradeAccountID(
-                tradeAccountDao.get(tradeUser.getId(), TradeUserType.PERSION).getAccountID());
-        tradePartyDetail.setTradeUserID(tradeUser.getId());
+        tradePartyDetail.setTradeAccountID(smartUserTradeAccount.getAccountID());
+        tradePartyDetail.setTradeUserID(smartTradeUser.getId());
         Long tradePartyID = tradePartyDetailDao.add(tradePartyDetail);
         tradePartyDetail.setId(tradePartyID);
 
         TradeDepartment tradeDepartment = tradeDepartmentDao.get(tradeDeptNO);
 
         TradeUser departmentTradeUser =
-                tradeUserDao.get(tradeDepartment.getDeptNO(), TradeUserType.DEPARTMENT.getName());
+                tradeUserDao.get(tradeDepartment.getDeptNO(), TradeUserType.DEPARTMENT);
+        if (departmentTradeUser == null) {
+            throw ErrConfig.WALLET_UNAVAILABLE;
+        }
+
+        TradeAccount departmentTradeAccount =
+                tradeAccountDao.get(departmentTradeUser.getId(), TradeUserType.DEPARTMENT);
+        if (departmentTradeAccount == null) {
+            throw ErrConfig.WALLET_UNAVAILABLE;
+        }
+        CommonUtil.checkWalletAutority(departmentTradeUser, departmentTradeAccount,
+                TradeUserType.DEPARTMENT);
 
         TradePartyDetail counterPartyDetail = new TradePartyDetail();
         counterPartyDetail.setCreateDate(DateUtil.getOnlyDate(now));
         counterPartyDetail.setPartyName(tradeDepartment.getDeptName());
         counterPartyDetail.setPartyType(TradeUserType.DEPARTMENT.getName());
-        counterPartyDetail.setTradeAccountID(tradeAccountDao
-                .get(departmentTradeUser.getId(), TradeUserType.DEPARTMENT).getAccountID());
+        counterPartyDetail.setTradeAccountID(departmentTradeAccount.getAccountID());
         counterPartyDetail.setTradeUserID(departmentTradeUser.getId());
 
         // 对手实体默认不填
@@ -163,10 +181,23 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
 
         TradeChannel tradeChannel = tradeChannelDao.get(channelType.getName());
 
+        TradeUser channelTradeUser = tradeUserDao.get(channelType.getName(), TradeUserType.CHANNEL);
+
+        if (channelTradeUser == null) {
+            throw ErrConfig.WALLET_UNAVAILABLE;
+        }
+
+        TradeAccount channelTradeAccount =
+                tradeAccountDao.get(channelTradeUser.getId(), TradeUserType.CHANNEL);
+        if (channelTradeAccount == null) {
+            throw ErrConfig.WALLET_UNAVAILABLE;
+        }
+        CommonUtil.checkWalletAutority(channelTradeUser, channelTradeAccount,
+                TradeUserType.CHANNEL);
+
         TradeChannelDetail tradeChannelDetail = new TradeChannelDetail();
         tradeChannelDetail.setChannelID(tradeChannel.getId());
-        tradeChannelDetail.setTradeAccountID(
-                tradeAccountDao.get(tradeChannel.getType(), TradeUserType.CHANNEL).getAccountID());
+        tradeChannelDetail.setTradeAccountID(channelTradeAccount.getAccountID());
         tradeChannelDetail.setOrderCreateTime(channelStartTime);
 
         Long tradeChannelDetailID = tradeChannelDetailDao.add(tradeChannelDetail);
@@ -184,7 +215,7 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
         tradeDetail.setTradeChannelID(tradeChannelDetailID);
         tradeDetail.setTradeCounterpartyID(counterPartyID);
         tradeDetail.setTradeCreateTime(tradeCreateTime);
-        tradeDetail.setTradeNO(FmtUtil.generateTradeNO());
+        tradeDetail.setTradeNO(CommonUtil.generateTradeNO());
         tradeDetail.setTradePartyID(tradePartyID);
         tradeDetail.setTradePaymentTime(new Date());
         tradeDetail.setTradeStatus(TradeStatus.SUCCESS.getName());
@@ -234,9 +265,10 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
                 tradeChannelDetailDao.get(tradeDetail.getTradeChannelID());
         TradeAccount smartUserTradeAccount =
                 tradeAccountDao.get(smartUser.getAccount(), TradeUserType.PERSION);
-        TradeAccount channelTradeAccount = tradeAccountDao.get(tradeDeptNO, TradeUserType.CHANNEL);
         TradeAccount departmentTradeAccount =
-                tradeAccountDao.get(channelType.getName(), TradeUserType.DEPARTMENT);
+                tradeAccountDao.get(tradeDeptNO, TradeUserType.DEPARTMENT);
+        TradeAccount channelTradeAccount =
+                tradeAccountDao.get(channelType.getName(), TradeUserType.CHANNEL);
 
         tradeDetail.setTradeStatus(tradeStatus.getName());
         tradeDetailDao.update(tradeDetail);

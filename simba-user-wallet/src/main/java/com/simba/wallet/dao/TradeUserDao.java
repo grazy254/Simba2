@@ -3,6 +3,7 @@ package com.simba.wallet.dao;
 import java.util.List;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.wallet.model.TradeUser;
+import com.simba.wallet.model.enums.TradeUserType;
 
 /**
  * 钱包用户信息 Dao
@@ -38,7 +39,7 @@ public interface TradeUserDao {
 
     TradeUser get(Long id);
 
-    TradeUser get(String userID, String type);
+    TradeUser get(String userID, TradeUserType type);
 
     TradeUser getBy(String field, Object value);
 

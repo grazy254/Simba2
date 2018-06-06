@@ -4,7 +4,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.simba.exception.BussException;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.dao.TradeUserDao;
@@ -170,39 +169,32 @@ public class TradeUserServiceImpl implements TradeUserService {
     }
 
     @Override
-    public TradeUser get(String userID, String userType) {
+    public TradeUser get(String userID, TradeUserType userType) {
         return tradeUserDao.get(userID, userType);
     }
 
     @Override
     public JsonResult activatePayment(String userID, TradeUserType userType) {
-        TradeUser tradeUser = tradeUserDao.get(userID, userType.getName());
-        // TODO: 1 0 可读性不强
+
+        TradeUser tradeUser = tradeUserDao.get(userID, userType);
+
         if (tradeUser.getIsActive() == AccountStatus.ACTIVE.getValue()) {
             if (tradeUser.getIsAllowPay() == 0) {
                 tradeUser.setIsAllowPay(1);
                 tradeUserDao.update(tradeUser);
             }
-        } else if (tradeUser.getIsActive() == AccountStatus.NOTACTIVE.getValue()) {
-            throw new BussException("账户未激活");
-        } else if (tradeUser.getIsActive() == AccountStatus.CLOSED.getValue()) {
-            throw new BussException("账户已注销");
         }
         return new JsonResult();
     }
 
     @Override
     public JsonResult frozePayment(String userID, TradeUserType userType) {
-        TradeUser tradeUser = tradeUserDao.get(userID, userType.getName());
-        if (tradeUser.getIsActive() == 1) {
+        TradeUser tradeUser = tradeUserDao.get(userID, userType);
+        if (tradeUser.getIsActive() == AccountStatus.ACTIVE.getValue()) {
             if (tradeUser.getIsAllowPay() == 1) {
                 tradeUser.setIsAllowPay(0);
                 tradeUserDao.update(tradeUser);
             }
-        } else if (tradeUser.getIsActive() == 0) {
-            throw new BussException("账户未激活");
-        } else if (tradeUser.getIsActive() == -1) {
-            throw new BussException("账户已注销");
         }
         return new JsonResult();
     }

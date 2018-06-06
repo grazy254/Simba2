@@ -24,8 +24,8 @@ import com.simba.wallet.model.form.TradeAccountSearchForm;
 import com.simba.wallet.model.vo.TradeAccountVO;
 import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeUserService;
+import com.simba.wallet.util.CommonUtil;
 import com.simba.wallet.util.ErrConfig;
-import com.simba.wallet.util.FmtUtil;
 import com.simba.wallet.util.SessionUtil;
 
 /**
@@ -56,15 +56,20 @@ public class TradeAccountController {
         }
         TradeAccount tradeAccount =
                 tradeAccountService.get(tradeAccountSearchForm.getUserID(), TradeUserType.PERSION);
-
-        TradeUser tradeUser = tradeUserService.get(tradeAccount.getTradeUserID());
         List<TradeAccountVO> tradeAccountVOList = new ArrayList<>();
-        tradeAccountVOList.add(new TradeAccountVO(tradeAccount, tradeUser));
-
         model.put("list", tradeAccountVOList);
-        Map<String, Object> balanceMap =
-                tradeAccountService.getBalance(tradeUser.getId(), AccountType.PERSIONAL_ACCOUNT);
-        model.putAll(FmtUtil.fmtBalance(balanceMap));
+        if (tradeAccount != null) {
+
+            TradeUser tradeUser = tradeUserService.get(tradeAccount.getTradeUserID());
+            if (tradeUser != null) {
+                tradeAccountVOList.add(new TradeAccountVO(tradeAccount, tradeUser));
+
+                Map<String, Object> balanceMap = tradeAccountService.getBalance(tradeUser.getId(),
+                        AccountType.PERSIONAL_ACCOUNT);
+                model.putAll(CommonUtil.fmtBalance(balanceMap));
+            }
+        }
+
         return "tradeAccount/table";
     }
 
@@ -144,7 +149,7 @@ public class TradeAccountController {
 
         result.put("list", tradeAccountVOList);
         Map<String, Object> balanceMap = tradeAccountService.getBalance(accountType);
-        result.putAll(FmtUtil.fmtBalance(balanceMap));
+        result.putAll(CommonUtil.fmtBalance(balanceMap));
         return result;
     }
 
@@ -157,30 +162,6 @@ public class TradeAccountController {
         return new JsonResult(count, "", 200);
     }
 
-    // @RequestMapping("/toAdd")
-    // public String toAdd() {
-    // return "tradeAccount/add";
-    // }
-    //
-    // @RequestMapping("/add")
-    // public String add(TradeAccount tradeAccount) {
-    // tradeAccountService.add(tradeAccount);
-    // return "redirect:/tradeAccount/list";
-    // }
-    //
-    // @RequestMapping("/toUpdate")
-    // public String toUpdate(Long id, ModelMap model) {
-    // TradeAccount tradeAccount = tradeAccountService.get(id);
-    // model.put("tradeAccount", tradeAccount);
-    // return "tradeAccount/update";
-    // }
-    //
-    // @RequestMapping("/update")
-    // public String update(TradeAccount tradeAccount) {
-    // tradeAccountService.update(tradeAccount);
-    // return "redirect:/tradeAccount/list";
-    // }
-
     /**
      * 展示余额
      * 
@@ -191,17 +172,19 @@ public class TradeAccountController {
     @RequestMapping("/showBalance")
     public JsonResult showBalance(HttpSession session) throws Exception {
         SmartUser smartUser = sessionUtil.getSmartUser(session);
-        try {
-            tradeUserService.get(smartUser.getAccount(), TradeUserType.PERSION.getName());
-        } catch (Exception e) {
-            if (e == ErrConfig.USER_NOT_EXIST_ERR) {
-                tradeAccountService.openAccount(smartUser.getAccount(), smartUser.getName(),
-                        smartUser.getPassword(), smartUser.getTelNo(), smartUser.getEmail(),
-                        TradeUserType.PERSION, 1, 0, AccountStatus.ACTIVE.getValue());
-            }
+
+        TradeUser tradeUser = tradeUserService.get(smartUser.getAccount(), TradeUserType.PERSION);
+        if (tradeUser == null) {
+            tradeAccountService.openAccount(smartUser.getAccount(), smartUser.getName(),
+                    smartUser.getPassword(), smartUser.getTelNo(), smartUser.getEmail(),
+                    TradeUserType.PERSION, 1, 0, AccountStatus.ACTIVE.getValue());
         }
-        return new JsonResult(FmtUtil.transToCNYType(tradeAccountService
-                .get(smartUser.getAccount(), TradeUserType.PERSION).getAccountBalance()));
+        TradeAccount smartUserTradeAccount =
+                tradeAccountService.get(smartUser.getAccount(), TradeUserType.PERSION);
+        if (smartUserTradeAccount == null) {
+            throw ErrConfig.INVALID_WALLET_USER;
+        }
+        return new JsonResult(CommonUtil.transToCNYType(smartUserTradeAccount.getAccountBalance()));
 
     }
 
@@ -216,13 +199,13 @@ public class TradeAccountController {
      * @return
      * @throws Exception
      */
-    @ResponseBody
-    @RequestMapping("/openPersonalAccount")
-    public JsonResult openPersonalAccount(String name, String password, String payPhone,
-            String payEmail, HttpSession session) throws Exception {
-        return tradeAccountService.openAccount(sessionUtil.getSmartUser(session).getAccount(), name,
-                password, payPhone, payEmail, TradeUserType.PERSION, 1, 1, 1);
-    }
+    // @ResponseBody
+    // @RequestMapping("/openPersonalAccount")
+    // public JsonResult openPersonalAccount(String name, String password, String payPhone,
+    // String payEmail, HttpSession session) throws Exception {
+    // return tradeAccountService.openAccount(sessionUtil.getSmartUser(session).getAccount(), name,
+    // password, payPhone, payEmail, TradeUserType.PERSION, 1, 1, 1);
+    // }
 
     /**
      * 冻结个人账户
@@ -343,17 +326,4 @@ public class TradeAccountController {
         return tradeAccountService.activeAccount(type, TradeUserType.CHANNEL);
     }
 
-    // @ResponseBody
-    // @RequestMapping("/delete")
-    // public JsonResult delete(Long id, ModelMap model) {
-    // tradeAccountService.delete(id);
-    // return new JsonResult();
-    // }
-    //
-    // @ResponseBody
-    // @RequestMapping("/batchDelete")
-    // public JsonResult batchDelete(Long[] id, ModelMap model) {
-    // tradeAccountService.batchDelete(Arrays.asList(id));
-    // return new JsonResult();
-    // }
 }

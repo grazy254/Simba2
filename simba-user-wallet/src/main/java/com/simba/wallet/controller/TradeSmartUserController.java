@@ -86,9 +86,14 @@ public class TradeSmartUserController {
         for (TradeUser tradeUser : list) {
             String accountStatus = AccountStatus.NOTEXIST.getName();
             TradeAccount tradeAccount = null;
+            try {
+                tradeAccount =
+                        tradeAccountService.get(tradeUser.getUserID(), TradeUserType.PERSION);
+                accountStatus = CommonUtil.getAccountStatus(tradeAccount).getName();
+            } catch (Exception e) {
 
-            tradeAccount = tradeAccountService.get(tradeUser.getUserID(), TradeUserType.PERSION);
-            accountStatus = CommonUtil.getAccountStatus(tradeAccount).getName();
+            }
+
 
             TradeSmartUserVO vo = new TradeSmartUserVO();
             vo.setId(tradeUser.getId());

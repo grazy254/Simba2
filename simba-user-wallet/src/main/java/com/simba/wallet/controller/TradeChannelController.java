@@ -46,9 +46,14 @@ public class TradeChannelController {
         List<TradeChannelVO> tradeChannelVOList = new ArrayList<>();
         for (TradeChannel channel : list) {
             String accountStatus = AccountStatus.NOTEXIST.getName();
-            TradeAccount tradeAccount =
-                    tradeAccountService.get(channel.getType(), TradeUserType.CHANNEL);
-            accountStatus = CommonUtil.getAccountStatus(tradeAccount).getName();
+
+            try {
+                TradeAccount tradeAccount =
+                        tradeAccountService.get(channel.getType(), TradeUserType.CHANNEL);
+                accountStatus = CommonUtil.getAccountStatus(tradeAccount).getName();
+            } catch (Exception e) {
+
+            }
 
             TradeChannelVO vo = new TradeChannelVO();
             vo.setId(channel.getId());

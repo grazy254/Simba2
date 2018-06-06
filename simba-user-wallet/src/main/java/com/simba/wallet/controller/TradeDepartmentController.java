@@ -46,10 +46,13 @@ public class TradeDepartmentController {
         List<TradeDepartmentVO> tradeDepartmentVOList = new ArrayList<>();
         for (TradeDepartment dept : list) {
             String accountStatus = AccountStatus.NOTEXIST.getName();
-            TradeAccount tradeAccount =
-                    tradeAccountService.get(dept.getDeptNO(), TradeUserType.DEPARTMENT);
-            accountStatus = CommonUtil.getAccountStatus(tradeAccount).getName();
+            try {
+                TradeAccount tradeAccount =
+                        tradeAccountService.get(dept.getDeptNO(), TradeUserType.DEPARTMENT);
+                accountStatus = CommonUtil.getAccountStatus(tradeAccount).getName();
+            } catch (Exception e) {
 
+            }
             TradeDepartmentVO vo = new TradeDepartmentVO();
             vo.setId(dept.getId());
             vo.setDeptName(dept.getDeptName());

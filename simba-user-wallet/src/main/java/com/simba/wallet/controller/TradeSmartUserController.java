@@ -11,15 +11,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.simba.framework.util.date.DateUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
-import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeUser;
-import com.simba.wallet.model.enums.AccountStatus;
-import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.model.form.TradeSmartUserSearchForm;
 import com.simba.wallet.model.vo.TradeSmartUserVO;
 import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeUserService;
 import com.simba.wallet.util.CommonUtil;
+import com.simba.wallet.util.Constants.TradeUserType;
 
 /**
  * 钱包用户信息控制器
@@ -42,17 +40,15 @@ public class TradeSmartUserController {
             ModelMap model) {
 
         if (StringUtils.isEmpty(tradeSmartUserSearchForm.getUserID())) {
-            return "trade/list";
+            return "tradeSmartUser/list";
         }
-
         TradeUser tradeUser =
                 tradeUserService.get(tradeSmartUserSearchForm.getUserID(), TradeUserType.PERSION);
         List<TradeSmartUserVO> tradeSmartUserVOList = new ArrayList<>();
-        String accountStatus = AccountStatus.NOTEXIST.getName();
-        TradeAccount tradeAccount = null;
+        String accountStatus = "";
         try {
-            tradeAccount = tradeAccountService.get(tradeUser.getId(), TradeUserType.PERSION);
-            accountStatus = CommonUtil.getAccountStatus(tradeAccount).getName();
+            accountStatus = CommonUtil.getAccountStatus(
+                    tradeAccountService.get(tradeUser.getId(), TradeUserType.PERSION));
         } catch (Exception e) {
 
         }
@@ -62,7 +58,7 @@ public class TradeSmartUserController {
         vo.setAccountStatus(accountStatus);
         // TODO: 判断账户的状态是否激活
         vo.setIsAllowPay(tradeUser.getIsAllowPay() == 1 ? "允许" : "不允许");
-        vo.setUserStatus(CommonUtil.getUserStatus(tradeUser).getName());
+        vo.setUserStatus(CommonUtil.getUserStatus(tradeUser));
         vo.setName(tradeUser.getName());
         vo.setCreateTime(DateUtil.date2String(tradeUser.getCreateTime()));
         vo.setLastUpdateTime(DateUtil.date2String(tradeUser.getLastUpdateTime()));
@@ -84,12 +80,10 @@ public class TradeSmartUserController {
                 tradeUserService.pageBy("type", TradeUserType.PERSION.getName(), pager);
         List<TradeSmartUserVO> tradeSmartUserVOList = new ArrayList<>();
         for (TradeUser tradeUser : list) {
-            String accountStatus = AccountStatus.NOTEXIST.getName();
-            TradeAccount tradeAccount = null;
+            String accountStatus = "";
             try {
-                tradeAccount =
-                        tradeAccountService.get(tradeUser.getUserID(), TradeUserType.PERSION);
-                accountStatus = CommonUtil.getAccountStatus(tradeAccount).getName();
+                accountStatus = CommonUtil.getAccountStatus(
+                        tradeAccountService.get(tradeUser.getUserID(), TradeUserType.PERSION));
             } catch (Exception e) {
 
             }
@@ -99,9 +93,8 @@ public class TradeSmartUserController {
             vo.setId(tradeUser.getId());
             vo.setAccount(tradeUser.getUserID());
             vo.setAccountStatus(accountStatus);
-            // TODO: 判断账户的状态是否激活
             vo.setIsAllowPay(tradeUser.getIsAllowPay() == 1 ? "允许" : "不允许");
-            vo.setUserStatus(CommonUtil.getUserStatus(tradeUser).getName());
+            vo.setUserStatus(CommonUtil.getUserStatus(tradeUser));
             vo.setName(tradeUser.getName());
             vo.setCreateTime(DateUtil.date2String(tradeUser.getCreateTime()));
             vo.setLastUpdateTime(DateUtil.date2String(tradeUser.getLastUpdateTime()));
@@ -123,24 +116,10 @@ public class TradeSmartUserController {
         return tradeUserService.frozePayment(account, TradeUserType.PERSION);
     }
 
-    // @ResponseBody
-    // @RequestMapping("/add")
-    // public JsonResult add(TradeUser tradeUser) {
-    // tradeUserService.add(tradeUser);
-    // return new JsonResult();
-    // }
-
-    // @ResponseBody
-    // @RequestMapping("/update")
-    // public JsonResult update(TradeUser tradeUser) {
-    // tradeUserService.update(tradeUser);
-    // return new JsonResult();
-    // }
-
     @ResponseBody
     @RequestMapping("/count")
-    public JsonResult count(TradeUser tradeUser) {
-        tradeUserService.count();
-        return new JsonResult();
+    public JsonResult count() {
+        Long count = tradeUserService.countBy("type", TradeUserType.PERSION.getName());
+        return new JsonResult(count, "", 200);
     }
 }

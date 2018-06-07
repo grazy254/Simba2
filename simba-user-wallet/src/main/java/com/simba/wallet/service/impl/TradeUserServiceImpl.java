@@ -8,9 +8,11 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.dao.TradeUserDao;
 import com.simba.wallet.model.TradeUser;
-import com.simba.wallet.model.enums.AccountStatus;
-import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.service.TradeUserService;
+import com.simba.wallet.util.CommonUtil;
+import com.simba.wallet.util.Constants.AccountActiveStatus;
+import com.simba.wallet.util.Constants.TradePayment;
+import com.simba.wallet.util.Constants.TradeUserType;
 
 /**
  * 钱包用户信息 Service实现类
@@ -178,9 +180,9 @@ public class TradeUserServiceImpl implements TradeUserService {
 
         TradeUser tradeUser = tradeUserDao.get(userID, userType);
 
-        if (tradeUser.getIsActive() == AccountStatus.ACTIVE.getValue()) {
-            if (tradeUser.getIsAllowPay() == 0) {
-                tradeUser.setIsAllowPay(1);
+        if (CommonUtil.checkTradeUserActive(tradeUser) == AccountActiveStatus.ACTIVE) {
+            if (CommonUtil.checkTradeUserPayment(tradeUser) == TradePayment.NOTALLOWPAY) {
+                tradeUser.setIsAllowPay(TradePayment.ALLOWPAY.getValue());
                 tradeUserDao.update(tradeUser);
             }
         }
@@ -190,9 +192,9 @@ public class TradeUserServiceImpl implements TradeUserService {
     @Override
     public JsonResult frozePayment(String userID, TradeUserType userType) {
         TradeUser tradeUser = tradeUserDao.get(userID, userType);
-        if (tradeUser.getIsActive() == AccountStatus.ACTIVE.getValue()) {
-            if (tradeUser.getIsAllowPay() == 1) {
-                tradeUser.setIsAllowPay(0);
+        if (CommonUtil.checkTradeUserActive(tradeUser) == AccountActiveStatus.ACTIVE) {
+            if (CommonUtil.checkTradeUserPayment(tradeUser) == TradePayment.ALLOWPAY) {
+                tradeUser.setIsAllowPay(TradePayment.NOTALLOWPAY.getValue());
                 tradeUserDao.update(tradeUser);
             }
         }

@@ -7,8 +7,8 @@ import com.simba.exception.BussException;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.registry.util.RegistryUtil;
 import com.simba.wallet.model.TradeAccount;
-import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.pay.trade.BaseInnerTrade;
+import com.simba.wallet.util.Constants.TradeType;
 
 /**
  * 购买交易

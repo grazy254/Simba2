@@ -2,7 +2,7 @@ package com.simba.wallet.pay.callbacktrade;
 
 import java.util.Date;
 import com.simba.framework.util.json.JsonResult;
-import com.simba.wallet.model.enums.TradeStatus;
+import com.simba.wallet.util.Constants.TradeStatus;
 
 public interface CallbackTradeInterface {
 

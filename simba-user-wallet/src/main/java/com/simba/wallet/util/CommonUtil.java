@@ -4,16 +4,18 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import com.simba.exception.BussException;
 import com.simba.framework.util.common.UUIDUtil;
 import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeUser;
-import com.simba.wallet.model.enums.AccountStatus;
-import com.simba.wallet.model.enums.AccountType;
-import com.simba.wallet.model.enums.ChannelType;
-import com.simba.wallet.model.enums.TradeStatus;
-import com.simba.wallet.model.enums.TradeType;
-import com.simba.wallet.model.enums.TradeUserType;
+import com.simba.wallet.util.Constants.AccountActiveStatus;
+import com.simba.wallet.util.Constants.AccountFrozenStatus;
+import com.simba.wallet.util.Constants.AccountType;
+import com.simba.wallet.util.Constants.ChannelType;
+import com.simba.wallet.util.Constants.TradePayment;
+import com.simba.wallet.util.Constants.TradeRechargement;
+import com.simba.wallet.util.Constants.TradeStatus;
+import com.simba.wallet.util.Constants.TradeType;
+import com.simba.wallet.util.Constants.TradeUserType;
 
 public class CommonUtil {
     public static String transToCNYType(Long amount) {
@@ -21,98 +23,145 @@ public class CommonUtil {
         return fmt.format(amount * 1.0 / 100) + "元";
     }
 
-    public static String fmtTradeType(String tradeType) {
+    public static String getTradeTypeValue(String tradeType) {
         if (TradeType.CONSUME.getName().equals(tradeType)) {
-            return TradeType.CONSUME.getDesc();
+            return TradeType.CONSUME.getValue();
         } else if (TradeType.RECHARGE.getName().equals(tradeType)) {
-            return TradeType.RECHARGE.getDesc();
+            return TradeType.RECHARGE.getValue();
         } else if (TradeType.REWARD.getName().equals(tradeType)) {
-            return TradeType.REWARD.getDesc();
+            return TradeType.REWARD.getValue();
         } else {
-            throw new BussException("不支持的交易类型");
+            throw ErrConfig.INVALID_TRADE_TYPE;
         }
     }
 
-    public static ChannelType fmtChannel(String channel) {
-        if (ChannelType.ALIPAY.getName().equals(channel)) {
+    public static ChannelType getChannelType(String channelType) {
+        if (ChannelType.ALIPAY.getName().equals(channelType)) {
             return ChannelType.ALIPAY;
-        } else if (ChannelType.WXPAY.getName().equals(channel)) {
+        } else if (ChannelType.WXPAY.getName().equals(channelType)) {
             return ChannelType.WXPAY;
         } else {
-            throw new BussException("不支持的交易类型");
+            throw ErrConfig.INVALID_CHANNEL_TYPE;
         }
     }
 
-    public static String fmtTradeStatus(String tradeStatus) {
+    public static String getTradeStatusValue(String tradeStatus) {
         if (TradeStatus.FAILED.getName().equals(tradeStatus)) {
-            return TradeStatus.FAILED.getDesc();
+            return TradeStatus.FAILED.getValue();
         } else if (TradeStatus.SUCCESS.getName().equals(tradeStatus)) {
-            return TradeStatus.SUCCESS.getDesc();
+            return TradeStatus.SUCCESS.getValue();
         } else if (TradeStatus.OVERTIME.getName().equals(tradeStatus)) {
-            return TradeStatus.OVERTIME.getDesc();
+            return TradeStatus.OVERTIME.getValue();
         } else if (TradeStatus.INPROCESS.getName().equals(tradeStatus)) {
-            return TradeStatus.INPROCESS.getDesc();
+            return TradeStatus.INPROCESS.getValue();
         } else {
-            throw new BussException("不支持的交易状态");
+            throw ErrConfig.INVALID_TRADE_STATUS;
         }
     }
 
-    public static AccountStatus getAccountStatus(TradeAccount tradeAccount) {
-        AccountStatus accountStatus = AccountStatus.NOTEXIST;
-        if (tradeAccount != null) {
-            if (tradeAccount.getIsActive() == 0) {
-                accountStatus = AccountStatus.NOTACTIVE;
-            } else if (tradeAccount.getIsActive() == 1) {
-                if (tradeAccount.getIsFrozen() == 0) {
-                    accountStatus = AccountStatus.ACTIVE;
-                } else {
-                    accountStatus = AccountStatus.FRONZEN;
-                }
-            } else if (tradeAccount.getIsActive() == -1) {
-                accountStatus = AccountStatus.CLOSED;
-            }
+    public static AccountActiveStatus checkAccountActive(TradeAccount tradeAccount) {
+        if (tradeAccount.getIsActive() == AccountActiveStatus.ACTIVE.getValue()) {
+            return AccountActiveStatus.ACTIVE;
+        } else if (tradeAccount.getIsActive() == AccountActiveStatus.CLOSED.getValue()) {
+            return AccountActiveStatus.CLOSED;
+        } else if (tradeAccount.getIsActive() == AccountActiveStatus.NOTACTIVE.getValue()) {
+            return AccountActiveStatus.NOTACTIVE;
+        } else {
+            throw ErrConfig.INVALID_ACCOUNT_ACTIVE_TYPE;
         }
-        return accountStatus;
     }
 
-    public static AccountStatus getUserStatus(TradeUser tradeUser) {
-        AccountStatus accountStatus = AccountStatus.NOTEXIST;
-        if (tradeUser != null) {
-            if (tradeUser.getIsActive() == 0) {
-                accountStatus = AccountStatus.NOTACTIVE;
-            } else if (tradeUser.getIsActive() == 1) {
-                accountStatus = AccountStatus.ACTIVE;
-            } else if (tradeUser.getIsActive() == -1) {
-                accountStatus = AccountStatus.CLOSED;
-            }
+    public static AccountFrozenStatus checkAccountFrozen(TradeAccount tradeAccount) {
+        if (tradeAccount.getIsFrozen() == AccountFrozenStatus.FROZEN.getValue()) {
+            return AccountFrozenStatus.FROZEN;
+        } else if (tradeAccount.getIsFrozen() == AccountFrozenStatus.NOTFROZEN.getValue()) {
+            return AccountFrozenStatus.NOTFROZEN;
+        } else {
+            throw ErrConfig.INVALID_ACCOUNT_FROZEN_TYPE;
         }
-        return accountStatus;
+    }
 
+    public static AccountActiveStatus checkTradeUserActive(TradeUser tradeUser) {
+        if (tradeUser.getIsActive() == AccountActiveStatus.ACTIVE.getValue()) {
+            return AccountActiveStatus.ACTIVE;
+        } else if (tradeUser.getIsActive() == AccountActiveStatus.CLOSED.getValue()) {
+            return AccountActiveStatus.CLOSED;
+        } else if (tradeUser.getIsActive() == AccountActiveStatus.NOTACTIVE.getValue()) {
+            return AccountActiveStatus.NOTACTIVE;
+        } else {
+            throw ErrConfig.INVALID_TRADEUSER_ACTIVE_TYPE;
+        }
+    }
+
+    public static TradePayment checkTradeUserPayment(TradeUser tradeUser) {
+        if (tradeUser.getIsAllowPay() == TradePayment.ALLOWPAY.getValue()) {
+            return TradePayment.ALLOWPAY;
+        } else if (tradeUser.getIsAllowPay() == TradePayment.NOTALLOWPAY.getValue()) {
+            return TradePayment.NOTALLOWPAY;
+        } else {
+            throw ErrConfig.INVALID_TRADE_PAYMENT_TYPE;
+        }
+    }
+
+
+    public static TradePayment checkAccountPayment(TradeAccount tradeAccount) {
+        if (tradeAccount.getIsAllowPay() == TradePayment.ALLOWPAY.getValue()) {
+            return TradePayment.ALLOWPAY;
+        } else if (tradeAccount.getIsAllowPay() == TradePayment.NOTALLOWPAY.getValue()) {
+            return TradePayment.NOTALLOWPAY;
+        } else {
+            throw ErrConfig.INVALID_TRADE_PAYMENT_TYPE;
+        }
+    }
+
+    private static TradeRechargement checkAccountRechargement(TradeAccount tradeAccount) {
+        if (tradeAccount.getIsAllowRecharge() == TradeRechargement.ALLOWRECHARGE.getValue()) {
+            return TradeRechargement.ALLOWRECHARGE;
+        } else if (tradeAccount.getIsAllowRecharge() == TradeRechargement.NOTALLOWRECHARGE
+                .getValue()) {
+            return TradeRechargement.NOTALLOWRECHARGE;
+        } else {
+            throw ErrConfig.INVALID_TRADE_RECHARGEMENT_TYPE;
+        }
+    }
+
+    public static String getUserStatus(TradeUser tradeUser) {
+        // AccountActiveStatus activeStatus = checkTradeUserActive(tradeUser);
+        // AccountFrozenStatus frozenStatus = checkTradeUserPayment(tradeUser);
+        return checkTradeUserActive(tradeUser).getName();
+    }
+
+    public static String getAccountStatus(TradeAccount tradeAccount) {
+        AccountActiveStatus activeStatus = checkAccountActive(tradeAccount);
+        AccountFrozenStatus frozenStatus = checkAccountFrozen(tradeAccount);
+        return (activeStatus == AccountActiveStatus.ACTIVE) ? frozenStatus.getName()
+                : activeStatus.getName();
     }
 
     public static AccountType getAccountType(TradeUserType tradeUserType) {
-
-        AccountType accountType = null;
         if (tradeUserType.equals(TradeUserType.PERSION)) {
-            accountType = AccountType.PERSIONAL_ACCOUNT;
+            return AccountType.PERSIONAL_ACCOUNT;
         } else if (tradeUserType.equals(TradeUserType.DEPARTMENT)) {
-            accountType = AccountType.COMPANY_ACCOUNT;
+            return AccountType.COMPANY_ACCOUNT;
         } else if (tradeUserType.equals(TradeUserType.CHANNEL)) {
-            accountType = AccountType.CHANNEL_ACCOUNT;
+            return AccountType.CHANNEL_ACCOUNT;
         } else {
-            throw new BussException("错误的用户类型");
+            throw ErrConfig.INVALID_TRADEUSER_TYPE;
         }
-        return accountType;
     }
 
-    public static ChannelType getChannelType(String chanelType) {
-        if (ChannelType.ALIPAY.getName().equals(chanelType)) {
-            return ChannelType.ALIPAY;
-        } else if (ChannelType.WXPAY.getName().equals(chanelType)) {
-            return ChannelType.WXPAY;
+    public static AccountType getAccountType(String accountType) {
+
+        if (AccountType.CHANNEL_ACCOUNT.getValue().equals(accountType)) {
+            return AccountType.CHANNEL_ACCOUNT;
+        } else if (AccountType.COMPANY_ACCOUNT.getValue().equals(accountType)) {
+            return AccountType.COMPANY_ACCOUNT;
+        } else if (AccountType.PERSIONAL_ACCOUNT.getValue().equals(accountType)) {
+            return AccountType.PERSIONAL_ACCOUNT;
         } else {
-            throw new BussException("不支持的渠道类型");
+            throw ErrConfig.INVALID_ACCOUNT_TYPE;
         }
+
     }
 
     public static Map<String, String> fmtBalance(Map<String, Object> balanceMap) {
@@ -142,15 +191,16 @@ public class CommonUtil {
 
     public static void checkWalletAutority(TradeUser tradeUser, TradeAccount tradeAccount,
             TradeUserType tradeUserType) {
-        if (tradeAccount.getIsActive() != AccountStatus.ACTIVE.getValue()
-                || tradeUser.getIsActive() != AccountStatus.ACTIVE.getValue()) {
+        if (checkAccountActive(tradeAccount) != AccountActiveStatus.ACTIVE
+                || checkTradeUserActive(tradeUser) != AccountActiveStatus.ACTIVE) {
             if (tradeUserType == TradeUserType.PERSION) {
                 throw ErrConfig.INVALID_WALLET_USER;
             } else {
                 throw ErrConfig.WALLET_UNAVAILABLE;
             }
         }
-        if (tradeAccount.getIsFrozen() == AccountStatus.FRONZEN.getValue()) {
+
+        if (checkAccountFrozen(tradeAccount) == AccountFrozenStatus.FROZEN) {
             if (tradeUserType == TradeUserType.PERSION) {
                 throw ErrConfig.WALLET_FROZEN;
             } else {
@@ -159,10 +209,11 @@ public class CommonUtil {
         }
 
         if (tradeUserType == TradeUserType.PERSION) {
-            if (tradeUser.getIsAllowPay() == 0 || tradeAccount.getIsAllowPay() == 0) {
+            if (checkTradeUserPayment(tradeUser) == TradePayment.NOTALLOWPAY
+                    || checkAccountPayment(tradeAccount) == TradePayment.NOTALLOWPAY) {
                 throw ErrConfig.WALLET_NOT_ALLOWPAY;
             }
-            if (tradeAccount.getIsAllowRecharge() == 0) {
+            if (checkAccountRechargement(tradeAccount) == TradeRechargement.NOTALLOWRECHARGE) {
                 {
                     throw ErrConfig.WALLET_NOT_ALLOWRECHARGE;
                 }

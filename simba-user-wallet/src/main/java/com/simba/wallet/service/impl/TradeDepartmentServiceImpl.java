@@ -8,9 +8,9 @@ import com.simba.exception.BussException;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.wallet.dao.TradeDepartmentDao;
 import com.simba.wallet.model.TradeDepartment;
-import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeDepartmentService;
+import com.simba.wallet.util.Constants.TradeUserType;
 
 /**
  * 收款部门 Service实现类

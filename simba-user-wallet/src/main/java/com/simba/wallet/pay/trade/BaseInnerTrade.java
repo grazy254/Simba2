@@ -17,11 +17,12 @@ import com.simba.wallet.model.TradeDepartment;
 import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.TradePartyDetail;
 import com.simba.wallet.model.TradeUser;
-import com.simba.wallet.model.enums.FeeType;
-import com.simba.wallet.model.enums.TradeStatus;
-import com.simba.wallet.model.enums.TradeType;
-import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.util.CommonUtil;
+import com.simba.wallet.util.Constants.FeeType;
+import com.simba.wallet.util.Constants.TradeStatus;
+import com.simba.wallet.util.Constants.TradeType;
+import com.simba.wallet.util.Constants.TradeUserType;
+import com.simba.wallet.util.ErrConfig;
 
 /**
  * 内部交易抽象类
@@ -94,7 +95,7 @@ public abstract class BaseInnerTrade implements InnerTradeInterface {
             long paymentAmount, Date tradeCreateTime, String tradeDeptNO, TradeType tradeType) {
 
         if (paymentAmount <= 0 || originalAmount <= 0) {
-            throw new BussException("非法金额");
+            throw ErrConfig.INVALID_PAYMENT_ACCOUNT;
         }
 
         SmartUser smartUser = smartUserDao.getBy("account", userID);
@@ -148,7 +149,7 @@ public abstract class BaseInnerTrade implements InnerTradeInterface {
         counterPartyDetail.setId(counterPartyID);
 
         TradeDetail tradeDetail = new TradeDetail();
-        tradeDetail.setFeeType(FeeType.CNY.getName());
+        tradeDetail.setFeeType(FeeType.CNY.name());
         tradeDetail.setOrderAddress(orderAddress);
         tradeDetail.setOrderDesc(orderDesc);
         tradeDetail.setOrderName(orderName);

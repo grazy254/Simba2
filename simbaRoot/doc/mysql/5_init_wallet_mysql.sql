@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2018/5/23 17:52:27                           */
+/* Created on:     2018/6/5 8:09:46                             */
 /*==============================================================*/
 
 
@@ -38,7 +38,7 @@ create table tradeAccount
    createTime           datetime default CURRENT_TIMESTAMP comment '创建时间',
    lastUpdateTime       datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '最后修改时间',
    primary key (id),
-   unique key uk_accountID (accountID, accountType)
+   unique key uk_accountID (accountID)
 );
 
 alter table tradeAccount comment '支付账号';
@@ -51,8 +51,8 @@ create table tradeChannel
    id                   bigint not null auto_increment,
    name                 varchar(100) comment '渠道名称：微信支付/支付宝支付',
    type                 varchar(20) comment '渠道类型：WXPAY/ALIPAY',
-   createTime           datetime comment '创建时间',
-   lastUpdateTime       datetime comment '最后更新时间',
+   createTime           datetime default CURRENT_TIMESTAMP comment '创建时间',
+   lastUpdateTime       datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '最后更新时间',
    primary key (id),
    unique key uk_type (type)
 );
@@ -66,11 +66,11 @@ create table tradeChannelDetail
 (
    id                   bigint not null auto_increment,
    tradeAccountID       varchar(100) not null comment '帐号ID',
-   channelID            bigint not null comment '渠道ID',
-   orderCreateTime      datetime not null comment '渠道提交时间',
-   paymentTime          datetime not null comment '渠道支付时间',
-   orderNO              varchar(100) not null comment '渠道订单号',
-   openID               varchar(100) not null comment '用户的openID',
+   channelID            bigint comment '渠道ID',
+   orderCreateTime      datetime comment '渠道提交时间',
+   paymentTime          datetime comment '渠道支付时间',
+   orderNO              varchar(100) comment '渠道订单号',
+   openID               varchar(100) comment '用户的openID',
    errorMsg             varchar(200) default '' comment '错误信息',
    errorCode            varchar(20) default '' comment '错误代号',
    createTime           datetime default CURRENT_TIMESTAMP comment '创建时间',
@@ -114,12 +114,14 @@ create table tradeDetail
    paymentAmount        bigint not null default 0 comment '实际费用',
    tradePartyID         bigint not null comment '交易主体ID',
    tradeCounterpartyID  bigint not null comment '交易对手ID',
-   tradeChannelID       bigint not null comment '交易渠道ID',
+   tradeChannelID       bigint comment '交易渠道ID',
    tradeCreateTime      datetime not null comment '请求支付时间',
    tradePaymentTime     datetime not null comment '支付创建时间',
    createTime           datetime not null default CURRENT_TIMESTAMP comment '创建时间',
    lastUpdateTime       datetime not null default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '最后更新时间',
-   primary key (id)
+   primary key (id),
+   unique key uk_orderNO (orderNO),
+   unique key uk_tradeNO (tradeNO)
 );
 
 alter table tradeDetail comment '交易详情信息';
@@ -154,16 +156,15 @@ create table tradeUser
    id                   bigint not null auto_increment,
    userID               varchar(100) not null comment '用户ID/部门ID',
    name                 varchar(100) not null comment '用户/部门名称',
-   type                 varchar(20) comment '用户类型：PERSON/CHANNEL/DEPARTMENT',
+   type                 varchar(20) not null comment '用户类型：PERSON/CHANNEL/DEPARTMENT',
    isAllowPay           tinyint not null comment '是否允许支付：0不允许，1允许',
-   isActive             tinyint comment '是否激活 0：未激活 1：激活 -1:注销',
+   isActive             tinyint not null comment '状态：1：激活，0：未激活，-1：注销',
    payPassword          varchar(128) not null comment '支付密码 ',
    payPhone             varchar(11) not null comment '支付手机',
    payEmail             varchar(200) not null comment '支付邮箱',
    createTime           datetime default CURRENT_TIMESTAMP comment '创建时间',
    lastUpdateTime       datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '最后更新时间',
-   primary key (id),
-   unique key uk_userID (userID)
+   primary key (id)
 );
 
 alter table tradeUser comment '钱包用户信息';

@@ -9,9 +9,9 @@ import com.simba.model.pay.result.PayResult;
 import com.simba.model.pay.result.RefundCallbackInfo;
 import com.simba.model.pay.result.RefundResult;
 import com.simba.model.pay.unifiedorder.UnifiedOrderReq;
-import com.simba.wallet.model.enums.TradeStatus;
 import com.simba.wallet.pay.callbacktrade.CallbackTradeContext;
 import com.simba.wallet.pay.callbacktrade.impl.WXRechargeTrade;
+import com.simba.wallet.util.Constants.TradeStatus;
 
 public class TradeByWechatPay implements PayInterface {
 

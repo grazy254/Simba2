@@ -1,7 +1,6 @@
 package com.simba.wallet.dao;
 
 import java.util.List;
-
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.form.TradeDetailSearchForm;

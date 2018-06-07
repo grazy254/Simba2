@@ -23,8 +23,7 @@ public class TradeAccountVO {
         this.setAccountBalance(CommonUtil.transToCNYType(tradeAccount.getAccountBalance()));
         this.setAvailableBalance(CommonUtil.transToCNYType(tradeAccount.getAvailableBalance()));
         this.setFrozenBalance(CommonUtil.transToCNYType(tradeAccount.getFrozenBalance()));
-        this.setAccountStatus(CommonUtil.getAccountStatus(tradeAccount).getName());
-
+        this.setAccountStatus(CommonUtil.getAccountStatus(tradeAccount));
         this.setUserID(tradeUser.getUserID());
     }
 

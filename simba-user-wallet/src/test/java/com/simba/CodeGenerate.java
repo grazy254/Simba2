@@ -1,14 +1,12 @@
 package com.simba;
 
 import java.io.IOException;
-
 import com.simba.codegenerate.CODETYPE;
 import com.simba.codegenerate.CodeGenerateUtil;
 import com.simba.codegenerate.PAGETYPE;
 import com.simba.framework.util.file.PropertiesUtil;
 import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.form.TradeDetailSearchForm;
-
 import freemarker.template.TemplateException;
 
 /**

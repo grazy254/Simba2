@@ -4,7 +4,7 @@ import java.util.List;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.model.TradeUser;
-import com.simba.wallet.model.enums.TradeUserType;
+import com.simba.wallet.util.Constants.TradeUserType;
 
 /**
  * 钱包用户信息 Service

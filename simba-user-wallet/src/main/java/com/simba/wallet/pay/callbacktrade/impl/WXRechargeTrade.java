@@ -6,10 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.registry.util.RegistryUtil;
 import com.simba.wallet.model.TradeAccount;
-import com.simba.wallet.model.enums.TradeStatus;
-import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.pay.callbacktrade.BaseCallbackTrade;
 import com.simba.wallet.util.CommonUtil;
+import com.simba.wallet.util.Constants.TradeStatus;
+import com.simba.wallet.util.Constants.TradeType;
 
 /**
  * 微信充值交易
@@ -46,10 +46,10 @@ public class WXRechargeTrade extends BaseCallbackTrade {
             String openID, Date channelPaymentTime, String channelErrorMsg, String channelErrorCode,
             long paymentAmount, TradeStatus tradeStatus) {
 
-        return finishTrade(userID, CommonUtil.fmtChannel(RegistryUtil.get("trade.channel.weixin")),
-                orderNO, channelOrderNO, openID, channelPaymentTime, channelErrorMsg,
-                channelErrorCode, paymentAmount, tradeStatus,
-                RegistryUtil.get("trade.department.recharge"));
+        return finishTrade(userID,
+                CommonUtil.getChannelType(RegistryUtil.get("trade.channel.weixin")), orderNO,
+                channelOrderNO, openID, channelPaymentTime, channelErrorMsg, channelErrorCode,
+                paymentAmount, tradeStatus, RegistryUtil.get("trade.department.recharge"));
     }
 
     @Override
@@ -57,7 +57,7 @@ public class WXRechargeTrade extends BaseCallbackTrade {
             Date channelStartTime) {
         return startTrade(userID, ip, "", orderNO, "", "", "", paymentAmount, paymentAmount,
                 new Date(), channelStartTime, RegistryUtil.get("trade.department.recharge"),
-                CommonUtil.fmtChannel(RegistryUtil.get("trade.channel.weixin")),
+                CommonUtil.getChannelType(RegistryUtil.get("trade.channel.weixin")),
                 TradeType.RECHARGE);
     }
 

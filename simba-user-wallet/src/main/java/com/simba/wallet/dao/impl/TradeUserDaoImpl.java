@@ -8,7 +8,7 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.jdbc.StatementParameter;
 import com.simba.wallet.dao.TradeUserDao;
 import com.simba.wallet.model.TradeUser;
-import com.simba.wallet.model.enums.TradeUserType;
+import com.simba.wallet.util.Constants.TradeUserType;
 import com.simba.wallet.util.ErrConfig;
 
 /**

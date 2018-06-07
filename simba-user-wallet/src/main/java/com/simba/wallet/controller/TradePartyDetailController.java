@@ -14,12 +14,12 @@ import com.simba.framework.util.date.DateTime;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.TradePartyDetail;
-import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.model.vo.TradePartyVO;
 import com.simba.wallet.service.TradeDetailService;
 import com.simba.wallet.service.TradePartyDetailService;
 import com.simba.wallet.service.TradeUserService;
 import com.simba.wallet.util.CommonUtil;
+import com.simba.wallet.util.Constants.TradeUserType;
 import com.simba.wallet.util.SessionUtil;
 
 /**
@@ -72,9 +72,10 @@ public class TradePartyDetailController {
             if (tradeDetail != null) {
                 TradePartyVO vo = new TradePartyVO();
                 vo.setTradeAmount(CommonUtil.transToCNYType(tradeDetail.getPaymentAmount()));
-                vo.setTradeStatus("充值" + CommonUtil.fmtTradeStatus(tradeDetail.getTradeStatus()));
+                vo.setTradeStatus(
+                        "充值" + CommonUtil.getTradeStatusValue(tradeDetail.getTradeStatus()));
                 vo.setTradeTime(DateTime.getTime(tradeDetail.getTradePaymentTime()));
-                vo.setTradeType(CommonUtil.fmtTradeType(tradeDetail.getTradeType()));
+                vo.setTradeType(CommonUtil.getTradeTypeValue(tradeDetail.getTradeType()));
                 result.add(vo);
             }
         }

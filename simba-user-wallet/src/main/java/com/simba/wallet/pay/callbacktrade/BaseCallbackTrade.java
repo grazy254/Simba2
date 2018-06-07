@@ -1,6 +1,7 @@
 package com.simba.wallet.pay.callbacktrade;
 
 import java.util.Date;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.simba.dao.SmartUserDao;
 import com.simba.exception.BussException;
@@ -21,12 +22,12 @@ import com.simba.wallet.model.TradeDepartment;
 import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.TradePartyDetail;
 import com.simba.wallet.model.TradeUser;
-import com.simba.wallet.model.enums.ChannelType;
-import com.simba.wallet.model.enums.FeeType;
-import com.simba.wallet.model.enums.TradeStatus;
-import com.simba.wallet.model.enums.TradeType;
-import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.util.CommonUtil;
+import com.simba.wallet.util.Constants.ChannelType;
+import com.simba.wallet.util.Constants.FeeType;
+import com.simba.wallet.util.Constants.TradeStatus;
+import com.simba.wallet.util.Constants.TradeType;
+import com.simba.wallet.util.Constants.TradeUserType;
 import com.simba.wallet.util.ErrConfig;
 
 /**
@@ -107,7 +108,7 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
      * @param tradeType 交易类型
      * 
      * @exception BussException 如果{@code paymentAmount <=0} 或者 {@code originalAmount<=0}会抛出非法金额异常
-     * @exception BussException 如果 {@code userID}没有开通钱包功能会抛用户不存在异常
+     * @exception BussException 如果 {@code userID}没有开通钱包功能会抛
      * @return
      */
     protected JsonResult startTrade(String userID, String ip, String location, String orderNO,
@@ -116,20 +117,18 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
             ChannelType channelType, TradeType tradeType) {
 
         if (paymentAmount <= 0 || originalAmount <= 0) {
-            throw new BussException("非法金额");
+            throw ErrConfig.INVALID_PAYMENT_ACCOUNT;
         }
 
         checkUserAccount(userID);
 
         SmartUser smartUser = smartUserDao.getBy("account", userID);
+        if (Objects.isNull(smartUser)) {
+            throw ErrConfig.USER_NOT_EXIST_ERR;
+        }
         TradeUser smartTradeUser = tradeUserDao.get(smartUser.getAccount(), TradeUserType.PERSION);
-
-
         TradeAccount smartUserTradeAccount =
                 tradeAccountDao.get(smartTradeUser.getId(), TradeUserType.PERSION);
-        if (smartUserTradeAccount == null) {
-            throw ErrConfig.INVALID_WALLET_USER;
-        }
         CommonUtil.checkWalletAutority(smartTradeUser, smartUserTradeAccount,
                 TradeUserType.PERSION);
 
@@ -144,22 +143,16 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
         tradePartyDetail.setMobileNumber(smartUser.getTelNo());
         tradePartyDetail.setTradeAccountID(smartUserTradeAccount.getAccountID());
         tradePartyDetail.setTradeUserID(smartTradeUser.getId());
+
         Long tradePartyID = tradePartyDetailDao.add(tradePartyDetail);
+
         tradePartyDetail.setId(tradePartyID);
 
         TradeDepartment tradeDepartment = tradeDepartmentDao.get(tradeDeptNO);
-
         TradeUser departmentTradeUser =
                 tradeUserDao.get(tradeDepartment.getDeptNO(), TradeUserType.DEPARTMENT);
-        if (departmentTradeUser == null) {
-            throw ErrConfig.WALLET_UNAVAILABLE;
-        }
-
         TradeAccount departmentTradeAccount =
                 tradeAccountDao.get(departmentTradeUser.getId(), TradeUserType.DEPARTMENT);
-        if (departmentTradeAccount == null) {
-            throw ErrConfig.WALLET_UNAVAILABLE;
-        }
         CommonUtil.checkWalletAutority(departmentTradeUser, departmentTradeAccount,
                 TradeUserType.DEPARTMENT);
 
@@ -169,7 +162,6 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
         counterPartyDetail.setPartyType(TradeUserType.DEPARTMENT.getName());
         counterPartyDetail.setTradeAccountID(departmentTradeAccount.getAccountID());
         counterPartyDetail.setTradeUserID(departmentTradeUser.getId());
-
         // 对手实体默认不填
         counterPartyDetail.setIp("");
         counterPartyDetail.setLocation("");
@@ -180,18 +172,9 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
         counterPartyDetail.setId(counterPartyID);
 
         TradeChannel tradeChannel = tradeChannelDao.get(channelType.getName());
-
         TradeUser channelTradeUser = tradeUserDao.get(channelType.getName(), TradeUserType.CHANNEL);
-
-        if (channelTradeUser == null) {
-            throw ErrConfig.WALLET_UNAVAILABLE;
-        }
-
         TradeAccount channelTradeAccount =
                 tradeAccountDao.get(channelTradeUser.getId(), TradeUserType.CHANNEL);
-        if (channelTradeAccount == null) {
-            throw ErrConfig.WALLET_UNAVAILABLE;
-        }
         CommonUtil.checkWalletAutority(channelTradeUser, channelTradeAccount,
                 TradeUserType.CHANNEL);
 
@@ -201,11 +184,10 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
         tradeChannelDetail.setOrderCreateTime(channelStartTime);
 
         Long tradeChannelDetailID = tradeChannelDetailDao.add(tradeChannelDetail);
-
         tradeChannelDetail.setId(tradeChannelDetailID);
 
         TradeDetail tradeDetail = new TradeDetail();
-        tradeDetail.setFeeType(FeeType.CNY.getName());
+        tradeDetail.setFeeType(FeeType.CNY.name());
         tradeDetail.setOrderAddress(orderAddress);
         tradeDetail.setOrderDesc(orderDesc);
         tradeDetail.setOrderName(orderName);
@@ -225,7 +207,7 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
         Long tradeDetailID = tradeDetailDao.add(tradeDetail);
 
         if (tradeDetailID <= 0) {
-            throw new BussException("创建支付订单失败");
+            throw ErrConfig.TRADE_FAILED;
         }
 
         return new JsonResult("订单创建成功");
@@ -253,18 +235,16 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
             String tradeDeptNO) {
 
         if (channelType == null) {
-            throw new BussException("渠道信息不可以为空");
+            throw ErrConfig.INVALID_CHANNEL;
         }
 
-        SmartUser smartUser = smartUserDao.getBy("account", userID);
         TradeDetail tradeDetail = tradeDetailDao.getBy("orderNO", orderNO);
         if (tradeDetail == null) {
-            throw new BussException("订单异常");
+            throw ErrConfig.INVALID_ORDER;
         }
         TradeChannelDetail tradeChannelDetail =
                 tradeChannelDetailDao.get(tradeDetail.getTradeChannelID());
-        TradeAccount smartUserTradeAccount =
-                tradeAccountDao.get(smartUser.getAccount(), TradeUserType.PERSION);
+        TradeAccount smartUserTradeAccount = tradeAccountDao.get(userID, TradeUserType.PERSION);
         TradeAccount departmentTradeAccount =
                 tradeAccountDao.get(tradeDeptNO, TradeUserType.DEPARTMENT);
         TradeAccount channelTradeAccount =
@@ -273,7 +253,6 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
         tradeDetail.setTradeStatus(tradeStatus.getName());
         tradeDetailDao.update(tradeDetail);
 
-        // tradeChannelDetail.setOrderCreateTime(channelOrderCreateTime);
         tradeChannelDetail.setOrderNO(channelOrderNO);
         tradeChannelDetail.setPaymentTime(channelPaymentTime);
         tradeChannelDetail.setOpenID(openID);

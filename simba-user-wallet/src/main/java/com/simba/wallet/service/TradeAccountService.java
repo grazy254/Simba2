@@ -5,9 +5,9 @@ import java.util.Map;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.model.TradeAccount;
-import com.simba.wallet.model.enums.AccountType;
-import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.model.form.TradeAccountSearchForm;
+import com.simba.wallet.util.Constants.AccountType;
+import com.simba.wallet.util.Constants.TradeUserType;
 
 /**
  * 支付账号 Service

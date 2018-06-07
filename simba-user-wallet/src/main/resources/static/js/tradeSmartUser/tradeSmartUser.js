@@ -1,6 +1,6 @@
 var TradeSmartUser = {
 	"toSearch" : function() {
-			TradeAccount.initTradeAccountList(0, Page.size, "doSearch");
+		TradeSmartUser.initTradeSmartUserList(0, Page.size, "doSearch");
 		},
 	"toAdd": function() {
 		window.self.location.href = contextPath + "/tradeSmartUser/toAdd";
@@ -41,6 +41,7 @@ var TradeSmartUser = {
 		$.extend(data2,data);
 		data["pageStart"] = start
 		data["pageSize"] = pageSize
+		data["userID"] = $("#userID").val()
 		$.ajax({
 			type: "get",
 			url: contextPath + "/tradeSmartUser/" + method,

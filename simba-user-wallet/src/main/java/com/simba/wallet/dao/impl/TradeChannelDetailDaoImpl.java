@@ -25,22 +25,23 @@ public class TradeChannelDetailDaoImpl implements TradeChannelDetailDao {
 
     @Override
     public Long add(TradeChannelDetail tradeChannelDetail) {
-        String sql = "insert into " + table + "( tradeAccountID, channelID ) values(?,?)";
+        String sql = "insert into " + table
+                + "( tradeAccountID, channelID, orderCreateTime ) values(?,?,?)";
         Number id = jdbc.updateForGeneratedKey(sql, tradeChannelDetail.getTradeAccountID(),
-                tradeChannelDetail.getChannelID());
+                tradeChannelDetail.getChannelID(), tradeChannelDetail.getOrderCreateTime());
         return id.longValue();
     }
 
     @Override
     public void update(TradeChannelDetail tradeChannelDetail) {
         String sql = "update " + table
-                + " set  tradeAccountID = ? , channelID = ? , orderCreateTime = ? , paymentTime = ? , orderNO = ? , openID = ? , errorMsg = ? , errorCode = ? , createTime = ? , lastUpdateTime = ?  where id = ?  ";
+                + " set  tradeAccountID = ? , channelID = ? , paymentTime = ? , orderNO = ? , openID = ? , errorMsg = ? , errorCode = ? , createTime = ? , lastUpdateTime = ?  where id = ?  ";
         jdbc.updateForBoolean(sql, tradeChannelDetail.getTradeAccountID(),
-                tradeChannelDetail.getChannelID(), tradeChannelDetail.getOrderCreateTime(),
-                tradeChannelDetail.getPaymentTime(), tradeChannelDetail.getOrderNO(),
-                tradeChannelDetail.getOpenID(), tradeChannelDetail.getErrorMsg(),
-                tradeChannelDetail.getErrorCode(), tradeChannelDetail.getCreateTime(),
-                tradeChannelDetail.getLastUpdateTime(), tradeChannelDetail.getId());
+                tradeChannelDetail.getChannelID(), tradeChannelDetail.getPaymentTime(),
+                tradeChannelDetail.getOrderNO(), tradeChannelDetail.getOpenID(),
+                tradeChannelDetail.getErrorMsg(), tradeChannelDetail.getErrorCode(),
+                tradeChannelDetail.getCreateTime(), tradeChannelDetail.getLastUpdateTime(),
+                tradeChannelDetail.getId());
     }
 
     @Override

@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2018/6/5 8:09:46                             */
+/* Created on:     2018/6/8 17:27:23                            */
 /*==============================================================*/
 
 
@@ -112,11 +112,15 @@ create table tradeDetail
    feeType              varchar(10) not null default 'CNY' comment '货币类型',
    originalAmount       bigint not null default 0 comment '原始费用',
    paymentAmount        bigint not null default 0 comment '实际费用',
+   partyTradeUserID     bigint comment '用户ID',
+   counterpartyTradeUserID char(10) comment '对手主题用户ID',
+   channelTradeUserID   char(10) comment '渠道用户ID',
    tradePartyID         bigint not null comment '交易主体ID',
    tradeCounterpartyID  bigint not null comment '交易对手ID',
    tradeChannelID       bigint comment '交易渠道ID',
    tradeCreateTime      datetime not null comment '请求支付时间',
    tradePaymentTime     datetime not null comment '支付创建时间',
+   tradePaymentDate     date comment '支付创建日期',
    createTime           datetime not null default CURRENT_TIMESTAMP comment '创建时间',
    lastUpdateTime       datetime not null default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '最后更新时间',
    primary key (id),
@@ -142,7 +146,6 @@ create table tradePartyDetail
    noticeMail           varchar(255) not null comment '通知的邮箱',
    location             varchar(200) default '' comment '当时的位置信息（对手主体可选填）',
    createTime           datetime default CURRENT_TIMESTAMP comment '创建时间',
-   createDate           date comment '创建日期',
    primary key (id)
 );
 

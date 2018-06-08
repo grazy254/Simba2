@@ -70,6 +70,13 @@ public class TradeDetail {
      */
     @DescAnnotation(desc = "实际费用")
     private long paymentAmount = 0;
+
+    /**
+     * 交易主体UserID
+     */
+    @DescAnnotation(desc = "主交易方TradeUserID")
+    private long tradeUserID;
+
     /**
      * 交易主体ID
      */
@@ -99,6 +106,13 @@ public class TradeDetail {
      */
     @DescAnnotation(desc = "支付创建时间")
     private Date tradePaymentTime;
+
+    /**
+     * 支付创建时间
+     */
+    @DescAnnotation(desc = "支付创建时间")
+    private Date tradePaymentDate;
+
 
     /**
      * 创建时间
@@ -255,6 +269,23 @@ public class TradeDetail {
 
     public void setLastUpdateTime(Date lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
+    }
+
+    public long getTradeUserID() {
+        return tradeUserID;
+    }
+
+    public void setTradeUserID(long tradeUserID) {
+        this.tradeUserID = tradeUserID;
+    }
+
+
+    public Date getTradePaymentDate() {
+        return tradePaymentDate;
+    }
+
+    public void setTradePaymentDate(Date tradePaymentDate) {
+        this.tradePaymentDate = tradePaymentDate;
     }
 
     @Override

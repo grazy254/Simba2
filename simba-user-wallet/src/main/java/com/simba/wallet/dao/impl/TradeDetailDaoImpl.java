@@ -28,15 +28,16 @@ public class TradeDetailDaoImpl implements TradeDetailDao {
     @Override
     public Long add(TradeDetail tradeDetail) {
         String sql = "insert into " + table
-                + "( tradeNO, tradeType, tradeStatus, orderNO, orderName, orderDesc, orderAddress, feeType, originalAmount, paymentAmount, tradePartyID, tradeCounterpartyID, tradeChannelID, tradeCreateTime, tradePaymentTime) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "( tradeNO, tradeType, tradeStatus, orderNO, orderName, orderDesc, orderAddress, feeType, originalAmount, paymentAmount, tradeUserID, tradePartyID, tradeCounterpartyID, tradeChannelID, tradeCreateTime, tradePaymentTime,tradePaymentDate) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         Number id = jdbc.updateForGeneratedKey(sql, tradeDetail.getTradeNO(),
                 tradeDetail.getTradeType(), tradeDetail.getTradeStatus(), tradeDetail.getOrderNO(),
                 tradeDetail.getOrderName(), tradeDetail.getOrderDesc(),
                 tradeDetail.getOrderAddress(), tradeDetail.getFeeType(),
                 tradeDetail.getOriginalAmount(), tradeDetail.getPaymentAmount(),
-                tradeDetail.getTradePartyID(), tradeDetail.getTradeCounterpartyID(),
-                tradeDetail.getTradeChannelID(), tradeDetail.getTradeCreateTime(),
-                tradeDetail.getTradePaymentTime());
+                tradeDetail.getTradeUserID(), tradeDetail.getTradePartyID(),
+                tradeDetail.getTradeCounterpartyID(), tradeDetail.getTradeChannelID(),
+                tradeDetail.getTradeCreateTime(), tradeDetail.getTradePaymentTime(),
+                tradeDetail.getTradePaymentDate());
         return id.longValue();
     }
 
@@ -204,15 +205,15 @@ public class TradeDetailDaoImpl implements TradeDetailDao {
     private String buildCondition(String sql, TradeDetailSearchForm tradeDetailSearchForm,
             StatementParameter param) {
         sql += " where 1 = 1";
-        if (tradeDetailSearchForm.getStartTime() != null
-                && StringUtils.isNotEmpty(tradeDetailSearchForm.getStartTime() + "")) {
-            sql += " and tradePaymentTime  >= ?";
-            param.set(tradeDetailSearchForm.getStartTime());
+        if (tradeDetailSearchForm.getStartDate() != null
+                && StringUtils.isNotEmpty(tradeDetailSearchForm.getStartDate() + "")) {
+            sql += " and tradePaymentDate  >= ?";
+            param.set(tradeDetailSearchForm.getStartDate());
         }
-        if (tradeDetailSearchForm.getEndTime() != null
-                && StringUtils.isNotEmpty(tradeDetailSearchForm.getEndTime() + "")) {
-            sql += " and tradePaymentTime  < ?";
-            param.set(tradeDetailSearchForm.getEndTime());
+        if (tradeDetailSearchForm.getEndDate() != null
+                && StringUtils.isNotEmpty(tradeDetailSearchForm.getEndDate() + "")) {
+            sql += " and tradePaymentDate  < ?";
+            param.set(tradeDetailSearchForm.getEndDate());
         }
         if (tradeDetailSearchForm.getTradeNO() != null
                 && StringUtils.isNotEmpty(tradeDetailSearchForm.getTradeNO() + "")) {
@@ -229,6 +230,12 @@ public class TradeDetailDaoImpl implements TradeDetailDao {
             sql += " and tradeStatus  = ?";
             param.set(tradeDetailSearchForm.getTradeStatus());
         }
+        if (tradeDetailSearchForm.getTradeUserID() != null
+                && StringUtils.isNotEmpty(tradeDetailSearchForm.getTradeUserID() + "")) {
+            sql += " and tradeUserID  = ?";
+            param.set(tradeDetailSearchForm.getTradeUserID());
+        }
+
         return sql;
     }
 }

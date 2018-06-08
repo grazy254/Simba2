@@ -160,11 +160,12 @@ public abstract class BaseInnerTrade implements InnerTradeInterface {
         tradeDetail.setTradeCounterpartyID(counterPartyID);
         tradeDetail.setTradeCreateTime(tradeCreateTime);
         tradeDetail.setTradeNO(CommonUtil.generateTradeNO());
+        tradeDetail.setTradeUserID(smartTradeUser.getId());
         tradeDetail.setTradePartyID(tradePartyID);
         tradeDetail.setTradeStatus(TradeStatus.SUCCESS.getName());
         tradeDetail.setTradeType(tradeType.getName());
-        tradeDetail.setTradePaymentTime(new Date());
-
+        tradeDetail.setTradePaymentTime(now);
+        tradeDetail.setTradePaymentDate(DateUtil.getOnlyDate(now));
         Long tradeDetailID = tradeDetailDao.add(tradeDetail);
 
         if (tradeDetailID <= 0) {

@@ -34,11 +34,13 @@ public class ErrConfig {
     public final static BussException INVALID_TRADE_RECHARGEMENT_TYPE =
             new BussException("用户可充值状态码错误");
 
-    public final static BussException INVALID_CHANNEL_TYPE = new BussException("不支持的交易类型");
+    public final static BussException INVALID_CHANNEL_TYPE = new BussException("不支持的渠道类型");
     public final static BussException INVALID_TRADE_TYPE = new BussException("不支持的交易类型");
     public final static BussException INVALID_TRADE_STATUS = new BussException("不支持的交易状态");
     public final static BussException INVALID_ACCOUNT_TYPE = new BussException("错误的账户类型");
     public final static BussException INVALID_TRADEUSER_TYPE = new BussException("错误的用户类型");
+
+    public final static BussException INVALID_PARAMETER = new BussException("参数错误");
 
 
 

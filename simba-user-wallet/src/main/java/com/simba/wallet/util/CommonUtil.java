@@ -45,6 +45,18 @@ public class CommonUtil {
         }
     }
 
+    public static TradeUserType getTradeUserType(String tradeUserType) {
+        if (TradeUserType.CHANNEL.getName().equals(tradeUserType)) {
+            return TradeUserType.CHANNEL;
+        } else if (TradeUserType.DEPARTMENT.getName().equals(tradeUserType)) {
+            return TradeUserType.DEPARTMENT;
+        } else if (TradeUserType.PERSION.getName().equals(tradeUserType)) {
+            return TradeUserType.PERSION;
+        } else {
+            throw ErrConfig.INVALID_TRADEUSER_TYPE;
+        }
+    }
+
     public static String getTradeStatusValue(String tradeStatus) {
         if (TradeStatus.FAILED.getName().equals(tradeStatus)) {
             return TradeStatus.FAILED.getValue();

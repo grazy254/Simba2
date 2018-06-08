@@ -47,7 +47,7 @@ public class WXRechargeTrade extends BaseCallbackTrade {
             long paymentAmount, TradeStatus tradeStatus) {
 
         return finishTrade(userID,
-                CommonUtil.getChannelType(RegistryUtil.get("trade.channel.weixin")), orderNO,
+                CommonUtil.getChannelType(RegistryUtil.get("trade.channel.wxpay")), orderNO,
                 channelOrderNO, openID, channelPaymentTime, channelErrorMsg, channelErrorCode,
                 paymentAmount, tradeStatus, RegistryUtil.get("trade.department.recharge"));
     }
@@ -57,7 +57,7 @@ public class WXRechargeTrade extends BaseCallbackTrade {
             Date channelStartTime) {
         return startTrade(userID, ip, "", orderNO, "", "", "", paymentAmount, paymentAmount,
                 new Date(), channelStartTime, RegistryUtil.get("trade.department.recharge"),
-                CommonUtil.getChannelType(RegistryUtil.get("trade.channel.weixin")),
+                CommonUtil.getChannelType(RegistryUtil.get("trade.channel.wxpay")),
                 TradeType.RECHARGE);
     }
 

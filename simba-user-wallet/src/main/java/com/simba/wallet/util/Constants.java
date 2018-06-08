@@ -189,15 +189,18 @@ public class Constants {
 
     public static enum TradeUserType {
 
-        PERSION("PERSON", "PE"), CHANNEL("CHANNEL", "CH"), DEPARTMENT("DEPARTMENT", "DEPT");
+        PERSION("PERSON", "PE", "大众用户"), CHANNEL("CHANNEL", "CH", "渠道用户"), DEPARTMENT("DEPARTMENT",
+                "DEPT", "部门用户");
 
         private String name;
         private String shortName;
+        private String value;
 
 
-        private TradeUserType(String name, String shortName) {
+        private TradeUserType(String name, String shortName, String value) {
             this.name = name;
             this.shortName = shortName;
+            this.value = value;
         }
 
         public String getName() {
@@ -206,6 +209,10 @@ public class Constants {
 
         public String getShortName() {
             return shortName;
+        }
+
+        public String getValue() {
+            return value;
         }
     }
 

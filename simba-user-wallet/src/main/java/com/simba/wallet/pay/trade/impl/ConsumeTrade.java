@@ -1,21 +1,14 @@
 package com.simba.wallet.pay.trade.impl;
 
 import java.util.Date;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.simba.dao.SmartUserDao;
 import com.simba.exception.BussException;
 import com.simba.framework.util.json.JsonResult;
-import com.simba.model.SmartUser;
 import com.simba.registry.util.RegistryUtil;
-import com.simba.wallet.dao.TradeAccountDao;
-import com.simba.wallet.dao.TradeUserDao;
 import com.simba.wallet.model.TradeAccount;
-import com.simba.wallet.model.TradeUser;
-import com.simba.wallet.model.enums.TradeType;
-import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.pay.trade.BaseInnerTrade;
+import com.simba.wallet.util.Constants.TradeType;
 
 /**
  * 购买交易
@@ -27,37 +20,17 @@ import com.simba.wallet.pay.trade.BaseInnerTrade;
 @Transactional
 public class ConsumeTrade extends BaseInnerTrade {
 
-    @Autowired
-    private TradeUserDao tradeUserDao;
-
-    @Autowired
-    private SmartUserDao smartUserDao;
-
-    @Autowired
-    private TradeAccountDao tradeAccountDao;
-
     public ConsumeTrade() {}
 
-
-    private boolean checkSmartUserAccountStatus(Long tradeUserID) {
-        TradeAccount tradeAccount = tradeAccountDao.get(tradeUserID, TradeUserType.PERSION);
-        if (tradeAccount.getFrozenBalance() != 0) {
-            return false;
-        }
-        return true;
-    }
-
     @Override
-    public void checkUserAccount(String userID) {
-        SmartUser smartUser = smartUserDao.getBy("account", userID);
-        TradeUser tradeUser =
-                tradeUserDao.get(smartUser.getAccount(), TradeUserType.PERSION.getName());
-
-        if (!checkSmartUserAccountStatus(tradeUser.getId())) {
+    public void checkUserAccount(TradeAccount tradeAccount, Long amount) {
+        if (tradeAccount.getFrozenBalance() != 0) {
             throw new BussException("有一笔异常支付");
         }
+        if (tradeAccount.getAvailableBalance() < amount) {
+            throw new BussException("金额不足");
+        }
     }
-
 
     @Override
     public void updateBalance(TradeAccount smartUserTradeAccount,

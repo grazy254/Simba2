@@ -2,7 +2,7 @@ package com.simba.wallet.pay.callbacktrade;
 
 import java.util.Date;
 import com.simba.framework.util.json.JsonResult;
-import com.simba.wallet.model.enums.TradeStatus;
+import com.simba.wallet.util.Constants.TradeStatus;
 
 public interface CallbackTradeInterface {
 
@@ -18,7 +18,7 @@ public interface CallbackTradeInterface {
      * @return
      */
     JsonResult startTrade(String userID, String ip, String orderNO, long paymentAmount,
-            Date tradeCreateTime, Date channelStartTime);
+            Date channelStartTime);
 
     /**
      * 回调接口结束交易

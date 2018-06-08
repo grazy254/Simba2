@@ -4,7 +4,7 @@ import java.util.List;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.model.TradeUser;
-import com.simba.wallet.model.enums.TradeUserType;
+import com.simba.wallet.util.Constants.TradeUserType;
 
 /**
  * 钱包用户信息 Service
@@ -40,7 +40,7 @@ public interface TradeUserService {
 
     TradeUser get(Long id);
 
-    TradeUser get(String userID, String userType);
+    TradeUser get(String userID, TradeUserType userType);
 
     void batchDelete(List<Long> idList);
 

@@ -10,14 +10,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.simba.framework.util.date.DateUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
-import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeDepartment;
-import com.simba.wallet.model.enums.AccountStatus;
-import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.model.vo.TradeDepartmentVO;
 import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeDepartmentService;
-import com.simba.wallet.util.FmtUtil;
+import com.simba.wallet.util.CommonUtil;
+import com.simba.wallet.util.Constants.TradeUserType;
 
 /**
  * 收款部门控制器
@@ -45,15 +43,13 @@ public class TradeDepartmentController {
         List<TradeDepartment> list = tradeDepartmentService.page(pager);
         List<TradeDepartmentVO> tradeDepartmentVOList = new ArrayList<>();
         for (TradeDepartment dept : list) {
-            String accountStatus = AccountStatus.NOTEXIST.getName();
-            TradeAccount tradeAccount = null;
+            String accountStatus = "";
             try {
-                tradeAccount = tradeAccountService.get(dept.getDeptNO(), TradeUserType.DEPARTMENT);
-                accountStatus = FmtUtil.getAccountStatus(tradeAccount).getName();
+                accountStatus = CommonUtil.getAccountStatus(
+                        tradeAccountService.get(dept.getDeptNO(), TradeUserType.DEPARTMENT));
             } catch (Exception e) {
 
             }
-
             TradeDepartmentVO vo = new TradeDepartmentVO();
             vo.setId(dept.getId());
             vo.setDeptName(dept.getDeptName());
@@ -104,12 +100,4 @@ public class TradeDepartmentController {
         tradeDepartmentService.delete(deptNO);
         return new JsonResult();
     }
-
-    // @ResponseBody
-    // @RequestMapping("/batchDelete")
-    // public JsonResult batchDelete(Long[] id, ModelMap model) {
-    // tradeDepartmentService.batchDelete(Arrays.asList(id));
-    // return new JsonResult();
-    // }
-
 }

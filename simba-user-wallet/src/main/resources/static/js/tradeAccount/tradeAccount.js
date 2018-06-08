@@ -6,10 +6,11 @@ var TradeAccount = {
 		var data = {}
 		var data2 = {}
 		method = method || "getList"
-		$.extend(data2, data);
 		data["pageStart"] = start
 		data["pageSize"] = pageSize
 		data["userID"] = $("#userID").val();
+		data["accountType"] = $("#accountType").val();
+		$.extend(data2, data);
 		$.ajax({
 			type : "get",
 			url : contextPath + "/tradeAccount/" + method,

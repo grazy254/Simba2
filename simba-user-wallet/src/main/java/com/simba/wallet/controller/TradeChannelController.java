@@ -10,14 +10,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.simba.framework.util.date.DateUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
-import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeChannel;
-import com.simba.wallet.model.enums.AccountStatus;
-import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.model.vo.TradeChannelVO;
 import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeChannelService;
-import com.simba.wallet.util.FmtUtil;
+import com.simba.wallet.util.CommonUtil;
+import com.simba.wallet.util.Constants.TradeUserType;
 
 /**
  * 渠道信息控制器
@@ -45,14 +43,15 @@ public class TradeChannelController {
         List<TradeChannel> list = tradeChannelService.page(pager);
         List<TradeChannelVO> tradeChannelVOList = new ArrayList<>();
         for (TradeChannel channel : list) {
-            String accountStatus = AccountStatus.NOTEXIST.getName();
-            TradeAccount tradeAccount = null;
+            String accountStatus = "";
+
             try {
-                tradeAccount = tradeAccountService.get(channel.getType(), TradeUserType.CHANNEL);
-                accountStatus = FmtUtil.getAccountStatus(tradeAccount).getName();
+                accountStatus = CommonUtil.getAccountStatus(
+                        tradeAccountService.get(channel.getType(), TradeUserType.CHANNEL));
             } catch (Exception e) {
 
             }
+
             TradeChannelVO vo = new TradeChannelVO();
             vo.setId(channel.getId());
             vo.setName(channel.getName());
@@ -103,12 +102,4 @@ public class TradeChannelController {
         tradeChannelService.delete(type);
         return new JsonResult();
     }
-
-    // @ResponseBody
-    // @RequestMapping("/batchDelete")
-    // public JsonResult batchDelete(Long[] id, ModelMap model) {
-    // tradeChannelService.batchDelete(Arrays.asList(id));
-    // return new JsonResult();
-    // }
-
 }

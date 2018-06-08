@@ -10,10 +10,11 @@ import com.simba.framework.util.jdbc.StatementParameter;
 import com.simba.wallet.dao.TradeAccountDao;
 import com.simba.wallet.dao.TradeUserDao;
 import com.simba.wallet.model.TradeAccount;
-import com.simba.wallet.model.enums.AccountType;
-import com.simba.wallet.model.enums.TradeUserType;
+import com.simba.wallet.model.TradeUser;
+import com.simba.wallet.util.CommonUtil;
+import com.simba.wallet.util.Constants.AccountType;
+import com.simba.wallet.util.Constants.TradeUserType;
 import com.simba.wallet.util.ErrConfig;
-import com.simba.wallet.util.FmtUtil;
 
 /**
  * 支付账号 Dao实现类
@@ -210,21 +211,20 @@ public class TradeAccountDaoImpl implements TradeAccountDao {
 
     @Override
     public TradeAccount get(String userID, TradeUserType userType) {
-        TradeAccount tradeAccount =
-                getByAnd("tradeUserID", tradeUserDao.get(userID, userType.getName()).getId(),
-                        "accountType", FmtUtil.getAccountType(userType).getName(), "isActive", 1);
-        if (tradeAccount == null) {
-            throw ErrConfig.ACCOUNT_NOT_EXIST_ERR;
-        }
-        return tradeAccount;
+        TradeUser tradeUser = tradeUserDao.get(userID, userType);
+        return get(tradeUser.getId(), userType);
     }
 
     @Override
     public TradeAccount get(Long tradeUserID, TradeUserType userType) {
         TradeAccount tradeAccount = getByAnd("tradeUserID", tradeUserID, "accountType",
-                FmtUtil.getAccountType(userType).getName(), "isActive", 1);
+                CommonUtil.getAccountType(userType).getValue(), "isActive", 1);
         if (tradeAccount == null) {
-            throw ErrConfig.ACCOUNT_NOT_EXIST_ERR;
+            if (userType == TradeUserType.PERSION) {
+                throw ErrConfig.INVALID_WALLET_USER;
+            } else {
+                throw ErrConfig.WALLET_UNAVAILABLE;
+            }
         }
         return tradeAccount;
     }
@@ -234,7 +234,7 @@ public class TradeAccountDaoImpl implements TradeAccountDao {
         String sql =
                 "select sum(accountBalance) as accountBalance, sum(availableBalance) as availableBalance, sum(frozenBalance) as frozenBalance from "
                         + table + " where isActive  != -1 and accountType = ?";
-        return jdbc.queryForMap(sql, accountType.getName());
+        return jdbc.queryForMap(sql, accountType.getValue());
     }
 
     @Override
@@ -242,7 +242,7 @@ public class TradeAccountDaoImpl implements TradeAccountDao {
         String sql =
                 "select sum(accountBalance) as accountBalance, sum(availableBalance) as availableBalance, sum(frozenBalance) as frozenBalance from "
                         + table + " where isActive  != -1 and accountType = ? and tradeUserID = ?";
-        return jdbc.queryForMap(sql, accountType.getName(), tradeUserID);
+        return jdbc.queryForMap(sql, accountType.getValue(), tradeUserID);
     }
 
 }

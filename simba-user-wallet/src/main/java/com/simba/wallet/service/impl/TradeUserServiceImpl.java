@@ -4,14 +4,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.simba.exception.BussException;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.dao.TradeUserDao;
 import com.simba.wallet.model.TradeUser;
-import com.simba.wallet.model.enums.AccountStatus;
-import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.service.TradeUserService;
+import com.simba.wallet.util.CommonUtil;
+import com.simba.wallet.util.Constants.AccountActiveStatus;
+import com.simba.wallet.util.Constants.TradePayment;
+import com.simba.wallet.util.Constants.TradeUserType;
 
 /**
  * 钱包用户信息 Service实现类
@@ -170,39 +171,32 @@ public class TradeUserServiceImpl implements TradeUserService {
     }
 
     @Override
-    public TradeUser get(String userID, String userType) {
+    public TradeUser get(String userID, TradeUserType userType) {
         return tradeUserDao.get(userID, userType);
     }
 
     @Override
     public JsonResult activatePayment(String userID, TradeUserType userType) {
-        TradeUser tradeUser = tradeUserDao.get(userID, userType.getName());
-        // TODO: 1 0 可读性不强
-        if (tradeUser.getIsActive() == AccountStatus.ACTIVE.getValue()) {
-            if (tradeUser.getIsAllowPay() == 0) {
-                tradeUser.setIsAllowPay(1);
+
+        TradeUser tradeUser = tradeUserDao.get(userID, userType);
+
+        if (CommonUtil.checkTradeUserActive(tradeUser) == AccountActiveStatus.ACTIVE) {
+            if (CommonUtil.checkTradeUserPayment(tradeUser) == TradePayment.NOTALLOWPAY) {
+                tradeUser.setIsAllowPay(TradePayment.ALLOWPAY.getValue());
                 tradeUserDao.update(tradeUser);
             }
-        } else if (tradeUser.getIsActive() == AccountStatus.NOTACTIVE.getValue()) {
-            throw new BussException("账户未激活");
-        } else if (tradeUser.getIsActive() == AccountStatus.CLOSED.getValue()) {
-            throw new BussException("账户已注销");
         }
         return new JsonResult();
     }
 
     @Override
     public JsonResult frozePayment(String userID, TradeUserType userType) {
-        TradeUser tradeUser = tradeUserDao.get(userID, userType.getName());
-        if (tradeUser.getIsActive() == 1) {
-            if (tradeUser.getIsAllowPay() == 1) {
-                tradeUser.setIsAllowPay(0);
+        TradeUser tradeUser = tradeUserDao.get(userID, userType);
+        if (CommonUtil.checkTradeUserActive(tradeUser) == AccountActiveStatus.ACTIVE) {
+            if (CommonUtil.checkTradeUserPayment(tradeUser) == TradePayment.ALLOWPAY) {
+                tradeUser.setIsAllowPay(TradePayment.NOTALLOWPAY.getValue());
                 tradeUserDao.update(tradeUser);
             }
-        } else if (tradeUser.getIsActive() == 0) {
-            throw new BussException("账户未激活");
-        } else if (tradeUser.getIsActive() == -1) {
-            throw new BussException("账户已注销");
         }
         return new JsonResult();
     }

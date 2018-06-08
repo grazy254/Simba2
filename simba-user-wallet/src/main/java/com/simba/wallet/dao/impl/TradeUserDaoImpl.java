@@ -8,6 +8,7 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.jdbc.StatementParameter;
 import com.simba.wallet.dao.TradeUserDao;
 import com.simba.wallet.model.TradeUser;
+import com.simba.wallet.util.Constants.TradeUserType;
 import com.simba.wallet.util.ErrConfig;
 
 /**
@@ -186,10 +187,14 @@ public class TradeUserDaoImpl implements TradeUserDao {
     }
 
     @Override
-    public TradeUser get(String userID, String type) {
-        TradeUser tradeUser = getByAnd("userID", userID, "type", type, "isActive", 1);
+    public TradeUser get(String userID, TradeUserType type) {
+        TradeUser tradeUser = getByAnd("userID", userID, "type", type.getName(), "isActive", 1);
         if (tradeUser == null) {
-            throw ErrConfig.USER_NOT_EXIST_ERR;
+            if (type == TradeUserType.PERSION) {
+                throw ErrConfig.INVALID_WALLET_USER;
+            } else {
+                throw ErrConfig.WALLET_UNAVAILABLE;
+            }
         }
         return tradeUser;
     }

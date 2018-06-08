@@ -63,10 +63,12 @@
        immediately after the control sidebar -->
 		</div>
 		<!-- ./wrapper -->
+		<input type="hidden" name="accountType" id="accountType" value="${accountType}"/>
+		
 	</body>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			TradeAccount.initTradeAccountList(0, Page.size, "getDepartmentList");
+			TradeAccount.initTradeAccountList(0, Page.size);
 		});
 	</script>
 

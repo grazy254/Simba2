@@ -3,7 +3,7 @@ package com.simba.wallet.model.vo;
 import com.simba.framework.util.date.DateUtil;
 import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeUser;
-import com.simba.wallet.util.FmtUtil;
+import com.simba.wallet.util.CommonUtil;
 
 public class TradeAccountVO {
     private String userID;
@@ -20,11 +20,10 @@ public class TradeAccountVO {
         this.setAccountID(tradeAccount.getAccountID());
         this.setCreateTime(DateUtil.date2String(tradeAccount.getCreateTime()));
         this.setLastUpdateTime(DateUtil.date2String(tradeAccount.getLastUpdateTime()));
-        this.setAccountBalance(FmtUtil.transToCNYType(tradeAccount.getAccountBalance()));
-        this.setAvailableBalance(FmtUtil.transToCNYType(tradeAccount.getAvailableBalance()));
-        this.setFrozenBalance(FmtUtil.transToCNYType(tradeAccount.getFrozenBalance()));
-        this.setAccountStatus(FmtUtil.getAccountStatus(tradeAccount).getName());
-
+        this.setAccountBalance(CommonUtil.transToCNYType(tradeAccount.getAccountBalance()));
+        this.setAvailableBalance(CommonUtil.transToCNYType(tradeAccount.getAvailableBalance()));
+        this.setFrozenBalance(CommonUtil.transToCNYType(tradeAccount.getFrozenBalance()));
+        this.setAccountStatus(CommonUtil.getAccountStatus(tradeAccount));
         this.setUserID(tradeUser.getUserID());
     }
 

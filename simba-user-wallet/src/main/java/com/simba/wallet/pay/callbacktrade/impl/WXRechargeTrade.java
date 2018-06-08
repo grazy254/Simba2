@@ -6,10 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.registry.util.RegistryUtil;
 import com.simba.wallet.model.TradeAccount;
-import com.simba.wallet.model.enums.TradeStatus;
-import com.simba.wallet.model.enums.TradeType;
 import com.simba.wallet.pay.callbacktrade.BaseCallbackTrade;
-import com.simba.wallet.util.FmtUtil;
+import com.simba.wallet.util.CommonUtil;
+import com.simba.wallet.util.Constants.TradeStatus;
+import com.simba.wallet.util.Constants.TradeType;
 
 /**
  * 微信充值交易
@@ -46,18 +46,19 @@ public class WXRechargeTrade extends BaseCallbackTrade {
             String openID, Date channelPaymentTime, String channelErrorMsg, String channelErrorCode,
             long paymentAmount, TradeStatus tradeStatus) {
 
-        return finishTrade(userID, FmtUtil.fmtChannel(RegistryUtil.get("trade.channel.weixin")),
-                orderNO, channelOrderNO, openID, channelPaymentTime, channelErrorMsg,
-                channelErrorCode, paymentAmount, tradeStatus,
-                RegistryUtil.get("trade.department.recharge"));
+        return finishTrade(userID,
+                CommonUtil.getChannelType(RegistryUtil.get("trade.channel.weixin")), orderNO,
+                channelOrderNO, openID, channelPaymentTime, channelErrorMsg, channelErrorCode,
+                paymentAmount, tradeStatus, RegistryUtil.get("trade.department.recharge"));
     }
 
     @Override
     public JsonResult startTrade(String userID, String ip, String orderNO, long paymentAmount,
-            Date tradeCreateTime, Date channelStartTime) {
+            Date channelStartTime) {
         return startTrade(userID, ip, "", orderNO, "", "", "", paymentAmount, paymentAmount,
-                tradeCreateTime, channelStartTime, RegistryUtil.get("trade.department.recharge"),
-                FmtUtil.fmtChannel(RegistryUtil.get("trade.channel.weixin")), TradeType.RECHARGE);
+                new Date(), channelStartTime, RegistryUtil.get("trade.department.recharge"),
+                CommonUtil.getChannelType(RegistryUtil.get("trade.channel.weixin")),
+                TradeType.RECHARGE);
     }
 
 }

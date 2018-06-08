@@ -7,9 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.wallet.dao.TradeChannelDao;
 import com.simba.wallet.model.TradeChannel;
-import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeChannelService;
+import com.simba.wallet.util.Constants.TradeUserType;
 
 /**
  * 渠道信息 Service实现类

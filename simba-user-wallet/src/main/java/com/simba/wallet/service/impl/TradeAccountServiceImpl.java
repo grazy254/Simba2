@@ -18,13 +18,14 @@ import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.dao.TradeAccountDao;
 import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeUser;
-import com.simba.wallet.model.enums.AccountStatus;
-import com.simba.wallet.model.enums.AccountType;
-import com.simba.wallet.model.enums.FeeType;
-import com.simba.wallet.model.enums.TradeUserType;
 import com.simba.wallet.model.form.TradeAccountSearchForm;
 import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeUserService;
+import com.simba.wallet.util.Constants.AccountActiveStatus;
+import com.simba.wallet.util.Constants.AccountFrozenStatus;
+import com.simba.wallet.util.Constants.AccountType;
+import com.simba.wallet.util.Constants.FeeType;
+import com.simba.wallet.util.Constants.TradeUserType;
 import com.simba.wallet.util.ErrConfig;
 
 /**
@@ -272,28 +273,24 @@ public class TradeAccountServiceImpl implements TradeAccountService {
 
             tradeUserID = tradeUserDao.add(tradeUser);
             if (tradeUserID <= 0) {
-                throw new BussException("保存支付用户信息失败");
+                throw ErrConfig.OPEN_WALLET_ACCOUNT_FAILED;
             }
         } else {
-            tradeUserID = tradeUserDB.getId();
+            throw ErrConfig.ACCOUNT_EXIST_ERR;
         }
         // 检查数据库是否存在该记录
-        TradeAccount tradeAccountDB = tradeAccountDao.getByAnd("accountType", accountType.getName(),
-                "tradeUserID", tradeUserID, "isActive", 1);
+        TradeAccount tradeAccountDB = tradeAccountDao.getByAnd("accountType",
+                accountType.getValue(), "tradeUserID", tradeUserID, "isActive", 1);
         if (tradeAccountDB != null) {
-            if (tradeAccountDB.getIsFrozen() == 1) {
-                throw new BussException("请解冻账户");
-            } else {
-                throw ErrConfig.ACCOUNT_EXIST_ERR;
-            }
+            throw ErrConfig.ACCOUNT_EXIST_ERR;
         }
 
         TradeAccount tradeAccount = new TradeAccount();
         tradeAccount.setAccountID(accountID);
-        tradeAccount.setAccountType(accountType.getName());
+        tradeAccount.setAccountType(accountType.getValue());
         tradeAccount.setAccountBalance(0);
         tradeAccount.setAvailableBalance(0);
-        tradeAccount.setFeeType(FeeType.CNY.getName());
+        tradeAccount.setFeeType(FeeType.CNY.name());
         tradeAccount.setFrozenBalance(0);
         tradeAccount.setIsActive(isActive);
         tradeAccount.setIsAllowPay(isAllowPay);
@@ -304,7 +301,7 @@ public class TradeAccountServiceImpl implements TradeAccountService {
         tradeAccount.setCreateTime(new Date());
         Long tradeAccountID = tradeAccountDao.add(tradeAccount);
         if (tradeAccountID <= 0) {
-            throw new BussException("保存支付账号信息失败");
+            throw ErrConfig.OPEN_WALLET_ACCOUNT_FAILED;
         }
         return new JsonResult("", "钱包功能开通成功", 200);
     }
@@ -316,40 +313,33 @@ public class TradeAccountServiceImpl implements TradeAccountService {
     public JsonResult frozeAccount(String userID, TradeUserType userType) {
         // TODO: 手机验证码 根据userID获取注册时的手机号
         TradeAccount tradeAccount = tradeAccountDao.get(userID, userType);
-        tradeAccount.setIsFrozen(AccountStatus.FRONZEN.getValue());
+        tradeAccount.setIsFrozen(AccountFrozenStatus.FROZEN.getValue());
         tradeAccountDao.update(tradeAccount);
         return new JsonResult();
     }
 
     @Override
     public JsonResult closeAccount(String userID, TradeUserType userType) {
-        try {
-            TradeUser tradeUser = tradeUserDao.get(userID, userType.getName());
-            TradeAccount tradeAccount = tradeAccountDao.get(tradeUser.getId(), userType);
-            tradeUser.setIsActive(AccountStatus.CLOSED.getValue());
-            tradeUserDao.update(tradeUser);
-            if (tradeAccount.getAccountBalance() == 0) {
-                tradeAccount.setIsActive(AccountStatus.CLOSED.getValue());
-                tradeAccountDao.update(tradeAccount);
-            } else {
-                throw new BussException("删除失败：账户余额不为0");
-            }
-        } catch (Exception e) {
-            if (e == ErrConfig.USER_NOT_EXIST_ERR || e == ErrConfig.ACCOUNT_NOT_EXIST_ERR) {
-                // TODO: logger
-                System.out.println(e);
-            } else {
-                throw new BussException(e.getMessage());
-            }
+
+        TradeUser tradeUser = tradeUserDao.get(userID, userType);
+        TradeAccount tradeAccount = tradeAccountDao.get(tradeUser.getId(), userType);
+        tradeUser.setIsActive(AccountActiveStatus.CLOSED.getValue());
+        tradeUserDao.update(tradeUser);
+        if (tradeAccount.getAccountBalance() == 0) {
+            tradeAccount.setIsActive(AccountActiveStatus.CLOSED.getValue());
+            tradeAccountDao.update(tradeAccount);
+        } else {
+            throw new BussException("注销失败：账户余额不为0");
         }
+
         return new JsonResult();
     }
 
     @Override
     public JsonResult activeAccount(String userID, TradeUserType userType) {
         TradeAccount tradeAccount = tradeAccountDao.get(userID, userType);
-        if (tradeAccount.getIsFrozen() == AccountStatus.FRONZEN.getValue()) {
-            tradeAccount.setIsFrozen(AccountStatus.NOTFROZEN.getValue());
+        if (tradeAccount.getIsFrozen() == AccountFrozenStatus.FROZEN.getValue()) {
+            tradeAccount.setIsFrozen(AccountFrozenStatus.NOTFROZEN.getValue());
             tradeAccountDao.update(tradeAccount);
         }
         return new JsonResult();

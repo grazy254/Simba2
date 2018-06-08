@@ -1,7 +1,6 @@
 package  com.simba.wallet.service;
 
 import java.util.List;
-
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.wallet.model.TradeDepartment;
 /**

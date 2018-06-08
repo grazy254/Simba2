@@ -1,3 +1,4 @@
+<#if list??>
 <#list list as tradeAccountVO>
 	<tr>
 		<td>${tradeAccountVO.userID}</td>
@@ -10,6 +11,8 @@
 		<td>${tradeAccountVO.lastUpdateTime} </td>
 	</tr>
 </#list>
+</#if>
+<#if showSummery>
 <tr>
 	<td></td>
 	<td></td> 
@@ -17,7 +20,9 @@
 	<td></td> 
 	<td></td>
 	
-	<td>总余额：${accountBalance}</td> 
-	<td>总可用余额：${availableBalance} </td>
-	<td>总冻结余额：${frozenBalance}</td>
+	<td>总余额：${accountBalance!}</td> 
+	<td>总可用余额：${availableBalance!} </td>
+	<td>总冻结余额：${frozenBalance!}</td>
 </tr>
+</#if>
+	

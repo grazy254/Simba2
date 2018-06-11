@@ -19,7 +19,7 @@ public class TradeDetail {
      * 交易流水号
      */
     @DescAnnotation(desc = "交易流水号")
-    private String tradeNO;
+    private long tradeNO;
 
     /**
      * 记录交易类型：充值/消费
@@ -75,7 +75,13 @@ public class TradeDetail {
      * 交易主体UserID
      */
     @DescAnnotation(desc = "主交易方TradeUserID")
-    private long tradeUserID;
+    private long partyTradeUserID;
+
+    @DescAnnotation(desc = "对手主交易方TradeUserID")
+    private long counterpartyTradeUserID;
+
+    @DescAnnotation(desc = "渠道方TradeUserID")
+    private long channelTradeUserID;
 
     /**
      * 交易主体ID
@@ -127,6 +133,30 @@ public class TradeDetail {
     private Date lastUpdateTime;
 
 
+    public long getPartyTradeUserID() {
+        return partyTradeUserID;
+    }
+
+    public void setPartyTradeUserID(long partyTradeUserID) {
+        this.partyTradeUserID = partyTradeUserID;
+    }
+
+    public long getCounterpartyTradeUserID() {
+        return counterpartyTradeUserID;
+    }
+
+    public void setCounterpartyTradeUserID(long counterpartyTradeUserID) {
+        this.counterpartyTradeUserID = counterpartyTradeUserID;
+    }
+
+    public long getChannelTradeUserID() {
+        return channelTradeUserID;
+    }
+
+    public void setChannelTradeUserID(long channelTradeUserID) {
+        this.channelTradeUserID = channelTradeUserID;
+    }
+
     public long getId() {
         return id;
     }
@@ -135,11 +165,11 @@ public class TradeDetail {
         this.id = id;
     }
 
-    public String getTradeNO() {
+    public long getTradeNO() {
         return tradeNO;
     }
 
-    public void setTradeNO(String tradeNO) {
+    public void setTradeNO(long tradeNO) {
         this.tradeNO = tradeNO;
     }
 
@@ -269,14 +299,6 @@ public class TradeDetail {
 
     public void setLastUpdateTime(Date lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
-    }
-
-    public long getTradeUserID() {
-        return tradeUserID;
-    }
-
-    public void setTradeUserID(long tradeUserID) {
-        this.tradeUserID = tradeUserID;
     }
 
 

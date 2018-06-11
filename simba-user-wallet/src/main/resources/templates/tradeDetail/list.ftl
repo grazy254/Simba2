@@ -32,7 +32,7 @@
 										&nbsp;&nbsp;
 										<input type="text" id="endTime" class="datetimepicker" name="endTime" placeholder="请输入结束日期">
 										&nbsp;&nbsp;
-										<input type="text" id="tradeNO"  name="tradeNO" placeholder="请输入订单号">
+										<input type="text" id="tradeNO"  name="tradeNO" placeholder="请输入交易流水号">
 										&nbsp;&nbsp;
 										<input type="text" id="userID"  name="userID" placeholder="请输入用户ID">
 										&nbsp;&nbsp;

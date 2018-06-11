@@ -1,19 +1,16 @@
 package com.simba.wallet.model.form;
 
-import java.util.Date;
-import org.springframework.format.annotation.DateTimeFormat;
 import com.simba.annotation.DBFieldAnnotation;
 
 public class TradeDetailSearchForm {
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @DBFieldAnnotation(desc = "开始日期", field = "tradePaymentDate", oper = ">=")
-    private Date startDate;
+    @DBFieldAnnotation(desc = "开始日期", field = "tradePaymentTime", oper = ">=")
+    private String startTime;
 
-    @DBFieldAnnotation(desc = "结束日期", field = "tradePaymentDate", oper = "<")
-    private Date endDate;
+    @DBFieldAnnotation(desc = "结束日期", field = "tradePaymentTime", oper = "<")
+    private String endTime;
 
-    @DBFieldAnnotation(desc = "订单号")
+    @DBFieldAnnotation(desc = "交易流水号")
     private String tradeNO;
 
     @DBFieldAnnotation(desc = "交易类型")
@@ -26,7 +23,6 @@ public class TradeDetailSearchForm {
     private String userID;
 
     private Long tradeUserID;
-
     private String tradeUserType;
 
 
@@ -38,12 +34,13 @@ public class TradeDetailSearchForm {
         this.tradeUserType = tradeUserType;
     }
 
-    public Long getTradeUserID() {
-        return tradeUserID;
-    }
 
     public void setTradeUserID(Long tradeUserID) {
         this.tradeUserID = tradeUserID;
+    }
+
+    public Long getTradeUserID() {
+        return tradeUserID;
     }
 
     public String getUserID() {
@@ -54,20 +51,22 @@ public class TradeDetailSearchForm {
         this.userID = userID;
     }
 
-    public Date getStartDate() {
-        return startDate;
+
+
+    public String getStartTime() {
+        return startTime;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public String getEndTime() {
+        return endTime;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public String getTradeNO() {

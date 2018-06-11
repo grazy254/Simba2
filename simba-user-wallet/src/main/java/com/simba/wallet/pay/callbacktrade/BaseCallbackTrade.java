@@ -3,6 +3,7 @@ package com.simba.wallet.pay.callbacktrade;
 import java.util.Date;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import com.simba.dao.SmartUserDao;
 import com.simba.exception.BussException;
 import com.simba.framework.util.date.DateUtil;
@@ -64,6 +65,9 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
 
     @Autowired
     protected TradeChannelDetailDao tradeChannelDetailDao;
+
+    @Value("${node.id}")
+    private int nodeId;
 
     /**
      * 检查用户状态
@@ -197,13 +201,15 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
         tradeDetail.setTradeChannelID(tradeChannelDetailID);
         tradeDetail.setTradeCounterpartyID(counterPartyID);
         tradeDetail.setTradeCreateTime(tradeCreateTime);
-        tradeDetail.setTradeNO(CommonUtil.generateTradeNO());
-        tradeDetail.setTradeUserID(smartTradeUser.getId());
+        tradeDetail.setTradeNO(CommonUtil.TradeNoGenerator.gen(nodeId));
         tradeDetail.setTradePartyID(tradePartyID);
         tradeDetail.setTradePaymentTime(now);
         tradeDetail.setTradePaymentDate(DateUtil.getOnlyDate(now));
         tradeDetail.setTradeStatus(TradeStatus.SUCCESS.getName());
         tradeDetail.setTradeType(tradeType.getName());
+        tradeDetail.setChannelTradeUserID(channelTradeUser.getId());
+        tradeDetail.setCounterpartyTradeUserID(departmentTradeUser.getId());
+        tradeDetail.setPartyTradeUserID(smartTradeUser.getId());
 
         Long tradeDetailID = tradeDetailDao.add(tradeDetail);
 

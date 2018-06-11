@@ -74,12 +74,45 @@ public class TradeDetailController {
         return "tradeDetail/table";
     }
 
+    @RequestMapping("/doSearch")
+    public String getList(Pager pager, TradeDetailSearchForm tradeDetailSearchForm,
+            ModelMap model) {
+        model.put("list", getList(pager, tradeDetailSearchForm));
+        return "tradeDetail/table";
+    }
+
+    @ResponseBody
+    @RequestMapping("/count")
+    public JsonResult count(TradeDetailSearchForm tradeDetailSearchForm) {
+        Long count = tradeDetailService.count(fillTradeUserID(tradeDetailSearchForm));
+        return new JsonResult(count, "", 200);
+    }
+
+    @ResponseBody
+    @RequestMapping("/search")
+    public List<TradeDetailVO> search(Integer pageStart,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date tradeDate,
+            HttpSession session) {
+        TradeDetailSearchForm tradeDetailSearchFrom = new TradeDetailSearchForm();
+        tradeDetailSearchFrom.setUserID(sessionUtil.getSmartUser(session).getAccount());
+        tradeDetailSearchFrom.setTradeUserType(TradeUserType.PERSION.getName());
+        if (tradeDate != null) {
+            tradeDetailSearchFrom.setStartTime(DateUtil.getTime(tradeDate));
+        }
+        return getList(new Pager((pageStart - 1) * 10, 10), tradeDetailSearchFrom);
+    }
+
+    public List<TradeDetailVO> getList(Pager page, TradeDetailSearchForm tradeDetailSearchForm) {
+        return getTradeDetailVOList(
+                tradeDetailService.page(page, fillTradeUserID(tradeDetailSearchForm)));
+    }
+
     private List<TradeDetailVO> getTradeDetailVOList(List<TradeDetail> tradeDetailList) {
         List<TradeDetailVO> result = new ArrayList<>();
         for (TradeDetail tradeDetail : tradeDetailList) {
             TradeDetailVO vo = new TradeDetailVO();
             vo.setPaymentAmount(CommonUtil.transToCNYType(tradeDetail.getPaymentAmount()));
-            vo.setTradeStatus("充值" + CommonUtil.getTradeStatusValue(tradeDetail.getTradeStatus()));
+            vo.setTradeStatus(CommonUtil.getTradeStatusValue(tradeDetail.getTradeStatus()));
             vo.setTradePaymentTime(DateTime.getTime(tradeDetail.getTradePaymentTime()));
             vo.setTradeType(CommonUtil.getTradeTypeValue(tradeDetail.getTradeType()));
             if (tradeDetail.getTradeChannelID() >= 0) {
@@ -96,9 +129,9 @@ public class TradeDetailController {
             vo.setTradeCounterpartyName(tradePartyDetailService
                     .get(tradeDetail.getTradeCounterpartyID()).getPartyName());
             vo.setTradeCreateTime(DateUtil.date2String(tradeDetail.getTradeCreateTime()));
-            vo.setTradeNO(tradeDetail.getTradeNO());
+            vo.setTradeNO(Long.toString(tradeDetail.getTradeNO()));
             vo.setTradePartyName(
-                    tradePartyDetailService.get(tradeDetail.getTradePartyID()).getPartyType());
+                    tradePartyDetailService.get(tradeDetail.getTradePartyID()).getPartyName());
             vo.setTradePaymentTime(DateUtil.date2String(tradeDetail.getTradePaymentTime()));
             result.add(vo);
         }
@@ -116,39 +149,5 @@ public class TradeDetailController {
             }
         }
         return tradeDetailSearchForm;
-    }
-
-    @RequestMapping("/doSearch")
-    public String getList(Pager pager, TradeDetailSearchForm tradeDetailSearchForm,
-            ModelMap model) {
-        model.put("list", getList(pager, tradeDetailSearchForm));
-        return "tradeDetail/table";
-    }
-
-    @ResponseBody
-    @RequestMapping("/count")
-    public JsonResult count(TradeDetailSearchForm tradeDetailSearchForm) {
-        Long count = tradeDetailService.count(tradeDetailSearchForm);
-        return new JsonResult(count, "", 200);
-    }
-
-    @ResponseBody
-    @RequestMapping("/search")
-    public List<TradeDetailVO> search(Integer pageStart,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date tradeDate,
-            HttpSession session) {
-        TradeDetailSearchForm tradeDetailSearchFrom = new TradeDetailSearchForm();
-        tradeDetailSearchFrom.setUserID(sessionUtil.getSmartUser(session).getAccount());
-        tradeDetailSearchFrom.setTradeUserType(TradeUserType.PERSION.getName());
-        if (tradeDate != null) {
-            tradeDetailSearchFrom.setStartDate(tradeDate);
-        }
-        return getList(new Pager((pageStart - 1) * 10, 10), tradeDetailSearchFrom);
-    }
-
-    public List<TradeDetailVO> getList(Pager page, TradeDetailSearchForm tradeDetailSearchForm) {
-
-        return getTradeDetailVOList(
-                tradeDetailService.page(page, fillTradeUserID(tradeDetailSearchForm)));
     }
 }

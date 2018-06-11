@@ -11,5 +11,7 @@ public interface InnerTradeInterface {
      * @param paymentAmount
      * @return
      */
-    public JsonResult trade(String userID, String orderNO, long paymentAmount);
+    public JsonResult trade(String userID, String ip, String location, String orderNO,
+            String orderName, String orderDesc, String orderAddress, long originalAmount,
+            long paymentAmount);
 }

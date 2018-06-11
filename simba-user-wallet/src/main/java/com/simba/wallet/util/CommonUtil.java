@@ -3,7 +3,6 @@ package com.simba.wallet.util;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import com.relops.snowflake.Snowflake;
 import com.simba.framework.util.common.UUIDUtil;
 import com.simba.wallet.model.TradeAccount;
@@ -196,19 +195,13 @@ public class CommonUtil {
 
     public static class TradeNoGenerator {
 
-        public static Map<Integer, Snowflake> table = new ConcurrentHashMap<>();
+        public static Snowflake snowflake = null;
 
         public static long gen(Integer nodeId) {
-            Snowflake snowflake = table.get(nodeId);
-            if (snowflake != null) {
-                return snowflake.next();
-            }
             if (snowflake == null) {
                 synchronized (TradeNoGenerator.class) {
                     if (snowflake == null) {
-                        System.out.println("new:" + nodeId);
                         snowflake = new Snowflake(nodeId);
-                        table.put(nodeId, snowflake);
                     }
                 }
             }

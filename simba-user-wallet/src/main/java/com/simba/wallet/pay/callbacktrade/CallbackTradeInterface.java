@@ -17,8 +17,9 @@ public interface CallbackTradeInterface {
      * @param channelStartTime
      * @return
      */
-    JsonResult startTrade(String userID, String ip, String orderNO, long paymentAmount,
-            Date channelStartTime);
+    JsonResult startTrade(String userID, String ip, String location, String orderNO,
+            String orderName, String orderDesc, String orderAddress, long originalAmount,
+            long paymentAmount, Date channelStartTime);
 
     /**
      * 回调接口结束交易
@@ -37,4 +38,5 @@ public interface CallbackTradeInterface {
     JsonResult finishTrade(String userID, String orderNO, String channelOrderNO, String openID,
             Date channelPaymentTime, String channelErrorMsg, String channelErrorCode,
             long paymentAmount, TradeStatus tradeStatus);
+
 }

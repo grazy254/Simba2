@@ -52,13 +52,17 @@ public class WXRechargeTrade extends BaseCallbackTrade {
                 paymentAmount, tradeStatus, RegistryUtil.get("trade.department.recharge"));
     }
 
+
     @Override
-    public JsonResult startTrade(String userID, String ip, String orderNO, long paymentAmount,
-            Date channelStartTime) {
-        return startTrade(userID, ip, "", orderNO, "", "", "", paymentAmount, paymentAmount,
-                new Date(), channelStartTime, RegistryUtil.get("trade.department.recharge"),
+    public JsonResult startTrade(String userID, String ip, String location, String orderNO,
+            String orderName, String orderDesc, String orderAddress, long originalAmount,
+            long paymentAmount, Date channelStartTime) {
+        return startTrade(userID, ip, location, orderNO, orderName, orderDesc, orderAddress,
+                originalAmount, paymentAmount, new Date(), channelStartTime,
+                RegistryUtil.get("trade.department.recharge"),
                 CommonUtil.getChannelType(RegistryUtil.get("trade.channel.wxpay")),
                 TradeType.RECHARGE);
     }
+
 
 }

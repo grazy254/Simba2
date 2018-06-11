@@ -42,6 +42,9 @@ public class ErrConfig {
 
     public final static BussException INVALID_PARAMETER = new BussException("参数错误");
 
+    public final static BussException EXISTING_INVALID_PAYMENT = new BussException("有一笔异常支付");
+    public final static BussException NO_ENOUGH_BALANCE = new BussException("余额不足");
+
 
 
 }

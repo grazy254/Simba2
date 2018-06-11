@@ -27,7 +27,7 @@ public class InnerTradeContext {
      * @return
      */
     public JsonResult trade(String userID, String orderNO, long paymentAmount) {
-        return trade.trade(userID, orderNO, paymentAmount);
+        return trade.trade(userID, "", "", orderNO, "", "", "", paymentAmount, paymentAmount);
     }
 
     /**
@@ -38,7 +38,14 @@ public class InnerTradeContext {
      * @return
      */
     public JsonResult trade(String userID, long paymentAmount) {
-        return trade.trade(userID, CommonUtil.generateOrderNO(), paymentAmount);
+        return trade.trade(userID, "", "", CommonUtil.generateOrderNO(), "", "", "", paymentAmount,
+                paymentAmount);
+    }
 
+    public JsonResult trade(String userID, String ip, String location, String orderNO,
+            String orderName, String orderDesc, String orderAddress, long originalAmount,
+            long paymentAmount) {
+        return trade.trade(userID, ip, location, orderNO, orderName, orderDesc, orderAddress,
+                originalAmount, paymentAmount);
     }
 }

@@ -19,6 +19,7 @@ import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.TradeUser;
 import com.simba.wallet.model.form.TradeDetailSearchForm;
+import com.simba.wallet.model.vo.SimpleTradeDetailVO;
 import com.simba.wallet.model.vo.TradeDetailVO;
 import com.simba.wallet.service.TradeChannelDetailService;
 import com.simba.wallet.service.TradeChannelService;
@@ -77,7 +78,8 @@ public class TradeDetailController {
     @RequestMapping("/doSearch")
     public String getList(Pager pager, TradeDetailSearchForm tradeDetailSearchForm,
             ModelMap model) {
-        model.put("list", getList(pager, tradeDetailSearchForm));
+        model.put("list", getTradeDetailVOList(
+                tradeDetailService.page(pager, fillTradeUserID(tradeDetailSearchForm))));
         return "tradeDetail/table";
     }
 
@@ -90,21 +92,33 @@ public class TradeDetailController {
 
     @ResponseBody
     @RequestMapping("/search")
-    public List<TradeDetailVO> search(Integer pageStart,
+    public List<SimpleTradeDetailVO> search(Integer pageStart,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date tradeDate,
             HttpSession session) {
-        TradeDetailSearchForm tradeDetailSearchFrom = new TradeDetailSearchForm();
-        tradeDetailSearchFrom.setUserID(sessionUtil.getSmartUser(session).getAccount());
-        tradeDetailSearchFrom.setTradeUserType(TradeUserType.PERSION.getName());
+        TradeDetailSearchForm tradeDetailSearchForm = new TradeDetailSearchForm();
+        tradeDetailSearchForm.setUserID(sessionUtil.getSmartUser(session).getAccount());
+        tradeDetailSearchForm.setTradeUserType(TradeUserType.PERSION.getName());
         if (tradeDate != null) {
-            tradeDetailSearchFrom.setStartTime(DateUtil.getTime(tradeDate));
+            tradeDetailSearchForm.setStartTime(DateUtil.getTime(tradeDate));
+            tradeDetailSearchForm.setEndTime(DateUtil.getTime(tradeDate));
         }
-        return getList(new Pager((pageStart - 1) * 10, 10), tradeDetailSearchFrom);
+        return getSimpleTradeDetailVOList(tradeDetailService
+                .page(new Pager((pageStart - 1) * 10, 10), fillTradeUserID(tradeDetailSearchForm)));
     }
 
-    public List<TradeDetailVO> getList(Pager page, TradeDetailSearchForm tradeDetailSearchForm) {
-        return getTradeDetailVOList(
-                tradeDetailService.page(page, fillTradeUserID(tradeDetailSearchForm)));
+
+    private List<SimpleTradeDetailVO> getSimpleTradeDetailVOList(
+            List<TradeDetail> tradeDetailList) {
+        List<SimpleTradeDetailVO> result = new ArrayList<>();
+        for (TradeDetail tradeDetail : tradeDetailList) {
+            SimpleTradeDetailVO vo = new SimpleTradeDetailVO();
+            vo.setTradeAmount(CommonUtil.transToCNYType(tradeDetail.getPaymentAmount()));
+            vo.setTradeStatus(CommonUtil.getTradeStatusValue(tradeDetail.getTradeStatus()));
+            vo.setTradeTime(DateTime.getTime(tradeDetail.getTradePaymentTime()));
+            vo.setTradeType(CommonUtil.getTradeTypeValue(tradeDetail.getTradeType()));
+            result.add(vo);
+        }
+        return result;
     }
 
     private List<TradeDetailVO> getTradeDetailVOList(List<TradeDetail> tradeDetailList) {

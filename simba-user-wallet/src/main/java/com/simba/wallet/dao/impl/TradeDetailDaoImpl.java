@@ -237,7 +237,7 @@ public class TradeDetailDaoImpl implements TradeDetailDao {
         }
         if (tradeDetailSearchForm.getEndTime() != null
                 && StringUtils.isNotEmpty(tradeDetailSearchForm.getEndTime() + "")) {
-            sql += " and tradePaymentTime  < ?";
+            sql += " and tradePaymentTime  <= ?";
             param.set(tradeDetailSearchForm.getEndTime());
         }
         if (tradeDetailSearchForm.getTradeNO() != null

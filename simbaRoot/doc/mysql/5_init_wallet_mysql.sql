@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2018/6/5 8:09:46                             */
+/* Created on:     2018/6/11 11:57:24                           */
 /*==============================================================*/
 
 
@@ -102,7 +102,7 @@ alter table tradeDepartment comment '收款部门';
 create table tradeDetail
 (
    id                   bigint not null auto_increment,
-   tradeNO              varchar(100) not null comment '交易流水号',
+   tradeNO              bigint not null comment '交易流水号',
    tradeType            varchar(10) not null comment '记录交易类型：充值/消费',
    tradeStatus          varchar(10) not null comment '记录支付状态 SUCCESS/FAILED/FROZON',
    orderNO              varchar(100) not null comment '订单号',
@@ -112,11 +112,15 @@ create table tradeDetail
    feeType              varchar(10) not null default 'CNY' comment '货币类型',
    originalAmount       bigint not null default 0 comment '原始费用',
    paymentAmount        bigint not null default 0 comment '实际费用',
+   partyTradeUserID     bigint comment '用户ID',
+   counterpartyTradeUserID bigint comment '对手主题用户ID',
+   channelTradeUserID   bigint comment '渠道用户ID',
    tradePartyID         bigint not null comment '交易主体ID',
    tradeCounterpartyID  bigint not null comment '交易对手ID',
    tradeChannelID       bigint comment '交易渠道ID',
    tradeCreateTime      datetime not null comment '请求支付时间',
    tradePaymentTime     datetime not null comment '支付创建时间',
+   tradePaymentDate     date comment '支付创建日期',
    createTime           datetime not null default CURRENT_TIMESTAMP comment '创建时间',
    lastUpdateTime       datetime not null default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '最后更新时间',
    primary key (id),
@@ -142,7 +146,6 @@ create table tradePartyDetail
    noticeMail           varchar(255) not null comment '通知的邮箱',
    location             varchar(200) default '' comment '当时的位置信息（对手主体可选填）',
    createTime           datetime default CURRENT_TIMESTAMP comment '创建时间',
-   createDate           date comment '创建日期',
    primary key (id)
 );
 

@@ -2,6 +2,7 @@ package com.simba.wallet.pay.trade;
 
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import com.simba.dao.SmartUserDao;
 import com.simba.exception.BussException;
 import com.simba.framework.util.date.DateUtil;
@@ -50,6 +51,8 @@ public abstract class BaseInnerTrade implements InnerTradeInterface {
     @Autowired
     protected TradeAccountDao tradeAccountDao;
 
+    @Value("${node.id}")
+    private int nodeId;
 
     /**
      * 检查用户账户状态
@@ -159,11 +162,15 @@ public abstract class BaseInnerTrade implements InnerTradeInterface {
         tradeDetail.setTradeChannelID(-1);
         tradeDetail.setTradeCounterpartyID(counterPartyID);
         tradeDetail.setTradeCreateTime(tradeCreateTime);
-        tradeDetail.setTradeNO(CommonUtil.generateTradeNO());
+        tradeDetail.setTradeNO(CommonUtil.TradeNoGenerator.gen(nodeId));
         tradeDetail.setTradePartyID(tradePartyID);
         tradeDetail.setTradeStatus(TradeStatus.SUCCESS.getName());
         tradeDetail.setTradeType(tradeType.getName());
-        tradeDetail.setTradePaymentTime(new Date());
+        tradeDetail.setTradePaymentTime(now);
+        tradeDetail.setTradePaymentDate(DateUtil.getOnlyDate(now));
+        tradeDetail.setChannelTradeUserID(-1);
+        tradeDetail.setCounterpartyTradeUserID(departmentTradeUser.getId());
+        tradeDetail.setPartyTradeUserID(smartTradeUser.getId());
 
         Long tradeDetailID = tradeDetailDao.add(tradeDetail);
 

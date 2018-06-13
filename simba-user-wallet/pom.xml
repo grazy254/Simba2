@@ -36,6 +36,13 @@
 			<artifactId>simba-wechat-pay-bill</artifactId>
 			<version>${simba.version}</version>
 		</dependency>
+		
+		<dependency>
+  			<groupId>com.relops</groupId>
+  			<artifactId>snowflake</artifactId>
+  			<version>1.1</version>
+		</dependency>
+		
 	</dependencies>
 
 	<distributionManagement>

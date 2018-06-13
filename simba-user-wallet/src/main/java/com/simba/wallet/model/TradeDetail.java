@@ -19,7 +19,7 @@ public class TradeDetail {
      * 交易流水号
      */
     @DescAnnotation(desc = "交易流水号")
-    private String tradeNO;
+    private long tradeNO;
 
     /**
      * 记录交易类型：充值/消费
@@ -70,6 +70,19 @@ public class TradeDetail {
      */
     @DescAnnotation(desc = "实际费用")
     private long paymentAmount = 0;
+
+    /**
+     * 交易主体UserID
+     */
+    @DescAnnotation(desc = "主交易方TradeUserID")
+    private long partyTradeUserID;
+
+    @DescAnnotation(desc = "对手主交易方TradeUserID")
+    private long counterpartyTradeUserID;
+
+    @DescAnnotation(desc = "渠道方TradeUserID")
+    private long channelTradeUserID;
+
     /**
      * 交易主体ID
      */
@@ -101,6 +114,13 @@ public class TradeDetail {
     private Date tradePaymentTime;
 
     /**
+     * 支付创建时间
+     */
+    @DescAnnotation(desc = "支付创建时间")
+    private Date tradePaymentDate;
+
+
+    /**
      * 创建时间
      */
     @DescAnnotation(desc = "创建时间")
@@ -113,6 +133,30 @@ public class TradeDetail {
     private Date lastUpdateTime;
 
 
+    public long getPartyTradeUserID() {
+        return partyTradeUserID;
+    }
+
+    public void setPartyTradeUserID(long partyTradeUserID) {
+        this.partyTradeUserID = partyTradeUserID;
+    }
+
+    public long getCounterpartyTradeUserID() {
+        return counterpartyTradeUserID;
+    }
+
+    public void setCounterpartyTradeUserID(long counterpartyTradeUserID) {
+        this.counterpartyTradeUserID = counterpartyTradeUserID;
+    }
+
+    public long getChannelTradeUserID() {
+        return channelTradeUserID;
+    }
+
+    public void setChannelTradeUserID(long channelTradeUserID) {
+        this.channelTradeUserID = channelTradeUserID;
+    }
+
     public long getId() {
         return id;
     }
@@ -121,11 +165,11 @@ public class TradeDetail {
         this.id = id;
     }
 
-    public String getTradeNO() {
+    public long getTradeNO() {
         return tradeNO;
     }
 
-    public void setTradeNO(String tradeNO) {
+    public void setTradeNO(long tradeNO) {
         this.tradeNO = tradeNO;
     }
 
@@ -255,6 +299,15 @@ public class TradeDetail {
 
     public void setLastUpdateTime(Date lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
+    }
+
+
+    public Date getTradePaymentDate() {
+        return tradePaymentDate;
+    }
+
+    public void setTradePaymentDate(Date tradePaymentDate) {
+        this.tradePaymentDate = tradePaymentDate;
     }
 
     @Override

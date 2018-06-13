@@ -55,10 +55,12 @@ public class WXRefundTrade extends BaseCallbackTrade {
     }
 
     @Override
-    public JsonResult startTrade(String userID, String ip, String orderNO, long paymentAmount,
-            Date channelStartTime) {
-        return startTrade(userID, ip, "", orderNO, "", "", "", paymentAmount, paymentAmount,
-                new Date(), channelStartTime, RegistryUtil.get("trade.department.refund"),
+    public JsonResult startTrade(String userID, String ip, String location, String orderNO,
+            String orderName, String orderDesc, String orderAddress, long originalAmount,
+            long paymentAmount, Date channelStartTime) {
+        return startTrade(userID, ip, location, orderNO, orderName, orderDesc, orderAddress,
+                originalAmount, paymentAmount, new Date(), channelStartTime,
+                RegistryUtil.get("trade.department.refund"),
                 CommonUtil.getChannelType(RegistryUtil.get("trade.channel.weixin")),
                 TradeType.REFUND);
     }

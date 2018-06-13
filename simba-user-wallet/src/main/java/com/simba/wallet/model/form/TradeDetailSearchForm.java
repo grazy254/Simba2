@@ -1,19 +1,16 @@
 package com.simba.wallet.model.form;
 
-import java.util.Date;
-import org.springframework.format.annotation.DateTimeFormat;
 import com.simba.annotation.DBFieldAnnotation;
 
 public class TradeDetailSearchForm {
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @DBFieldAnnotation(desc = "开始日期", field = "tradePaymentTime", oper = ">=")
-    private Date startTime;
+    private String startTime;
 
     @DBFieldAnnotation(desc = "结束日期", field = "tradePaymentTime", oper = "<")
-    private Date endTime;
+    private String endTime;
 
-    @DBFieldAnnotation(desc = "订单号")
+    @DBFieldAnnotation(desc = "交易流水号")
     private String tradeNO;
 
     @DBFieldAnnotation(desc = "交易类型")
@@ -22,19 +19,53 @@ public class TradeDetailSearchForm {
     @DBFieldAnnotation(desc = "交易状态")
     private String tradeStatus;
 
-    public Date getStartTime() {
+    @DBFieldAnnotation(desc = "用户账号")
+    private String userID;
+
+    private Long tradeUserID;
+    private String tradeUserType;
+
+
+    public String getTradeUserType() {
+        return tradeUserType;
+    }
+
+    public void setTradeUserType(String tradeUserType) {
+        this.tradeUserType = tradeUserType;
+    }
+
+
+    public void setTradeUserID(Long tradeUserID) {
+        this.tradeUserID = tradeUserID;
+    }
+
+    public Long getTradeUserID() {
+        return tradeUserID;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+
+
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 

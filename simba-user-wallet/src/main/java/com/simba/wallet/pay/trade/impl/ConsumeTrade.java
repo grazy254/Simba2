@@ -3,12 +3,12 @@ package com.simba.wallet.pay.trade.impl;
 import java.util.Date;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.simba.exception.BussException;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.registry.util.RegistryUtil;
 import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.pay.trade.BaseInnerTrade;
 import com.simba.wallet.util.Constants.TradeType;
+import com.simba.wallet.util.ErrConfig;
 
 /**
  * 购买交易
@@ -25,10 +25,10 @@ public class ConsumeTrade extends BaseInnerTrade {
     @Override
     public void checkUserAccount(TradeAccount tradeAccount, Long amount) {
         if (tradeAccount.getFrozenBalance() != 0) {
-            throw new BussException("有一笔异常支付");
+            throw ErrConfig.EXISTING_INVALID_PAYMENT;
         }
         if (tradeAccount.getAvailableBalance() < amount) {
-            throw new BussException("金额不足");
+            throw ErrConfig.NO_ENOUGH_BALANCE;
         }
     }
 
@@ -49,8 +49,11 @@ public class ConsumeTrade extends BaseInnerTrade {
 
 
     @Override
-    public JsonResult trade(String userID, String orderNO, long paymentAmount) {
-        return trade(userID, "", "", orderNO, "", "", "", paymentAmount, paymentAmount, new Date(),
+    public JsonResult trade(String userID, String ip, String location, String orderNO,
+            String orderName, String orderDesc, String orderAddress, long originalAmount,
+            long paymentAmount) {
+        return trade(userID, ip, location, orderNO, orderName, orderDesc, orderAddress,
+                paymentAmount, paymentAmount, new Date(),
                 RegistryUtil.get("trade.department.consume"), TradeType.CONSUME);
     }
 

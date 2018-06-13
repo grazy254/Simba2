@@ -10,6 +10,8 @@ import com.simba.framework.util.jdbc.StatementParameter;
 import com.simba.wallet.dao.TradeDetailDao;
 import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.form.TradeDetailSearchForm;
+import com.simba.wallet.util.CommonUtil;
+import com.simba.wallet.util.Constants.TradeUserType;
 
 /**
  * 交易详情信息 Dao实现类
@@ -28,30 +30,35 @@ public class TradeDetailDaoImpl implements TradeDetailDao {
     @Override
     public Long add(TradeDetail tradeDetail) {
         String sql = "insert into " + table
-                + "( tradeNO, tradeType, tradeStatus, orderNO, orderName, orderDesc, orderAddress, feeType, originalAmount, paymentAmount, tradePartyID, tradeCounterpartyID, tradeChannelID, tradeCreateTime, tradePaymentTime) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "( tradeNO, tradeType, tradeStatus, orderNO, orderName, orderDesc, orderAddress, feeType, "
+                + "originalAmount, paymentAmount, partyTradeUserID, counterpartyTradeUserID, channelTradeUserID, "
+                + "tradePartyID, tradeCounterpartyID, tradeChannelID, tradeCreateTime, tradePaymentTime,tradePaymentDate) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         Number id = jdbc.updateForGeneratedKey(sql, tradeDetail.getTradeNO(),
                 tradeDetail.getTradeType(), tradeDetail.getTradeStatus(), tradeDetail.getOrderNO(),
                 tradeDetail.getOrderName(), tradeDetail.getOrderDesc(),
                 tradeDetail.getOrderAddress(), tradeDetail.getFeeType(),
                 tradeDetail.getOriginalAmount(), tradeDetail.getPaymentAmount(),
-                tradeDetail.getTradePartyID(), tradeDetail.getTradeCounterpartyID(),
-                tradeDetail.getTradeChannelID(), tradeDetail.getTradeCreateTime(),
-                tradeDetail.getTradePaymentTime());
+                tradeDetail.getPartyTradeUserID(), tradeDetail.getCounterpartyTradeUserID(),
+                tradeDetail.getChannelTradeUserID(), tradeDetail.getTradePartyID(),
+                tradeDetail.getTradeCounterpartyID(), tradeDetail.getTradeChannelID(),
+                tradeDetail.getTradeCreateTime(), tradeDetail.getTradePaymentTime(),
+                tradeDetail.getTradePaymentDate());
         return id.longValue();
     }
 
     @Override
     public void update(TradeDetail tradeDetail) {
         String sql = "update " + table
-                + " set  tradeNO = ? , tradeType = ? , tradeStatus = ? , orderNO = ? , orderName = ? , orderDesc = ? , orderAddress = ? , feeType = ? , originalAmount = ? , paymentAmount = ? , tradePartyID = ? , tradeCounterpartyID = ? , tradeChannelID = ? , tradeCreateTime = ? , tradePaymentTime = ? , createTime = ? , lastUpdateTime = ?  where id = ?  ";
+                + " set  tradeNO = ? , tradeType = ? , tradeStatus = ? , orderNO = ? , orderName = ? , orderDesc = ? , orderAddress = ? , feeType = ? , originalAmount = ? , paymentAmount = ? , partyTradeUserID = ? , counterpartyTradeUserID = ?, channelTradeUserID = ?, tradePartyID = ? , tradeCounterpartyID = ? , tradeChannelID = ? , tradeCreateTime = ? , tradePaymentTime = ? , createTime = ? , lastUpdateTime = ?  where id = ?  ";
         jdbc.updateForBoolean(sql, tradeDetail.getTradeNO(), tradeDetail.getTradeType(),
                 tradeDetail.getTradeStatus(), tradeDetail.getOrderNO(), tradeDetail.getOrderName(),
                 tradeDetail.getOrderDesc(), tradeDetail.getOrderAddress(), tradeDetail.getFeeType(),
                 tradeDetail.getOriginalAmount(), tradeDetail.getPaymentAmount(),
-                tradeDetail.getTradePartyID(), tradeDetail.getTradeCounterpartyID(),
-                tradeDetail.getTradeChannelID(), tradeDetail.getTradeCreateTime(),
-                tradeDetail.getTradePaymentTime(), tradeDetail.getCreateTime(),
-                tradeDetail.getLastUpdateTime(), tradeDetail.getId());
+                tradeDetail.getPartyTradeUserID(), tradeDetail.getCounterpartyTradeUserID(),
+                tradeDetail.getChannelTradeUserID(), tradeDetail.getTradePartyID(),
+                tradeDetail.getTradeCounterpartyID(), tradeDetail.getTradeChannelID(),
+                tradeDetail.getTradeCreateTime(), tradeDetail.getTradePaymentTime(),
+                tradeDetail.getCreateTime(), tradeDetail.getLastUpdateTime(), tradeDetail.getId());
     }
 
     @Override
@@ -204,6 +211,25 @@ public class TradeDetailDaoImpl implements TradeDetailDao {
     private String buildCondition(String sql, TradeDetailSearchForm tradeDetailSearchForm,
             StatementParameter param) {
         sql += " where 1 = 1";
+
+        if (tradeDetailSearchForm.getTradeUserID() != null
+                && StringUtils.isNotEmpty(tradeDetailSearchForm.getTradeUserID() + "")) {
+            TradeUserType tradeUserType =
+                    CommonUtil.getTradeUserType(tradeDetailSearchForm.getTradeUserType());
+            switch (tradeUserType) {
+                case CHANNEL:
+                    sql += " and channelTradeUserID  = ?";
+                    break;
+                case DEPARTMENT:
+                    sql += " and counterpartyTradeUserID  = ?";
+                    break;
+                case PERSION:
+                    sql += " and partyTradeUserID  = ?";
+                    break;
+            }
+            param.set(tradeDetailSearchForm.getTradeUserID());
+        }
+
         if (tradeDetailSearchForm.getStartTime() != null
                 && StringUtils.isNotEmpty(tradeDetailSearchForm.getStartTime() + "")) {
             sql += " and tradePaymentTime  >= ?";
@@ -211,7 +237,7 @@ public class TradeDetailDaoImpl implements TradeDetailDao {
         }
         if (tradeDetailSearchForm.getEndTime() != null
                 && StringUtils.isNotEmpty(tradeDetailSearchForm.getEndTime() + "")) {
-            sql += " and tradePaymentTime  < ?";
+            sql += " and tradePaymentTime  <= ?";
             param.set(tradeDetailSearchForm.getEndTime());
         }
         if (tradeDetailSearchForm.getTradeNO() != null

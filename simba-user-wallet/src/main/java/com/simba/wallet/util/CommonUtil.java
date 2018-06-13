@@ -3,7 +3,7 @@ package com.simba.wallet.util;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+import com.relops.snowflake.Snowflake;
 import com.simba.framework.util.common.UUIDUtil;
 import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeUser;
@@ -42,6 +42,18 @@ public class CommonUtil {
             return ChannelType.WXPAY;
         } else {
             throw ErrConfig.INVALID_CHANNEL_TYPE;
+        }
+    }
+
+    public static TradeUserType getTradeUserType(String tradeUserType) {
+        if (TradeUserType.CHANNEL.getName().equals(tradeUserType)) {
+            return TradeUserType.CHANNEL;
+        } else if (TradeUserType.DEPARTMENT.getName().equals(tradeUserType)) {
+            return TradeUserType.DEPARTMENT;
+        } else if (TradeUserType.PERSION.getName().equals(tradeUserType)) {
+            return TradeUserType.PERSION;
+        } else {
+            throw ErrConfig.INVALID_TRADEUSER_TYPE;
         }
     }
 
@@ -181,12 +193,28 @@ public class CommonUtil {
         return map;
     }
 
-    public static String generateTradeNO() {
-        return UUID.randomUUID().toString();
+    public static class TradeNoGenerator {
+
+        public static Snowflake snowflake = null;
+
+        public static long gen(Integer nodeId) {
+            if (snowflake == null) {
+                synchronized (TradeNoGenerator.class) {
+                    if (snowflake == null) {
+                        snowflake = new Snowflake(nodeId);
+                    }
+                }
+            }
+            return snowflake.next();
+        }
+    }
+
+    public static long generateTradeNO() {
+        return 1L;
     }
 
     public static String generateOrderNO() {
-        return "R" + UUIDUtil.get();
+        return "r" + UUIDUtil.get();
     }
 
     public static void checkWalletAutority(TradeUser tradeUser, TradeAccount tradeAccount,

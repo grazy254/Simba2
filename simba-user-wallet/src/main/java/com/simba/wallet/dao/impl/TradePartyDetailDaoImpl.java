@@ -26,13 +26,12 @@ public class TradePartyDetailDaoImpl implements TradePartyDetailDao {
     @Override
     public Long add(TradePartyDetail tradePartyDetail) {
         String sql = "insert into " + table
-                + "( tradeUserID, partyName, partyType, tradeAccountID, ip, mobileNumber, device, noticeMail, location, createDate) values(?,?,?,?,?,?,?,?,?,?)";
+                + "( tradeUserID, partyName, partyType, tradeAccountID, ip, mobileNumber, device, noticeMail, location) values(?,?,?,?,?,?,?,?,?)";
         Number id = jdbc.updateForGeneratedKey(sql, tradePartyDetail.getTradeUserID(),
                 tradePartyDetail.getPartyName(), tradePartyDetail.getPartyType(),
                 tradePartyDetail.getTradeAccountID(), tradePartyDetail.getIp(),
                 tradePartyDetail.getMobileNumber(), tradePartyDetail.getDevice(),
-                tradePartyDetail.getNoticeMail(), tradePartyDetail.getLocation(),
-                tradePartyDetail.getCreateDate());
+                tradePartyDetail.getNoticeMail(), tradePartyDetail.getLocation());
         return id.longValue();
     }
 

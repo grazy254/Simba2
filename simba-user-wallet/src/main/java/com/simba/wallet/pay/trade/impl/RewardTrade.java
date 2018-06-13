@@ -20,8 +20,11 @@ import com.simba.wallet.util.Constants.TradeType;
 public class RewardTrade extends BaseInnerTrade {
 
     @Override
-    public JsonResult trade(String userID, String orderNO, long paymentAmount) {
-        return trade(userID, "", "", orderNO, "", "", "", paymentAmount, paymentAmount, new Date(),
+    public JsonResult trade(String userID, String ip, String location, String orderNO,
+            String orderName, String orderDesc, String orderAddress, long originalAmount,
+            long paymentAmount) {
+        return trade(userID, ip, location, orderNO, orderName, orderDesc, orderAddress,
+                paymentAmount, paymentAmount, new Date(),
                 RegistryUtil.get("trade.department.reward"), TradeType.REWARD);
     }
 
@@ -41,4 +44,6 @@ public class RewardTrade extends BaseInnerTrade {
 
 
     }
+
+
 }

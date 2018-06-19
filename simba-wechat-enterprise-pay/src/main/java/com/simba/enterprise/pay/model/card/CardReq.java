@@ -50,7 +50,7 @@ public class CardReq {
 	/**
 	 * 付款金额：RMB分（支付总额，不含手续费） 注：大于0的整数
 	 */
-	private String amount;
+	private int amount;
 
 	/**
 	 * 付款说明 -- 企业付款到银行卡付款说明,即订单备注（UTF8编码，允许100个字符以内）
@@ -113,11 +113,11 @@ public class CardReq {
 		this.bank_code = bank_code;
 	}
 
-	public String getAmount() {
+	public int getAmount() {
 		return amount;
 	}
 
-	public void setAmount(String amount) {
+	public void setAmount(int amount) {
 		this.amount = amount;
 	}
 

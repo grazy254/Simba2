@@ -1,5 +1,7 @@
 package com.simba.controller.form;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * 企业转账到零钱的请求类对象
  * 
@@ -11,7 +13,7 @@ public class LooseMoneyTransferForm {
 	/**
 	 * 设备号(微信支付分配的终端设备号)
 	 */
-	private String device_info;
+	private String device_info = StringUtils.EMPTY;
 
 	/**
 	 * 商户订单号，需保持唯一性 (只能是字母或者数字，不能包含有符号)
@@ -26,7 +28,7 @@ public class LooseMoneyTransferForm {
 	/**
 	 * 校验用户姓名选项 (NO_CHECK：不校验真实姓名 FORCE_CHECK：强校验真实姓名)
 	 */
-	private String check_name;
+	private String check_name = "NO_CHECK";
 
 	/**
 	 * 收款用户姓名(收款用户真实姓名。 如果check_name设置为FORCE_CHECK，则必填用户真实姓名)

@@ -8,13 +8,10 @@ package com.simba.controller.form;
  */
 public class CardTransferForm {
 
-
-
 	/**
 	 * 商户企业付款单号-商户订单号，需保持唯一（只允许数字[0~9]或字母[A~Z]和[a~z]，最短8位，最长32位）
 	 */
 	private String partner_trade_no;
-
 
 	/**
 	 * 银行卡所在开户行编号,详见银行编号列表
@@ -67,7 +64,5 @@ public class CardTransferForm {
 	public String toString() {
 		return "CardTransferForm [partner_trade_no=" + partner_trade_no + ", bank_code=" + bank_code + ", amount=" + amount + ", desc=" + desc + "]";
 	}
-	
-	
-	
+
 }

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.simba.alipay.enums.TradeStatus;
 import com.simba.dao.AliPayBillDao;
 import com.simba.framework.util.jdbc.Jdbc;
 import com.simba.framework.util.jdbc.Pager;
@@ -213,5 +214,14 @@ public class AliPayBillDaoImpl implements AliPayBillDao {
 			param.set(aliPayBillSearchForm.getEndCreateTime());
 		}
 		return sql;
+	}
+
+	@Override
+	public List<AliPayBill> listUnfinish() {
+		String sql = "select * from " + table + " where status in (?,?)";
+		StatementParameter params = new StatementParameter();
+		params.setString(TradeStatus.PAY.getName());
+		params.setString(TradeStatus.REFUND.getName());
+		return jdbc.queryForList(sql, AliPayBill.class, params);
 	}
 }

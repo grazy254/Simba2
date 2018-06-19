@@ -3,10 +3,22 @@ package com.simba.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
+import com.alipay.api.response.AlipayTradeQueryResponse;
+import com.simba.alipay.enums.TradeStatus;
+import com.simba.alipay.util.AliPayUtil;
+import com.simba.cache.Redis;
 import com.simba.dao.AliPayBillDao;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.AliPayBill;
@@ -23,8 +35,19 @@ import com.simba.service.AliPayBillService;
 @Transactional
 public class AliPayBillServiceImpl implements AliPayBillService {
 
+	private static final Log logger = LogFactory.getLog(AliPayBillServiceImpl.class);
+
+	@Resource
+	private Redis redisUtil;
+
+	@Resource
+	private TaskExecutor taskExecutor;
+
 	@Autowired
 	private AliPayBillDao aliPayBillDao;
+
+	@Autowired
+	private AliPayUtil aliPayUtil;
 
 	@Override
 	public void add(AliPayBill aliPayBill) {
@@ -171,5 +194,48 @@ public class AliPayBillServiceImpl implements AliPayBillService {
 	@Transactional(readOnly = true)
 	public Long countByOr(String field1, Object value1, String field2, Object value2) {
 		return aliPayBillDao.countByOr(field1, value1, field2, value2);
+	}
+
+	@Override
+	public void checkUnfinishOrder() {
+		List<AliPayBill> list = this.listUnfinish();
+		for (AliPayBill bill : list) {
+			if (redisUtil.tryLock("alipay_" + bill.getId(), 60)) {
+				dealUnfinishOrder(bill);
+			}
+		}
+	}
+
+	private void dealUnfinishOrder(AliPayBill bill) {
+		taskExecutor.execute(() -> {
+			try {
+				if (TradeStatus.REFUND.getName().equals(bill.getStatus())) {
+					dealRefundOrder(bill);
+				} else {
+					dealUnpayOrder(bill);
+				}
+			} catch (Exception e) {
+				logger.error("处理未完成的订单发生异常:" + bill.toString(), e);
+			}
+		});
+	}
+
+	private void dealUnpayOrder(AliPayBill bill) throws AlipayApiException {
+		AlipayTradeQueryResponse response = aliPayUtil.query(bill.getOutTradeNo(), bill.getTradeNo());
+		bill.setStatus(response.getTradeStatus());
+		this.update(bill);
+	}
+
+	private void dealRefundOrder(AliPayBill bill) throws AlipayApiException {
+		AlipayTradeFastpayRefundQueryResponse response = aliPayUtil.refundQuery(bill.getTradeNo(), bill.getOutTradeNo(), null);
+		if (StringUtils.isNotEmpty(response.getTotalAmount())) {
+			bill.setStatus(TradeStatus.REFUNDSUCCESS.getName());
+			this.update(bill);
+		}
+	}
+
+	@Override
+	public List<AliPayBill> listUnfinish() {
+		return aliPayBillDao.listUnfinish();
 	}
 }

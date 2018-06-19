@@ -12,15 +12,12 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.http.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.simba.controller.form.RefundForm;
 import com.simba.framework.util.common.ServerUtil;
 import com.simba.framework.util.data.RandomUtil;
-import com.simba.framework.util.json.FastJsonUtil;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.pay.refund.RefundReq;
 import com.simba.model.pay.unifiedorder.UnifiedOrderReq;
@@ -35,7 +32,7 @@ import com.simba.util.send.WxPayUtil;
  * @author caozhejun
  *
  */
-@Controller
+@RestController
 @RequestMapping("/pay")
 public class PayController {
 
@@ -62,7 +59,7 @@ public class PayController {
 	 * @return
 	 */
 	@RequestMapping("/order")
-	public String order(HttpServletRequest request, UnifiedOrderReq req, ModelMap model) {
+	public JsonResult order(HttpServletRequest request, UnifiedOrderReq req) {
 		req.setAppid(appid);
 		req.setMch_id(mchId);
 		req.setOut_trade_no(RandomUtil.random32Chars());
@@ -92,10 +89,8 @@ public class PayController {
 		params.put("prePayId", prePayId);
 		params.put("codeUrl", codeUrl);
 		params.put("mwebUrl", mwebUrl);
-		String json = FastJsonUtil.toJson(params);
-		model.put("message", json);
 		payService.dealOrder(req, prePayId, codeUrl, mwebUrl);
-		return "message";
+		return new JsonResult(params);
 	}
 
 	/**
@@ -104,7 +99,6 @@ public class PayController {
 	 * @param outTradeNo
 	 * @return
 	 */
-	@ResponseBody
 	@RequestMapping("/closeOrder")
 	public JsonResult closeOrder(String outTradeNo) {
 		payService.closeOrder(outTradeNo);

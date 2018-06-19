@@ -20,6 +20,8 @@ public interface AliPayBillService {
 	void delete(Long id);
 
 	List<AliPayBill> listAll();
+	
+	List<AliPayBill> listUnfinish();
 		
 	Long count();
 	
@@ -60,5 +62,7 @@ public interface AliPayBillService {
 	List<AliPayBill> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
 
 	List<AliPayBill> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
+
+	void checkUnfinishOrder();
 
 }

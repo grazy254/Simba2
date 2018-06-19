@@ -69,7 +69,7 @@ public class CardRes {
 	/**
 	 * 手续费金额 RMB：分
 	 */
-	private String cmms_amt;
+	private int cmms_amt;
 
 	public String getReturn_code() {
 		return return_code;
@@ -159,11 +159,11 @@ public class CardRes {
 		this.payment_no = payment_no;
 	}
 
-	public String getCmms_amt() {
+	public int getCmms_amt() {
 		return cmms_amt;
 	}
 
-	public void setCmms_amt(String cmms_amt) {
+	public void setCmms_amt(int cmms_amt) {
 		this.cmms_amt = cmms_amt;
 	}
 

@@ -1,5 +1,7 @@
 package com.simba.impls;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +12,7 @@ import com.simba.alipay.controller.form.AliPayCancelForm;
 import com.simba.alipay.controller.form.AliPayCloseForm;
 import com.simba.alipay.controller.form.AliPayRefundForm;
 import com.simba.alipay.controller.form.AppPayForm;
+import com.simba.alipay.enums.TradeStatus;
 import com.simba.alipay.interfaces.AliPayInterface;
 import com.simba.model.AliPayBill;
 import com.simba.service.AliPayBillService;
@@ -31,7 +34,10 @@ public class AliPayBillImpl implements AliPayInterface {
 
 	@Override
 	public void dealCallback(AliPayCallbackForm callbackForm) {
-
+		String outTradeNo = callbackForm.getOut_trade_no();
+		AliPayBill bill = aliPayBillService.getBy("outTradeNo", outTradeNo);
+		bill.setStatus(callbackForm.getTrade_status());
+		aliPayBillService.update(bill);
 	}
 
 	@Override
@@ -45,23 +51,35 @@ public class AliPayBillImpl implements AliPayInterface {
 		bill.setProductCode(payForm.getProductCode());
 		bill.setGoodType(StringUtils.EMPTY);
 		bill.setTradeNo(StringUtils.EMPTY);
-
+		bill.setSellId(StringUtils.EMPTY);
+		bill.setTimeoutExpress(StringUtils.defaultString(payForm.getTimeoutExpress()));
+		bill.setCreateTime(new Date());
+		bill.setStatus(TradeStatus.PAY.getName());
 		aliPayBillService.add(bill);
 	}
 
 	@Override
 	public void close(AliPayCloseForm closeForm) {
-
+		String outTradeNo = closeForm.getOutTradeNo();
+		AliPayBill bill = aliPayBillService.getBy("outTradeNo", outTradeNo);
+		bill.setStatus(TradeStatus.CLOSED.getName());
+		aliPayBillService.update(bill);
 	}
 
 	@Override
 	public void cancel(AliPayCancelForm cancelForm) {
-
+		String outTradeNo = cancelForm.getOutTradeNo();
+		AliPayBill bill = aliPayBillService.getBy("outTradeNo", outTradeNo);
+		bill.setStatus(TradeStatus.CLOSED.getName());
+		aliPayBillService.update(bill);
 	}
 
 	@Override
 	public void refund(AliPayRefundForm refundForm) {
-
+		String outTradeNo = refundForm.getOutTradeNo();
+		AliPayBill bill = aliPayBillService.getBy("outTradeNo", outTradeNo);
+		bill.setStatus(TradeStatus.REFUND.getName());
+		aliPayBillService.update(bill);
 	}
 
 }

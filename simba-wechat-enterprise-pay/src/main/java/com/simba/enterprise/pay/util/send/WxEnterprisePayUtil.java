@@ -112,6 +112,11 @@ public class WxEnterprisePayUtil {
 		if (params.get("sign") != null && !checkSign(params)) {
 			throw new RuntimeException("微信支付服务器返回签名错误");
 		}
+		String return_code = params.get("return_code");
+		String result_code = params.get("result_code");
+		if (!"SUCCESS".equals(return_code) || !"SUCCESS".equals(result_code)) {
+			throw new RuntimeException("微信企业支付异常");
+		}
 	}
 
 	private boolean checkSign(Map<String, String> params) {

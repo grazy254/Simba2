@@ -8,13 +8,10 @@ package com.simba.controller.form;
  */
 public class LooseMoneyTransferForm {
 
-
-
 	/**
 	 * 设备号(微信支付分配的终端设备号)
 	 */
 	private String device_info;
-
 
 	/**
 	 * 商户订单号，需保持唯一性 (只能是字母或者数字，不能包含有符号)
@@ -120,6 +117,5 @@ public class LooseMoneyTransferForm {
 		return "LooseMoneyTransferForm [device_info=" + device_info + ", partner_trade_no=" + partner_trade_no + ", openid=" + openid + ", check_name=" + check_name + ", re_user_name=" + re_user_name
 				+ ", amount=" + amount + ", desc=" + desc + ", spbill_create_ip=" + spbill_create_ip + "]";
 	}
-	
-	
+
 }

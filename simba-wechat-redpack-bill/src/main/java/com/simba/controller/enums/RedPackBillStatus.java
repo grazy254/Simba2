@@ -3,7 +3,7 @@ package com.simba.controller.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum RedPackBillType {
+public enum RedPackBillStatus {
 
 	All("","所有"),
 	SENDING("sending","发放中"),
@@ -18,7 +18,7 @@ public enum RedPackBillType {
 	
 	private String name;
 
-	private RedPackBillType(String status,String name){
+	private RedPackBillStatus(String status,String name){
 		this.status=status;
 		this.name=name;
 	}
@@ -41,21 +41,21 @@ public enum RedPackBillType {
 	
 	static{
 		
-		for(RedPackBillType type :RedPackBillType.values()){
+		for(RedPackBillStatus type :RedPackBillStatus.values()){
 			maps.put(type.getStatus(), type.getName());
 		}
 	}
 	
-	private static Map<String ,RedPackBillType> map=new HashMap<String ,RedPackBillType>();
+	private static Map<String ,RedPackBillStatus> map=new HashMap<String ,RedPackBillStatus>();
 	
 	static{
 		
-		for(RedPackBillType type :RedPackBillType.values()){
+		for(RedPackBillStatus type :RedPackBillStatus.values()){
 			map.put(type.getStatus(), type);
 		}
 	}
 	
-	public static RedPackBillType get(String status){
+	public static RedPackBillStatus get(String status){
 		return map.get(status);
 	}
 	

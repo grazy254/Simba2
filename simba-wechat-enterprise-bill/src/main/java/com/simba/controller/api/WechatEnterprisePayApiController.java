@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.simba.controller.enums.CardMoneyBillType;
-import com.simba.controller.enums.LooseMoneyBillType;
+import com.simba.controller.enums.CardMoneyBillStatus;
+import com.simba.controller.enums.LooseMoneyBillStatus;
 import com.simba.controller.form.CardTransferForm;
 import com.simba.controller.form.LooseMoneyTransferForm;
 import com.simba.enterprise.pay.model.card.CardReq;
@@ -96,9 +96,9 @@ public class WechatEnterprisePayApiController {
 		bill.setCreateTime(new Date());
 		bill.setCreateUser(StringUtils.EMPTY);
 		if (StringUtils.isNotEmpty(bill.getPaymentNo())) {
-			bill.setStatus(LooseMoneyBillType.SUCCESS.getStatus());
+			bill.setStatus(LooseMoneyBillStatus.PROCESSING.getStatus());
 		} else {
-			bill.setStatus(LooseMoneyBillType.FAILED.getStatus());
+			bill.setStatus(LooseMoneyBillStatus.FAILED.getStatus());
 		}
 		looseMoneyBillService.add(bill);
 		return new JsonResult(res);
@@ -144,9 +144,9 @@ public class WechatEnterprisePayApiController {
 		bill.setAmount(cardTransferForm.getAmount());
 		bill.setDescription(cardTransferForm.getDesc());
 		if (StringUtils.isNotEmpty(bill.getPaymentNo())) {
-			bill.setStatus(CardMoneyBillType.SUCCESS.getStatus());
+			bill.setStatus(CardMoneyBillStatus.PROCESSING.getStatus());
 		} else {
-			bill.setStatus(CardMoneyBillType.FAILED.getStatus());
+			bill.setStatus(CardMoneyBillStatus.FAILED.getStatus());
 		}
 		bill.setErrMsg(res.getErr_code_des());
 		bill.setPaymentNo(res.getPayment_no());

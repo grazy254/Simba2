@@ -89,6 +89,8 @@ public class PayController {
 		params.put("prePayId", prePayId);
 		params.put("codeUrl", codeUrl);
 		params.put("mwebUrl", mwebUrl);
+		params.put("totalFee", req.getTotal_fee() + "");
+		params.put("outTradeNo", req.getOut_trade_no());
 		payService.dealOrder(req, prePayId, codeUrl, mwebUrl);
 		return new JsonResult(params);
 	}
@@ -115,20 +117,21 @@ public class PayController {
 	 */
 	@RequestMapping("/refund")
 	public JsonResult refund(RefundForm refundForm) throws ParseException, IOException {
+		refundForm.setOut_refund_no(RandomUtil.random32Chars());
 		RefundReq refundReq = new RefundReq();
 		refundReq.setDevice_info(refundForm.getDevice_info());
 		refundReq.setOp_user_id(refundForm.getOp_user_id());
 		refundReq.setOut_refund_no(refundForm.getOut_refund_no());
 		refundReq.setOut_trade_no(refundForm.getOut_trade_no());
 		refundReq.setRefund_account(refundForm.getRefund_account());
-		refundReq.setRefund_fee(refundForm.getRefund_fee());
 		refundReq.setSign_type(refundForm.getSign_type());
-		refundReq.setTotal_fee(refundForm.getTotal_fee());
 		refundReq.setTransaction_id(refundForm.getTransaction_id());
 		refundReq.setRefund_fee_type(refundForm.getRefund_fee_type());
 		if (StringUtils.isEmpty(refundForm.getNotify_url())) {
 			refundReq.setNotify_url(wxPayDomain + "/payCallback/refundReceive");
 		}
+		refundReq.setTotal_fee(refundForm.getTotal_fee());
+		refundReq.setRefund_fee(refundForm.getRefund_fee());
 		payService.refund(refundReq);
 		return new JsonResult();
 	}

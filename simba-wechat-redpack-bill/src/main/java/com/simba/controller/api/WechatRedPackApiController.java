@@ -2,6 +2,8 @@ package com.simba.controller.api;
 
 import java.io.IOException;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.http.ParseException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,18 +26,26 @@ import com.simba.redpack.util.send.WxRedPackUtil;
 @RestController
 @RequestMapping("/wechatRedPackApi")
 public class WechatRedPackApiController {
+
 	private WxRedPackUtil wxRedPackUtil;
+
+	@PostConstruct
+	private void init() {
+		wxRedPackUtil = WxRedPackUtil.getInstance();
+	}
+
 	/**
 	 * 发送普通红包
+	 * 
 	 * @param normalRedPackForm
 	 * @return
 	 * @throws ParseException
 	 * @throws IOException
 	 */
 	@RequestMapping("/sendNormalRedPack")
-	public JsonResult sendNormalRedPack(NormalRedPackForm normalRedPackForm) throws ParseException, IOException{
-		NormalRedPackReq normalRedPackReq=new NormalRedPackReq();
-		normalRedPackReq.setAct_name(normalRedPackForm.getAct_name() );
+	public JsonResult sendNormalRedPack(NormalRedPackForm normalRedPackForm) throws ParseException, IOException {
+		NormalRedPackReq normalRedPackReq = new NormalRedPackReq();
+		normalRedPackReq.setAct_name(normalRedPackForm.getAct_name());
 		normalRedPackReq.setClient_ip(normalRedPackForm.getClient_ip());
 		normalRedPackReq.setConsume_mch_id(normalRedPackForm.getConsume_mch_id());
 		normalRedPackReq.setMch_billno(normalRedPackForm.getMch_billno());
@@ -46,19 +56,20 @@ public class WechatRedPackApiController {
 		normalRedPackReq.setSend_name(normalRedPackForm.getSend_name());
 		normalRedPackReq.setTotal_amount(normalRedPackForm.getTotal_amount());
 		normalRedPackReq.setWishing(normalRedPackForm.getWishing());
-		return new JsonResult (wxRedPackUtil.sendNormalRedPack(normalRedPackReq),"",200);
+		return new JsonResult(wxRedPackUtil.sendNormalRedPack(normalRedPackReq), "", 200);
 	}
-	
+
 	/**
 	 * 发送裂变红包
+	 * 
 	 * @param groupRedPackForm
 	 * @return
 	 * @throws ParseException
 	 * @throws IOException
 	 */
 	@RequestMapping("/sendGroupRedPack")
-	public JsonResult sendGroupRedPack(GroupRedPackForm groupRedPackForm) throws ParseException, IOException{
-		GroupRedPackReq groupRedPackReq=new GroupRedPackReq();
+	public JsonResult sendGroupRedPack(GroupRedPackForm groupRedPackForm) throws ParseException, IOException {
+		GroupRedPackReq groupRedPackReq = new GroupRedPackReq();
 		groupRedPackReq.setAct_name(groupRedPackForm.getAct_name());
 		groupRedPackReq.setAmt_type(groupRedPackForm.getAmt_type());
 		groupRedPackReq.setConsume_mch_id(groupRedPackForm.getConsume_mch_id());
@@ -71,21 +82,22 @@ public class WechatRedPackApiController {
 		groupRedPackReq.setTotal_amount(groupRedPackForm.getTotal_amount());
 		groupRedPackReq.setTotal_num(groupRedPackForm.getTotal_num());
 		groupRedPackReq.setWishing(groupRedPackForm.getWishing());
-		return new JsonResult (wxRedPackUtil.sendGroupRedPack(groupRedPackReq),"",200);
+		return new JsonResult(wxRedPackUtil.sendGroupRedPack(groupRedPackReq), "", 200);
 	}
-	
+
 	/**
 	 * 查询红包记录
+	 * 
 	 * @param SearchRedPackForm
 	 * @return
 	 * @throws ParseException
 	 * @throws IOException
 	 */
 	@RequestMapping("/searchRedPack")
-	public JsonResult searchRedPack(SearchRedPackForm searchRedPackForm) throws ParseException, IOException{
-		SearchReq searchReq=new SearchReq();
+	public JsonResult searchRedPack(SearchRedPackForm searchRedPackForm) throws ParseException, IOException {
+		SearchReq searchReq = new SearchReq();
 		searchReq.setBill_type(searchRedPackForm.getBill_type());
 		searchReq.setMch_billno(searchRedPackForm.getMch_billno());
-		return new JsonResult (wxRedPackUtil.searchRedPack(searchReq),"",200);
+		return new JsonResult(wxRedPackUtil.searchRedPack(searchReq), "", 200);
 	}
 }

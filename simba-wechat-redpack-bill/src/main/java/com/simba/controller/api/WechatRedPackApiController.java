@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.simba.controller.enums.RedPackType;
 import com.simba.controller.form.GroupRedPackForm;
 import com.simba.controller.form.NormalRedPackForm;
 import com.simba.controller.form.SearchRedPackForm;
@@ -65,6 +66,7 @@ public class WechatRedPackApiController {
 		normalRedPackReq.setWishing(normalRedPackForm.getWishing());
 		NormalRedPackRes res = wxRedPackUtil.sendNormalRedPack(normalRedPackReq);
 		RedPackBill bill = new RedPackBill();
+		bill.setType(RedPackType.NORMAL.getName());
 		
 		redPackBillService.add(bill);
 		return new JsonResult(res);

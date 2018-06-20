@@ -93,7 +93,7 @@ var Notify = {
 
     "listReceiver": function (id) {
         var url = contextPath + "/notify/toListReceiver?notifyId=" + id;
-        parent.showModal("查看用户", url, 600);
+        parent.showModal("查看用户", url, 550);
     },
 
     "checkForm": function () {

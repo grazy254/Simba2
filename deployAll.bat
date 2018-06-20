@@ -52,7 +52,7 @@ cd ../
 cd simba-socket
 call mvn clean -U deploy
 cd ../
-cd simba-thirft
+cd simba-thrift
 call mvn clean -U deploy
 cd ../
 cd simba-udpsocket
@@ -305,6 +305,9 @@ cd simba-user-integral
 call mvn clean -U deploy
 cd ../
 cd simba-user-message
+call mvn clean -U deploy
+cd ../
+cd simba-alipay-bill
 call mvn clean -U deploy
 cd ../
 echo " deplay all finish "

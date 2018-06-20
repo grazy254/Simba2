@@ -9,7 +9,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.simba.controller.enums.RedPackBillType;
+import com.simba.controller.enums.RedPackBillStatus;
 import com.simba.controller.form.RedPackBillSearchForm;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
@@ -31,7 +31,7 @@ public class RedPackBillController {
 
 	@RequestMapping("/list")
 	public String list(ModelMap model) {
-		model.put("redPackBill",RedPackBillType.maps );
+		model.put("redPackBill",RedPackBillStatus.maps );
 		return "redPackBill/list";
 		
 	}

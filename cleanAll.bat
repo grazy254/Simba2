@@ -1,6 +1,9 @@
 cd simba-rule
 call mvn clean -U 
 cd ../
+cd simba-alipay-bill
+call mvn clean -U 
+cd ../
 cd simba-user-wallet
 call mvn clean -U 
 cd ../
@@ -175,7 +178,7 @@ cd ../
 cd simba-socket
 call mvn clean -U 
 cd ../
-cd simba-thirft
+cd simba-thrift
 call mvn clean -U 
 cd ../
 cd simba-udpsocket

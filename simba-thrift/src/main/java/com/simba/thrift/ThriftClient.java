@@ -1,7 +1,6 @@
-package com.simba.thirft;
+package com.simba.thrift;
 
-import java.io.IOException;
-
+import com.simba.exception.SimbaException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.thrift.async.AsyncMethodCallback;
@@ -9,32 +8,27 @@ import org.apache.thrift.async.TAsyncClientManager;
 import org.apache.thrift.protocol.TCompactProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.protocol.TProtocolFactory;
-import org.apache.thrift.transport.TFramedTransport;
-import org.apache.thrift.transport.TNonblockingSocket;
-import org.apache.thrift.transport.TNonblockingTransport;
-import org.apache.thrift.transport.TSocket;
-import org.apache.thrift.transport.TTransport;
-import org.apache.thrift.transport.TTransportException;
+import org.apache.thrift.transport.*;
 
-import com.simba.exception.SimbaException;
+import java.io.IOException;
 
 /**
- * thirft 客户端抽象类(具体调用逻辑放在request方法中，自己实现)
+ * thrift 客户端抽象类(具体调用逻辑放在request方法中，自己实现)
  * 
  * @author caozhejun
  *
  */
-public abstract class ThirftClient {
+public abstract class ThriftClient {
 
-	private static final Log logger = LogFactory.getLog(ThirftClient.class);
+	private static final Log logger = LogFactory.getLog(ThriftClient.class);
 
 	/**
-	 * thirft服务器的ip地址(必须)
+	 * thrift服务器的ip地址(必须)
 	 */
 	private String ip;
 
 	/**
-	 * thirft服务器的端口号(必须)
+	 * thrift服务器的端口号(必须)
 	 */
 	private int port;
 
@@ -44,23 +38,23 @@ public abstract class ThirftClient {
 	private Object data;
 
 	/**
-	 * 调用thirft服务返回的结果
+	 * 调用thrift服务返回的结果
 	 */
 	private Object result;
 
 	/**
-	 * thirft回调方法，只有客户端类型为 异步非阻塞时才有效
+	 * thrift回调方法，只有客户端类型为 异步非阻塞时才有效
 	 */
 	private AsyncMethodCallback<?> callback;
 
 	/**
-	 * thirft客户端的类型(必须)
+	 * thrift客户端的类型(必须)
 	 */
-	private ThirftClientType type;
+	private ThriftClientType type;
 
 	/**
 	 * 
-	 * 以下属性是预留给实现类使用的，可用在request方法中，构造thirft工具生成的代码客户端
+	 * 以下属性是预留给实现类使用的，可用在request方法中，构造thrift工具生成的代码客户端
 	 * 
 	 */
 	/**
@@ -83,19 +77,19 @@ public abstract class ThirftClient {
 	protected abstract Object request();
 
 	/**
-	 * 发送thirft请求
+	 * 发送thrift请求
 	 */
 	public void send() {
 		try {
 			sendRequst();
 		} catch (Exception e) {
-			logger.error("发送thirft请求异常", e);
-			throw new SimbaException("发送thirft请求异常");
+			logger.error("发送thrift请求异常", e);
+			throw new SimbaException("发送thrift请求异常");
 		}
 	}
 
 	private void sendRequst() throws TTransportException, IOException {
-		if (type == ThirftClientType.SyncBlock || type == ThirftClientType.SyncUnblock) {
+		if (type == ThriftClientType.SyncBlock || type == ThriftClientType.SyncUnblock) {
 			sendSyncRequest();
 		} else {
 			sendAsynRequest();
@@ -109,7 +103,7 @@ public abstract class ThirftClient {
 	 */
 	private void sendSyncRequest() throws TTransportException {
 		TTransport syncTransport = null;
-		if (type == ThirftClientType.SyncBlock) {
+		if (type == ThriftClientType.SyncBlock) {
 			syncTransport = new TSocket(ip, port);
 		} else {
 			syncTransport = new TFramedTransport(new TSocket(ip, port));
@@ -166,11 +160,11 @@ public abstract class ThirftClient {
 		this.callback = callback;
 	}
 
-	public ThirftClientType getType() {
+	public ThriftClientType getType() {
 		return type;
 	}
 
-	public void setType(ThirftClientType type) {
+	public void setType(ThriftClientType type) {
 		this.type = type;
 	}
 

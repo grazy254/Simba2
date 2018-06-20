@@ -11,7 +11,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.simba.controller.enums.LooseMoneyBillType;
+import com.simba.controller.enums.LooseMoneyBillStatus;
 import com.simba.controller.form.LooseMoneyBillSearchForm;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
@@ -34,7 +34,7 @@ public class LooseMoneyBillController {
 	private  static final Log logger= LogFactory.getLog(LooseMoneyBillController.class);
 	@RequestMapping("/list")
 	public String list(ModelMap model) {
-		model.put("billTypeList",LooseMoneyBillType.maps);
+		model.put("billTypeList",LooseMoneyBillStatus.maps);
 		logger.info("-------billType------"+model);
 		return "looseMoneyBill/list";
 	}

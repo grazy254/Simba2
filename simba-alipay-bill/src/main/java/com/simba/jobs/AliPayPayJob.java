@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 
-import com.simba.service.PayBillService;
+import com.simba.service.AliPayBillService;
 
 /**
  * 定时更新微信支付订单定时器
@@ -22,13 +22,13 @@ import com.simba.service.PayBillService;
  *
  */
 @Component
-public class WechatPayJob {
+public class AliPayPayJob {
 
 	@Autowired
-	private PayBillService payBillService;
+	private AliPayBillService aliPayBillService;
 
-	@Value("${appID}")
-	private String appID;
+	@Value("${alipay.appid}")
+	private String appId;
 
 	/**
 	 * 查询未完成的订单，更新其状态
@@ -41,8 +41,8 @@ public class WechatPayJob {
 	 */
 	@Scheduled(cron = "0 0/2 * * * *")
 	public void checkUnfinishOrder() throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
-		if (StringUtils.isNotEmpty(appID)) {
-			payBillService.checkUnfinishOrder();
+		if (StringUtils.isNotEmpty(appId)) {
+			aliPayBillService.checkUnfinishOrder();
 		}
 	}
 }

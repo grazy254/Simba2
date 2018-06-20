@@ -9,7 +9,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.simba.controller.enums.CardMoneyBillType;
+import com.simba.controller.enums.CardMoneyBillStatus;
 import com.simba.controller.form.CardMoneyBillSearchForm;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
@@ -31,7 +31,7 @@ public class CardMoneyBillController {
 
 	@RequestMapping("/list")
 	public String list(ModelMap model) {
-		model.put("billType", CardMoneyBillType.maps);
+		model.put("billType", CardMoneyBillStatus.maps);
 		return "cardMoneyBill/list";
 	}
 

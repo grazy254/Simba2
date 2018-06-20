@@ -1,4 +1,4 @@
-package com.simba.thirft;
+package com.simba.thrift;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,17 +16,17 @@ import org.apache.thrift.transport.TTransportException;
 import org.apache.thrift.transport.TTransportFactory;
 
 /**
- * thirft服务器端(非阻塞)
+ * thrift服务器端(非阻塞)
  * 
  * @author caozhejun
  *
  */
-public class ThirftServer {
+public class ThriftServer {
 
-	private static final Log logger = LogFactory.getLog(ThirftServer.class);
+	private static final Log logger = LogFactory.getLog(ThriftServer.class);
 
 	/**
-	 * 启动thirft非阻塞服务器
+	 * 启动thrift非阻塞服务器
 	 * 
 	 * @param port
 	 *            端口号
@@ -38,7 +38,7 @@ public class ThirftServer {
 	}
 
 	/**
-	 * 启动thirft非阻塞服务器
+	 * 启动thrift非阻塞服务器
 	 * 
 	 * @param port
 	 *            端口号
@@ -59,7 +59,7 @@ public class ThirftServer {
 		if (handler != null) {
 			server.setServerEventHandler(handler);
 		}
-		logger.info("启动thirft服务器成功:" + port);
+		logger.info("启动thrift服务器成功:" + port);
 		server.serve();
 	}
 

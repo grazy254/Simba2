@@ -1,12 +1,12 @@
-package com.simba.thirft;
+package com.simba.thrift;
 
 /**
- * thirft客户端类型
+ * thrift客户端类型
  * 
  * @author caozhejun
  *
  */
-public enum ThirftClientType {
+public enum ThriftClientType {
 
 	/**
 	 * 同步阻塞

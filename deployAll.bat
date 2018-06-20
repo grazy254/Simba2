@@ -52,7 +52,7 @@ cd ../
 cd simba-socket
 call mvn clean -U deploy
 cd ../
-cd simba-thirft
+cd simba-thrift
 call mvn clean -U deploy
 cd ../
 cd simba-udpsocket

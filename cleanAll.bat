@@ -178,7 +178,7 @@ cd ../
 cd simba-socket
 call mvn clean -U 
 cd ../
-cd simba-thirft
+cd simba-thrift
 call mvn clean -U 
 cd ../
 cd simba-udpsocket

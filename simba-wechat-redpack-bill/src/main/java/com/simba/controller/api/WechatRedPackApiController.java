@@ -6,6 +6,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.http.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,6 +14,7 @@ import com.simba.controller.enums.RedPackType;
 import com.simba.controller.form.GroupRedPackForm;
 import com.simba.controller.form.NormalRedPackForm;
 import com.simba.controller.form.SearchRedPackForm;
+import com.simba.framework.util.data.RandomUtil;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.RedPackBill;
 import com.simba.redpack.model.group.GroupRedPackReq;
@@ -34,6 +36,12 @@ public class WechatRedPackApiController {
 
 	private WxRedPackUtil wxRedPackUtil;
 
+	@Value("${wx.pay.mchid}")
+	private String mchid;
+
+	@Value("${appID}")
+	private String appID;
+
 	@Autowired
 	private RedPackBillService redPackBillService;
 
@@ -52,6 +60,7 @@ public class WechatRedPackApiController {
 	 */
 	@RequestMapping("/sendNormalRedPack")
 	public JsonResult sendNormalRedPack(NormalRedPackForm normalRedPackForm) throws ParseException, IOException {
+		normalRedPackForm.setMch_billno(RandomUtil.random32Chars());
 		NormalRedPackReq normalRedPackReq = new NormalRedPackReq();
 		normalRedPackReq.setAct_name(normalRedPackForm.getAct_name());
 		normalRedPackReq.setClient_ip(normalRedPackForm.getClient_ip());
@@ -67,7 +76,10 @@ public class WechatRedPackApiController {
 		NormalRedPackRes res = wxRedPackUtil.sendNormalRedPack(normalRedPackReq);
 		RedPackBill bill = new RedPackBill();
 		bill.setType(RedPackType.NORMAL.getName());
-		
+		bill.setBillNo(normalRedPackForm.getMch_billno());
+		bill.setMchId(mchid);
+		bill.setAppid(appID);
+
 		redPackBillService.add(bill);
 		return new JsonResult(res);
 	}

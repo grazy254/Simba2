@@ -1,6 +1,13 @@
 package  com.simba.service;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+
+import org.w3c.dom.DOMException;
+import org.xml.sax.SAXException;
 
 import com.simba.controller.form.RedPackBillSearchForm;
 import com.simba.framework.util.jdbc.Pager;
@@ -55,6 +62,8 @@ public interface RedPackBillService {
 	List<RedPackBill> listByOr(String field1, Object value1, String field2, Object value2);
 
 	List<RedPackBill> pageBy(String field, Object value, Pager page);
+	
+	List<RedPackBill> listAllUnfinish();
 
 	List<RedPackBill> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
 
@@ -63,5 +72,11 @@ public interface RedPackBillService {
 	List<RedPackBill> page(RedPackBillSearchForm searchForm, Pager pager);
 
 	Long count(RedPackBillSearchForm searchForm);
+	
+	/**
+	 * 查询未完成的订单，更新其状态
+	 */
+	void checkUnfinishOrder()throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException ;
+
 
 }

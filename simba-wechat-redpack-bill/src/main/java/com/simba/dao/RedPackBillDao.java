@@ -62,4 +62,6 @@ public interface RedPackBillDao {
 
 	Long count(RedPackBillSearchForm searchForm);
 
+	List<RedPackBill> listAllUnfinish();
+
 }

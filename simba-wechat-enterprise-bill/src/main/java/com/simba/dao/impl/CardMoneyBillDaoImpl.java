@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.simba.controller.enums.CardMoneyBillStatus;
 import com.simba.controller.form.CardMoneyBillSearchForm;
 import com.simba.dao.CardMoneyBillDao;
 import com.simba.framework.util.jdbc.Jdbc;
@@ -221,5 +222,13 @@ public class CardMoneyBillDaoImpl implements CardMoneyBillDao {
 			param.setString(searchForm.getPaymentNo());
 		}
 		return sql;
+	}
+
+	@Override
+	public List<CardMoneyBill> listAllUnfinish() {
+		String sql = "select * from " + table + " where status in (?)";
+		StatementParameter params = new StatementParameter();
+		params.setString(CardMoneyBillStatus.PROCESSING.getStatus());
+		return jdbc.queryForList(sql, CardMoneyBill.class, params);
 	}
 }

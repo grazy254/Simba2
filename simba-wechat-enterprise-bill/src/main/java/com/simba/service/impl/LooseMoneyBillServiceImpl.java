@@ -1,13 +1,26 @@
 package com.simba.service.impl;
 
+import java.io.IOException;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.DOMException;
+import org.xml.sax.SAXException;
 
+import com.simba.cache.Redis;
 import com.simba.controller.form.LooseMoneyBillSearchForm;
 import com.simba.dao.LooseMoneyBillDao;
+import com.simba.enterprise.pay.util.send.WxEnterprisePayUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.LooseMoneyBill;
 import com.simba.service.LooseMoneyBillService;
@@ -21,9 +34,24 @@ import com.simba.service.LooseMoneyBillService;
 @Service
 @Transactional
 public class LooseMoneyBillServiceImpl implements LooseMoneyBillService {
+	
+	private static final Log logger = LogFactory.getLog(LooseMoneyBillServiceImpl.class);
+	
+	private WxEnterprisePayUtil wxEnterprisePayUtil;
 
 	@Autowired
 	private LooseMoneyBillDao looseMoneyBillDao;
+	
+	@Resource
+	private Redis redisUtil;
+	
+	@Resource
+	private TaskExecutor taskExecutor;
+	
+	@PostConstruct
+	private void init() {
+		wxEnterprisePayUtil = WxEnterprisePayUtil.getInstance();
+	}
 
 	@Override
 	public void add(LooseMoneyBill looseMoneyBill) {
@@ -166,5 +194,10 @@ public class LooseMoneyBillServiceImpl implements LooseMoneyBillService {
 	@Override
 	public Long count(LooseMoneyBillSearchForm searchForm) {
 		return looseMoneyBillDao.count(searchForm);
+	}
+
+	@Override
+	public void checkUnfinishOrder() throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+		
 	}
 }

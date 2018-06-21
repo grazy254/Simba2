@@ -3,6 +3,7 @@ package com.simba.enterprise.pay.util.send;
 import java.io.IOException;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.ParseException;
@@ -54,6 +55,10 @@ public class WxEnterprisePayUtil {
 		key = environmentUtil.get("wx.pay.key");
 		appid = environmentUtil.get("appID");
 		mchId = environmentUtil.get("wx.pay.mchid");
+		if (StringUtils.isEmpty(key) || StringUtils.isEmpty(appid) || StringUtils.isEmpty(mchId)) {
+			logger.warn("没有配置微信企业支付相关信息，不能使用微信企业支付");
+			return;
+		}
 		rsaKey = getRSAKey();
 	}
 

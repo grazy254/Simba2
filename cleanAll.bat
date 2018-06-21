@@ -1,3 +1,6 @@
+cd simba-auto-deploy
+call mvn clean -U 
+cd ../
 cd simba-rule
 call mvn clean -U 
 cd ../

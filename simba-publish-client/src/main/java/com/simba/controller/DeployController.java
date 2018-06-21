@@ -41,6 +41,23 @@ public class DeployController {
 
 	private static final Log logger = LogFactory.getLog(DeployController.class);
 
+	@RequestMapping("/rollback")
+	public JsonResult rollback(MultipartHttpServletRequest request, String[] fileNames, DeployForm deployForm) {
+		checkIp(request);
+		checkSign(deployForm);
+		rollbackFiles(fileNames);
+		return new JsonResult();
+	}
+
+	/**
+	 * 回滚文件对应的服务
+	 * 
+	 * @param fileNames
+	 */
+	private void rollbackFiles(String[] fileNames) {
+
+	}
+
 	@RequestMapping("/receive")
 	public JsonResult receive(MultipartHttpServletRequest request, MultipartFile file, DeployForm deployForm) throws IllegalStateException, IOException {
 		checkIp(request);

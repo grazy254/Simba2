@@ -79,6 +79,10 @@ public class AliPayUtil {
 
 	@PostConstruct
 	private void init() {
+		if (StringUtils.isEmpty(appId) || StringUtils.isEmpty(privateKey) || StringUtils.isEmpty(publicKey) || StringUtils.isEmpty(domain)) {
+			logger.warn("没有配置阿里支付相关信息，不能使用阿里支付功能");
+			return;
+		}
 		alipayClient = new DefaultAlipayClient(AliPayConstantData.payUrl, appId, privateKey, AliPayConstantData.format, ConstantData.DEFAULT_CHARSET, publicKey, AliPayConstantData.signType);
 		callbackUrl = domain + "/alipay/callback";
 	}

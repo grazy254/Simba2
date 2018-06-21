@@ -3,6 +3,7 @@ package com.simba.redpack.util.send;
 import java.io.IOException;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.ParseException;
@@ -44,6 +45,9 @@ public class WxRedPackUtil {
 		key = environmentUtil.get("wx.pay.key");
 		appid = environmentUtil.get("appID");
 		mchId = environmentUtil.get("wx.pay.mchid");
+		if (StringUtils.isEmpty(key) || StringUtils.isEmpty(appid) || StringUtils.isEmpty(mchId)) {
+			logger.warn("没有配置微信支付信息，不能使用微信支付功能");
+		}
 	}
 
 	private static final class WxRedPackUtilHolder {

@@ -65,7 +65,8 @@ public class DeployController {
 		String name = fileName.substring(0, lastIndex);
 		String jarFile = serverDir + "/" + fileName;
 		String scriptFile = serverDir + "/" + name + ".bat";
-		file.transferTo(new File(jarFile));
+		File jar = bakJarFile(jarFile);
+		file.transferTo(jar);
 		logger.info("文件写入成功" + jarFile);
 		String scriptContent = "java " + deployForm.getStartParams() + " -jar " + jarFile;
 		FileUtils.writeStringToFile(new File(scriptFile), scriptContent);
@@ -116,7 +117,8 @@ public class DeployController {
 		String name = fileName.substring(0, lastIndex);
 		String jarFile = serverDir + "/" + fileName;
 		String scriptFile = serverDir + "/" + name + ".sh";
-		file.transferTo(new File(jarFile));
+		File jar = bakJarFile(jarFile);
+		file.transferTo(jar);
 		logger.info("文件写入成功" + jarFile);
 		String scriptContent = "nohup java " + deployForm.getStartParams() + " -jar " + jarFile + " &";
 		FileUtils.writeStringToFile(new File(scriptFile), scriptContent);
@@ -124,6 +126,23 @@ public class DeployController {
 		ExecuteUtil.execute("chmod 777 " + scriptFile);
 		logger.info("脚本设置权限成功" + scriptFile);
 		return scriptFile;
+	}
+
+	/**
+	 * 备份jar文件
+	 * 
+	 * @param jarFile
+	 * @return
+	 * @throws IOException
+	 */
+	private File bakJarFile(String jarFile) throws IOException {
+		File jar = new File(jarFile);
+		if (jar.exists()) {
+			File bak = new File(jarFile + ".bak");
+			FileUtils.copyFile(jar, bak);
+			logger.info("备份文件成功:" + bak.getAbsolutePath());
+		}
+		return jar;
 	}
 
 	private void killJarProcessLinux(String fileName) throws IOException {

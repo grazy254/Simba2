@@ -10,7 +10,7 @@
 3. 集成redis，Spring cache，提升运行速度
 4. 内置后台管理系统的基础功能和高效的代码生成工具，一键生成CRUD及页面
 5. 控制器层统一的异常拦截机制
-6. 集成websocket、thirft、groovy、ftp、httpclient、office等各种工具
+6. 集成websocket、thrift、groovy、ftp、httpclient、office等各种工具
 7. 集成spring cloud，可以监控所有系统的运行情况，异常情况邮件提醒
 8. 集成百度ai接口
 9. 集成极光短信、阿里云短信服务

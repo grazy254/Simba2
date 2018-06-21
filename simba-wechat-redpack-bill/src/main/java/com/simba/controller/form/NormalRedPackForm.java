@@ -27,7 +27,12 @@ public class NormalRedPackForm {
 	 * 红包发放总人数 total_num=1
 	 * 
 	 */
-	private String total_amount;
+	private int total_num;
+
+	/**
+	 * 付款金额
+	 */
+	private int total_amount;
 
 	/**
 	 * 红包祝福语
@@ -121,11 +126,19 @@ public class NormalRedPackForm {
 		this.re_openid = re_openid;
 	}
 
-	public String getTotal_amount() {
+	public int getTotal_num() {
+		return total_num;
+	}
+
+	public void setTotal_num(int total_num) {
+		this.total_num = total_num;
+	}
+
+	public int getTotal_amount() {
 		return total_amount;
 	}
 
-	public void setTotal_amount(String total_amount) {
+	public void setTotal_amount(int total_amount) {
 		this.total_amount = total_amount;
 	}
 
@@ -190,6 +203,5 @@ public class NormalRedPackForm {
 		return "normalRedPackForm [mch_billno=" + mch_billno + ", send_name=" + send_name + ", re_openid=" + re_openid + ", total_amount=" + total_amount + ", wishing=" + wishing + ", client_ip="
 				+ client_ip + ", act_name=" + act_name + ", remark=" + remark + ", scene_id=" + scene_id + ", risk_info=" + risk_info + ", consume_mch_id=" + consume_mch_id + "]";
 	}
-	
-	
+
 }

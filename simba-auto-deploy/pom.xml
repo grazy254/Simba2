@@ -10,6 +10,13 @@
 	<name>simba-auto-deploy</name>
 	<url>http://maven.apache.org</url>
 
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.3.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
 
 
 	<properties>
@@ -93,9 +100,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<jvmArguments>-Dfile.encoding=UTF-8</jvmArguments>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

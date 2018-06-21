@@ -50,20 +50,8 @@ public class SessionUtil {
 	// 存在session里的标志，代表用户是否为超级管理员
 	public static final String isAdminKey = "sessAdmin";
 
-	// 存在session里的验证码的标志
-	public static final String captchaKey = "sessCaptcha";
-
 	// 存在session里的用户账号
 	public static final String accountKey = "sessAccount";
-
-	public static void setCaptcha(HttpSession session, String captcha) {
-		session.setAttribute(captchaKey, captcha);
-	}
-
-	public static boolean checkCaptcha(HttpSession session, String captcha) {
-		String sCaptcha = (String) session.getAttribute(captchaKey);
-		return StringUtils.equalsIgnoreCase(sCaptcha, captcha);
-	}
 
 	public static void setAdmin(HttpSession session) {
 		session.setAttribute(isAdminKey, true);

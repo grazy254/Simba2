@@ -1,4 +1,4 @@
-package com.simba.permission.controller;
+package com.simba.controller;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.simba.util.SessionUtil;
+import com.simba.CaptchaUtil;
 
 /**
  * 验证码Controller
@@ -86,7 +86,7 @@ public class CaptchaController {
 			// 将产生的随机数组合在一起。
 			randomCode.append(strRand);
 		}
-		SessionUtil.setCaptcha(request.getSession(), randomCode.toString());
+		CaptchaUtil.setCaptcha(request.getSession(), randomCode.toString());
 		// 禁止图像缓存。
 		response.setHeader("Pragma", "no-cache");
 		response.setHeader("Cache-Control", "no-cache");

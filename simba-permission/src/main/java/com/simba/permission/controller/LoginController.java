@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.simba.CaptchaUtil;
 import com.simba.common.EnvironmentUtil;
 import com.simba.framework.util.code.EncryptUtil;
 import com.simba.permission.model.Org;
@@ -141,7 +142,7 @@ public class LoginController {
 	 * @return
 	 */
 	private boolean checkCaptcha(HttpServletRequest request) {
-		return SessionUtil.checkCaptcha(request.getSession(), request.getParameter("captcha"));
+		return CaptchaUtil.checkCaptcha(request.getSession(), request.getParameter("captcha"));
 	}
 
 	/**

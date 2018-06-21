@@ -114,9 +114,9 @@ var TreeViewUtil = {
 				node = nodes[0];
 			} else {
 				var l = nodes.length;
-				for(var i = 0; i < l; i++) {
-					if(nodes[i].id == id) {
-						node = nodes[i];
+				for(var j = 0; j < l; j++) {
+					if(nodes[j].id == id) {
+						node = nodes[j];
 						break;
 					}
 				}

@@ -52,7 +52,7 @@ public class TradeAccountController {
             ModelMap model) {
 
         if (StringUtils.isEmpty(tradeAccountSearchForm.getUserID())) {
-            return "tradeAccount/smartUserList";
+            return "redirect:/tradeAccount/smartUserList";
         }
         TradeAccount tradeAccount =
                 tradeAccountService.get(tradeAccountSearchForm.getUserID(), TradeUserType.PERSION);
@@ -69,7 +69,7 @@ public class TradeAccountController {
                 model.putAll(CommonUtil.fmtBalance(balanceMap));
             }
         }
-
+        model.put("showSummery", true);
         return "tradeAccount/table";
     }
 

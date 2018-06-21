@@ -13,9 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.simba.CaptchaUtil;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * 验证码Controller
@@ -23,6 +27,7 @@ import com.simba.CaptchaUtil;
  * @author caozj
  *
  */
+@Api(value = "验证码Controller", tags = "验证码Controller")
 @Controller
 @RequestMapping("/captcha")
 public class CaptchaController {
@@ -43,8 +48,9 @@ public class CaptchaController {
 	 * @param response
 	 * @throws IOException
 	 */
-	@RequestMapping("/getCaptcha")
-	public void getCaptcha(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	@ApiOperation(value = "获取验证码图片", notes = "获取验证码图片")
+	@GetMapping("/get")
+	public void get(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		// 定义图像buffer
 		BufferedImage buffImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = buffImg.createGraphics();

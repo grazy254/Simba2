@@ -8,12 +8,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.simba.model.constant.ConstantData;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 /**
  * sessionController
  * 
  * @author caozhejun
  *
  */
+@Api(value = "Session Controller", tags = "Session Controller")
 @RestController
 @RequestMapping("/session")
 public class SessionController {
@@ -24,6 +28,7 @@ public class SessionController {
 	 * @param request
 	 * @return
 	 */
+	@ApiOperation(value = "获取会话session的sid", notes = "获取会话session的sid")
 	@RequestMapping(value = "/getSid", method = RequestMethod.GET)
 	public String getSid(HttpServletRequest request) {
 		return (String) request.getAttribute(ConstantData.SESSIONID_COOKIE_NAME);

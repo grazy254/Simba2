@@ -62,4 +62,6 @@ public interface CardMoneyBillDao {
 
 	Long count(CardMoneyBillSearchForm searchForm);
 
+	List<CardMoneyBill> listAllUnfinish();
+
 }

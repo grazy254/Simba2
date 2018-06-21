@@ -1,13 +1,28 @@
 package com.simba.service.impl;
 
+import java.io.IOException;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.http.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.DOMException;
+import org.xml.sax.SAXException;
 
+import com.simba.cache.Redis;
 import com.simba.controller.form.CardMoneyBillSearchForm;
 import com.simba.dao.CardMoneyBillDao;
+import com.simba.enterprise.pay.model.searchCard.SearchCardRes;
+import com.simba.enterprise.pay.util.send.WxEnterprisePayUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.CardMoneyBill;
 import com.simba.service.CardMoneyBillService;
@@ -21,9 +36,24 @@ import com.simba.service.CardMoneyBillService;
 @Service
 @Transactional
 public class CardMoneyBillServiceImpl implements CardMoneyBillService {
+	
+	private static final Log logger = LogFactory.getLog(CardMoneyBillServiceImpl.class);
+	
+	private WxEnterprisePayUtil wxEnterprisePayUtil;
 
 	@Autowired
 	private CardMoneyBillDao cardMoneyBillDao;
+	
+	@Resource
+	private Redis redisUtil;
+	
+	@Resource
+	private TaskExecutor taskExecutor;
+	
+	@PostConstruct
+	private void init() {
+		wxEnterprisePayUtil = WxEnterprisePayUtil.getInstance();
+	}
 
 	@Override
 	public void add(CardMoneyBill cardMoneyBill) {
@@ -166,5 +196,37 @@ public class CardMoneyBillServiceImpl implements CardMoneyBillService {
 	@Override
 	public List<CardMoneyBill> page(CardMoneyBillSearchForm searchForm, Pager pager) {
 		return cardMoneyBillDao.page(searchForm, pager);
+	}
+
+	@Override
+	public void checkUnfinishOrder() throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+		List<CardMoneyBill> list = this.listAllUnfinish();
+		for(CardMoneyBill bill : list) {
+			if (redisUtil.tryLock("wechatenterprisepaycard_" + bill.getId(), 60)) {
+				dealUnfinishOrder(bill);
+			}
+		}
+	}
+
+	private void dealUnfinishOrder(CardMoneyBill bill) {
+		taskExecutor.execute(() -> {
+			try {
+				dealUnfinishOrderBill(bill);
+			} catch (Exception e) {
+				logger.error("处理未完成的订单发生异常:" + bill.toString(), e);
+			}
+		});
+	}
+
+	private void dealUnfinishOrderBill(CardMoneyBill bill) throws ParseException, IOException {
+		SearchCardRes res = wxEnterprisePayUtil.searchCard(bill.getPartnerTradeNo());
+		String status = res.getStatus();
+		bill.setStatus(status);
+		this.update(bill);
+	}
+
+	@Override
+	public List<CardMoneyBill> listAllUnfinish() {
+		return cardMoneyBillDao.listAllUnfinish();
 	}
 }

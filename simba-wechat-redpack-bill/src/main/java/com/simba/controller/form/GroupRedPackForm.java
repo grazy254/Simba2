@@ -31,12 +31,12 @@ public class GroupRedPackForm {
 	/**
 	 * 总金额 (红包发放总金额，即一组红包金额总和，包括分享者的红包和裂变的红包，单位分 )
 	 */
-	private String total_amount;
+	private int total_amount;
 
 	/**
 	 * 红包发放总人数，即总共有多少人可以领到该组红包（包括分享者）
 	 */
-	private String total_num;
+	private int total_num;
 
 	/**
 	 * 红包金额设置方式
@@ -131,19 +131,19 @@ public class GroupRedPackForm {
 		this.re_openid = re_openid;
 	}
 
-	public String getTotal_amount() {
+	public int getTotal_amount() {
 		return total_amount;
 	}
 
-	public void setTotal_amount(String total_amount) {
+	public void setTotal_amount(int total_amount) {
 		this.total_amount = total_amount;
 	}
 
-	public String getTotal_num() {
+	public int getTotal_num() {
 		return total_num;
 	}
 
-	public void setTotal_num(String total_num) {
+	public void setTotal_num(int total_num) {
 		this.total_num = total_num;
 	}
 
@@ -209,6 +209,5 @@ public class GroupRedPackForm {
 				+ amt_type + ", wishing=" + wishing + ", act_name=" + act_name + ", remark=" + remark + ", scene_id=" + scene_id + ", risk_info=" + risk_info + ", consume_mch_id=" + consume_mch_id
 				+ "]";
 	}
-	
-	
+
 }

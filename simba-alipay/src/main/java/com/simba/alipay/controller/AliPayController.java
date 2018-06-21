@@ -46,7 +46,7 @@ public class AliPayController {
 	 * @param closeForm
 	 * @return
 	 */
-	@RequestMapping("close")
+	@RequestMapping("/close")
 	public JsonResult close(AliPayCloseForm closeForm) throws AlipayApiException {
 		aliPayService.close(closeForm);
 		return new JsonResult();
@@ -59,7 +59,7 @@ public class AliPayController {
 	 * @return
 	 * @throws AlipayApiException
 	 */
-	@RequestMapping("cancel")
+	@RequestMapping("/cancel")
 	public JsonResult cancel(AliPayCancelForm cancelForm) throws AlipayApiException {
 		aliPayService.cancel(cancelForm);
 		return new JsonResult();

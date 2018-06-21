@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.simba.controller.enums.RedPackBillStatus;
 import com.simba.controller.form.RedPackBillSearchForm;
 import com.simba.dao.RedPackBillDao;
 import com.simba.framework.util.jdbc.Jdbc;
@@ -231,5 +232,15 @@ public class RedPackBillDaoImpl implements RedPackBillDao {
 			param.setString(searchForm.getSendListId());
 		}
 		return sql;
+	}
+
+	@Override
+	public List<RedPackBill> listAllUnfinish() {
+		String sql = "select * from " + table + " where status in (?,?,?)";
+		StatementParameter params = new StatementParameter();
+		params.setString(RedPackBillStatus.SENDING.getName());
+		params.setString(RedPackBillStatus.SENT.getName());
+		params.setString(RedPackBillStatus.RFUND_ING.getName());
+		return jdbc.queryForList(sql, RedPackBill.class, params);
 	}
 }

@@ -1,15 +1,31 @@
 package com.simba.service.impl;
 
+import java.io.IOException;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.http.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.DOMException;
+import org.xml.sax.SAXException;
 
+import com.simba.cache.Redis;
 import com.simba.controller.form.RedPackBillSearchForm;
 import com.simba.dao.RedPackBillDao;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.RedPackBill;
+import com.simba.redpack.model.search.SearchReq;
+import com.simba.redpack.model.search.SearchRes;
+import com.simba.redpack.util.send.WxRedPackUtil;
 import com.simba.service.RedPackBillService;
 
 /**
@@ -22,8 +38,23 @@ import com.simba.service.RedPackBillService;
 @Transactional
 public class RedPackBillServiceImpl implements RedPackBillService {
 
+	private static final Log logger = LogFactory.getLog(RedPackBillServiceImpl.class);
+
+	private WxRedPackUtil wxRedPackUtil;
+
+	@Resource
+	private Redis redisUtil;
+
 	@Autowired
 	private RedPackBillDao redPackBillDao;
+
+	@Resource
+	private TaskExecutor taskExecutor;
+
+	@PostConstruct
+	private void init() {
+		wxRedPackUtil = WxRedPackUtil.getInstance();
+	}
 
 	@Override
 	public void add(RedPackBill redPackBill) {
@@ -166,5 +197,39 @@ public class RedPackBillServiceImpl implements RedPackBillService {
 	@Override
 	public Long count(RedPackBillSearchForm searchForm) {
 		return redPackBillDao.count(searchForm);
+	}
+
+	@Override
+	public void checkUnfinishOrder() throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+		List<RedPackBill> list = this.listAllUnfinish();
+		for (RedPackBill bill : list) {
+			if (redisUtil.tryLock("wechatredpackpay_" + bill.getId(), 60)) {
+				dealUnfinishOrder(bill);
+			}
+		}
+	}
+
+	private void dealUnfinishOrder(RedPackBill bill) {
+		taskExecutor.execute(() -> {
+			try {
+				dealUnfinishOrderBill(bill);
+			} catch (Exception e) {
+				logger.error("处理未完成的订单发生异常:" + bill.toString(), e);
+			}
+		});
+	}
+
+	private void dealUnfinishOrderBill(RedPackBill bill) throws ParseException, IOException {
+		SearchReq searchReq = new SearchReq();
+		searchReq.setMch_billno(bill.getBillNo());
+		SearchRes res = wxRedPackUtil.searchRedPack(searchReq);
+		String status = res.getStatus();
+		bill.setStatus(status);
+		this.update(bill);
+	}
+
+	@Override
+	public List<RedPackBill> listAllUnfinish() {
+		return redPackBillDao.listAllUnfinish();
 	}
 }

@@ -1,6 +1,13 @@
 package com.simba.service;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+
+import org.w3c.dom.DOMException;
+import org.xml.sax.SAXException;
 
 import com.simba.controller.form.LooseMoneyBillSearchForm;
 import com.simba.framework.util.jdbc.Pager;
@@ -64,4 +71,11 @@ public interface LooseMoneyBillService {
 
 	Long count(LooseMoneyBillSearchForm searchForm);
 
+	
+	/**
+	 * 查询未完成的订单，更新其状态
+	 */
+	void checkUnfinishOrder()throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException ;
+
+	List<LooseMoneyBill> listAllUnfinish();
 }

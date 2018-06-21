@@ -57,7 +57,12 @@ public class NormalRedPackReq {
 	 * 红包发放总人数 total_num=1
 	 * 
 	 */
-	private String total_amount;
+	private int total_num;
+
+	/**
+	 * 付款金额
+	 */
+	private int total_amount;
 
 	/**
 	 * 红包祝福语
@@ -183,11 +188,11 @@ public class NormalRedPackReq {
 		this.re_openid = re_openid;
 	}
 
-	public String getTotal_amount() {
+	public int getTotal_amount() {
 		return total_amount;
 	}
 
-	public void setTotal_amount(String total_amount) {
+	public void setTotal_amount(int total_amount) {
 		this.total_amount = total_amount;
 	}
 
@@ -245,6 +250,14 @@ public class NormalRedPackReq {
 
 	public void setConsume_mch_id(String consume_mch_id) {
 		this.consume_mch_id = consume_mch_id;
+	}
+
+	public int getTotal_num() {
+		return total_num;
+	}
+
+	public void setTotal_num(int total_num) {
+		this.total_num = total_num;
 	}
 
 	public String toXML() {

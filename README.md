@@ -1,24 +1,24 @@
-���ʹ��Spring Boot��Ϊ������ܣ�����Spring Cloud��΢����������Լ���װ�˳��õĸ��ֹ���������Լ�ͨ��ҵ��ģ��
-����ϵͳ����
-1. �������� 2.�û����� 3.��ɫ���� 4.Ȩ�޹��� 5.�˵����� 6.ҵ����� 7.ע�����͹���
-8. ע������� 9.�쳣��Ϣ���� 10.��־���� 11.������� 12.���ݿ��� 13����Ŀ�汾���� 14.������Ŀ
-15. App�汾���� 16.�ļ�������
+框架使用Spring Boot作为基础框架，集成Spring Cloud各微服务组件，以及封装了常用的各种功能组件，以及通用业务模块
+管理系统功能
+1. 机构管理 2.用户管理 3.角色管理 4.权限管理 5.菜单管理 6.业务管理 7.注册类型管理
+8. 注册表管理 9.异常信息管理 10.日志管理 11.任务管理 12.数据库监控 13。项目版本管理 14.创建项目
+15. App版本管理 16.文件管理等
 
-��Ŀ�ص�
-1. ����SpringBoot,���˴�����Ŀ���ú�maven����,������רע��ҵ�񿪷�,���صķְ���ʽ,����������
-2. ���Ƶ���־��¼��ϵ���ɼ�¼��¼��־��ҵ�������־���쳣��־�ʼ�����
-3. ����redis��Spring cache�����������ٶ�
-4. ���ú�̨����ϵͳ�Ļ������ܺ͸�Ч�Ĵ������ɹ��ߣ�һ������CRUD��ҳ��
-5. ��������ͳһ���쳣���ػ���
-6. ����websocket��thrift��groovy��ftp��httpclient��office�ȸ��ֹ���
-7. ����spring cloud�����Լ������ϵͳ������������쳣����ʼ�����
-8. ���ɰٶ�ai�ӿ�
-9. ���ɼ�����š������ƶ��ŷ���
-10. ���ɰ�����oss�ֲ�ʽ�ļ�ϵͳ
-11. ����zookeeper
-12. ����΢�Ź��ںš�΢��Ӳ��ƽ̨
-13. ����spring cloudӦ������
-14. ���ɰٶ����߱༭��ueditor
-15. �ֲ�ʽsession
-16. �۶ϻ���,����ע�������,���ؾ���
-17. ����Redis��zookeeper�ķֲ�ʽ����
+项目特点
+1. 基于SpringBoot,简化了大量项目配置和maven依赖,让您更专注于业务开发,独特的分包方式,代码多而不乱
+2. 完善的日志记录体系，可记录登录日志，业务操作日志，异常日志邮件提醒
+3. 集成redis，Spring cache，提升运行速度
+4. 内置后台管理系统的基础功能和高效的代码生成工具，一键生成CRUD及页面
+5. 控制器层统一的异常拦截机制
+6. 集成websocket、thrift、groovy、ftp、httpclient、office等各种工具
+7. 集成spring cloud，可以监控所有系统的运行情况，异常情况邮件提醒
+8. 集成百度ai接口
+9. 集成极光短信、阿里云短信服务
+10. 集成阿里云oss分布式文件系统
+11. 集成zookeeper
+12. 集成微信公众号、微信硬件平台
+13. 集成spring cloud应用网关
+14. 集成百度在线编辑器ueditor
+15. 分布式session
+16. 熔断机制,服务注册与调用,负载均衡
+17. 基于Redis和zookeeper的分布式锁等

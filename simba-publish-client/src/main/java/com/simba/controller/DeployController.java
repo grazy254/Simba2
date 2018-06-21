@@ -42,7 +42,7 @@ public class DeployController {
 	private static final Log logger = LogFactory.getLog(DeployController.class);
 
 	@RequestMapping("/rollback")
-	public JsonResult rollback(MultipartHttpServletRequest request, String[] fileNames, DeployForm deployForm) {
+	public JsonResult rollback(MultipartHttpServletRequest request, String[] fileNames, DeployForm deployForm) throws IOException {
 		checkIp(request);
 		checkSign(deployForm);
 		rollbackFiles(fileNames);
@@ -53,9 +53,63 @@ public class DeployController {
 	 * 回滚文件对应的服务
 	 * 
 	 * @param fileNames
+	 * @throws IOException
 	 */
-	private void rollbackFiles(String[] fileNames) {
+	private void rollbackFiles(String[] fileNames) throws IOException {
+		for (String fileName : fileNames) {
+			rollbackFile(fileName);
+		}
+	}
 
+	/**
+	 * 回滚文件对应的服务
+	 * 
+	 * @param fileName
+	 * @throws IOException
+	 */
+	private void rollbackFile(String fileName) throws IOException {
+		if (SystemUtil.isWindowsOs()) {
+			rollbackFileWindows(fileName);
+		} else {
+			rollbackFileLinux(fileName);
+		}
+	}
+
+	private void rollbackFileWindows(String fileName) throws IOException {
+		String serverDir = RegistryTableData.getInstance().get("autoDeployServerDir");
+		File backFile = new File(serverDir + "/" + fileName + ".bak");
+		if (!backFile.exists()) {
+			logger.error(backFile.getAbsolutePath() + "不存在，无法回滚");
+			return;
+		}
+		File jarFile = new File(serverDir + "/" + fileName);
+		FileUtils.copyFile(backFile, jarFile);
+		// 关闭运行的进程
+		killJarProcessWindows(fileName);
+		// 启动服务
+		int lastIndex = fileName.lastIndexOf(".");
+		String name = fileName.substring(0, lastIndex);
+		String scriptFile = serverDir + "/" + name + ".bat";
+		ExecuteUtil.executeBat(scriptFile);
+	}
+
+	private void rollbackFileLinux(String fileName) throws IOException {
+		String serverDir = RegistryTableData.getInstance().get("autoDeployServerDir");
+		File backFile = new File(serverDir + "/" + fileName + ".bak");
+		if (!backFile.exists()) {
+			logger.error(backFile.getAbsolutePath() + "不存在，无法回滚");
+			return;
+		}
+		File jarFile = new File(serverDir + "/" + fileName);
+		FileUtils.copyFile(backFile, jarFile);
+		// 关注运行的进程
+		killJarProcessLinux(fileName);
+		// 启动服务
+		int lastIndex = fileName.lastIndexOf(".");
+		String name = fileName.substring(0, lastIndex);
+		String scriptFile = serverDir + "/" + name + ".sh";
+		logger.info("启动服务:" + scriptFile);
+		ExecuteUtil.execute(scriptFile);
 	}
 
 	@RequestMapping("/receive")

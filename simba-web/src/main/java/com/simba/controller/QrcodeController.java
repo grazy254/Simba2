@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.zxing.NotFoundException;
 import com.google.zxing.WriterException;
 import com.simba.framework.util.code.QrcodeUtil;
 
@@ -60,9 +61,10 @@ public class QrcodeController {
 	 * @param file
 	 * @return
 	 * @throws IOException
+	 * @throws NotFoundException
 	 */
 	@RequestMapping("/read")
-	public String read(MultipartFile file) throws IOException {
+	public String read(MultipartFile file) throws IOException, NotFoundException {
 		return QrcodeUtil.read(file.getInputStream());
 	}
 

@@ -11,10 +11,19 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.Binarizer;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.MultiFormatReader;
 import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.Result;
 import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.HybridBinarizer;
 import com.simba.model.constant.ConstantData;
 
 /**
@@ -178,8 +187,19 @@ public class QrcodeUtil {
 	 * 
 	 * @param in
 	 * @return
+	 * @throws IOException
+	 * @throws NotFoundException
 	 */
-	public static String read(InputStream in) {
-		return "";
+	public static String read(InputStream in) throws IOException, NotFoundException {
+		BufferedImage image = ImageIO.read(in);
+		LuminanceSource source = new BufferedImageLuminanceSource(image);
+		Binarizer binarizer = new HybridBinarizer(source);
+		BinaryBitmap binaryBitmap = new BinaryBitmap(binarizer);
+		Map<DecodeHintType, Object> hints = new HashMap<>();
+		hints.put(DecodeHintType.CHARACTER_SET, ConstantData.DEFAULT_CHARSET);
+		MultiFormatReader formatReader = new MultiFormatReader();
+		Result result = formatReader.decode(binaryBitmap, hints);
+		return result.getText();
 	}
+
 }

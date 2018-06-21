@@ -10,6 +10,7 @@ import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import org.xml.sax.SAXException;
 import com.simba.cache.Redis;
 import com.simba.controller.form.LooseMoneyBillSearchForm;
 import com.simba.dao.LooseMoneyBillDao;
+import com.simba.enterprise.pay.model.searchloosemoney.SearchLooseMoneyRes;
 import com.simba.enterprise.pay.util.send.WxEnterprisePayUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.LooseMoneyBill;
@@ -198,6 +200,33 @@ public class LooseMoneyBillServiceImpl implements LooseMoneyBillService {
 
 	@Override
 	public void checkUnfinishOrder() throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
-		
+		List<LooseMoneyBill> list = this.listAllUnfinish();
+		for(LooseMoneyBill bill : list) {
+			if (redisUtil.tryLock("wechatenterprisepayloose_" + bill.getId(), 60)) {
+				dealUnfinishOrder(bill);
+			}
+		}
+	}
+
+	private void dealUnfinishOrder(LooseMoneyBill bill) {
+		taskExecutor.execute(() -> {
+			try {
+				dealUnfinishOrderBill(bill);
+			} catch (Exception e) {
+				logger.error("处理未完成的订单发生异常:" + bill.toString(), e);
+			}
+		});
+	}
+
+	private void dealUnfinishOrderBill(LooseMoneyBill bill) throws ParseException, IOException {
+		SearchLooseMoneyRes res = wxEnterprisePayUtil.searchLooseMoney(bill.getPartnerTradeNo());
+		String status = res.getStatus();
+		bill.setStatus(status);
+		this.update(bill);
+	}
+
+	@Override
+	public List<LooseMoneyBill> listAllUnfinish() {
+		return looseMoneyBillDao.listAllUnfinish();
 	}
 }

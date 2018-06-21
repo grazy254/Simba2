@@ -62,4 +62,6 @@ public interface LooseMoneyBillDao {
 
 	Long count(LooseMoneyBillSearchForm searchForm);
 
+	List<LooseMoneyBill> listAllUnfinish();
+
 }

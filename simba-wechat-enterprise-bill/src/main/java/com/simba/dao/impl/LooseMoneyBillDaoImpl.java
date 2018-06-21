@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.simba.controller.enums.LooseMoneyBillStatus;
 import com.simba.controller.form.LooseMoneyBillSearchForm;
 import com.simba.dao.LooseMoneyBillDao;
 import com.simba.framework.util.jdbc.Jdbc;
@@ -221,5 +222,13 @@ public class LooseMoneyBillDaoImpl implements LooseMoneyBillDao {
 			param.setString(searchForm.getPaymentNo());
 		}
 		return sql;
+	}
+
+	@Override
+	public List<LooseMoneyBill> listAllUnfinish() {
+		String sql = "select * from " + table + " where status in (?)";
+		StatementParameter params = new StatementParameter();
+		params.setString(LooseMoneyBillStatus.PROCESSING.getStatus());
+		return jdbc.queryForList(sql, LooseMoneyBill.class, params);
 	}
 }

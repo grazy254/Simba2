@@ -202,7 +202,7 @@ public class CardMoneyBillServiceImpl implements CardMoneyBillService {
 	public void checkUnfinishOrder() throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		List<CardMoneyBill> list = this.listAllUnfinish();
 		for(CardMoneyBill bill : list) {
-			if (redisUtil.tryLock("wechatenterprisepay_" + bill.getId(), 60)) {
+			if (redisUtil.tryLock("wechatenterprisepaycard_" + bill.getId(), 60)) {
 				dealUnfinishOrder(bill);
 			}
 		}
@@ -216,7 +216,6 @@ public class CardMoneyBillServiceImpl implements CardMoneyBillService {
 				logger.error("处理未完成的订单发生异常:" + bill.toString(), e);
 			}
 		});
-		
 	}
 
 	private void dealUnfinishOrderBill(CardMoneyBill bill) throws ParseException, IOException {

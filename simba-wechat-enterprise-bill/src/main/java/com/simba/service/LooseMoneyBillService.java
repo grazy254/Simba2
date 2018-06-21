@@ -77,4 +77,5 @@ public interface LooseMoneyBillService {
 	 */
 	void checkUnfinishOrder()throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException ;
 
+	List<LooseMoneyBill> listAllUnfinish();
 }

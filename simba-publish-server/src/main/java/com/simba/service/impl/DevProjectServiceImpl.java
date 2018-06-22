@@ -688,6 +688,11 @@ public class DevProjectServiceImpl implements DevProjectService {
 		String names = StringUtil.join(fileNames, ",");
 		Map<String, String> params = new HashMap<>(1);
 		params.put("fileNames", names);
+		String key = RegistryTableData.getInstance().get("autoDeployKey");
+		long time = System.currentTimeMillis();
+		String sign = EncryptUtil.md5(time + key);
+		params.put("sign", sign);
+		params.put("time", time + "");
 		for (ProjectServer server : servers) {
 			rollbackServer(params, server);
 		}

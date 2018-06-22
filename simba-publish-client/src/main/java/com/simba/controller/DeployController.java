@@ -42,7 +42,7 @@ public class DeployController {
 	private static final Log logger = LogFactory.getLog(DeployController.class);
 
 	@RequestMapping("/rollback")
-	public JsonResult rollback(MultipartHttpServletRequest request, String[] fileNames, DeployForm deployForm) throws IOException {
+	public JsonResult rollback(HttpServletRequest request, String[] fileNames, DeployForm deployForm) throws IOException {
 		checkIp(request);
 		checkSign(deployForm);
 		rollbackFiles(fileNames);
@@ -251,9 +251,8 @@ public class DeployController {
 		return StringUtil.getFirstNumber(line);
 	}
 
-	private void checkIp(MultipartHttpServletRequest request) {
-		HttpServletRequest r = (HttpServletRequest) request;
-		String ip = ServerUtil.getProxyIp(r);
+	private void checkIp(HttpServletRequest request) {
+		String ip = ServerUtil.getProxyIp(request);
 		logger.info("接收到" + ip + "发来的发布请求");
 		String ips = RegistryTableData.getInstance().get("autoDeployIps");
 		if (StringUtils.isBlank(ips)) {

@@ -13,6 +13,8 @@
 			<button type="button" class="btn btn-default btn-sm" onclick="DevProject.showPublishSome(${devProject.id});"><i class="fa fa-send"></i>发布某台服务器</button>
 			<button type="button" class="btn btn-default btn-sm" onclick="DevProject.publishAll(${devProject.id});"><i class="fa fa-upload"></i>发布所有关联服务器</button>
 			<button type="button" class="btn btn-default btn-sm" onclick="DevProject.copy(${devProject.id});"><i class="fa fa-copy"></i>拷贝配置</button>
+			<button type="button" class="btn btn-default btn-sm" onclick="DevProject.showRollbackSome(${devProject.id});"><i class="fa fa-mail-reply"></i>回滚某台服务器</button>
+			<button type="button" class="btn btn-default btn-sm" onclick="DevProject.rollbackAll(${devProject.id});"><i class="fa fa-reply-all"></i>回滚所有关联服务器</button>
 		</td>
 	</tr>
 </#list>

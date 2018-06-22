@@ -101,4 +101,8 @@ public interface DevProjectService {
 
 	void copy(Integer id) throws InvalidRemoteException, TransportException, GitAPIException, SVNException;
 
+	void rollback(int projectId, String[] serverIds);
+
+	void rollbackAll(int projectId);
+
 }

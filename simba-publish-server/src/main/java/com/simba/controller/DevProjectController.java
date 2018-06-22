@@ -196,6 +196,19 @@ public class DevProjectController {
 		return "devProject/publishSome";
 	}
 
+	@RequestMapping("/showRollbackSome")
+	public String showRollbackSome(int id, ModelMap model) {
+		List<ProjectServerRel> rels = projectServerRelService.listBy("projectId", id);
+		List<ProjectServer> servers = new ArrayList<>(rels.size());
+		rels.forEach((ProjectServerRel rel) -> {
+			ProjectServer server = projectServerService.get(rel.getServerId());
+			servers.add(server);
+		});
+		model.put("servers", servers);
+		model.put("id", id);
+		return "devProject/rollbackSome";
+	}
+
 	@ResponseBody
 	@RequestMapping("/publishSomeServers")
 	public JsonResult publishSomeServers(int projectId, String[] serverIds) throws IOException, WrongRepositoryStateException, InvalidConfigurationException, InvalidRemoteException, CanceledException,
@@ -208,6 +221,22 @@ public class DevProjectController {
 	@RequestMapping("/refreshCode")
 	public JsonResult refreshCode(int id) throws InvalidRemoteException, TransportException, GitAPIException, SVNException {
 		devProjectService.refreshCode(id);
+		return new JsonResult();
+	}
+
+	@ResponseBody
+	@RequestMapping("/rollbackSomeServers")
+	public JsonResult rollbackSomeServers(int projectId, String[] serverIds) throws IOException, WrongRepositoryStateException, InvalidConfigurationException, InvalidRemoteException,
+			CanceledException, RefNotFoundException, RefNotAdvertisedException, NoHeadException, TransportException, GitAPIException, SVNException {
+		devProjectService.rollback(projectId, serverIds);
+		return new JsonResult();
+	}
+	
+	@ResponseBody
+	@RequestMapping("/rollbackAll")
+	public JsonResult rollbackAll(int id) throws IOException, WrongRepositoryStateException, InvalidConfigurationException, InvalidRemoteException, CanceledException, RefNotFoundException,
+			RefNotAdvertisedException, NoHeadException, TransportException, GitAPIException, SVNException {
+		devProjectService.rollbackAll(id);
 		return new JsonResult();
 	}
 }

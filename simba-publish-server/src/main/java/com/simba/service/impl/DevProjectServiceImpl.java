@@ -38,6 +38,7 @@ import com.simba.dao.ProjectServerRelDao;
 import com.simba.exception.BussException;
 import com.simba.framework.util.code.EncryptUtil;
 import com.simba.framework.util.common.ExecuteUtil;
+import com.simba.framework.util.common.StringUtil;
 import com.simba.framework.util.common.SystemUtil;
 import com.simba.framework.util.common.ThreadUtil;
 import com.simba.framework.util.date.DateUtil;
@@ -68,6 +69,8 @@ public class DevProjectServiceImpl implements DevProjectService {
 	private static final Log logger = LogFactory.getLog(DevProjectServiceImpl.class);
 
 	private static final String deployUrl = "/deploy/receive";
+
+	private static final String rollbackUrl = "/deploy/rollback";
 
 	@Value("${auto.deploy.local.reps}")
 	private String repsDir;
@@ -419,7 +422,7 @@ public class DevProjectServiceImpl implements DevProjectService {
 
 	private void checkServers(List<ProjectServer> servers) {
 		if (servers == null || servers.size() == 0) {
-			throw new BussException("没有需要打包发布的服务器");
+			throw new BussException("没有绑定服务器");
 		}
 	}
 
@@ -431,6 +434,9 @@ public class DevProjectServiceImpl implements DevProjectService {
 	 */
 	private void publishPackageServers(DevProject devProject, List<ProjectServer> servers) {
 		List<ProjectPackageResult> res = projectPackageResultDao.listBy("projectId", devProject.getId());
+		if (res.isEmpty()) {
+			throw new BussException("没有需要发布的文件");
+		}
 		res.forEach((ProjectPackageResult r) -> {
 			publishServer(r, devProject, servers);
 		});
@@ -596,7 +602,7 @@ public class DevProjectServiceImpl implements DevProjectService {
 		if (StringUtils.isBlank(emails)) {
 			return;
 		}
-		String title = devProject.getName() + "打包发布完成[" + DateUtil.now() + "]";
+		String title = devProject.getName() + "发布完成[" + DateUtil.now() + "]";
 		String[] emailList = emails.split(",");
 		for (String email : emailList) {
 			if (StringUtils.isBlank(email)) {
@@ -636,4 +642,66 @@ public class DevProjectServiceImpl implements DevProjectService {
 		}
 		this.add(devProject, targetFile);
 	}
+
+	@Override
+	public void rollback(int projectId, String[] serverIds) {
+		List<ProjectServer> servers = new ArrayList<>();
+		for (String serverId : serverIds) {
+			ProjectServer server = projectServerDao.get(NumberUtils.toInt(serverId));
+			servers.add(server);
+		}
+		rollbackServers(this.get(projectId), servers);
+	}
+
+	@Override
+	public void rollbackAll(int projectId) {
+		List<ProjectServerRel> rels = projectServerRelDao.listBy("projectId", projectId);
+		List<ProjectServer> servers = new ArrayList<>(rels.size());
+		rels.forEach((ProjectServerRel rel) -> {
+			ProjectServer server = projectServerDao.get(rel.getServerId());
+			servers.add(server);
+		});
+		rollbackServers(this.get(projectId), servers);
+	}
+
+	/**
+	 * 回滚服务器
+	 * 
+	 * @param devProject
+	 * @param servers
+	 */
+	private void rollbackServers(DevProject devProject, List<ProjectServer> servers) {
+		checkServers(servers);
+		List<ProjectPackageResult> res = projectPackageResultDao.listBy("projectId", devProject.getId());
+		if (res.isEmpty()) {
+			throw new BussException("没有需要发布的文件");
+		}
+		List<String> fileNames = new ArrayList<>(res.size());
+		res.forEach((ProjectPackageResult result) -> {
+			String fileName = result.getFilePath();
+			int index = fileName.lastIndexOf("/");
+			if (index > -1) {
+				fileName = fileName.substring(index + 1);
+			}
+			fileNames.add(fileName);
+		});
+		String names = StringUtil.join(fileNames, ",");
+		Map<String, String> params = new HashMap<>(1);
+		params.put("fileNames", names);
+		for (ProjectServer server : servers) {
+			rollbackServer(params, server);
+		}
+		addLog(devProject);
+		taskExecutor.execute(() -> {
+			sendNotifyEmail(devProject);
+		});
+	}
+
+	private void rollbackServer(Map<String, String> params, ProjectServer server) {
+		String url = "http://" + server.getIp() + ":" + server.getPort() + rollbackUrl;
+		logger.info("开始回滚文件" + params.toString() + "到" + url);
+		String response = HttpClientUtil.post(url, params);
+		logger.info("结束回滚文件" + params.toString() + "到" + url + ",返回结果:" + response);
+	}
+
 }

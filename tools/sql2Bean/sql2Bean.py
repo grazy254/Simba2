@@ -4,6 +4,8 @@ import re
 import win32clipboard
 import natsort
 
+from shuogg import file_util
+
 package_name = 'com.simba'
 IS_SIMBA = True
 
@@ -150,12 +152,11 @@ def get_tables(sql_text):
     for per_table_ret in ret:
         table_name = per_table_ret[1].replace('\r', '').replace('\n', '')
         table_body = per_table_ret[2]
-        table_body_lines = list(
-            map(lambda x: x.strip(), table_body.strip().splitlines()))
+        table_body_lines = list(map(lambda x: x.strip(), table_body.strip().splitlines()))
         new_table = Table()
         # 遍历( ... )里面的每一行
+        key_names = []
         for line in table_body_lines:
-            key_names = []
             if 'primary key' in line:
                 key_names.append(line[line.find('(') + 1:line.find(')')])
             if 'key ' not in line:
@@ -165,8 +166,7 @@ def get_tables(sql_text):
                 field_tail = ret_line.group(3)
                 field_comment = '--'
                 if 'comment ' in field_tail:
-                    field_comment = re.search(
-                        r'[\w\s]+\'(.+)\'', line).group(1)
+                    field_comment = re.search(r'[\w\s]+\'(.+)\'', line).group(1)
                 new_field = Field(field_name, field_type, field_comment)
                 if 'not null' in line:
                     new_field.is_not_null = True
@@ -188,15 +188,18 @@ def get_tables(sql_text):
     return tables
 
 
-def sql_to_beans(sql_text):
+def sql_to_beans(sql_text, save_dir='./'):
     """
-    sql(可含多个表)转为javabeans并保存
-    :param sql_text:
+    sql(可含多个表)转为javabeans并保存到指定目录(默认当前目录)
+    :param sql_text: pdm的sql
+    :param save_dir:
     :return:
     """
     table_list = get_tables(sql_text)
     for table in table_list:
-        print(table_to_bean(table))
+        bean_str = table_to_bean(table)
+        file_name = table.name[0].upper() + table.name[1:] + '.java'
+        file_util.write_file_content(save_dir + file_name, bean_str)
 
 
 def table_to_bean(table):
@@ -205,12 +208,16 @@ def table_to_bean(table):
     :param table: Table obj
     :return: javaBean text
     """
+    # 生成package
     class_name = table.name[0].upper() + table.name[1:]
-    bean_content = 'package ' + package_name + '.model;\n'
+    package_line = 'package ' + package_name + '.model;\n'
+    bean_content = package_line
+    # 生成类注释
     bean_content += CLASS_COMMENT.format(table.comment)
     if IS_SIMBA:
         bean_content += DESC_ANNO.format(table.comment)
     bean_content += ('public class ' + class_name + ' {')
+    # 生成private type fieldName
     typefield_list = []
     for field in table.fields:
         real_type = get_field_type(field.type)
@@ -226,10 +233,23 @@ def table_to_bean(table):
     # 生成toString
     bean_content += gen_tostring(class_name, typefield_list)
     bean_content += '}'
+    # 生成import
+    import_lines = '\n'
+    if ' Date ' in bean_content:
+        import_lines += 'import java.util.Date;\n\n'
+    if IS_SIMBA:
+        import_lines += 'import com.simba.annotation.DescAnnotation;\n'
+    bean_content = insert_suffix(bean_content, package_line, import_lines)
+
     return bean_content
 
 
 def gen_getter_setter(typefield_list):
+    """
+    生成并返回getter setter
+    :param typefield_list: 字段类型+名的元组列表 eg:[(int,id), (String,name), (Date,createTime)]
+    :return: str
+    """
     getter_setter_list = []
     for type_field in typefield_list:
         gset = GETTER_SETTER.format(
@@ -239,6 +259,12 @@ def gen_getter_setter(typefield_list):
 
 
 def gen_tostring(class_name, typefield_list):
+    """
+    生成并返回tostring
+    :param class_name
+    :param typefield_list: 字段类型+名的元组列表 eg:[(int,id), (String,name), (Date,createTime)]
+    :return: str
+    """
     tostring = '\"' + class_name + '{\" +\n'
     tostring += '\t\t\"' + \
                 typefield_list[0][1] + '=\" + ' + typefield_list[0][1] + ' +\n'
@@ -253,6 +279,11 @@ def gen_tostring(class_name, typefield_list):
 
 
 def get_field_type(sql_type):
+    """
+    sql的类型映射到java的类型
+    :param sql_type:
+    :return: str
+    """
     sql_type = sql_type.lower()
     if 'varchar' in sql_type or 'text' == sql_type:
         return 'String'
@@ -270,9 +301,14 @@ def get_field_type(sql_type):
         return 'Date'
     if 'bool' in sql_type:
         return 'boolean'
+    raise RuntimeError('Unknown sql type:' + sql_type)
 
 
 def run_file_transfer():
+    """
+    对当前目录下的所有sql文件进行转换
+    :return:
+    """
     path_list = get_suffixfiles_fullpath('.sql')
     if len(path_list) > 0:
         for sql_file_path in path_list:

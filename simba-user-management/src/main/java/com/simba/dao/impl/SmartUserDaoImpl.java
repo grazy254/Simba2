@@ -28,10 +28,10 @@ public class SmartUserDaoImpl implements SmartUserDao {
     @Override
     public long add(SmartUser smartUser) {
         String sql = "insert into " + table
-                + "( account, name, email, telNo, password, createTime, status) values(?,?,?,?,?,?,?)";
+                + "( account, name, email, telNo, password, createTime, status,sex,groupId) values(?,?,?,?,?,?,?,?,?)";
         Number id = jdbc.updateForGeneratedKey(sql, smartUser.getAccount(), smartUser.getName(),
                 smartUser.getEmail(), smartUser.getTelNo(), smartUser.getPassword(),
-                smartUser.getCreateTime(), smartUser.getStatus());
+                smartUser.getCreateTime(), smartUser.getStatus(),smartUser.getSex(),smartUser.getGroupId());
         return id.longValue();
     }
 

@@ -337,7 +337,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 		}
 		
 		List<SmartUser> ulist = smartUserDao.listBy("account", mobile);
-		if (ulist.size() == 0) {
+		if (ulist.size() < 1) {
 			//把手机号写入数据表中
 			SmartUser user = new SmartUser();
 			user.setAccount(mobile);
@@ -352,11 +352,10 @@ public class SmartUserServiceImpl implements SmartUserService {
 			user.setStatus(0);
 			smartUserDao.add(user);
 			//返回用户ID
-			Long userId=smartUserDao.getBy("account", mobile).getId();
-			return new JsonResult("-1", userId+",账号"+mobile+"不存在,", 400);
+			return new JsonResult("-1",mobile+"不存在,", 400);
 		} else {
 			if(ulist.get(0).getPassword()==null ||ulist.get(0).getPassword().length()==0){
-				return new JsonResult("-2",ulist.get(0).getId()+",用户还未完善信息", 400);
+				return new JsonResult("-2","用户还未完善信息", 400);
 			}else{
 				return new JsonResult(ulist.get(0).getId(), "登录成功", 200);
 			}

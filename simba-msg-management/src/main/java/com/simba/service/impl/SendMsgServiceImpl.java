@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -215,6 +216,9 @@ public class SendMsgServiceImpl implements SendMsgService {
     private int increaseSendNum(int projectId, int increasement) {
         int sendAmount;
         Map<Integer, Integer> msgAmountMap = (Map<Integer, Integer>) redisUtil.get(RedisKey.DAY_AMOUNT);
+        if (msgAmountMap == null) {
+            msgAmountMap = new HashMap<>();
+        }
         if (msgAmountMap.get(projectId) == null) {
             sendAmount = 1;
             msgAmountMap.put(projectId, sendAmount);

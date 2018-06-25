@@ -1,5 +1,7 @@
 package com.simba.alipay.controller;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +25,8 @@ import com.simba.framework.util.json.JsonResult;
 @RequestMapping("/aliPay")
 public class AliPayController {
 
+	private static final Log logger = LogFactory.getLog(AliPayController.class);
+
 	@Autowired
 	private AliPayService aliPayService;
 
@@ -35,6 +39,7 @@ public class AliPayController {
 	 */
 	@RequestMapping("/appPay")
 	public JsonResult appPay(AppPayForm payForm) throws AlipayApiException {
+		logger.info("收到[支付订单]信息:" + payForm.toString());
 		payForm.setOutTradeNo(RandomUtil.random32Chars());
 		String result = aliPayService.appPay(payForm);
 		return new JsonResult(result);
@@ -48,6 +53,7 @@ public class AliPayController {
 	 */
 	@RequestMapping("/close")
 	public JsonResult close(AliPayCloseForm closeForm) throws AlipayApiException {
+		logger.info("收到[关闭订单]信息:" + closeForm.toString());
 		aliPayService.close(closeForm);
 		return new JsonResult();
 	}
@@ -61,6 +67,7 @@ public class AliPayController {
 	 */
 	@RequestMapping("/cancel")
 	public JsonResult cancel(AliPayCancelForm cancelForm) throws AlipayApiException {
+		logger.info("收到[撤销订单]信息:" + cancelForm.toString());
 		aliPayService.cancel(cancelForm);
 		return new JsonResult();
 	}
@@ -74,6 +81,7 @@ public class AliPayController {
 	 */
 	@RequestMapping("/refund")
 	public JsonResult refund(AliPayRefundForm refundForm) throws AlipayApiException {
+		logger.info("收到[退款]信息:" + refundForm.toString());
 		aliPayService.refund(refundForm);
 		return new JsonResult();
 	}

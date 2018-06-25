@@ -125,7 +125,8 @@ public class SendMsgServiceImpl implements SendMsgService {
     public ShortMessage resend(long msgId) {
         ShortMessage shortMessage = shortMessageService.get(msgId);
         MsgType platform = MsgType.getByType(shortMessage.getPlatform());
-        MsgTemplate template = templateService.getBy("selfId", shortMessage.getTemplateId());
+        String fieldName = platform.getType().equals("jpush") ? "jpushTemplateId" : "aliTemplateId";
+        MsgTemplate template = templateService.getBy(fieldName, shortMessage.getTemplateId());
         String realTemplateId = null;
         if (platform == MsgType.JPUSH) {
             realTemplateId = template.getJpushTemplateId();

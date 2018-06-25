@@ -347,6 +347,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 			user.setTelNo(mobile);
 			user.setSex(-1);
 			user.setGroupId(0);
+			user.setHeadPic("");;
 			user.setThirdSystem("");
 			user.setCreateTime(new Date());
 			user.setStatus(0);

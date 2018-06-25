@@ -72,7 +72,11 @@ public class SmartUser {
 	@DescAnnotation(desc = "性别")
 	private int sex;
 
-	
+	/**
+	 * 头像
+	 */
+	@DescAnnotation(desc = "头像")
+	private String headPic;
 	
 	//扩张属性----第三方系统用户ID和第三方系统名称
 	
@@ -162,6 +166,14 @@ public class SmartUser {
 		this.sex = sex;
 	}
 
+	public String getHeadPic() {
+		return headPic;
+	}
+
+	public void setHeadPic(String headPic) {
+		this.headPic = headPic;
+	}
+
 	public String getThirdSystem() {
 		return thirdSystem;
 	}
@@ -181,7 +193,7 @@ public class SmartUser {
 	@Override
 	public String toString() {
 		return "SmartUser [id=" + id + ", account=" + account + ", name=" + name + ", email=" + email + ", telNo=" + telNo + ", password=" + password + ", createTime=" + createTime + ", status="
-				+ status + ", groupId=" + groupId + ", sex=" + sex + ", thirdSystem=" + thirdSystem + ", group=" + group + "]";
+				+ status + ", groupId=" + groupId + ", sex=" + sex + ", headPic=" + headPic + ", thirdSystem=" + thirdSystem + ", group=" + group + "]";
 	}
 
 	

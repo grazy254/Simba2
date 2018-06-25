@@ -172,10 +172,10 @@ var ShortMessage = {
             dataType: "json",
             success: function (data) {
                 if (data.code == 200) {
-                    parent.showInfo("重发成功!");
+                    parent.showSuccessInfo("重发成功!");
                     ShortMessage.search(0,Page.size);
                 } else {
-                    parent.showInfo(data.msg);
+                    parent.showInfo('发送失败!'+data.msg);
                 }
             }
         });

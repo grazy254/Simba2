@@ -5,7 +5,21 @@
 		<td>${aliPayBill.body}</td>
 		<td>${aliPayBill.totalAmount}</td>
 		<td>${aliPayBill.subject}</td>
-		<td>${aliPayBill.status}</td>
+		<td>
+			<#if aliPayBill.status=='WAIT_BUYER_PAY'>
+				交易创建，等待买家付款
+			<#elseif aliPayBill.status=='TRADE_CLOSED'>
+				未付款交易超时关闭，或支付完成后全额退款
+			<#elseif aliPayBill.status=='TRADE_SUCCESS'>
+				交易支付成功
+			<#elseif aliPayBill.status=='TRADE_FINISHED'>
+				交易结束，不可退款
+			<#elseif aliPayBill.status=='REFUND'>
+				退款中
+			<#elseif aliPayBill.status=='REFUNDSUCCESS'>
+				退款成功
+			</#if>
+		</td>
 		<td>${aliPayBill.outTradeNo}</td>
 		<td>${aliPayBill.tradeNo}</td>
 		<td>${aliPayBill.productCode}</td>
@@ -15,10 +29,19 @@
 		<td>${aliPayBill.timeoutExpress}</td>
 		<td>${aliPayBill.createTime?string("yyyy-MM-dd HH:mm:ss")}</td>
 		<td>
-		<!--
-			<button type="button" class="btn btn-default btn-sm" onclick="AliPayBill.toUpdate(${aliPayBill.id});"><i class="fa fa-pencil-square-o"></i>修改</button>
-			<button type="button" class="btn btn-default btn-sm" onclick="AliPayBill.deleteAliPayBill(${aliPayBill.id});"><i class="fa fa-remove"></i>删除</button>
-		-->
+			<#if aliPayBill.status=='WAIT_BUYER_PAY'>
+				<button type="button" class="btn btn-default btn-sm" onclick="AliPayBill.toUpdate(${aliPayBill.id});"><i class="fa fa-pencil-square-o"></i>关闭</button>
+			<#elseif aliPayBill.status=='TRADE_CLOSED'>
+
+			<#elseif aliPayBill.status=='TRADE_SUCCESS'>
+					
+			<#elseif aliPayBill.status=='TRADE_FINISHED'>
+
+			<#elseif aliPayBill.status=='REFUND'>
+
+			<#elseif aliPayBill.status=='REFUNDSUCCESS'>
+
+			</#if>
 		</td>
 	</tr>
 </#list>

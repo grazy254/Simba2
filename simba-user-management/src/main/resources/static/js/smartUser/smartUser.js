@@ -21,9 +21,8 @@ var SmartUser = {
 			success: function(data) {
 				if(data.code == 200) {
 					top.showSuccessInfo(data.msg);
+					top.changeContentFrameUrl("/smartUser/list")
 					top.hideModal();
-					window.top.location.href = contextPath + "/smartUser/list";
-					
 					
 				} else {
 					alert(data.msg);

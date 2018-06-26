@@ -40,14 +40,7 @@
 											<label for="type">分组类型</label>
 											<input type="text" class="form-control" id="type" name="type" placeholder="请输入分组类型">
 										</div>
-										<div class="form-group">
-											<label for="creater">分组创建者</label>
-											<input type="text" class="form-control" id="creater" name="creater" placeholder="请输入分组创建者">
-										</div>
-										<div class="form-group">
-											<label for="createTime">createTime</label>
-											<input type="text" class="form-control" id="createTime" name="createTime" placeholder="请输入createTime">
-										</div>
+										
 									</div>
 									<!-- /.box-body -->
 

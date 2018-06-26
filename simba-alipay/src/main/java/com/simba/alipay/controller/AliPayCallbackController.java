@@ -14,6 +14,7 @@ import com.alipay.api.AlipayApiException;
 import com.simba.alipay.controller.form.AliPayCallbackForm;
 import com.simba.alipay.service.AliPayService;
 import com.simba.alipay.util.AliPayUtil;
+import com.simba.framework.util.collection.MapUtil;
 import com.simba.framework.util.common.BeanUtils;
 
 /**
@@ -86,6 +87,7 @@ public class AliPayCallbackController {
 	 */
 	private void checkSign(AliPayCallbackForm callbackForm) throws AlipayApiException {
 		Map<String, String> params = BeanUtils.xmlBean2Map(callbackForm);
+		MapUtil.removeNullEntry(params);
 		aliPayUtil.checkSign(params);
 	}
 }

@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.SmartGroup;
+import com.simba.model.SmartUser;
 import com.simba.service.SmartGroupService;
+import com.simba.service.SmartUserService;
 
 /**
  * 分组表控制器
@@ -26,6 +28,9 @@ public class SmartGroupController {
 
 	@Autowired
 	private SmartGroupService smartGroupService;
+	
+	@Autowired
+	private SmartUserService smartUserService;
 
 	@RequestMapping("/list")
 	public String list() {
@@ -49,6 +54,16 @@ public class SmartGroupController {
 	@RequestMapping("/toAdd")
 	public String toAdd() {
 		return "smartGroup/add";
+	}
+	
+	@RequestMapping("/toGroupList")
+	public String toGroupList(long smartUserId,ModelMap model) {
+		
+		SmartUser smartUser=smartUserService.get(smartUserId);
+		model.put("smartUser", smartUser);
+		List<SmartGroup> list = smartGroupService.listAll();
+		model.put("list", list);
+		return "smartGroup/toGroupList";
 	}
 
 	@RequestMapping("/add")

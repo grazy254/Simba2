@@ -36,7 +36,7 @@ public interface CallbackTradeInterface {
      * @return
      */
     JsonResult finishTrade(String userID, String orderNO, String channelOrderNO, String openID,
-            Date channelPaymentTime, String channelErrorMsg, String channelErrorCode,
-            long paymentAmount, TradeStatus tradeStatus);
+            Date channelStartTime, Date channelPaymentTime, String channelErrorMsg,
+            String channelErrorCode, long paymentAmount, TradeStatus tradeStatus);
 
 }

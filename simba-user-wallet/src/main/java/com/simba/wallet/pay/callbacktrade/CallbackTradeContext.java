@@ -23,11 +23,25 @@ public class CallbackTradeContext {
                 paymentAmount, channelStartTime);
     }
 
+    public JsonResult startTrade(String userID, String ip, String orderNO, long paymentAmount) {
+        return callbackTrade.startTrade(userID, ip, "", orderNO, "", "", "", paymentAmount,
+                paymentAmount, new Date());
+    }
+
+
     public JsonResult finishTrade(String userID, String orderNO, String channelOrderNO,
             String openID, Date channelPaymentTime, String channelErrorMsg, String channelErrorCode,
             long paymentAmount, TradeStatus tradeStatus) {
 
-        return callbackTrade.finishTrade(userID, orderNO, channelOrderNO, openID,
+        return callbackTrade.finishTrade(userID, orderNO, channelOrderNO, openID, null,
+                channelPaymentTime, channelErrorMsg, channelErrorCode, paymentAmount, tradeStatus);
+    }
+
+    public JsonResult finishTrade(String userID, String orderNO, String channelOrderNO,
+            String openID, Date channelStartTime, Date channelPaymentTime, String channelErrorMsg,
+            String channelErrorCode, long paymentAmount, TradeStatus tradeStatus) {
+
+        return callbackTrade.finishTrade(userID, orderNO, channelOrderNO, openID, channelStartTime,
                 channelPaymentTime, channelErrorMsg, channelErrorCode, paymentAmount, tradeStatus);
     }
 }

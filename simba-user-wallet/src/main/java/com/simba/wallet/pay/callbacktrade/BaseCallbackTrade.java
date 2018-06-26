@@ -78,6 +78,7 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
 
     }
 
+
     /**
      * 需要自己实现的后续交易操作
      * 
@@ -185,7 +186,10 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
         TradeChannelDetail tradeChannelDetail = new TradeChannelDetail();
         tradeChannelDetail.setChannelID(tradeChannel.getId());
         tradeChannelDetail.setTradeAccountID(channelTradeAccount.getAccountID());
-        tradeChannelDetail.setOrderCreateTime(channelStartTime);
+
+        if (channelStartTime != null) {
+            tradeChannelDetail.setOrderCreateTime(channelStartTime);
+        }
 
         Long tradeChannelDetailID = tradeChannelDetailDao.add(tradeChannelDetail);
         tradeChannelDetail.setId(tradeChannelDetailID);
@@ -237,9 +241,9 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
      * @return
      */
     protected JsonResult finishTrade(String userID, ChannelType channelType, String orderNO,
-            String channelOrderNO, String openID, Date channelPaymentTime, String channelErrorMsg,
-            String channelErrorCode, long paymentAmount, TradeStatus tradeStatus,
-            String tradeDeptNO) {
+            String channelOrderNO, String openID, Date channelStartTime, Date channelPaymentTime,
+            String channelErrorMsg, String channelErrorCode, long paymentAmount,
+            TradeStatus tradeStatus, String tradeDeptNO) {
 
         if (channelType == null) {
             throw ErrConfig.INVALID_CHANNEL;
@@ -249,6 +253,11 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
         if (tradeDetail == null) {
             throw ErrConfig.INVALID_ORDER;
         }
+
+        if (TradeStatus.SUCCESS.getName().equals(tradeDetail.getTradeStatus())) {
+            return new JsonResult("订单完成");
+        }
+
         TradeChannelDetail tradeChannelDetail =
                 tradeChannelDetailDao.get(tradeDetail.getTradeChannelID());
         TradeAccount smartUserTradeAccount = tradeAccountDao.get(userID, TradeUserType.PERSION);
@@ -261,6 +270,9 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
         tradeDetailDao.update(tradeDetail);
 
         tradeChannelDetail.setOrderNO(channelOrderNO);
+        if (channelStartTime != null) {
+            tradeChannelDetail.setOrderCreateTime(channelStartTime);
+        }
         tradeChannelDetail.setPaymentTime(channelPaymentTime);
         tradeChannelDetail.setOpenID(openID);
         tradeChannelDetail.setOrderNO(channelOrderNO);

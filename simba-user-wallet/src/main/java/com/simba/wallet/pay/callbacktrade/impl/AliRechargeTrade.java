@@ -19,7 +19,7 @@ import com.simba.wallet.util.Constants.TradeType;
  */
 @Service
 @Transactional
-public class WXRechargeTrade extends BaseCallbackTrade {
+public class AliRechargeTrade extends BaseCallbackTrade {
 
     @Override
     public void updateBalance(TradeAccount smartUserTradeAccount,
@@ -47,7 +47,7 @@ public class WXRechargeTrade extends BaseCallbackTrade {
             String channelErrorCode, long paymentAmount, TradeStatus tradeStatus) {
 
         return finishTrade(userID,
-                CommonUtil.getChannelType(RegistryUtil.get("trade.channel.wxpay")), orderNO,
+                CommonUtil.getChannelType(RegistryUtil.get("trade.channel.alipay")), orderNO,
                 channelOrderNO, openID, channelStartTime, channelPaymentTime, channelErrorMsg,
                 channelErrorCode, paymentAmount, tradeStatus,
                 RegistryUtil.get("trade.department.recharge"));
@@ -61,7 +61,7 @@ public class WXRechargeTrade extends BaseCallbackTrade {
         return startTrade(userID, ip, location, orderNO, orderName, orderDesc, orderAddress,
                 originalAmount, paymentAmount, new Date(), channelStartTime,
                 RegistryUtil.get("trade.department.recharge"),
-                CommonUtil.getChannelType(RegistryUtil.get("trade.channel.wxpay")),
+                CommonUtil.getChannelType(RegistryUtil.get("trade.channel.alipay")),
                 TradeType.RECHARGE);
     }
 

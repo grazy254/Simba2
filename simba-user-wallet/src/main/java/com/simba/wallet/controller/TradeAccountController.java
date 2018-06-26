@@ -154,7 +154,7 @@ public class TradeAccountController {
         if (tradeUser == null) {
             tradeAccountService.openAccount(smartUser.getAccount(), smartUser.getName(),
                     smartUser.getPassword(), smartUser.getTelNo(), smartUser.getEmail(),
-                    TradeUserType.PERSION, 1, 0, Constants.AccountActiveStatus.ACTIVE.getValue());
+                    TradeUserType.PERSION, 1, 1, Constants.AccountActiveStatus.ACTIVE.getValue());
         }
         TradeAccount smartUserTradeAccount =
                 tradeAccountService.get(smartUser.getAccount(), TradeUserType.PERSION);

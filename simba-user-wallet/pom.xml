@@ -33,6 +33,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.simba</groupId>
+			<artifactId>simba-alipay</artifactId>
+			<version>${simba.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
 			<artifactId>simba-wechat-pay-bill</artifactId>
 			<version>${simba.version}</version>
 		</dependency>

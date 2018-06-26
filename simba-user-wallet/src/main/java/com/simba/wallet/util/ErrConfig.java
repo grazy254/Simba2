@@ -45,6 +45,8 @@ public class ErrConfig {
     public final static BussException EXISTING_INVALID_PAYMENT = new BussException("有一笔异常支付");
     public final static BussException NO_ENOUGH_BALANCE = new BussException("余额不足");
 
+    public final static BussException CNY_PARSE_ERR = new BussException("元转换成分异常 ");
+
 
 
 }

@@ -1,6 +1,7 @@
 package com.simba.wallet.util;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 import com.relops.snowflake.Snowflake;
@@ -21,6 +22,11 @@ public class CommonUtil {
     public static String transToCNYType(Long amount) {
         DecimalFormat fmt = new DecimalFormat("0.00");
         return fmt.format(amount * 1.0 / 100) + "元";
+    }
+
+    public static Long CNYToLong(String amount) throws ParseException {
+        DecimalFormat fmt = new DecimalFormat("0.00");
+        return (long) (fmt.parse(amount).doubleValue() * 100);
     }
 
     public static String getTradeTypeValue(String tradeType) {

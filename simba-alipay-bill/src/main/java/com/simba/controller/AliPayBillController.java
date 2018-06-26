@@ -77,21 +77,13 @@ public class AliPayBillController {
 	@RequestMapping("/getList")
 	public String getList(Pager pager, ModelMap model) {
 		List<AliPayBill> list = aliPayBillService.page(pager);
-		setStatusDescription(list);
 		model.put("list", list);
 		return "aliPayBill/table";
-	}
-
-	private void setStatusDescription(List<AliPayBill> list) {
-		list.forEach((bill) -> {
-			bill.setStatus(TradeStatus.get(bill.getStatus()).getDescription() + "(" + bill.getStatus() + ")");
-		});
 	}
 
 	@RequestMapping("/doSearch")
 	public String getList(Pager pager, AliPayBillSearchForm aliPayBillSearchForm, ModelMap model) {
 		List<AliPayBill> list = aliPayBillService.page(pager, aliPayBillSearchForm);
-		setStatusDescription(list);
 		model.put("list", list);
 		return "aliPayBill/table";
 	}

@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +38,8 @@ import com.simba.util.send.WxPayUtil;
 @RequestMapping("/pay")
 public class PayController {
 
+	private static final Log logger = LogFactory.getLog(PayController.class);
+
 	@Value("${appID}")
 	private String appid;
 
@@ -60,6 +64,7 @@ public class PayController {
 	 */
 	@RequestMapping("/order")
 	public JsonResult order(HttpServletRequest request, UnifiedOrderReq req) {
+		logger.info("接收到微信[支付订单]:" + req.toString());
 		req.setAppid(appid);
 		req.setMch_id(mchId);
 		req.setOut_trade_no(RandomUtil.random32Chars());
@@ -103,6 +108,7 @@ public class PayController {
 	 */
 	@RequestMapping("/closeOrder")
 	public JsonResult closeOrder(String outTradeNo) {
+		logger.info("接收到微信[关闭订单]:" + outTradeNo);
 		payService.closeOrder(outTradeNo);
 		return new JsonResult();
 	}
@@ -117,6 +123,7 @@ public class PayController {
 	 */
 	@RequestMapping("/refund")
 	public JsonResult refund(RefundForm refundForm) throws ParseException, IOException {
+		logger.info("接收到微信[申请退款]:" + refundForm.toString());
 		refundForm.setOut_refund_no(RandomUtil.random32Chars());
 		RefundReq refundReq = new RefundReq();
 		refundReq.setDevice_info(refundForm.getDevice_info());

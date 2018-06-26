@@ -1,8 +1,4 @@
-/*==============================================================*/
-/* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/7/19 星期三 13:56:03                       */
-/*==============================================================*/
-
+drop table if exists group;
 
 drop table if exists project;
 
@@ -13,9 +9,9 @@ drop table if exists thirdSystemUser;
 drop table if exists userGroup;
 
 /*==============================================================*/
-/* Table: userGroup                                             */
+/* Table: group                                                 */
 /*==============================================================*/
-create table userGroup
+create table group
 (
    id                   bigint not null auto_increment,
    name                 varchar(64) comment '分组名称',
@@ -27,8 +23,7 @@ create table userGroup
    primary key (id)
 );
 
-alter table userGroup comment '用户分组';
-
+alter table group comment '分组表';
 
 /*==============================================================*/
 /* Table: project                                               */
@@ -62,6 +57,9 @@ create table smartUser
    password             varchar(128) comment '密码',
    createTime           datetime not null comment '注册时间',
    status               tinyint comment '状态',
+   sex                  int comment '性别',
+   groupId              bigint comment '分组id',
+   headPic              varchar(256) comment '头像',
    primary key (id),
    unique key AK_Key_Account (account)
 );
@@ -84,3 +82,16 @@ create table thirdSystemUser
 
 alter table thirdSystemUser comment '第三方系统用户';
 
+/*==============================================================*/
+/* Table: userGroup                                             */
+/*==============================================================*/
+create table userGroup
+(
+   id                   bigint not null auto_increment,
+   userId               bigint,
+   groupId              bigint,
+   createTime           datetime,
+   primary key (id)
+);
+
+alter table userGroup comment '用户分组关联表';

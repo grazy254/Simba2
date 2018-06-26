@@ -16,7 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
+import com.simba.alipay.controller.form.AliPayCallbackForm;
 import com.simba.alipay.enums.TradeStatus;
+import com.simba.alipay.service.AliPayService;
 import com.simba.alipay.util.AliPayUtil;
 import com.simba.cache.Redis;
 import com.simba.dao.AliPayBillDao;
@@ -48,6 +50,9 @@ public class AliPayBillServiceImpl implements AliPayBillService {
 
 	@Autowired
 	private AliPayUtil aliPayUtil;
+
+	@Autowired
+	private AliPayService aliPayService;
 
 	@Override
 	public void add(AliPayBill aliPayBill) {
@@ -209,11 +214,13 @@ public class AliPayBillServiceImpl implements AliPayBillService {
 	private void dealUnfinishOrder(AliPayBill bill) {
 		taskExecutor.execute(() -> {
 			try {
+				logger.info("开始处理未完成的订单:" + bill.toString());
 				if (TradeStatus.REFUND.getName().equals(bill.getStatus())) {
 					dealRefundOrder(bill);
 				} else {
 					dealUnpayOrder(bill);
 				}
+				logger.info("结束处理未完成的订单:" + bill.toString());
 			} catch (Exception e) {
 				logger.error("处理未完成的订单发生异常:" + bill.toString(), e);
 			}
@@ -223,14 +230,26 @@ public class AliPayBillServiceImpl implements AliPayBillService {
 	private void dealUnpayOrder(AliPayBill bill) throws AlipayApiException {
 		AlipayTradeQueryResponse response = aliPayUtil.query(bill.getOutTradeNo(), bill.getTradeNo());
 		bill.setStatus(response.getTradeStatus());
-		this.update(bill);
+		if (TradeStatus.SUCCESS.getName().equals(bill.getStatus())) {
+			AliPayCallbackForm callbackForm = new AliPayCallbackForm();
+			callbackForm.setOut_trade_no(bill.getOutTradeNo());
+			callbackForm.setTrade_status(TradeStatus.SUCCESS.getName());
+			callbackForm.setTotal_amount(bill.getTotalAmount());
+			aliPayService.dealCallback(callbackForm);
+		} else {
+			this.update(bill);
+		}
 	}
 
 	private void dealRefundOrder(AliPayBill bill) throws AlipayApiException {
 		AlipayTradeFastpayRefundQueryResponse response = aliPayUtil.refundQuery(bill.getTradeNo(), bill.getOutTradeNo(), null);
 		if (StringUtils.isNotEmpty(response.getTotalAmount())) {
-			bill.setStatus(TradeStatus.REFUNDSUCCESS.getName());
-			this.update(bill);
+			AliPayCallbackForm callbackForm = new AliPayCallbackForm();
+			callbackForm.setOut_trade_no(bill.getOutTradeNo());
+			callbackForm.setTrade_status(TradeStatus.REFUNDSUCCESS.getName());
+			callbackForm.setTotal_amount(bill.getTotalAmount());
+			callbackForm.setRefund_fee(bill.getTotalAmount());
+			aliPayService.dealCallback(callbackForm);
 		}
 	}
 

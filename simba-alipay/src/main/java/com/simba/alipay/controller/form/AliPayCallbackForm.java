@@ -89,7 +89,7 @@ public class AliPayCallbackForm {
 	private String trade_status;
 
 	/**
-	 * 本次交易支付的订单金额，单位为人民币（元）
+	 * 本次交易支付的订单金额，单位为人民币(分)
 	 */
 	private String total_amount;
 
@@ -114,7 +114,7 @@ public class AliPayCallbackForm {
 	private String point_amount;
 
 	/**
-	 * 退款通知中，返回总退款金额，单位为元，支持两位小数
+	 * 退款通知中，返回总退款金额，单位为分
 	 */
 	private String refund_fee;
 

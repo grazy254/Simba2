@@ -2,6 +2,7 @@ package com.simba.alipay.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,7 +55,10 @@ public class AliPayServiceImpl implements AliPayService {
 		model.setSubject(payForm.getSubject());
 		model.setOutTradeNo(payForm.getOutTradeNo());
 		model.setTimeoutExpress(payForm.getTimeoutExpress());
-		model.setTotalAmount(payForm.getTotalAmount());
+		String totalAmount = payForm.getTotalAmount();
+		int amonutFen = NumberUtils.toInt(totalAmount);
+		totalAmount = amonutFen * 1.0 / 100 + "";
+		model.setTotalAmount(totalAmount);
 		model.setProductCode(payForm.getProductCode());
 		return aliPayUtil.appPay(model).getBody();
 	}

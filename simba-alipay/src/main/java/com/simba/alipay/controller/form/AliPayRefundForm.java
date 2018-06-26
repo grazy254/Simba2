@@ -26,7 +26,7 @@ public class AliPayRefundForm {
 	/**
 	 * 本次退款金额
 	 */
-	private Integer refundAmount;
+	private String refundAmount;
 
 	public String getOutTradeNo() {
 		return outTradeNo;
@@ -52,11 +52,11 @@ public class AliPayRefundForm {
 		this.outRequestNo = outRequestNo;
 	}
 
-	public Integer getRefundAmount() {
+	public String getRefundAmount() {
 		return refundAmount;
 	}
 
-	public void setRefundAmount(Integer refundAmount) {
+	public void setRefundAmount(String refundAmount) {
 		this.refundAmount = refundAmount;
 	}
 

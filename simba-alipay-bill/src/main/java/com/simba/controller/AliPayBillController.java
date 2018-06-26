@@ -42,23 +42,28 @@ public class AliPayBillController {
 	public JsonResult close(long id) throws AlipayApiException {
 		AliPayBill bill = aliPayBillService.get(id);
 		AliPayCloseForm closeForm = new AliPayCloseForm();
+		closeForm.setOutTradeNo(bill.getOutTradeNo());
 		aliPayService.close(closeForm);
 		return new JsonResult();
 	}
 
 	@RequestMapping("/cancel")
 	@ResponseBody
-	public JsonResult cancel(long id) {
+	public JsonResult cancel(long id) throws AlipayApiException {
 		AliPayBill bill = aliPayBillService.get(id);
 		AliPayCancelForm cancelForm = new AliPayCancelForm();
+		cancelForm.setOutTradeNo(bill.getOutTradeNo());
+		aliPayService.cancel(cancelForm);
 		return new JsonResult();
 	}
 
 	@RequestMapping("/refund")
 	@ResponseBody
-	public JsonResult refund(long id) {
+	public JsonResult refund(long id) throws AlipayApiException {
 		AliPayRefundForm refundForm = new AliPayRefundForm();
 		AliPayBill bill = aliPayBillService.get(id);
+		refundForm.setOutTradeNo(bill.getOutTradeNo());
+		aliPayService.refund(refundForm);
 		return new JsonResult();
 	}
 

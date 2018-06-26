@@ -31,7 +31,7 @@ public class AliPayBill {
 	private String body;
 
 	/**
-	 * 订单总金额
+	 * 订单总金额(单位为分)
 	 */
 	@DescAnnotation(desc = "订单总金额")
 	private String totalAmount;

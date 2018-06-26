@@ -267,7 +267,7 @@ public class MenuController {
 	@ResponseBody
 	@RequestMapping("/delete")
 	public JsonResult delete(int id, ModelMap model) {
-		menuService.delete(id);
+		menuService.deleteRecur(id);
 		return new JsonResult();
 	}
 

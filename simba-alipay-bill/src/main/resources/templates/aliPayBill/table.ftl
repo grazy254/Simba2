@@ -31,12 +31,10 @@
 		<td>
 			<#if aliPayBill.status=='WAIT_BUYER_PAY'>
 				<button type="button" class="btn btn-default btn-sm" onclick="AliPayBill.close(${aliPayBill.id});"><i class="fa fa-close"></i>关闭</button>
-				<button type="button" class="btn btn-default btn-sm" onclick="AliPayBill.refund(${aliPayBill.id});"><i class="fa fa-close"></i>退款</button>
-				<button type="button" class="btn btn-default btn-sm" onclick="AliPayBill.cancel(${aliPayBill.id});"><i class="fa fa-close"></i>撤销</button>
 			<#elseif aliPayBill.status=='TRADE_CLOSED'>
 
 			<#elseif aliPayBill.status=='TRADE_SUCCESS'>
-					
+					<button type="button" class="btn btn-default btn-sm" onclick="AliPayBill.refund(${aliPayBill.id});"><i class="fa fa-close"></i>退款</button>
 			<#elseif aliPayBill.status=='TRADE_FINISHED'>
 
 			<#elseif aliPayBill.status=='REFUND'>

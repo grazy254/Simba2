@@ -30,7 +30,7 @@ public class AppPayForm {
 	private String timeoutExpress;
 
 	/**
-	 * 订单总金额，传入的参数单位为分，实际保存到支付宝单位为元，精确到小数点后两位，取值范围[0.01,100000000]
+	 * 订单总金额，传入的参数单位为分
 	 */
 	private String totalAmount;
 

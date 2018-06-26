@@ -1,6 +1,5 @@
 package com.simba.alipay.controller;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +40,6 @@ public class AliPayController {
 	@RequestMapping("/appPay")
 	public JsonResult appPay(AppPayForm payForm) throws AlipayApiException {
 		logger.info("收到[支付订单]信息:" + payForm.toString());
-		String totalAmount = payForm.getTotalAmount();
-		int amountFen = NumberUtils.toInt(totalAmount);
-		double amountYuan = amountFen * 1.0 / 100;
-		payForm.setTotalAmount(amountYuan + "");
 		payForm.setOutTradeNo(RandomUtil.random32Chars());
 		String result = aliPayService.appPay(payForm);
 		return new JsonResult(result);

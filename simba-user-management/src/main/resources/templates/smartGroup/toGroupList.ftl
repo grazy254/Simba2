@@ -41,14 +41,12 @@
 											<tr>
 												<th>分组名称</th>
 												<th>分组描述</th>
-												<th>分组状态</th>
 												<th>操作</th>
 											</tr>
 											<#list list as smartGroup>
 	<tr>
 		<td>${smartGroup.name}</td>
 		<td>${smartGroup.description}</td>
-		<td>${smartGroup.status}</td>
 		<td>
 		<button type="button" class="btn btn-default btn-sm" onclick="SmartUser.addUser2Group(${smartGroup.id},${smartUser.id});"><i class="fa fa-plus"></i>加入该分组</button>
 		</td>

@@ -61,9 +61,15 @@ public class AliPayUtil {
 	@Value("${alipay.appid}")
 	private String appId;
 
+	/**
+	 * 应用的私钥
+	 */
 	@Value("${alipay.private.key}")
 	private String privateKey;
 
+	/**
+	 * 支付宝的公钥
+	 */
 	@Value("${alipay.public.key}")
 	private String publicKey;
 

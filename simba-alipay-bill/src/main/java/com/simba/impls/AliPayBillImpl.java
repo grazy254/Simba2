@@ -55,6 +55,7 @@ public class AliPayBillImpl implements AliPayInterface {
 		bill.setTimeoutExpress(StringUtils.defaultString(payForm.getTimeoutExpress()));
 		bill.setCreateTime(new Date());
 		bill.setStatus(TradeStatus.PAY.getName());
+		bill.setStoreId(StringUtils.EMPTY);
 		aliPayBillService.add(bill);
 	}
 

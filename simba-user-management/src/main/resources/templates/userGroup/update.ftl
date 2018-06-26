@@ -20,22 +20,22 @@
 						<div class="col-md-12">
 							<div class="box box-primary">
 								<div class="box-header with-border">
-									<h3 class="box-title">修改用户分组</h3>
+									<h3 class="box-title">修改用户分组关联表</h3>
 								</div>
 								<form role="form" onsubmit="return UserGroup.checkForm();" id="form" action="${base}/userGroup/update">
 									<input type="hidden" id="id" name="id" value="${userGroup.id}" />
 									<div class="box-body">
 										<div class="form-group">
-											<label for="name">分组名称</label>
-											<input type="text" class="form-control" id="name" name="name" value="${userGroup.name}" placeholder="请输入分组名称">
+											<label for="userId">userId</label>
+											<input type="text" class="form-control" id="userId" name="userId" value="${userGroup.userId}" placeholder="请输入userId">
 										</div>
 										<div class="form-group">
-											<label for="description">分组描述</label>
-											<input type="text" class="form-control" id="description" name="description" value="${userGroup.description}" placeholder="请输入分组描述">
+											<label for="groupId">groupId</label>
+											<input type="text" class="form-control" id="groupId" name="groupId" value="${userGroup.groupId}" placeholder="请输入groupId">
 										</div>
 										<div class="form-group">
-											<label for="type">分组类型</label>
-											<input type="text" class="form-control" id="type" name="type" value="${userGroup.type}" placeholder="请输入分组类型">
+											<label for="createTime">createTime</label>
+											<input type="text" class="form-control" id="createTime" name="createTime" value="${userGroup.createTime}" placeholder="请输入createTime">
 										</div>
 									</div>
 									<!-- /.box-body -->

@@ -577,5 +577,20 @@ public class SmartUserServiceImpl implements SmartUserService {
 		smartUserDao.update(smartUser);
 		return new JsonResult("更新成功",200);
 	}
+	
+	/**
+	 * 根据UserId更新头像
+	 * @param name
+	 * @param userId
+	 * @return
+	 */
+	@Override
+	public JsonResult updateHeadPic(String headPic,long userId){
+		SmartUser smartUser=new SmartUser();
+		smartUser=smartUserDao.get(userId);
+		smartUser.setHeadPic(headPic);;
+		smartUserDao.update(smartUser);
+		return new JsonResult("更新成功",200);
+	}
 
 }

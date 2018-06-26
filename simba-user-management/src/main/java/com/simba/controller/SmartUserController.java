@@ -2,6 +2,7 @@ package com.simba.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -18,11 +19,10 @@ import com.simba.model.SmartUser;
 import com.simba.model.ThirdSystemUser;
 import com.simba.model.UserGroup;
 import com.simba.model.form.SmartUserSearchForm;
+import com.simba.service.SmartGroupService;
 import com.simba.service.SmartUserService;
 import com.simba.service.ThirdSystemUserService;
 import com.simba.service.UserGroupService;
-
-import ch.qos.logback.classic.Logger;
 
 /**
  * 用户控制器
@@ -42,6 +42,10 @@ public class SmartUserController {
 	
 	@Autowired
 	private UserGroupService userGroupService;
+	
+	@Autowired
+	private SmartGroupService smartGroupService;
+	
 
 	@Autowired
 	private static final Log logger = LogFactory.getLog(SmartUserController.class);
@@ -72,9 +76,11 @@ public class SmartUserController {
 	public JsonResult group(long groupId,long smartUserId){
 		List<SmartUser> smartUserList=smartUserService.listBy("id", smartUserId);
 		if(smartUserList.size()>0){
-			SmartUser smartUser=smartUserList.get(0);
-			smartUser.setGroupId(groupId);
-			smartUserService.update(smartUser);
+			UserGroup userGroup =new UserGroup();
+			userGroup.setUserId(smartUserId);
+			userGroup.setGroupId(groupId);
+			userGroup.setCreateTime(new Date());
+			userGroupService.add(userGroup);
 			return new JsonResult("分组成功",200);
 		}else{
 			return new JsonResult("此用户不存在",400);
@@ -94,9 +100,9 @@ public class SmartUserController {
 			}
 			smartuser.setThirdSystem(tsString);
 			String group="";
-			List <UserGroup> userGroupList =userGroupService.listBy("id", smartuser.getGroupId());
-			if(userGroupList.size()>0){
-				group=userGroupList.get(0).getName();
+			List <UserGroup> userGroupList =userGroupService.listBy("userId", smartuser.getId());
+			for(int i =0 ;i<userGroupList.size();i++){
+				group+=smartGroupService.get(userGroupList.get(i).getGroupId()).getName();
 			}
 			smartuser.setGroup(group);
 		});

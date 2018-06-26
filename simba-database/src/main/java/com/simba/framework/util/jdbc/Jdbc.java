@@ -114,6 +114,9 @@ public class Jdbc extends JdbcDaoSupport {
 	}
 
 	public <T> T query(String sql, Class<T> elementType) {
+		if (log) {
+			logger.info("sql:" + sql);
+		}
 		try {
 			return this.getJdbcTemplate().queryForObject(sql, new BeanPropertyRowMapper<T>(elementType));
 		} catch (Exception e) {
@@ -169,6 +172,9 @@ public class Jdbc extends JdbcDaoSupport {
 	}
 
 	public List<Map<String, Object>> queryForMaps(String sql) {
+		if (log) {
+			logger.info("sql:" + sql);
+		}
 		try {
 			List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sql);
 			return list;
@@ -179,6 +185,9 @@ public class Jdbc extends JdbcDaoSupport {
 	}
 
 	public List<Map<String, Object>> queryForMaps(String sql, Object... args) {
+		if (log) {
+			logger.info("sql:" + sql);
+		}
 		try {
 			List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sql, args);
 			return list;
@@ -189,6 +198,9 @@ public class Jdbc extends JdbcDaoSupport {
 	}
 
 	public Map<String, Object> queryForMap(String sql) {
+		if (log) {
+			logger.info("sql:" + sql);
+		}
 		try {
 			Map<String, Object> map = this.getJdbcTemplate().queryForMap(sql);
 			return map;
@@ -199,6 +211,9 @@ public class Jdbc extends JdbcDaoSupport {
 	}
 
 	public Map<String, Object> queryForMap(String sql, Object... args) {
+		if (log) {
+			logger.info("sql:" + sql);
+		}
 		try {
 			Map<String, Object> map = this.getJdbcTemplate().queryForMap(sql, args);
 			return map;
@@ -209,6 +224,9 @@ public class Jdbc extends JdbcDaoSupport {
 	}
 
 	public <T> List<T> queryForList(String sql, Class<T> elementType) {
+		if (log) {
+			logger.info("sql:" + sql);
+		}
 		try {
 			List<T> list = this.getJdbcTemplate().query(sql, new BeanPropertyRowMapper<T>(elementType));
 			if (log) {
@@ -222,6 +240,9 @@ public class Jdbc extends JdbcDaoSupport {
 	}
 
 	public List<Long> queryForLongs(String sql, StatementParameter param) {
+		if (log) {
+			logger.info("sql:" + sql);
+		}
 		List<Long> list = (List<Long>) super.getJdbcTemplate().query(sql, param.getArgs(), new RowMapper<Long>() {
 			public Long mapRow(ResultSet rs, int index) {
 				try {
@@ -572,9 +593,12 @@ public class Jdbc extends JdbcDaoSupport {
 	}
 
 	public int updateForRecord(String sql, Object... args) {
+		String sql1 = this.getSQL(sql, args);
+		if (log) {
+			logger.info("执行 sql:" + sql1);
+		}
 		int updatedCount = this.getJdbcTemplate().update(sql, args);
 		if (log) {
-			String sql1 = this.getSQL(sql, args);
 			logger.info("updatedCount:" + updatedCount + " sql:" + sql1);
 		}
 		return updatedCount;
@@ -587,6 +611,9 @@ public class Jdbc extends JdbcDaoSupport {
 	}
 
 	public int updateForRecord(String sql) {
+		if (log) {
+			logger.info("执行 sql:" + sql);
+		}
 		int updatedCount = this.getJdbcTemplate().update(sql);
 		if (log) {
 			logger.info("updatedCount:" + updatedCount + " sql:" + sql);
@@ -606,7 +633,9 @@ public class Jdbc extends JdbcDaoSupport {
 		return this.getClass().getName();
 	}
 
-	/********************************************* 分页查询A计划start ***************************************/
+	/*********************************************
+	 * 分页查询A计划start
+	 ***************************************/
 
 	/**
 	 * 拼装分页sql
@@ -654,8 +683,8 @@ public class Jdbc extends JdbcDaoSupport {
 	 * 分页查询
 	 * 
 	 * @param sql
-	 *            单表SELECT语句，代码从第一个“from(不区分大小写)”关键字开始截取，头尾添加select
-	 *            count(0)和limit ?,?进行查询
+	 *            单表SELECT语句，代码从第一个“from(不区分大小写)”关键字开始截取，头尾添加select count(0)和limit
+	 *            ?,?进行查询
 	 * @param elementType
 	 *            返回类型
 	 * @param pager
@@ -695,7 +724,9 @@ public class Jdbc extends JdbcDaoSupport {
 		}
 	}
 
-	/********************************************* 分页查询A计划end ***************************************/
+	/*********************************************
+	 * 分页查询A计划end
+	 ***************************************/
 
 	/**
 	 * 批量删除,默认删除的字段名为id(支持单条删除).
@@ -749,14 +780,16 @@ public class Jdbc extends JdbcDaoSupport {
 		return updateForBoolean(delSql.toString(), param);
 	}
 
-	/********************************************* 分页查询B计划start ***************************************/
+	/*********************************************
+	 * 分页查询B计划start
+	 ***************************************/
 
 	/**
 	 * 分页查询
 	 * 
 	 * @param sql
-	 *            单表SELECT语句，代码从第一个“from(不区分大小写)”关键字开始截取，头尾添加select
-	 *            count(0)和limit ?,?进行查询
+	 *            单表SELECT语句，代码从第一个“from(不区分大小写)”关键字开始截取，头尾添加select count(0)和limit
+	 *            ?,?进行查询
 	 * @param type
 	 *            返回类型
 	 * @param start
@@ -784,8 +817,8 @@ public class Jdbc extends JdbcDaoSupport {
 	 * 分页查询
 	 * 
 	 * @param sql
-	 *            单表SELECT语句，代码从第一个“from(不区分大小写)”关键字开始截取，头尾添加select
-	 *            count(0)和limit ?,?进行查询
+	 *            单表SELECT语句，代码从第一个“from(不区分大小写)”关键字开始截取，头尾添加select count(0)和limit
+	 *            ?,?进行查询
 	 * @param type
 	 *            返回类型
 	 * @param pageNo
@@ -960,6 +993,8 @@ public class Jdbc extends JdbcDaoSupport {
 
 	}
 
-	/********************************************* 分页查询B计划end ***************************************/
+	/*********************************************
+	 * 分页查询B计划end
+	 ***************************************/
 
 }

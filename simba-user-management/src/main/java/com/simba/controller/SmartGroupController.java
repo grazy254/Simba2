@@ -11,76 +11,76 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
-import com.simba.model.UserGroup;
-import com.simba.service.UserGroupService;
+import com.simba.model.SmartGroup;
+import com.simba.service.SmartGroupService;
 
 /**
- * 用户分组关联表控制器
+ * 分组表控制器
  * 
  * @author caozj
  * 
  */
 @Controller
-@RequestMapping("/userGroup")
-public class UserGroupController {
+@RequestMapping("/smartGroup")
+public class SmartGroupController {
 
 	@Autowired
-	private UserGroupService userGroupService;
+	private SmartGroupService smartGroupService;
 
 	@RequestMapping("/list")
 	public String list() {
-		return "userGroup/list";
+		return "smartGroup/list";
 	}
 	
 	@RequestMapping("/getList")
 	public String getList(Pager pager,ModelMap model){
-		List<UserGroup> list = userGroupService.page(pager);
+		List<SmartGroup> list = smartGroupService.page(pager);
 		model.put("list", list);
-		return "userGroup/table";
+		return "smartGroup/table";
 	}
 	
 	@ResponseBody
 	@RequestMapping("/count")
 	public JsonResult count() {
-		Long count = userGroupService.count();
+		Long count = smartGroupService.count();
 		return new JsonResult(count, "", 200);
 	}
 
 	@RequestMapping("/toAdd")
 	public String toAdd() {
-		return "userGroup/add";
+		return "smartGroup/add";
 	}
 
 	@RequestMapping("/add")
-	public String add(UserGroup userGroup) {
-		userGroupService.add(userGroup);
-		return "redirect:/userGroup/list";
+	public String add(SmartGroup smartGroup) {
+		smartGroupService.add(smartGroup);
+		return "redirect:/smartGroup/list";
 	}
 
 	@RequestMapping("/toUpdate")
 	public String toUpdate(Long id, ModelMap model) {
-		UserGroup userGroup = userGroupService.get(id);
-		model.put("userGroup", userGroup);
-		return "userGroup/update";
+		SmartGroup smartGroup = smartGroupService.get(id);
+		model.put("smartGroup", smartGroup);
+		return "smartGroup/update";
 	}
 
 	@RequestMapping("/update")
-	public String update(UserGroup userGroup) {
-		userGroupService.update(userGroup);
-		return "redirect:/userGroup/list";
+	public String update(SmartGroup smartGroup) {
+		smartGroupService.update(smartGroup);
+		return "redirect:/smartGroup/list";
 	}
 
 	@ResponseBody
 	@RequestMapping("/delete")
 	public JsonResult delete(Long id, ModelMap model) {
-		userGroupService.delete(id);
+		smartGroupService.delete(id);
 		return new JsonResult();
 	}
 
 	@ResponseBody
 	@RequestMapping("/batchDelete")
 	public JsonResult batchDelete(Long[] id, ModelMap model) {
-		userGroupService.batchDelete(Arrays.asList(id));
+		smartGroupService.batchDelete(Arrays.asList(id));
 		return new JsonResult();
 	}
 

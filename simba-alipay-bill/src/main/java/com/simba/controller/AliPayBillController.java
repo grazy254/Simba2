@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.simba.alipay.enums.TradeStatus;
+import com.simba.alipay.service.AliPayService;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.AliPayBill;
@@ -28,6 +29,27 @@ public class AliPayBillController {
 
 	@Autowired
 	private AliPayBillService aliPayBillService;
+
+	@Autowired
+	private AliPayService aliPayService;
+
+	@RequestMapping("/close")
+	@ResponseBody
+	public JsonResult close(long id) {
+		return new JsonResult();
+	}
+
+	@RequestMapping("/cancel")
+	@ResponseBody
+	public JsonResult cancel(long id) {
+		return new JsonResult();
+	}
+
+	@RequestMapping("/refund")
+	@ResponseBody
+	public JsonResult refund(long id) {
+		return new JsonResult();
+	}
 
 	@RequestMapping("/list")
 	public String list(ModelMap model) {

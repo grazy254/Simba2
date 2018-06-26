@@ -1,18 +1,19 @@
 package com.simba.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import com.simba.dao.UserGroupDao;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.UserGroup;
 import com.simba.service.UserGroupService;
+
 /**
- * 用户分组 Service实现类
+ * 用户分组关联表 Service实现类
  * 
  * @author caozj
  * 
@@ -26,8 +27,6 @@ public class UserGroupServiceImpl implements UserGroupService {
 
 	@Override
 	public void add(UserGroup userGroup) {
-		userGroup.setStatus(0);
-		userGroup.setCreateTime(new Date());
 		userGroupDao.add(userGroup);
 	}
 
@@ -47,7 +46,7 @@ public class UserGroupServiceImpl implements UserGroupService {
 	public List<UserGroup> page(Pager page) {
 		return userGroupDao.page(page);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public Long count() {
@@ -73,8 +72,6 @@ public class UserGroupServiceImpl implements UserGroupService {
 
 	@Override
 	public void update(UserGroup userGroup) {
-		userGroup.setStatus(0);
-		userGroup.setCreateTime(new Date());
 		userGroupDao.update(userGroup);
 	}
 	

@@ -4,8 +4,9 @@ import java.util.List;
 
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.UserGroup;
+
 /**
- * 用户分组 Dao
+ * 用户分组关联表 Dao
  * 
  * @author caozj
  * 
@@ -19,7 +20,7 @@ public interface UserGroupDao {
 	void delete(Long id);
 
 	List<UserGroup> listAll();
-	
+
 	Long count();
 	
 	Long countBy(String field, Object value);
@@ -35,7 +36,7 @@ public interface UserGroupDao {
 	void deleteByOr(String field1, Object value1, String field2, Object value2);
 	
 	List<UserGroup> page(Pager page);
-	
+
 	UserGroup get(Long id);
 	
 	UserGroup getBy(String field, Object value);
@@ -55,6 +56,7 @@ public interface UserGroupDao {
 	List<UserGroup> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
 
 	List<UserGroup> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
+	
 	
 
 }

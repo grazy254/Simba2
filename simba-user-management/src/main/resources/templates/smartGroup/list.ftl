@@ -9,7 +9,7 @@
 		<#include "../iCheck.ftl"/>
 		<script type="text/javascript" src="${base}/js/common/checkbox.js"></script>
 		<script type="text/javascript" src="${base}/js/common/page.js"></script>
-		<script type="text/javascript" src="${base}/js/userGroup/userGroup.js"></script>
+		<script type="text/javascript" src="${base}/js/smartGroup/smartGroup.js"></script>
 	</head>
 
 	<body>
@@ -21,15 +21,15 @@
 						<div class="col-md-12">
 							<div class="box box-primary">
 								<div class="box-header with-border">
-									<h3 class="box-title">用户分组关联表管理</h3>
+									<h3 class="box-title">分组表管理</h3>
 								</div>
 								<!-- /.box-header -->
 								<div class="box-body no-padding">
 									<div class="mailbox-controls">
 										<!-- Check all button -->
-										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="UserGroup.toAdd();"><i class="fa fa-plus"></i>
+										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="SmartGroup.toAdd();"><i class="fa fa-plus"></i>
                 新增</button>
-										<button type="button" class="btn btn-default btn-sm" onclick="UserGroup.batchDelete();"><i class="fa fa-remove"></i>删除</button>
+										<button type="button" class="btn btn-default btn-sm" onclick="SmartGroup.batchDelete();"><i class="fa fa-remove"></i>删除</button>
 										<div class="pull-right">
 
 										</div>
@@ -41,8 +41,11 @@
 										<thead>
 											<tr>
 												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
-												<th>userId</th>
-												<th>groupId</th>
+												<th>分组名称</th>
+												<th>分组描述</th>
+												<th>分组状态</th>
+												<th>分组类型</th>
+												<th>分组创建者</th>
 												<th>createTime</th>
 												<th>操作</th>
 											</tr>
@@ -74,7 +77,7 @@
 	</body>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			UserGroup.initUserGroupList(0, Page.size);
+			SmartGroup.initSmartGroupList(0, Page.size);
 		});
 	</script>
 

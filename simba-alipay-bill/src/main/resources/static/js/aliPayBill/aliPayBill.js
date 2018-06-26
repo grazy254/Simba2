@@ -1,8 +1,69 @@
 var AliPayBill = {
+
+	"close": function(id) {
+		$.ajax({
+			type: "post",
+			url: contextPath + "/aliPayBill/close",
+			data: {
+				"id": id
+			},
+			async: true,
+			dataType: "json",
+			success: function(data) {
+				if(data.code == 200) {
+					parent.showInfo("关闭订单成功");
+					AliPayBill.initAliPayBillList(0, Page.size, "doSearch");
+				} else {
+					parent.showInfo(data.msg);
+				}
+			}
+		});
+	},
+
+	"refund": function(id) {
+		$.ajax({
+			type: "post",
+			url: contextPath + "/aliPayBill/refund",
+			data: {
+				"id": id
+			},
+			async: true,
+			dataType: "json",
+			success: function(data) {
+				if(data.code == 200) {
+					parent.showInfo("退款提交成功");
+					AliPayBill.initAliPayBillList(0, Page.size, "doSearch");
+				} else {
+					parent.showInfo(data.msg);
+				}
+			}
+		});
+	},
+
+	"cancel": function(id) {
+		$.ajax({
+			type: "post",
+			url: contextPath + "/aliPayBill/cancel",
+			data: {
+				"id": id
+			},
+			async: true,
+			dataType: "json",
+			success: function(data) {
+				if(data.code == 200) {
+					parent.showInfo("撤销订单成功");
+					AliPayBill.initAliPayBillList(0, Page.size, "doSearch");
+				} else {
+					parent.showInfo(data.msg);
+				}
+			}
+		});
+	},
+
 	"toSearch": function() {
 		AliPayBill.initAliPayBillList(0, Page.size, "doSearch");
 	},
-	
+
 	"toAdd": function() {
 		window.self.location.href = contextPath + "/aliPayBill/toAdd";
 	},
@@ -45,7 +106,7 @@ var AliPayBill = {
 		data["startCreateTime"] = $("#startCreateTime").val();
 		data["endCreateTime"] = $("#endCreateTime").val();
 		data["status"] = $("#status").val();
-		$.extend(data2,data);
+		$.extend(data2, data);
 		data["pageStart"] = start;
 		data["pageSize"] = pageSize;
 		$.ajax({

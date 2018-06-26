@@ -1,7 +1,6 @@
 package com.simba.service.impl;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -23,7 +22,11 @@ import com.simba.dao.PayBillDao;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.PayBill;
 import com.simba.model.pay.orderquery.OrderQueryRes;
+import com.simba.model.pay.result.PayResult;
+import com.simba.model.pay.result.RefundCallbackInfo;
+import com.simba.model.pay.result.RefundResult;
 import com.simba.service.PayBillService;
+import com.simba.service.PayService;
 import com.simba.util.send.WxPayUtil;
 
 /**
@@ -46,6 +49,9 @@ public class PayBillServiceImpl implements PayBillService {
 
 	@Resource
 	private TaskExecutor taskExecutor;
+
+	@Autowired
+	private PayService payService;
 
 	@Override
 	public void add(PayBill payBill) {
@@ -213,11 +219,13 @@ public class PayBillServiceImpl implements PayBillService {
 	private void dealUnfinishOrder(PayBill bill) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		taskExecutor.execute(() -> {
 			try {
+				logger.info("开始处理未完成的订单:" + bill.toString());
 				if ("REFUND".equals(bill.getStatus())) {
 					dealRefundOrder(bill);
 				} else {
 					dealUnpayOrder(bill);
 				}
+				logger.info("结束处理未完成的订单:" + bill.toString());
 			} catch (Exception e) {
 				logger.error("处理未完成的订单发生异常:" + bill.toString(), e);
 			}
@@ -238,8 +246,14 @@ public class PayBillServiceImpl implements PayBillService {
 		OrderQueryRes res = WxPayUtil.getInstance().queryOrderByOutTradeNo(bill.getOutTradeNo());
 		String status = res.getTrade_state();
 		bill.setStatus(status);
-		bill.setCreateTime(new Date());
-		this.update(bill);
+		if ("SUCCESS".equals(status)) {
+			PayResult payResult = new PayResult();
+			payResult.setOut_trade_no(bill.getOutTradeNo());
+			payResult.setTotal_fee(bill.getFee());
+			payService.dealResult(payResult);
+		} else {
+			this.update(bill);
+		}
 	}
 
 	/**
@@ -254,9 +268,11 @@ public class PayBillServiceImpl implements PayBillService {
 	 */
 	private void dealRefundOrder(PayBill bill) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		WxPayUtil.getInstance().refundQueryByOutTradeNo(bill.getOutTradeNo());
-		bill.setStatus("REVOKED");
-		bill.setCreateTime(new Date());
-		this.update(bill);
+		RefundResult refundResult = new RefundResult();
+		RefundCallbackInfo callbackInfo = new RefundCallbackInfo();
+		callbackInfo.setOut_trade_no(bill.getOutTradeNo());
+		callbackInfo.setRefund_status("SUCCESS");
+		payService.dealRefundCallback(refundResult, callbackInfo);
 	}
 
 	@Override

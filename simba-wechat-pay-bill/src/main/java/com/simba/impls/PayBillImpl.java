@@ -30,7 +30,6 @@ public class PayBillImpl implements PayInterface {
 	@Override
 	public void dealResult(PayResult payResult) {
 		PayBill bill = payBillService.getBy("outTradeNo", payResult.getOut_trade_no());
-		bill.setCreateTime(new Date());
 		if (payResult.getResult_code().equals("SUCCESS") && payResult.getReturn_code().equals("SUCCESS")) {
 			bill.setStatus("SUCCESS");
 		} else {
@@ -70,7 +69,6 @@ public class PayBillImpl implements PayInterface {
 	@Override
 	public void close(String outTradeNo) {
 		PayBill bill = payBillService.getBy("outTradeNo", outTradeNo);
-		bill.setCreateTime(new Date());
 		bill.setStatus("CLOSED");
 		payBillService.update(bill);
 	}
@@ -78,7 +76,6 @@ public class PayBillImpl implements PayInterface {
 	@Override
 	public void refund(RefundReq refundReq) {
 		PayBill bill = payBillService.getBy("outTradeNo", refundReq.getOut_trade_no());
-		bill.setCreateTime(new Date());
 		bill.setStatus("REFUND");
 		bill.setAttach(bill.getAttach() + "(退款金额:" + refundReq.getRefund_fee() + "分)");
 		payBillService.update(bill);
@@ -93,7 +90,6 @@ public class PayBillImpl implements PayInterface {
 		} else {
 			bill.setStatus("SUCCESS");
 		}
-		bill.setCreateTime(new Date());
 		payBillService.update(bill);
 	}
 

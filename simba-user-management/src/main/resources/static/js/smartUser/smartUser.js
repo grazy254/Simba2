@@ -5,7 +5,31 @@ var SmartUser = {
 	},
 	
 	"toGroup": function(smartUserId) {
-		 top.showModal("选择分组", contextPath + "/userGroup/toGroupList?smartUserId="+smartUserId, 600);
+		 top.showModal("选择分组", contextPath + "/smartGroup/toGroupList?smartUserId="+smartUserId, 600);
+	},
+	
+	"addUser2Group":function(groupId,smartUserId){
+		$.ajax({
+			type: "post",
+			url: contextPath + "/smartUser/group",
+			data: {
+				"groupId": groupId,
+				"smartUserId":smartUserId
+			},
+			async: true,
+			dataType: "json",
+			success: function(data) {
+				if(data.code == 200) {
+					top.showSuccessInfo(data.msg);
+					top.hideModal();
+					window.top.location.href = contextPath + "/smartUser/list";
+					
+					
+				} else {
+					alert(data.msg);
+				}
+			}
+		});
 	},
 
 	"batchDelete": function() {

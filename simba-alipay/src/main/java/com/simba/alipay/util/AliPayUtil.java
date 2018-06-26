@@ -313,9 +313,7 @@ public class AliPayUtil {
 	 * @throws AlipayApiException
 	 */
 	public void checkSign(Map<String, String> params) throws AlipayApiException {
-		// 切记alipaypublickey是支付宝的公钥，请去open.alipay.com对应应用下查看。
-		// boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String
-		// publicKey, String charset, String sign_type)
+		logger.info("检查签名参数:" + params.toString());
 		boolean flag = AlipaySignature.rsaCheckV1(params, publicKey, ConstantData.DEFAULT_CHARSET, "RSA2");
 		if (!flag) {
 			throw new BussException("支付宝支付回调url签名错误，可能有人攻击");

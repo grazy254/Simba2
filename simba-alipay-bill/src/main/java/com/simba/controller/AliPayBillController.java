@@ -63,6 +63,7 @@ public class AliPayBillController {
 		AliPayRefundForm refundForm = new AliPayRefundForm();
 		AliPayBill bill = aliPayBillService.get(id);
 		refundForm.setOutTradeNo(bill.getOutTradeNo());
+		refundForm.setRefundAmount(bill.getTotalAmount());
 		aliPayService.refund(refundForm);
 		return new JsonResult();
 	}

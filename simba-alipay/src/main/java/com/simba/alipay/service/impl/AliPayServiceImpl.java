@@ -97,6 +97,10 @@ public class AliPayServiceImpl implements AliPayService {
 				imp.refund(refundForm);
 			});
 		}
+		String totalAmount = refundForm.getRefundAmount();
+		int amonutFen = NumberUtils.toInt(totalAmount);
+		totalAmount = amonutFen * 1.0 / 100 + "";
+		refundForm.setRefundAmount(totalAmount);
 		aliPayUtil.refund(refundForm.getOutTradeNo(), refundForm.getTradeNo(), refundForm.getOutRequestNo(), refundForm.getRefundAmount());
 	}
 

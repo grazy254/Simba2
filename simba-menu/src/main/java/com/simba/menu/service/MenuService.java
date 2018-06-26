@@ -18,7 +18,9 @@ public interface MenuService {
 
 	void delete(int id);
 
-	List<Menu> listChildren(int parentID);
+    void deleteRecur(int id);
+
+    List<Menu> listChildren(int parentID);
 
 	void batchDelete(List<Integer> ids);
 

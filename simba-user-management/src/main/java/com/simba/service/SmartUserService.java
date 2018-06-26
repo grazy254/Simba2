@@ -205,4 +205,12 @@ public interface SmartUserService {
 	 * @return
 	 */
 	JsonResult updateName(String name,long userId);
+	
+	/**
+	 * 根据UserId更新昵称
+	 * @param name
+	 * @param userId
+	 * @return
+	 */
+	JsonResult updateHeadPic(String headPic,long userId);
 }

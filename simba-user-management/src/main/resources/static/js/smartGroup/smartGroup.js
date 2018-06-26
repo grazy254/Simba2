@@ -1,12 +1,12 @@
-var UserGroup = {
+var SmartGroup = {
 
 	"toAdd": function() {
-		window.self.location.href = contextPath + "/userGroup/toAdd";
+		window.self.location.href = contextPath + "/smartGroup/toAdd";
 	},
 
 	"batchDelete": function() {
 		var ids = new Array();
-		$("input[name='userGroup']").each(function() {
+		$("input[name='smartGroup']").each(function() {
 			if(true == $(this).is(':checked')) {
 				ids.push($(this).val());
 			}
@@ -17,7 +17,7 @@ var UserGroup = {
 		}
 		$.ajax({
 			type: "post",
-			url: contextPath + "/userGroup/batchDelete",
+			url: contextPath + "/smartGroup/batchDelete",
 			data: {
 				"id": ids.join(",")
 			},
@@ -25,7 +25,7 @@ var UserGroup = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
-					UserGroup.initUserGroupList(0, Page.size);
+					SmartGroup.initSmartGroupList(0, Page.size);
 				} else {
 					parent.showInfo(data.msg);
 				}
@@ -33,10 +33,10 @@ var UserGroup = {
 		});
 	},
 
-	"initUserGroupList": function(start, pageSize) {
+	"initSmartGroupList": function(start, pageSize) {
 		$.ajax({
 			type: "get",
-			url: contextPath + "/userGroup/getList",
+			url: contextPath + "/smartGroup/getList",
 			data: {
 				"pageStart": start,
 				"pageSize": pageSize
@@ -51,7 +51,7 @@ var UserGroup = {
 		});
 		$.ajax({
 			type: "get",
-			url: contextPath + "/userGroup/count",
+			url: contextPath + "/smartGroup/count",
 			async: true,
 			data: {
 			},
@@ -59,24 +59,24 @@ var UserGroup = {
 			dataType: "json",
 			success: function(data) {
 				var total = data.data;
-				var pageHtml = Page.init(total, start, pageSize, "UserGroup.clickPager");
+				var pageHtml = Page.init(total, start, pageSize, "SmartGroup.clickPager");
 				$("#page").html(pageHtml);
 			}
 		});
 	},
 
 	"clickPager": function(start, pageSize) {
-		UserGroup.initUserGroupList(start, pageSize);
+		SmartGroup.initSmartGroupList(start, pageSize);
 	},
 
 	"toUpdate": function(id) {
-		window.self.location.href = contextPath + "/userGroup/toUpdate?id=" + id;
+		window.self.location.href = contextPath + "/smartGroup/toUpdate?id=" + id;
 	},
 
-	"deleteUserGroup": function(id) {
+	"deleteSmartGroup": function(id) {
 		$.ajax({
 			type: "post",
-			url: contextPath + "/userGroup/batchDelete",
+			url: contextPath + "/smartGroup/batchDelete",
 			data: {
 				"id": id
 			},
@@ -84,7 +84,7 @@ var UserGroup = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
-					UserGroup.initUserGroupList(0, Page.size);
+					SmartGroup.initSmartGroupList(0, Page.size);
 				} else {
 					parent.showInfo(data.msg);
 				}
@@ -97,7 +97,7 @@ var UserGroup = {
 	},
 
 	"toList": function() {
-		window.self.location.href = contextPath + "/userGroup/list";
+		window.self.location.href = contextPath + "/smartGroup/list";
 	},
 
 	"end": null

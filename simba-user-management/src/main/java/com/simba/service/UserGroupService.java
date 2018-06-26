@@ -4,8 +4,9 @@ import java.util.List;
 
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.UserGroup;
+
 /**
- *用户分组 Service
+ *用户分组关联表 Service
  * 
  * @author caozj
  * 
@@ -19,7 +20,7 @@ public interface UserGroupService {
 	void delete(Long id);
 
 	List<UserGroup> listAll();
-		
+
 	Long count();
 	
 	Long countBy(String field, Object value);
@@ -35,7 +36,7 @@ public interface UserGroupService {
 	void deleteByOr(String field1, Object value1, String field2, Object value2);
 	
 	List<UserGroup> page(Pager page);
-	
+
 	UserGroup get(Long id);
 	
 	void batchDelete(List<Long> idList);

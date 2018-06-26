@@ -9,6 +9,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alipay.api.AlipayApiException;
+import com.simba.alipay.controller.form.AliPayCancelForm;
+import com.simba.alipay.controller.form.AliPayCloseForm;
+import com.simba.alipay.controller.form.AliPayRefundForm;
 import com.simba.alipay.enums.TradeStatus;
 import com.simba.alipay.service.AliPayService;
 import com.simba.framework.util.jdbc.Pager;
@@ -35,19 +39,26 @@ public class AliPayBillController {
 
 	@RequestMapping("/close")
 	@ResponseBody
-	public JsonResult close(long id) {
+	public JsonResult close(long id) throws AlipayApiException {
+		AliPayBill bill = aliPayBillService.get(id);
+		AliPayCloseForm closeForm = new AliPayCloseForm();
+		aliPayService.close(closeForm);
 		return new JsonResult();
 	}
 
 	@RequestMapping("/cancel")
 	@ResponseBody
 	public JsonResult cancel(long id) {
+		AliPayBill bill = aliPayBillService.get(id);
+		AliPayCancelForm cancelForm = new AliPayCancelForm();
 		return new JsonResult();
 	}
 
 	@RequestMapping("/refund")
 	@ResponseBody
 	public JsonResult refund(long id) {
+		AliPayRefundForm refundForm = new AliPayRefundForm();
+		AliPayBill bill = aliPayBillService.get(id);
 		return new JsonResult();
 	}
 

@@ -70,7 +70,7 @@
 												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
 												<th>应用ID</th>
 												<th>描述</th>
-												<th>订单总金额</th>
+												<th>订单总金额(单位:分)</th>
 												<th>标题</th>
 												<th>状态</th>
 												<th>商户订单号</th>

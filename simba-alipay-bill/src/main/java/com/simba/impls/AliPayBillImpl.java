@@ -37,6 +37,8 @@ public class AliPayBillImpl implements AliPayInterface {
 		String outTradeNo = callbackForm.getOut_trade_no();
 		AliPayBill bill = aliPayBillService.getBy("outTradeNo", outTradeNo);
 		bill.setStatus(callbackForm.getTrade_status());
+		bill.setTradeNo(callbackForm.getTrade_no());
+		bill.setSellId(callbackForm.getSeller_id());
 		aliPayBillService.update(bill);
 	}
 

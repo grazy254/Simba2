@@ -81,6 +81,7 @@ public class SmartGroupController {
 
 	@RequestMapping("/update")
 	public String update(SmartGroup smartGroup) {
+		
 		smartGroupService.update(smartGroup);
 		return "redirect:/smartGroup/list";
 	}

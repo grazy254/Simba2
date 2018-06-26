@@ -1,11 +1,11 @@
 package com.simba.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import com.simba.dao.SmartGroupDao;
 import com.simba.framework.util.jdbc.Pager;
@@ -27,6 +27,10 @@ public class SmartGroupServiceImpl implements SmartGroupService {
 
 	@Override
 	public void add(SmartGroup smartGroup) {
+		smartGroup.setCreateTime(new Date());
+		smartGroup.setCreater("");
+		smartGroup.setType(0);
+		smartGroup.setStatus(0);
 		smartGroupDao.add(smartGroup);
 	}
 

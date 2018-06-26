@@ -95,13 +95,8 @@ public class SmartUserController {
 	@RequestMapping("/getList")
 	public String getList(Pager pager, SmartUserSearchForm searchForm, ModelMap model) {
 		List<SmartUser> list = smartUserService.page(pager, searchForm);
-		
 		list.forEach((smartuser) -> {
-			List<String> tslist =getTS(smartuser.getId());
 			String tsString="";
-//			for(int i=0;i<tslist.size();i++){
-//				tsString+=tslist.get(i)+",";
-//			}
 			smartuser.setThirdSystem(tsString);
 			String group="";
 			List <UserGroup> userGroupList =userGroupService.listBy("userId", smartuser.getId());
@@ -110,7 +105,6 @@ public class SmartUserController {
 			}
 			smartuser.setGroup(group);
 		});
-		logger.info("==============="+list);
 		model.put("list", list);
 		return "smartUser/table";
 	}

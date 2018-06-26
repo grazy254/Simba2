@@ -74,6 +74,10 @@ public class SmartUserController {
 	@ResponseBody
 	@RequestMapping("/group")
 	public JsonResult group(long groupId,long smartUserId){
+		List<UserGroup> userGroupList =userGroupService.listByAnd("groupId",groupId ,"userId", smartUserId);
+		if(userGroupList.size()>0){
+			return new JsonResult(1,"已在此分组",400);
+		}
 		List<SmartUser> smartUserList=smartUserService.listBy("id", smartUserId);
 		if(smartUserList.size()>0){
 			UserGroup userGroup =new UserGroup();
@@ -83,7 +87,7 @@ public class SmartUserController {
 			userGroupService.add(userGroup);
 			return new JsonResult("分组成功",200);
 		}else{
-			return new JsonResult("此用户不存在",400);
+			return new JsonResult(0,"此用户不存在",400);
 		}
 		
 	}
@@ -95,14 +99,14 @@ public class SmartUserController {
 		list.forEach((smartuser) -> {
 			List<String> tslist =getTS(smartuser.getId());
 			String tsString="";
-			for(int i=0;i<tslist.size();i++){
-				tsString+=tslist.get(i)+",";
-			}
+//			for(int i=0;i<tslist.size();i++){
+//				tsString+=tslist.get(i)+",";
+//			}
 			smartuser.setThirdSystem(tsString);
 			String group="";
 			List <UserGroup> userGroupList =userGroupService.listBy("userId", smartuser.getId());
 			for(int i =0 ;i<userGroupList.size();i++){
-				group+=smartGroupService.get(userGroupList.get(i).getGroupId()).getName();
+				group+=smartGroupService.get(userGroupList.get(i).getGroupId()).getName()+" ";
 			}
 			smartuser.setGroup(group);
 		});

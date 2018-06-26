@@ -36,6 +36,7 @@ public class PayBillImpl implements PayInterface {
 			bill.setStatus("PAYERROR");
 			bill.setErrMsg(payResult.getErr_code_des());
 		}
+		bill.setOpenid(payResult.getOpenid());
 		payBillService.update(bill);
 	}
 

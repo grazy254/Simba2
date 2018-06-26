@@ -20,6 +20,7 @@ import com.simba.common.EnvironmentUtil;
 import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.framework.util.common.PathUtil;
 import com.simba.framework.util.data.ThreadDataUtil;
+import com.simba.model.SmartUser;
 import com.simba.service.SmartUserService;
 
 /**
@@ -76,7 +77,10 @@ public class ThreadDataInterceptor implements HandlerInterceptor {
 			logger.info("userId:" +Long.parseLong(userId.toString()));
 			logger.info("userId:" +smartUserService);
 			ThreadDataUtil.set("account", smartUserService.get(Long.parseLong(userId.toString())));
-			logger.info("已写入线程变量 --key=account value="+smartUserService.get(Long.parseLong(userId.toString())));
+			SmartUser smartUser= smartUserService.get(Long.parseLong(userId.toString()));
+			//处于安全考虑，将密码设为空
+			smartUser.setPassword("");
+			logger.info("已写入线程变量 --key=account value="+smartUser);
 		}
 	}
 

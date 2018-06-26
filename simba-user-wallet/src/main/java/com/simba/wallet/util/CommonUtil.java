@@ -29,6 +29,15 @@ public class CommonUtil {
         return (long) (fmt.parse(amount).doubleValue() * 100);
     }
 
+    public static void main(String[] args) {
+        try {
+            System.out.println(CNYToLong("1.2332"));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
     public static String getTradeTypeValue(String tradeType) {
         if (TradeType.CONSUME.getName().equals(tradeType)) {
             return TradeType.CONSUME.getValue();

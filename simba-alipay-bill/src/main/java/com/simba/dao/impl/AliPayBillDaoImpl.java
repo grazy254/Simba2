@@ -54,20 +54,20 @@ public class AliPayBillDaoImpl implements AliPayBillDao {
 
 	@Override
 	public List<AliPayBill> page(Pager page) {
-		String sql = "select * from " + table;
+		String sql = "select * from " + table + " order by createTime desc";
 		return jdbc.queryForPage(sql, AliPayBill.class, page);
 	}
 
 	@Override
 	public List<AliPayBill> page(Pager page, AliPayBillSearchForm aliPayBillSearchForm) {
-		String sql = "select * from " + table;
+		String sql = "select * from " + table+" order by createTime desc";
 		StatementParameter param = new StatementParameter();
 		return jdbc.queryForPage(buildCondition(sql, aliPayBillSearchForm, param), AliPayBill.class, page, param);
 	}
 
 	@Override
 	public List<AliPayBill> listAll() {
-		String sql = "select * from " + table;
+		String sql = "select * from " + table+" order by createTime desc";
 		return jdbc.queryForList(sql, AliPayBill.class);
 	}
 
@@ -109,25 +109,25 @@ public class AliPayBillDaoImpl implements AliPayBillDao {
 
 	@Override
 	public List<AliPayBill> listBy(String field, Object value) {
-		String sql = "select * from " + table + " where " + field + " = ? ";
+		String sql = "select * from " + table + " where " + field + " = ? order by createTime desc";
 		return jdbc.queryForList(sql, AliPayBill.class, value);
 	}
 
 	@Override
 	public List<AliPayBill> listByAnd(String field1, Object value1, String field2, Object value2) {
-		String sql = "select * from " + table + " where " + field1 + " = ? and " + field2 + " = ? ";
+		String sql = "select * from " + table + " where " + field1 + " = ? and " + field2 + " = ? order by createTime desc";
 		return jdbc.queryForList(sql, AliPayBill.class, value1, value2);
 	}
 
 	@Override
 	public List<AliPayBill> listByOr(String field1, Object value1, String field2, Object value2) {
-		String sql = "select * from " + table + " where " + field1 + " = ? or " + field2 + " = ? ";
+		String sql = "select * from " + table + " where " + field1 + " = ? or " + field2 + " = ? order by createTime desc";
 		return jdbc.queryForList(sql, AliPayBill.class, value1, value2);
 	}
 
 	@Override
 	public List<AliPayBill> pageBy(String field, Object value, Pager page) {
-		String sql = "select * from " + table + " where " + field + " = ? ";
+		String sql = "select * from " + table + " where " + field + " = ? order by createTime desc";
 		StatementParameter param = new StatementParameter();
 		param.set(value);
 		return jdbc.queryForPage(sql, AliPayBill.class, page, param);
@@ -135,7 +135,7 @@ public class AliPayBillDaoImpl implements AliPayBillDao {
 
 	@Override
 	public List<AliPayBill> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page) {
-		String sql = "select * from " + table + " where " + field1 + " = ? and " + field2 + " = ? ";
+		String sql = "select * from " + table + " where " + field1 + " = ? and " + field2 + " = ? order by createTime desc";
 		StatementParameter param = new StatementParameter();
 		param.set(value1);
 		param.set(value2);
@@ -144,7 +144,7 @@ public class AliPayBillDaoImpl implements AliPayBillDao {
 
 	@Override
 	public List<AliPayBill> pageByOr(String field1, Object value1, String field2, Object value2, Pager page) {
-		String sql = "select * from " + table + " where " + field1 + " = ? or " + field2 + " = ? ";
+		String sql = "select * from " + table + " where " + field1 + " = ? or " + field2 + " = ? order by createTime desc";
 		StatementParameter param = new StatementParameter();
 		param.set(value1);
 		param.set(value2);
@@ -213,12 +213,13 @@ public class AliPayBillDaoImpl implements AliPayBillDao {
 			sql += " and createTime  <= ?";
 			param.set(aliPayBillSearchForm.getEndCreateTime());
 		}
+		sql += " order by createTime desc";
 		return sql;
 	}
 
 	@Override
 	public List<AliPayBill> listUnfinish() {
-		String sql = "select * from " + table + " where status in (?,?)";
+		String sql = "select * from " + table + " where status in (?,?) ";
 		StatementParameter params = new StatementParameter();
 		params.setString(TradeStatus.PAY.getName());
 		params.setString(TradeStatus.REFUND.getName());

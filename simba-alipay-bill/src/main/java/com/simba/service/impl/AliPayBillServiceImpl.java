@@ -230,6 +230,9 @@ public class AliPayBillServiceImpl implements AliPayBillService {
 	private void dealUnpayOrder(AliPayBill bill) throws AlipayApiException {
 		AlipayTradeQueryResponse response = aliPayUtil.query(bill.getOutTradeNo(), bill.getTradeNo());
 		bill.setStatus(response.getTradeStatus());
+		if (StringUtils.isEmpty(bill.getStatus())) {
+			return;
+		}
 		if (TradeStatus.SUCCESS.getName().equals(bill.getStatus())) {
 			AliPayCallbackForm callbackForm = new AliPayCallbackForm();
 			callbackForm.setOut_trade_no(bill.getOutTradeNo());

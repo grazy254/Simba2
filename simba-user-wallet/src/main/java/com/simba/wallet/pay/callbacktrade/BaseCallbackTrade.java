@@ -209,7 +209,7 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
         tradeDetail.setTradePartyID(tradePartyID);
         tradeDetail.setTradePaymentTime(now);
         tradeDetail.setTradePaymentDate(DateUtil.getOnlyDate(now));
-        tradeDetail.setTradeStatus(TradeStatus.SUCCESS.getName());
+        tradeDetail.setTradeStatus(TradeStatus.INPROCESS.getName());
         tradeDetail.setTradeType(tradeType.getName());
         tradeDetail.setChannelTradeUserID(channelTradeUser.getId());
         tradeDetail.setCounterpartyTradeUserID(departmentTradeUser.getId());
@@ -266,9 +266,6 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
         TradeAccount channelTradeAccount =
                 tradeAccountDao.get(channelType.getName(), TradeUserType.CHANNEL);
 
-        tradeDetail.setTradeStatus(tradeStatus.getName());
-        tradeDetailDao.update(tradeDetail);
-
         tradeChannelDetail.setOrderNO(channelOrderNO);
         if (channelStartTime != null) {
             tradeChannelDetail.setOrderCreateTime(channelStartTime);
@@ -286,6 +283,9 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
             tradeAccountDao.update(smartUserTradeAccount);
             tradeAccountDao.update(departmentTradeAccount);
             tradeAccountDao.update(channelTradeAccount);
+
+            tradeDetail.setTradeStatus(tradeStatus.getName());
+            tradeDetailDao.update(tradeDetail);
 
             return new JsonResult("订单完成");
         } else if (tradeStatus == TradeStatus.FAILED) {

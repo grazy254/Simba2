@@ -1,11 +1,13 @@
 package com.simba.wallet.pay.wechatpay;
 
 import java.util.Date;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.simba.framework.util.data.ThreadDataUtil;
 import com.simba.framework.util.date.DateUtil;
 import com.simba.interfaces.PayInterface;
+import com.simba.model.SmartUser;
 import com.simba.model.pay.refund.RefundReq;
 import com.simba.model.pay.result.PayResult;
 import com.simba.model.pay.result.RefundCallbackInfo;
@@ -24,9 +26,17 @@ public class TradeByWechatPay implements PayInterface {
     @Autowired
     private WXRefundTrade refundTrade;
 
-    private CallbackTradeContext rechargeContext = new CallbackTradeContext(rechargeTrade);
-    private CallbackTradeContext refundContext = new CallbackTradeContext(refundTrade);
-    private String userID = (String) ThreadDataUtil.get("account");
+
+    private CallbackTradeContext rechargeContext = null;
+    private CallbackTradeContext refundContext = null;
+
+
+    @PostConstruct
+    public void init() {
+        rechargeContext = new CallbackTradeContext(rechargeTrade);
+        refundContext = new CallbackTradeContext(refundTrade);
+    }
+
 
     @Override
     public void dealResult(PayResult payResult) {
@@ -34,7 +44,8 @@ public class TradeByWechatPay implements PayInterface {
         if (payResult.getTotal_fee() > 0) {
             status = TradeStatus.SUCCESS;
         }
-        rechargeContext.finishTrade(userID, payResult.getOut_trade_no(),
+        SmartUser user = (SmartUser) ThreadDataUtil.get("account");
+        rechargeContext.finishTrade(user.getAccount(), payResult.getOut_trade_no(),
                 payResult.getTransaction_id(), payResult.getOpenid(),
                 DateUtil.str2Date(payResult.getTime_end(), "yyyyMMddHHmmss"),
                 payResult.getErr_code_des(), payResult.getErr_code(), payResult.getTotal_fee(),
@@ -45,8 +56,10 @@ public class TradeByWechatPay implements PayInterface {
 
     @Override
     public void dealOrder(UnifiedOrderReq req, String prePayId, String codeUrl, String mwebUrl) {
-        rechargeContext.startTrade(userID, req.getSpbill_create_ip(), req.getOut_trade_no(),
-                req.getTotal_fee(), DateUtil.str2Date(req.getTime_start(), "yyyyMMddHHmmss"));
+        SmartUser user = (SmartUser) ThreadDataUtil.get("account");
+        rechargeContext.startTrade(user.getAccount(), req.getSpbill_create_ip(),
+                req.getOut_trade_no(), req.getTotal_fee(),
+                DateUtil.str2Date(req.getTime_start(), "yyyyMMddHHmmss"));
     }
 
     @Override
@@ -57,7 +70,8 @@ public class TradeByWechatPay implements PayInterface {
 
     @Override
     public void refund(RefundReq refundReq) {
-        refundContext.startTrade(userID, "", refundReq.getOut_trade_no(),
+        SmartUser user = (SmartUser) ThreadDataUtil.get("account");
+        refundContext.startTrade(user.getAccount(), "", refundReq.getOut_trade_no(),
                 refundReq.getRefund_fee());
 
     }
@@ -68,7 +82,8 @@ public class TradeByWechatPay implements PayInterface {
         if ("SUCCESS".equals(callbackInfo.getRefund_status())) {
             status = TradeStatus.SUCCESS;
         }
-        refundContext.finishTrade(userID, callbackInfo.getOut_trade_no(),
+        SmartUser user = (SmartUser) ThreadDataUtil.get("account");
+        refundContext.finishTrade(user.getAccount(), callbackInfo.getOut_trade_no(),
                 callbackInfo.getTransaction_id(), "", new Date(),
                 DateUtil.str2Date(callbackInfo.getSuccess_time(), "yyyy-MM-dd HH:mm:ss"), "", "",
                 callbackInfo.getRefund_fee(), status);

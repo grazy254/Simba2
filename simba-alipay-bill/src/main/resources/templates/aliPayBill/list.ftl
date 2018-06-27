@@ -68,7 +68,9 @@
 										<thead>
 											<tr>
 												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
+												<!-- 
 												<th>应用ID</th>
+												-->
 												<th>描述</th>
 												<th>订单总金额(单位:分)</th>
 												<th>标题</th>
@@ -76,8 +78,10 @@
 												<th>商户订单号</th>
 												<th>支付宝交易流水号</th>
 												<th>产品码</th>
+												<!--
 												<th>商品主类型</th>
 												<th>商户门店编号</th>
+												-->
 												<th>收款支付宝账号ID</th>
 												<th>最晚付款时间</th>
 												<th>订单时间</th>

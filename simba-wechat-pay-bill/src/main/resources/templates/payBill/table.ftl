@@ -11,14 +11,37 @@
 		<td>${payBill.tradeType}</td>
 		<td>${payBill.productId}</td>
 		<td>${payBill.openid}</td>
-		<td>${payBill.status}</td>
+		<td>
+			<#if payBill.status=='SUCCESS'>
+				支付成功
+			<#elseif payBill.status=='REFUND'>
+				转入退款
+			<#elseif payBill.status=='NOTPAY'>
+				未支付
+			<#elseif payBill.status=='CLOSED'>
+				已关闭
+			<#elseif payBill.status=='REVOKED'>
+				已撤销（刷卡支付）
+			<#elseif payBill.status=='USERPAYING'>
+				用户支付中
+			<#elseif payBill.status=='PAYERROR'>
+				支付失败
+			</#if>
+			
+		</td>
 		<td>${payBill.errMsg}</td>
 		<td>${payBill.createTime?string("yyyy-MM-dd HH:mm:ss")}</td>
 		<td>
-			<!--
-			<button type="button" class="btn btn-default btn-sm" onclick="PayBill.toUpdate(${payBill.id});"><i class="fa fa-pencil-square-o"></i>修改</button>
-			<button type="button" class="btn btn-default btn-sm" onclick="PayBill.deletePayBill(${payBill.id});"><i class="fa fa-remove"></i>删除</button>
-			-->
+			<#if payBill.status=='SUCCESS'>
+				<button type="button" class="btn btn-default btn-sm" onclick="PayBill.refund(${aliPayBill.id});"><i class="fa fa-close"></i>退款</button>
+			<#elseif payBill.status=='REFUND'>
+			<#elseif payBill.status=='NOTPAY'>
+			<#elseif payBill.status=='CLOSED'>
+			<#elseif payBill.status=='REVOKED'>
+			<#elseif payBill.status=='USERPAYING'>
+			<#elseif payBill.status=='PAYERROR'>
+				<button type="button" class="btn btn-default btn-sm" onclick="PayBill.close(${aliPayBill.id});"><i class="fa fa-close"></i>关闭</button>
+			</#if>
 		</td>
 	</tr>
 </#list>

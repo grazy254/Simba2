@@ -1,9 +1,13 @@
 package com.simba.controller;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.http.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,10 +15,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.simba.controller.enums.PayBillType;
 import com.simba.controller.form.PayBillSearchForm;
+import com.simba.framework.util.data.RandomUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.PayBill;
+import com.simba.model.pay.refund.RefundReq;
 import com.simba.service.PayBillService;
+import com.simba.service.PayService;
 
 /**
  * 支付账单控制器
@@ -26,8 +33,40 @@ import com.simba.service.PayBillService;
 @RequestMapping("/payBill")
 public class PayBillController {
 
+	@Value("${wx.pay.domain}")
+	private String wxPayDomain;
+
 	@Autowired
 	private PayBillService payBillService;
+
+	@Autowired
+	private PayService payService;
+
+	@RequestMapping("/close")
+	@ResponseBody
+	public JsonResult close(long id) {
+		PayBill bill = payBillService.get(id);
+		payService.closeOrder(bill.getOutTradeNo());
+		return new JsonResult();
+	}
+
+	@RequestMapping("/refund")
+	@ResponseBody
+	public JsonResult refund(long id) throws ParseException, IOException {
+		PayBill bill = payBillService.get(id);
+		RefundReq refundReq = new RefundReq();
+		refundReq.setDevice_info(bill.getDeviceInfo());
+		refundReq.setOp_user_id(StringUtils.EMPTY);
+		refundReq.setOut_refund_no(RandomUtil.random32Chars());
+		refundReq.setOut_trade_no(bill.getOutTradeNo());
+		refundReq.setRefund_account(StringUtils.EMPTY);
+		refundReq.setTransaction_id(StringUtils.EMPTY);
+		refundReq.setNotify_url(wxPayDomain + "/payCallback/refundReceive");
+		refundReq.setTotal_fee(bill.getFee());
+		refundReq.setRefund_fee(bill.getFee());
+		payService.refund(refundReq);
+		return new JsonResult();
+	}
 
 	@RequestMapping("/list")
 	public String list(ModelMap model) {

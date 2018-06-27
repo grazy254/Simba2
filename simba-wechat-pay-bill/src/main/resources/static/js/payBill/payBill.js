@@ -121,6 +121,46 @@ var PayBill = {
 	"toList": function() {
 		window.self.location.href = contextPath + "/payBill/list";
 	},
+	
+	"refund": function(id) {
+		$.ajax({
+			type: "post",
+			url: contextPath + "/payBill/refund",
+			data: {
+				"id": id
+			},
+			async: true,
+			dataType: "json",
+			success: function(data) {
+				if(data.code == 200) {
+					parent.showInfo("退款提交成功");
+					PayBill.search();
+				} else {
+					parent.showInfo(data.msg);
+				}
+			}
+		});
+	},
+	
+	"close": function(id) {
+		$.ajax({
+			type: "post",
+			url: contextPath + "/payBill/close",
+			data: {
+				"id": id
+			},
+			async: true,
+			dataType: "json",
+			success: function(data) {
+				if(data.code == 200) {
+					parent.showInfo("关闭订单成功");
+					PayBill.search();
+				} else {
+					parent.showInfo(data.msg);
+				}
+			}
+		});
+	},
 
 	"end": null
 };

@@ -5,8 +5,8 @@
 		<td>${payBill.detail}</td>
 		<td>${payBill.outTradeNo}</td>
 		<td>${payBill.fee}</td>
-		<td>${payBill.startTime}</td>
-		<td>${payBill.endTime}</td>
+		<td>${payBill.startTime?string("yyyy-MM-dd HH:mm:ss")}</td>
+		<td>${payBill.endTime?string("yyyy-MM-dd HH:mm:ss")}</td>
 		<td>${payBill.goodsTag}</td>
 		<td>${payBill.tradeType}</td>
 		<td>${payBill.productId}</td>

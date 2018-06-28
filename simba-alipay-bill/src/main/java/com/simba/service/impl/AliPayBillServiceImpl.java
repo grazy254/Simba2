@@ -1,6 +1,5 @@
 package com.simba.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -56,7 +55,6 @@ public class AliPayBillServiceImpl implements AliPayBillService {
 
 	@Override
 	public void add(AliPayBill aliPayBill) {
-		aliPayBill.setCreateTime(new Date());
 		aliPayBillDao.add(aliPayBill);
 	}
 
@@ -114,7 +112,6 @@ public class AliPayBillServiceImpl implements AliPayBillService {
 
 	@Override
 	public void update(AliPayBill aliPayBill) {
-		aliPayBill.setCreateTime(new Date());
 		aliPayBillDao.update(aliPayBill);
 	}
 

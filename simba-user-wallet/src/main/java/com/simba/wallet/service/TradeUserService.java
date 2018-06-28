@@ -4,6 +4,7 @@ import java.util.List;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.model.TradeUser;
+import com.simba.wallet.util.Constants.TradeType;
 import com.simba.wallet.util.Constants.TradeUserType;
 
 /**
@@ -70,4 +71,6 @@ public interface TradeUserService {
     JsonResult activatePayment(String userID, TradeUserType userType);
 
     JsonResult frozePayment(String userID, TradeUserType userType);
+
+    TradeUser getByOrderNO(String orderNO, TradeType tradeType);
 }

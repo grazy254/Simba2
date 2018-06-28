@@ -1,7 +1,9 @@
 <#list list as aliPayBill>
 	<tr>
 		<td><input type="checkbox" name="aliPayBill" value="${aliPayBill.id}"></td>
+		<!-- 
 		<td>${aliPayBill.appid}</td>
+		-->
 		<td>${aliPayBill.body}</td>
 		<td>${aliPayBill.totalAmount}</td>
 		<td>${aliPayBill.subject}</td>
@@ -23,8 +25,10 @@
 		<td>${aliPayBill.outTradeNo}</td>
 		<td>${aliPayBill.tradeNo}</td>
 		<td>${aliPayBill.productCode}</td>
+		<!--
 		<td>${aliPayBill.goodType}</td>
 		<td>${aliPayBill.storeId}</td>
+		-->
 		<td>${aliPayBill.sellId}</td>
 		<td>${aliPayBill.timeoutExpress}</td>
 		<td>${aliPayBill.createTime?string("yyyy-MM-dd HH:mm:ss")}</td>

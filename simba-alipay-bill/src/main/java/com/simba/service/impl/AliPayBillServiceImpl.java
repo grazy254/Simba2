@@ -1,6 +1,5 @@
 package com.simba.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -56,7 +55,6 @@ public class AliPayBillServiceImpl implements AliPayBillService {
 
 	@Override
 	public void add(AliPayBill aliPayBill) {
-		aliPayBill.setCreateTime(new Date());
 		aliPayBillDao.add(aliPayBill);
 	}
 
@@ -114,7 +112,6 @@ public class AliPayBillServiceImpl implements AliPayBillService {
 
 	@Override
 	public void update(AliPayBill aliPayBill) {
-		aliPayBill.setCreateTime(new Date());
 		aliPayBillDao.update(aliPayBill);
 	}
 
@@ -230,6 +227,9 @@ public class AliPayBillServiceImpl implements AliPayBillService {
 	private void dealUnpayOrder(AliPayBill bill) throws AlipayApiException {
 		AlipayTradeQueryResponse response = aliPayUtil.query(bill.getOutTradeNo(), bill.getTradeNo());
 		bill.setStatus(response.getTradeStatus());
+		if (StringUtils.isEmpty(bill.getStatus())) {
+			return;
+		}
 		if (TradeStatus.SUCCESS.getName().equals(bill.getStatus())) {
 			AliPayCallbackForm callbackForm = new AliPayCallbackForm();
 			callbackForm.setOut_trade_no(bill.getOutTradeNo());
@@ -242,7 +242,7 @@ public class AliPayBillServiceImpl implements AliPayBillService {
 	}
 
 	private void dealRefundOrder(AliPayBill bill) throws AlipayApiException {
-		AlipayTradeFastpayRefundQueryResponse response = aliPayUtil.refundQuery(bill.getTradeNo(), bill.getOutTradeNo(), null);
+		AlipayTradeFastpayRefundQueryResponse response = aliPayUtil.refundQuery(bill.getTradeNo(), bill.getOutTradeNo(), bill.getOutTradeNo());
 		if (StringUtils.isNotEmpty(response.getTotalAmount())) {
 			AliPayCallbackForm callbackForm = new AliPayCallbackForm();
 			callbackForm.setOut_trade_no(bill.getOutTradeNo());

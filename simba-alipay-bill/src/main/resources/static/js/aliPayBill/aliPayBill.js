@@ -11,8 +11,8 @@ var AliPayBill = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
-					parent.showInfo("关闭订单成功");
-					AliPayBill.initAliPayBillList(0, Page.size, "doSearch");
+					parent.showSuccessInfo("关闭订单成功");
+					AliPayBill.toSearch();
 				} else {
 					parent.showInfo(data.msg);
 				}
@@ -31,8 +31,8 @@ var AliPayBill = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
-					parent.showInfo("退款提交成功");
-					AliPayBill.initAliPayBillList(0, Page.size, "doSearch");
+					parent.showSuccessInfo("退款提交成功");
+					AliPayBill.toSearch();
 				} else {
 					parent.showInfo(data.msg);
 				}
@@ -51,8 +51,8 @@ var AliPayBill = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
-					parent.showInfo("撤销订单成功");
-					AliPayBill.initAliPayBillList(0, Page.size, "doSearch");
+					parent.showSuccessInfo("撤销订单成功");
+					AliPayBill.toSearch();
 				} else {
 					parent.showInfo(data.msg);
 				}
@@ -89,7 +89,8 @@ var AliPayBill = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
-					AliPayBill.initAliPayBillList(0, Page.size);
+					parent.showSuccessInfo("删除订单成功");
+					AliPayBill.toSearch();
 				} else {
 					parent.showInfo(data.msg);
 				}
@@ -153,7 +154,8 @@ var AliPayBill = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
-					AliPayBill.initAliPayBillList(0, Page.size);
+					parent.showSuccessInfo("删除订单成功");
+					AliPayBill.toSearch();
 				} else {
 					parent.showInfo(data.msg);
 				}

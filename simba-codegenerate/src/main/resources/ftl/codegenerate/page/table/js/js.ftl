@@ -30,7 +30,7 @@ var ${className} = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
-					${className}.init${className}List(0, Page.size);
+					${className}.init${className}List(0, Page.size<#if isSearch == true>, "doSearch"</#if>);
 				} else {
 					parent.showInfo(data.msg);
 				}
@@ -93,7 +93,7 @@ var ${className} = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
-					${className}.init${className}List(0, Page.size);
+					${className}.init${className}List(0, Page.size<#if isSearch == true>, "doSearch"</#if>);
 				} else {
 					parent.showInfo(data.msg);
 				}

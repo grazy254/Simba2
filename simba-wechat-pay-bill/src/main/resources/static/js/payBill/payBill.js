@@ -29,6 +29,7 @@ var PayBill = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
+					parent.showSuccessInfo("关闭订单成功");
 					PayBill.initPayBillList(0, Page.size);
 				} else {
 					parent.showInfo(data.msg);
@@ -106,6 +107,7 @@ var PayBill = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
+					parent.showSuccessInfo("删除订单成功");
 					PayBill.initPayBillList(0, Page.size);
 				} else {
 					parent.showInfo(data.msg);
@@ -133,7 +135,7 @@ var PayBill = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
-					parent.showInfo("退款提交成功");
+					parent.showSuccessInfo("退款提交成功");
 					PayBill.search();
 				} else {
 					parent.showInfo(data.msg);
@@ -153,7 +155,7 @@ var PayBill = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
-					parent.showInfo("关闭订单成功");
+					parent.showSuccessInfo("关闭订单成功");
 					PayBill.search();
 				} else {
 					parent.showInfo(data.msg);

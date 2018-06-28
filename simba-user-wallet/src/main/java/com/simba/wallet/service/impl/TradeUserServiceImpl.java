@@ -4,14 +4,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.simba.exception.BussException;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
+import com.simba.wallet.dao.TradeDetailDao;
 import com.simba.wallet.dao.TradeUserDao;
+import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.TradeUser;
 import com.simba.wallet.service.TradeUserService;
 import com.simba.wallet.util.CommonUtil;
 import com.simba.wallet.util.Constants.AccountActiveStatus;
 import com.simba.wallet.util.Constants.TradePayment;
+import com.simba.wallet.util.Constants.TradeType;
 import com.simba.wallet.util.Constants.TradeUserType;
 
 /**
@@ -26,6 +30,9 @@ public class TradeUserServiceImpl implements TradeUserService {
 
     @Autowired
     private TradeUserDao tradeUserDao;
+
+    @Autowired
+    private TradeDetailDao tradeDetailDao;
 
     @Override
     public long add(TradeUser tradeUser) {
@@ -199,5 +206,16 @@ public class TradeUserServiceImpl implements TradeUserService {
             }
         }
         return new JsonResult();
+    }
+
+    @Override
+    public TradeUser getByOrderNO(String orderNO, TradeType tradeType) {
+        TradeDetail tradeDetail =
+                tradeDetailDao.getByAnd("orderNO", orderNO, "tradeType", tradeType.getName());
+        TradeUser tradeUser = get(tradeDetail.getPartyTradeUserID());
+        if (tradeUser == null) {
+            throw new BussException("未找到订单详情信息");
+        }
+        return tradeUser;
     }
 }

@@ -242,7 +242,7 @@ public class AliPayBillServiceImpl implements AliPayBillService {
 	}
 
 	private void dealRefundOrder(AliPayBill bill) throws AlipayApiException {
-		AlipayTradeFastpayRefundQueryResponse response = aliPayUtil.refundQuery(bill.getTradeNo(), bill.getOutTradeNo(), null);
+		AlipayTradeFastpayRefundQueryResponse response = aliPayUtil.refundQuery(bill.getTradeNo(), bill.getOutTradeNo(), bill.getOutTradeNo());
 		if (StringUtils.isNotEmpty(response.getTotalAmount())) {
 			AliPayCallbackForm callbackForm = new AliPayCallbackForm();
 			callbackForm.setOut_trade_no(bill.getOutTradeNo());

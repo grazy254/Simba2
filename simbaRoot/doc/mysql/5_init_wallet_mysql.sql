@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2018/6/11 11:57:24                           */
+/* Created on:     2018/6/28 8:48:50                            */
 /*==============================================================*/
 
 
@@ -124,7 +124,7 @@ create table tradeDetail
    createTime           datetime not null default CURRENT_TIMESTAMP comment '创建时间',
    lastUpdateTime       datetime not null default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '最后更新时间',
    primary key (id),
-   unique key uk_orderNO (orderNO),
+   unique key uk_orderNO (orderNO, tradeType),
    unique key uk_tradeNO (tradeNO)
 );
 

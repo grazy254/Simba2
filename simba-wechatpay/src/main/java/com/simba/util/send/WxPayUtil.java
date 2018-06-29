@@ -92,7 +92,7 @@ public class WxPayUtil {
 		String sign = SignUtil.getInstance().createSign(params, key);
 		request.setSign(sign);
 		String xml = request.toXML();
-		logger.info("统一下单:" + WxPayConstantData.unifiedorderUrl + ",内容:" + xml);
+		logger.info("统一下单:" + WxPayConstantData.unifiedorderUrl + ",内容:" + xml + "," + key);
 		String resp = HttpClientUtil.postXML(WxPayConstantData.unifiedorderUrl, xml);
 		logger.info("统一下单返回结果:" + resp);
 		UnifiedOrderRes result = XmlUtil.toOject(resp, UnifiedOrderRes.class);

@@ -2,6 +2,7 @@ package com.simba.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ import com.simba.controller.form.RefundForm;
 import com.simba.framework.util.common.ServerUtil;
 import com.simba.framework.util.data.RandomUtil;
 import com.simba.framework.util.json.JsonResult;
+import com.simba.model.constant.ConstantData;
 import com.simba.model.pay.refund.RefundReq;
 import com.simba.model.pay.unifiedorder.UnifiedOrderReq;
 import com.simba.model.pay.unifiedorder.UnifiedOrderRes;
@@ -76,6 +78,7 @@ public class PayController {
 		req.setTime_start(format.format(now));
 		if (StringUtils.isEmpty(req.getNotify_url())) {
 			String notifyUrl = wxPayDomain + "/payCallback/orderReceive";
+			notifyUrl = URLEncoder.encode(notifyUrl, ConstantData.DEFAULT_CHARSET);
 			req.setNotify_url(notifyUrl);
 		}
 		if (StringUtils.isEmpty(req.getOpenid())) {

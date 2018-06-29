@@ -31,8 +31,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.thoughtworks.xstream.XStream;
 import com.simba.model.constant.ConstantData;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
 
 /**
  * xml工具类
@@ -49,7 +51,7 @@ public class XmlUtil {
 	 * @return
 	 */
 	private static XStream getXStream(Class<?>... cs) {
-		XStream xStream = new XStream();
+		XStream xStream = new XStream(new DomDriver(ConstantData.DEFAULT_CHARSET, new XmlFriendlyNameCoder("-_", "_")));
 		for (Class<?> c : cs) {
 			xStream.alias(c.getSimpleName().toLowerCase(), c);
 			xStream.processAnnotations(c);

@@ -6,6 +6,8 @@ import java.util.TreeMap;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * 签名工具类
@@ -14,6 +16,8 @@ import org.apache.commons.lang3.StringUtils;
  *
  */
 public class SignUtil {
+
+	private static final Log logger = LogFactory.getLog(SignUtil.class);
 
 	private SignUtil() {
 
@@ -41,11 +45,13 @@ public class SignUtil {
 		StringBuilder toSign = new StringBuilder();
 		for (String key : sortedMap.keySet()) {
 			String value = params.get(key);
-			if (StringUtils.isNotEmpty(value) && !"sign".equals(key) && !"key".equals(key)) {
+			if (StringUtils.isNotEmpty(key) && StringUtils.isNotEmpty(value) && !"sign".equals(key) && !"key".equals(key)) {
 				toSign.append(key + "=" + value + "&");
 			}
 		}
 		toSign.append("key=" + signKey);
-		return DigestUtils.md5Hex(toSign.toString()).toUpperCase();
+		String toSignString = toSign.toString();
+		logger.info("签名为" + toSignString);
+		return DigestUtils.md5Hex(toSignString).toUpperCase();
 	}
 }

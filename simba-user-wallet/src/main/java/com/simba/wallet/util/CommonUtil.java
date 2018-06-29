@@ -45,6 +45,8 @@ public class CommonUtil {
             return TradeType.RECHARGE.getValue();
         } else if (TradeType.REWARD.getName().equals(tradeType)) {
             return TradeType.REWARD.getValue();
+        } else if (TradeType.REFUND.getName().equals(tradeType)) {
+            return TradeType.REFUND.getValue();
         } else {
             throw ErrConfig.INVALID_TRADE_TYPE;
         }

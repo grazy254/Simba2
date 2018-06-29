@@ -193,9 +193,15 @@ public class TradeAccount {
 
     @Override
     public String toString() {
-        return "TradeAccount{" + "id=" + id + ", tradeUserID=" + tradeUserID + ", accountID='"
-                + accountID + '\'' + ", accountType='" + accountType + '\'' + ", createTime="
-                + createTime + ", lastUpdateTime=" + lastUpdateTime + '}';
+        return "TradeAccount [id=" + id + ", tradeUserID=" + tradeUserID + ", accountID="
+                + accountID + ", accountType=" + accountType + ", feeType=" + feeType
+                + ", isAllowRecharge=" + isAllowRecharge + ", isAllowPay=" + isAllowPay
+                + ", isActive=" + isActive + ", isFrozen=" + isFrozen + ", accountBalance="
+                + accountBalance + ", availableBalance=" + availableBalance + ", frozenBalance="
+                + frozenBalance + ", createTime=" + createTime + ", lastUpdateTime="
+                + lastUpdateTime + "]";
     }
+
+
 
 }

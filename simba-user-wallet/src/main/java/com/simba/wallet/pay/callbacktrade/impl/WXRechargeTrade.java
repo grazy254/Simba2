@@ -50,7 +50,7 @@ public class WXRechargeTrade extends BaseCallbackTrade {
                 CommonUtil.getChannelType(RegistryUtil.get("trade.channel.wxpay")), orderNO,
                 channelOrderNO, openID, channelStartTime, channelPaymentTime, channelErrorMsg,
                 channelErrorCode, paymentAmount, tradeStatus,
-                RegistryUtil.get("trade.department.recharge"));
+                RegistryUtil.get("trade.department.recharge"), TradeType.RECHARGE);
     }
 
 

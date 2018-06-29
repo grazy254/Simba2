@@ -1,11 +1,13 @@
 package com.simba.wallet.pay.alipay;
 
+import java.util.Date;
 import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import com.google.common.base.Strings;
 import com.simba.alipay.controller.form.AliPayCallbackForm;
 import com.simba.alipay.controller.form.AliPayCancelForm;
 import com.simba.alipay.controller.form.AliPayCloseForm;
@@ -48,35 +50,50 @@ public class TradeByAliPay implements AliPayInterface {
 
     }
 
+    private Date getGmtDate(String gmtDate) {
+        if (gmtDate == null) {
+            return new Date();
+        }
+        return DateUtil.str2Date(gmtDate, "yyyyMMddHHmmss");
+    }
+
     @Override
     public void dealCallback(AliPayCallbackForm callbackForm) {
 
-        if (com.simba.alipay.enums.TradeStatus.SUCCESS.name()
+        logger.info(String.format("alipay recharge callback trade callbackForm : %s",
+                callbackForm.toString()));
+
+        logger.info("alipay recharge callback trade status: " + callbackForm.getTrade_status());
+
+        if (com.simba.alipay.enums.TradeStatus.SUCCESS.getName()
                 .equals(callbackForm.getTrade_status())) {
 
             TradeUser tradeUser = tradeUserService.getByOrderNO(callbackForm.getOut_trade_no(),
                     TradeType.RECHARGE);
 
+            logger.info("alipay recharge callback trade user account: " + tradeUser.getUserID());
+
             JsonResult rs = rechargeContext.finishTrade(tradeUser.getUserID(),
                     callbackForm.getOut_trade_no(), callbackForm.getTrade_no(),
-                    callbackForm.getBuyer_id(),
-                    DateUtil.str2Date(callbackForm.getGmt_create(), "yyyyMMddHHmmss"),
-                    DateUtil.str2Date(callbackForm.getGmt_payment(), "yyyyMMddHHmmss"), "", "",
+                    callbackForm.getBuyer_id(), getGmtDate(callbackForm.getGmt_create()),
+                    getGmtDate(callbackForm.getGmt_payment()), "", "",
                     NumberUtils.toInt(callbackForm.getTotal_amount()), TradeStatus.SUCCESS);
             logger.info("alipay recharge callback trade result: " + rs.toJson());
 
         } else if (com.simba.alipay.enums.TradeStatus.REFUNDSUCCESS.getName()
-                .equals(callbackForm.getTrade_status())) {
+                .equals(callbackForm.getTrade_status())
+                || !Strings.isNullOrEmpty(callbackForm.getRefund_fee())) {
 
             TradeUser tradeUser =
                     tradeUserService.getByOrderNO(callbackForm.getOut_trade_no(), TradeType.REFUND);
 
+            logger.info("alipay refund callback trade user account: " + tradeUser.getUserID());
+
             JsonResult rs = refundContext.finishTrade(tradeUser.getUserID(),
                     callbackForm.getOut_trade_no(), callbackForm.getTrade_no(),
-                    callbackForm.getBuyer_id(),
-                    DateUtil.str2Date(callbackForm.getGmt_create(), "yyyyMMddHHmmss"),
-                    DateUtil.str2Date(callbackForm.getGmt_payment(), "yyyyMMddHHmmss"), "", "",
-                    NumberUtils.toLong(callbackForm.getTotal_amount()), TradeStatus.SUCCESS);
+                    callbackForm.getBuyer_id(), getGmtDate(callbackForm.getGmt_create()),
+                    getGmtDate(callbackForm.getGmt_payment()), "", "",
+                    NumberUtils.toLong(callbackForm.getRefund_fee()), TradeStatus.SUCCESS);
             logger.info("alipay refund callback trade result: " + rs.toJson());
 
         }
@@ -86,6 +103,8 @@ public class TradeByAliPay implements AliPayInterface {
 
     @Override
     public void appPay(AppPayForm payForm) {
+        logger.info(
+                String.format("alipay recharge start trade AppPayForm: %s", payForm.toString()));
         SmartUser user = (SmartUser) ThreadDataUtil.get("account");
         JsonResult rs = rechargeContext.startTrade(user.getAccount(), "", payForm.getOutTradeNo(),
                 NumberUtils.toLong(payForm.getTotalAmount()));
@@ -108,9 +127,10 @@ public class TradeByAliPay implements AliPayInterface {
 
     @Override
     public void refund(AliPayRefundForm refundForm) {
-
+        logger.info(String.format("alipay refund start trade refundForm: %s", refundForm));
         TradeUser tradeUser =
                 tradeUserService.getByOrderNO(refundForm.getOutTradeNo(), TradeType.RECHARGE);
+        logger.info("alipay refund start trade user account: " + tradeUser.getUserID());
 
         JsonResult rs = refundContext.startTrade(tradeUser.getUserID(), "",
                 refundForm.getOutTradeNo(), NumberUtils.toLong(refundForm.getRefundAmount()));

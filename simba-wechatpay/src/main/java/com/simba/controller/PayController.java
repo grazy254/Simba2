@@ -93,6 +93,7 @@ public class PayController {
 		params.put("paySign", sign);
 		params.put("prePayId", prePayId);
 		params.put("codeUrl", codeUrl);
+		params.put("mchId", mchId);
 		params.put("mwebUrl", mwebUrl);
 		params.put("totalFee", req.getTotal_fee() + "");
 		params.put("outTradeNo", req.getOut_trade_no());

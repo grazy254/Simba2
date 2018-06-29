@@ -65,7 +65,7 @@ public class AliPayCallbackController {
 		deal(callbackForm);
 		return "success";
 	}
-
+	
 	/**
 	 * 价格单位统一成分
 	 * 
@@ -81,7 +81,7 @@ public class AliPayCallbackController {
 	private String converter(String money) {
 		double fee = NumberUtils.toDouble(money);
 		double fen = fee * 100;
-		int zfen = NumberUtils.toInt(fen + "");
+		int zfen = Integer.parseInt(new java.text.DecimalFormat("0").format(fen));
 		return zfen + "";
 	}
 

@@ -1,6 +1,8 @@
 package com.simba.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,6 +23,7 @@ import com.simba.controller.form.RefundForm;
 import com.simba.framework.util.common.ServerUtil;
 import com.simba.framework.util.data.RandomUtil;
 import com.simba.framework.util.json.JsonResult;
+import com.simba.model.constant.ConstantData;
 import com.simba.model.pay.refund.RefundReq;
 import com.simba.model.pay.unifiedorder.UnifiedOrderReq;
 import com.simba.model.pay.unifiedorder.UnifiedOrderRes;
@@ -61,9 +64,10 @@ public class PayController {
 	 * @param req
 	 * @param model
 	 * @return
+	 * @throws UnsupportedEncodingException
 	 */
 	@RequestMapping("/order")
-	public JsonResult order(HttpServletRequest request, UnifiedOrderReq req) {
+	public JsonResult order(HttpServletRequest request, UnifiedOrderReq req) throws UnsupportedEncodingException {
 		logger.info("接收到微信[支付订单]:" + req.toString());
 		req.setAppid(appid);
 		req.setMch_id(mchId);
@@ -73,7 +77,8 @@ public class PayController {
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
 		req.setTime_start(format.format(now));
 		if (StringUtils.isEmpty(req.getNotify_url())) {
-			req.setNotify_url(wxPayDomain + "/payCallback/orderReceive");
+			String notifyUrl = wxPayDomain + "/payCallback/orderReceive";
+			req.setNotify_url(notifyUrl);
 		}
 		if (StringUtils.isEmpty(req.getOpenid())) {
 			String openid = (String) request.getSession().getAttribute("openid");

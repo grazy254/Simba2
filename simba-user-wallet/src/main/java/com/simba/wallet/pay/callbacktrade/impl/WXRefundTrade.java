@@ -52,7 +52,7 @@ public class WXRefundTrade extends BaseCallbackTrade {
                 CommonUtil.getChannelType(RegistryUtil.get("trade.channel.weixin")), orderNO,
                 channelOrderNO, openID, channelStartTime, channelPaymentTime, channelErrorMsg,
                 channelErrorCode, paymentAmount, tradeStatus,
-                RegistryUtil.get("trade.department.refund"));
+                RegistryUtil.get("trade.department.refund"), TradeType.REFUND);
     }
 
     @Override

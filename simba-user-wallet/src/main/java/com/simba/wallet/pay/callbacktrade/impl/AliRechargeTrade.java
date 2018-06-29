@@ -50,7 +50,7 @@ public class AliRechargeTrade extends BaseCallbackTrade {
                 CommonUtil.getChannelType(RegistryUtil.get("trade.channel.alipay")), orderNO,
                 channelOrderNO, openID, channelStartTime, channelPaymentTime, channelErrorMsg,
                 channelErrorCode, paymentAmount, tradeStatus,
-                RegistryUtil.get("trade.department.recharge"));
+                RegistryUtil.get("trade.department.recharge"), TradeType.RECHARGE);
     }
 
 

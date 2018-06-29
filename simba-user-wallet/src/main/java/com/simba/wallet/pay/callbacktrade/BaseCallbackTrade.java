@@ -2,6 +2,8 @@ package com.simba.wallet.pay.callbacktrade;
 
 import java.util.Date;
 import java.util.Objects;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import com.simba.dao.SmartUserDao;
@@ -41,6 +43,8 @@ import com.simba.wallet.util.ErrConfig;
  *
  */
 public abstract class BaseCallbackTrade implements CallbackTradeInterface {
+
+    private static final Log logger = LogFactory.getLog(BaseCallbackTrade.class);
 
     @Autowired
     protected TradeDetailDao tradeDetailDao;
@@ -120,6 +124,13 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
             String orderName, String orderDesc, String orderAddress, long originalAmount,
             long paymentAmount, Date tradeCreateTime, Date channelStartTime, String tradeDeptNO,
             ChannelType channelType, TradeType tradeType) {
+        logger.info(String.format(
+                "start trade userID %s, ip %s, location %s, orderNO %s, "
+                        + "orderName %s, orderDesc %s, orderAddress %s, originalAmount %s, paymentAmount %s, "
+                        + "tradeCreateTime %s, channelStartTime %s, tradeDeptNO %s, channelType %s, tradeType %s",
+                userID, ip, location, orderNO, orderName, orderDesc, orderAddress, originalAmount,
+                paymentAmount, tradeCreateTime, channelStartTime, tradeDeptNO,
+                channelType.getName(), tradeType.getName()).toString());
 
         if (paymentAmount <= 0 || originalAmount <= 0) {
             throw ErrConfig.INVALID_PAYMENT_ACCOUNT;
@@ -243,13 +254,20 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
     protected JsonResult finishTrade(String userID, ChannelType channelType, String orderNO,
             String channelOrderNO, String openID, Date channelStartTime, Date channelPaymentTime,
             String channelErrorMsg, String channelErrorCode, long paymentAmount,
-            TradeStatus tradeStatus, String tradeDeptNO) {
+            TradeStatus tradeStatus, String tradeDeptNO, TradeType tradeType) {
 
-        if (channelType == null) {
-            throw ErrConfig.INVALID_CHANNEL;
-        }
+        logger.info("finish trade: " + userID + " channelType: " + channelType.getName()
+                + " orderNO: " + orderNO + " channelOrderNO: " + channelOrderNO + " openID: "
+                + openID + " channelStartTime: " + channelStartTime + " channelPaymentTime: "
+                + channelPaymentTime + " paymentAmount: " + paymentAmount + " tradeStatus:"
+                + tradeStatus.getName() + " tradeDeptNO: " + tradeDeptNO + " tadeType: "
+                + tradeType.getName());
 
-        TradeDetail tradeDetail = tradeDetailDao.getBy("orderNO", orderNO);
+        TradeDetail tradeDetail =
+                tradeDetailDao.getByAnd("orderNO", orderNO, "tradeType", tradeType.getName());
+
+        logger.info("tradeDetail :" + tradeDetail);
+
         if (tradeDetail == null) {
             throw ErrConfig.INVALID_ORDER;
         }
@@ -275,16 +293,24 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
         tradeChannelDetail.setOrderNO(channelOrderNO);
         tradeChannelDetail.setErrorCode(channelErrorCode);
         tradeChannelDetail.setErrorMsg(channelErrorMsg);
+
+        logger.info("update tradeChannelDetail: " + tradeChannelDetail);
+
         tradeChannelDetailDao.update(tradeChannelDetail);
 
         if (tradeStatus == TradeStatus.SUCCESS) {
             updateBalance(smartUserTradeAccount, departmentTradeAccount, channelTradeAccount,
                     paymentAmount);
+            logger.info("update smartUserTradeAccount: " + smartUserTradeAccount);
             tradeAccountDao.update(smartUserTradeAccount);
+            logger.info("update departmentTradeAccount: " + departmentTradeAccount);
             tradeAccountDao.update(departmentTradeAccount);
+            logger.info("update channelTradeAccount: " + channelTradeAccount);
             tradeAccountDao.update(channelTradeAccount);
 
             tradeDetail.setTradeStatus(tradeStatus.getName());
+            logger.info("update tradeDetail: " + tradeDetail);
+
             tradeDetailDao.update(tradeDetail);
 
             return new JsonResult("订单完成");

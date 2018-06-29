@@ -60,7 +60,7 @@ public class AliPayBillDaoImpl implements AliPayBillDao {
 
 	@Override
 	public List<AliPayBill> page(Pager page, AliPayBillSearchForm aliPayBillSearchForm) {
-		String sql = "select * from " + table+" order by createTime desc";
+		String sql = "select * from " + table;
 		StatementParameter param = new StatementParameter();
 		return jdbc.queryForPage(buildCondition(sql, aliPayBillSearchForm, param), AliPayBill.class, page, param);
 	}

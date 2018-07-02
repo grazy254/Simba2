@@ -2,6 +2,7 @@ package com.simba.util.send;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -31,6 +32,7 @@ import com.simba.model.pay.refund.RefundReq;
 import com.simba.model.pay.refund.RefundRes;
 import com.simba.model.pay.refundquery.RefundQueryReq;
 import com.simba.model.pay.refundquery.RefundQueryRes;
+import com.simba.model.pay.sandbox.SandBoxRes;
 import com.simba.model.pay.unifiedorder.UnifiedOrderReq;
 import com.simba.model.pay.unifiedorder.UnifiedOrderRes;
 import com.simba.util.common.SignUtil;
@@ -61,8 +63,21 @@ public class WxPayUtil {
 		key = environmentUtil.get("wx.pay.key");
 		appid = environmentUtil.get("appID");
 		mchId = environmentUtil.get("wx.pay.mchid");
+		String sandboxEnabled = environmentUtil.get("wx.pay.sandbox");
 		if (StringUtils.isEmpty(key) || StringUtils.isEmpty(appid) || StringUtils.isEmpty(mchId)) {
 			logger.warn("没有配置微信支付信息，不能使用微信支付功能");
+		}
+		// 是否启用沙箱测试
+		boolean sandbox = true;
+		if ("false".equals(sandboxEnabled)) {
+			sandbox = false;
+		}
+		if (sandbox) {
+			key = getSandboxKey();
+			logger.info("启动沙箱key:" + key);
+		} else {
+			WxPayConstantData.getInstance().changeReal();
+			logger.info("启动微信支付正式环境");
 		}
 	}
 
@@ -80,8 +95,9 @@ public class WxPayUtil {
 	 * 
 	 * @param request
 	 * @return
+	 * @throws Exception
 	 */
-	public UnifiedOrderRes unifiedOrder(UnifiedOrderReq request) {
+	public UnifiedOrderRes unifiedOrder(UnifiedOrderReq request) throws Exception {
 		checkParameters(request);// 校验参数
 		String nonce_str = RandomUtil.random32Chars();
 		request.setAppid(appid);
@@ -92,8 +108,8 @@ public class WxPayUtil {
 		String sign = SignUtil.getInstance().createSign(params, key);
 		request.setSign(sign);
 		String xml = request.toXML();
-		logger.info("统一下单:" + WxPayConstantData.unifiedorderUrl + ",内容:" + xml + "," + key);
-		String resp = HttpClientUtil.postXML(WxPayConstantData.unifiedorderUrl, xml);
+		logger.info("统一下单:" + WxPayConstantData.getInstance().getUnifiedorderUrl() + ",内容:" + xml + "," + key);
+		String resp = HttpClientUtil.postXML(WxPayConstantData.getInstance().getUnifiedorderUrl(), xml);
 		logger.info("统一下单返回结果:" + resp);
 		UnifiedOrderRes result = XmlUtil.toOject(resp, UnifiedOrderRes.class);
 		checkSign(result);
@@ -175,8 +191,8 @@ public class WxPayUtil {
 		String sign = SignUtil.getInstance().createSign(params, key);
 		request.setSign(sign);
 		String xml = request.toXML();
-		logger.info("查询订单:" + WxPayConstantData.orderqueryUrl + ",内容:" + xml);
-		String resp = HttpClientUtil.postXML(WxPayConstantData.orderqueryUrl, xml);
+		logger.info("查询订单:" + WxPayConstantData.getInstance().getOrderqueryUrl() + ",内容:" + xml);
+		String resp = HttpClientUtil.postXML(WxPayConstantData.getInstance().getOrderqueryUrl(), xml);
 		logger.info("查询订单返回结果:" + resp);
 		OrderQueryRes result = XmlUtil.toOject(resp, OrderQueryRes.class);
 		result.composeCoupons(resp);
@@ -211,8 +227,8 @@ public class WxPayUtil {
 		String sign = SignUtil.getInstance().createSign(params, key);
 		request.setSign(sign);
 		String xml = request.toXML();
-		logger.info("关闭订单:" + WxPayConstantData.closeorderUrl + ",内容:" + xml);
-		String resp = HttpClientUtil.postXML(WxPayConstantData.closeorderUrl, xml);
+		logger.info("关闭订单:" + WxPayConstantData.getInstance().getCloseorderUrl() + ",内容:" + xml);
+		String resp = HttpClientUtil.postXML(WxPayConstantData.getInstance().getCloseorderUrl(), xml);
 		logger.info("关闭订单返回结果:" + resp);
 		CloseOrderRes result = XmlUtil.toOject(resp, CloseOrderRes.class);
 		checkSign(result);
@@ -331,8 +347,8 @@ public class WxPayUtil {
 		String sign = SignUtil.getInstance().createSign(params, key);
 		request.setSign(sign);
 		String xml = request.toXML();
-		logger.info("查询退款:" + WxPayConstantData.refundqueryUrl + ",内容:" + xml);
-		String resp = HttpClientUtil.postXML(WxPayConstantData.refundqueryUrl, xml);
+		logger.info("查询退款:" + WxPayConstantData.getInstance().getRefundqueryUrl() + ",内容:" + xml);
+		String resp = HttpClientUtil.postXML(WxPayConstantData.getInstance().getRefundqueryUrl(), xml);
 		logger.info("查询退款返回结果:" + resp);
 		RefundQueryRes result = XmlUtil.toOject(resp, RefundQueryRes.class);
 		result.composeRefundRecords(resp);
@@ -371,8 +387,8 @@ public class WxPayUtil {
 		String sign = SignUtil.getInstance().createSign(params, key);
 		request.setSign(sign);
 		String xml = request.toXML();
-		logger.info("下载对账单:" + WxPayConstantData.downloadbillUrl + ",内容:" + xml);
-		String resp = HttpClientUtil.postXML(WxPayConstantData.downloadbillUrl, xml);
+		logger.info("下载对账单:" + WxPayConstantData.getInstance().getDownloadbillUrl() + ",内容:" + xml);
+		String resp = HttpClientUtil.postXML(WxPayConstantData.getInstance().getDownloadbillUrl(), xml);
 		logger.info("下载对账单返回结果:" + resp);
 		return resp;
 	}
@@ -414,7 +430,7 @@ public class WxPayUtil {
 		String sign = SignUtil.getInstance().createSign(params, key);
 		request.setSign(sign);
 		String xml = request.toXML();
-		String resp = CertRequestUrl.getInstance().executeWithKey(WxPayConstantData.refundUrl, xml);
+		String resp = CertRequestUrl.getInstance().executeWithKey(WxPayConstantData.getInstance().getRefundUrl(), xml);
 		RefundRes result = XmlUtil.toOject(resp, RefundRes.class);
 		checkSign(result);
 		if (!"SUCCESS".equals(result.getReturn_code()) || !"SUCCESS".equals(result.getResult_code())) {
@@ -466,4 +482,28 @@ public class WxPayUtil {
 			throw new IllegalArgumentException("当 trade_type是'NATIVE'时未指定product_id");
 		}
 	}
+
+	/**
+	 * 获取沙箱的key
+	 * 
+	 * @return
+	 */
+	public String getSandboxKey() {
+		Map<String, String> params = new HashMap<>();
+		params.put("mch_id", mchId);
+		params.put("nonce_str", RandomUtil.random32Chars());
+		String sign = SignUtil.getInstance().createSign(params, key);
+		params.put("sign", sign);
+		String xml = "<xml>" + "<mch_id>" + params.get("mch_id") + "</mch_id>" + "<nonce_str>" + params.get("nonce_str") + "</nonce_str>" + "<sign>" + params.get("sign") + "</sign>" + "</xml>";
+		logger.info("获取沙箱key的xml内容为:" + xml);
+		String res = HttpClientUtil.postXML(WxPayConstantData.getInstance().getSandboxnewKeyUrl(), xml);
+		logger.info("获取沙箱key返回:" + res);
+		SandBoxRes result = XmlUtil.toOject(res, SandBoxRes.class);
+		checkSign(result);
+		if (!"SUCCESS".equals(result.getReturn_code())) {
+			throw new BussException("获取沙箱key发生异常:" + result.getReturn_msg());
+		}
+		return result.getSandbox_signkey();
+	}
+
 }

@@ -62,10 +62,10 @@ public class PayController {
 	 * @param req
 	 * @param model
 	 * @return
-	 * @throws UnsupportedEncodingException
+	 * @throws Exception 
 	 */
 	@RequestMapping("/order")
-	public JsonResult order(HttpServletRequest request, UnifiedOrderReq req) throws UnsupportedEncodingException {
+	public JsonResult order(HttpServletRequest request, UnifiedOrderReq req) throws Exception {
 		logger.info("接收到微信[支付订单]:" + req.toString());
 		req.setAppid(appid);
 		req.setMch_id(mchId);

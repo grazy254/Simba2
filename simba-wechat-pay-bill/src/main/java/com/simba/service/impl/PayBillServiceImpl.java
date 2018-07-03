@@ -1,15 +1,21 @@
 package com.simba.service.impl;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +27,8 @@ import com.simba.controller.form.PayBillSearchForm;
 import com.simba.dao.PayBillDao;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.PayBill;
+import com.simba.model.constant.ConstantData;
+import com.simba.model.pay.downloadbill.DownloadBillReq;
 import com.simba.model.pay.orderquery.OrderQueryRes;
 import com.simba.model.pay.result.PayResult;
 import com.simba.model.pay.result.RefundCallbackInfo;
@@ -40,6 +48,9 @@ import com.simba.util.send.WxPayUtil;
 public class PayBillServiceImpl implements PayBillService {
 
 	private static final Log logger = LogFactory.getLog(PayBillServiceImpl.class);
+
+	@Value("${wx.pay.bill.dir}")
+	private String billDir;
 
 	@Autowired
 	private PayBillDao payBillDao;
@@ -279,4 +290,23 @@ public class PayBillServiceImpl implements PayBillService {
 	public List<PayBill> listUnfinish() {
 		return payBillDao.listUnfinish();
 	}
+
+	@Override
+	public void checkBill() throws IOException {
+		Date yesterday = DateUtils.addDays(new Date(), -1);
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		String billDate = format.format(yesterday);
+		DownloadBillReq request = new DownloadBillReq();
+		request.setBill_date(billDate);
+		request.setBill_type("ALL");
+		String billContent = WxPayUtil.getInstance().downloadBill(request);
+		File dir = new File(billDir);
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
+		String billFile = billDir + "/" + "wechatpay" + "/" + billDate + ".txt";
+		FileUtils.write(new File(billFile), billContent, ConstantData.DEFAULT_CHARSET);
+		logger.info("写入微信支付对账单成功:" + billFile);
+	}
+
 }

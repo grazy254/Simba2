@@ -74,7 +74,7 @@ public interface PayBillService {
 	/**
 	 * 查询未完成的订单，更新其状态
 	 */
-	void checkUnfinishOrder()throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException ;
+	void checkUnfinishOrder() throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException;
 
 	/**
 	 * 查询所有没有结束的订单信息
@@ -82,4 +82,9 @@ public interface PayBillService {
 	 * @return
 	 */
 	List<PayBill> listUnfinish();
+
+	/**
+	 * 下载微信对账单，对数据进行检查
+	 */
+	void checkBill() throws IOException;
 }

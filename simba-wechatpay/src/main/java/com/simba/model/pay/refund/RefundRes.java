@@ -60,6 +60,8 @@ public class RefundRes {
 	 */
 	private String appid;
 
+	private String trade_type;
+
 	/**
 	 * 自定义参数，可以为请求支付的终端设备号等
 	 */
@@ -101,6 +103,13 @@ public class RefundRes {
 	private String refund_id;
 
 	/**
+	 * 用户付款的id
+	 */
+	private String openid;
+
+	private String cash_refund_fee_type;
+
+	/**
 	 * ORIGINAL—原路退款
 	 * 
 	 * BALANCE—退回到余额
@@ -138,6 +147,8 @@ public class RefundRes {
 	 */
 	private int cash_fee;
 
+	private String err_msg;
+
 	/**
 	 * 货币类型，符合ISO 4217标准的三位字母代码，默认人民币：CNY
 	 */
@@ -147,6 +158,8 @@ public class RefundRes {
 	 * 现金退款金额，单位为分，只能为整数
 	 */
 	private int cash_refund_fee;
+
+	private String bank_type;
 
 	/**
 	 * 代金券退款金额<=退款金额，退款金额-代金券或立减优惠退款金额为现金
@@ -158,7 +171,33 @@ public class RefundRes {
 	 */
 	private int coupon_refund_count;
 
+	private String refund_fee_type;
+
 	private List<Coupon> coupons;
+
+	public String getCash_refund_fee_type() {
+		return cash_refund_fee_type;
+	}
+
+	public void setCash_refund_fee_type(String cash_refund_fee_type) {
+		this.cash_refund_fee_type = cash_refund_fee_type;
+	}
+
+	public String getBank_type() {
+		return bank_type;
+	}
+
+	public void setBank_type(String bank_type) {
+		this.bank_type = bank_type;
+	}
+
+	public String getRefund_fee_type() {
+		return refund_fee_type;
+	}
+
+	public void setRefund_fee_type(String refund_fee_type) {
+		this.refund_fee_type = refund_fee_type;
+	}
 
 	public String getReturn_code() {
 		return return_code;
@@ -276,6 +315,14 @@ public class RefundRes {
 		return refund_channel;
 	}
 
+	public String getTrade_type() {
+		return trade_type;
+	}
+
+	public void setTrade_type(String trade_type) {
+		this.trade_type = trade_type;
+	}
+
 	public void setRefund_channel(String refund_channel) {
 		this.refund_channel = refund_channel;
 	}
@@ -318,6 +365,14 @@ public class RefundRes {
 
 	public void setFee_type(String fee_type) {
 		this.fee_type = fee_type;
+	}
+
+	public String getErr_msg() {
+		return err_msg;
+	}
+
+	public void setErr_msg(String err_msg) {
+		this.err_msg = err_msg;
 	}
 
 	public int getCash_fee() {
@@ -368,6 +423,14 @@ public class RefundRes {
 		this.coupons = coupons;
 	}
 
+	public String getOpenid() {
+		return openid;
+	}
+
+	public void setOpenid(String openid) {
+		this.openid = openid;
+	}
+
 	/**
 	 * 通过xml组装coupons属性内容
 	 * 
@@ -377,8 +440,7 @@ public class RefundRes {
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
 	 */
-	public void composeCoupons(String xml)
-			throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+	public void composeCoupons(String xml) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		if (this.coupon_refund_count > 0) {
 			this.coupons = new ArrayList<>();
 			Document doc = XmlUtil.parseXMLContent(xml);

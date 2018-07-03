@@ -461,7 +461,14 @@ public class WxPayUtil {
 
 	private void checkSign(Object result) {
 		Map<String, String> params = BeanUtils.xmlBean2Map(result);
-		if (params.get("sign") != null && !checkSign(params)) {
+		Map<String, String> signParams = new HashMap<>();
+		for (String key : params.keySet()) {
+			String value = params.get(key);
+			if (StringUtils.isNotEmpty(value) && !"0".equals(value)) {
+				signParams.put(key, value);
+			}
+		}
+		if (params.get("sign") != null && !checkSign(signParams)) {
 			throw new RuntimeException("微信支付服务器返回签名错误");
 		}
 	}

@@ -22,7 +22,7 @@
 						<div class="col-md-12">
 							<div class="box box-primary">
 								<div class="box-header with-border">
-									<h3 class="box-title">支付账单管理</h3>
+									<h3 class="box-title">微信支付账单管理</h3>
 								</div>
 								<!-- /.box-header -->
 								<div class="box-body no-padding">
@@ -74,7 +74,6 @@
 												<th>商品ID</th>
 												<th>用户标识</th>
 												<th>状态</th>
-												<th>错误信息</th>
 												<th>时间</th>
 												<th>操作</th>
 											</tr>

@@ -29,18 +29,17 @@
 			</#if>
 			
 		</td>
-		<td>${payBill.errMsg}</td>
 		<td>${payBill.createTime?string("yyyy-MM-dd HH:mm:ss")}</td>
 		<td>
 			<#if payBill.status=='SUCCESS'>
-				<button type="button" class="btn btn-default btn-sm" onclick="PayBill.refund(${aliPayBill.id});"><i class="fa fa-close"></i>退款</button>
+				<button type="button" class="btn btn-default btn-sm" onclick="PayBill.refund(${payBill.id});"><i class="fa fa-close"></i>退款</button>
 			<#elseif payBill.status=='REFUND'>
 			<#elseif payBill.status=='NOTPAY'>
 			<#elseif payBill.status=='CLOSED'>
 			<#elseif payBill.status=='REVOKED'>
 			<#elseif payBill.status=='USERPAYING'>
 			<#elseif payBill.status=='PAYERROR'>
-				<button type="button" class="btn btn-default btn-sm" onclick="PayBill.close(${aliPayBill.id});"><i class="fa fa-close"></i>关闭</button>
+				<button type="button" class="btn btn-default btn-sm" onclick="PayBill.close(${payBill.id});"><i class="fa fa-close"></i>关闭</button>
 			</#if>
 		</td>
 	</tr>

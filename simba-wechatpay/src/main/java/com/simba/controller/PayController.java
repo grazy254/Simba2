@@ -201,6 +201,7 @@ public class PayController {
 		req.setLimit_pay("no_credit");
 		req.setProduct_id("testProductId");
 		req.setScene_info("sceneInfo");
+		req.setTrade_type("APP");
 		req.setTotal_fee(201);
 		order(request, req);
 		ThreadUtil.sleep(6000);

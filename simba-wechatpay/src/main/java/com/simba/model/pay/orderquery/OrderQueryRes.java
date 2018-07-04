@@ -191,7 +191,27 @@ public class OrderQueryRes {
 
 	private String retcode;
 
+	private String coupon_batch_id_1;
+
+	private String coupon_batch_id_0;
+
 	private List<Coupon> coupons;
+
+	public String getCoupon_batch_id_1() {
+		return coupon_batch_id_1;
+	}
+
+	public void setCoupon_batch_id_1(String coupon_batch_id_1) {
+		this.coupon_batch_id_1 = coupon_batch_id_1;
+	}
+
+	public String getCoupon_batch_id_0() {
+		return coupon_batch_id_0;
+	}
+
+	public void setCoupon_batch_id_0(String coupon_batch_id_0) {
+		this.coupon_batch_id_0 = coupon_batch_id_0;
+	}
 
 	public String getRetcode() {
 		return retcode;

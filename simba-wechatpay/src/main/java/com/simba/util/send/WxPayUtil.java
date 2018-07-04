@@ -53,7 +53,6 @@ public class WxPayUtil {
 	private String key = null;
 	private String appid = null;
 	private String mchId = null;
-	private String tradeType = null;
 
 	private WxPayUtil() {
 		init();
@@ -64,7 +63,6 @@ public class WxPayUtil {
 		key = environmentUtil.get("wx.pay.key");
 		appid = environmentUtil.get("appID");
 		mchId = environmentUtil.get("wx.pay.mchid");
-		tradeType = environmentUtil.get("wx.pay.sandbox.trade.type");
 		String sandboxEnabled = environmentUtil.get("wx.pay.sandbox");
 		if (StringUtils.isEmpty(key) || StringUtils.isEmpty(appid) || StringUtils.isEmpty(mchId)) {
 			logger.warn("没有配置微信支付信息，不能使用微信支付功能");
@@ -77,32 +75,10 @@ public class WxPayUtil {
 		if (sandbox) {
 			key = getSandboxKey();
 			logger.info("启动沙箱key:" + key);
-			// 启动沙箱测试代码
-			new Thread(() -> {
-				sandboxTest();
-			}).start();
 		} else {
 			WxPayConstantData.getInstance().changeReal();
 			logger.info("启动微信支付正式环境");
 		}
-	}
-
-	/**
-	 * 启动沙箱测试用例
-	 */
-	private void sandboxTest() {
-		if ("APP".equals(tradeType)) {
-			sandboxTestApp();
-		}
-	}
-
-	/**
-	 * 启动微信App支付沙箱测试用例
-	 */
-	private void sandboxTestApp() {
-		logger.info("=======================开始执行动微信App支付沙箱测试用例=================================");
-
-		logger.info("====================结束执行动微信App支付沙箱测试用例=====================================");
 	}
 
 	private static final class WxPayUtilHolder {

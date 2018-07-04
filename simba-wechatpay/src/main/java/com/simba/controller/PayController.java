@@ -61,7 +61,7 @@ public class PayController {
 	 * @param req
 	 * @param model
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@RequestMapping("/order")
 	public JsonResult order(HttpServletRequest request, UnifiedOrderReq req) throws Exception {
@@ -143,6 +143,17 @@ public class PayController {
 		refundReq.setTotal_fee(refundForm.getTotal_fee());
 		refundReq.setRefund_fee(refundForm.getRefund_fee());
 		payService.refund(refundReq);
+		return new JsonResult();
+	}
+
+	/**
+	 * 完成沙箱测试用例
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/sandbox")
+	public JsonResult sandbox() {
+
 		return new JsonResult();
 	}
 }

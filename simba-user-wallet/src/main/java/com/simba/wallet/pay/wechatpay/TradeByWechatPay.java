@@ -7,7 +7,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.simba.framework.util.data.ThreadDataUtil;
-import com.simba.framework.util.date.DateUtil;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.interfaces.PayInterface;
 import com.simba.model.SmartUser;
@@ -21,6 +20,7 @@ import com.simba.wallet.pay.callbacktrade.CallbackTradeContext;
 import com.simba.wallet.pay.callbacktrade.impl.WXRechargeTrade;
 import com.simba.wallet.pay.callbacktrade.impl.WXRefundTrade;
 import com.simba.wallet.service.TradeUserService;
+import com.simba.wallet.util.CommonUtil;
 import com.simba.wallet.util.Constants.TradeStatus;
 import com.simba.wallet.util.Constants.TradeType;
 
@@ -47,7 +47,6 @@ public class TradeByWechatPay implements PayInterface {
         refundContext = new CallbackTradeContext(refundTrade);
     }
 
-
     @Override
     public void dealResult(PayResult payResult) {
         logger.info(String.format("wechat recharge callbacke trade payResult: %s",
@@ -62,9 +61,8 @@ public class TradeByWechatPay implements PayInterface {
 
         JsonResult rs = rechargeContext.finishTrade(tradeUser.getUserID(),
                 payResult.getOut_trade_no(), payResult.getTransaction_id(), payResult.getOpenid(),
-                DateUtil.str2Date(payResult.getTime_end(), "yyyyMMddHHmmss"),
-                payResult.getErr_code_des(), payResult.getErr_code(), payResult.getTotal_fee(),
-                status);
+                CommonUtil.getGmtDate(payResult.getTime_end()), payResult.getErr_code_des(),
+                payResult.getErr_code(), payResult.getTotal_fee(), status);
         logger.info("wechat recharge callback trade result: " + rs.toJson());
     }
 
@@ -78,7 +76,7 @@ public class TradeByWechatPay implements PayInterface {
         SmartUser user = (SmartUser) ThreadDataUtil.get("account");
         JsonResult rs = rechargeContext.startTrade(user.getAccount(), req.getSpbill_create_ip(),
                 req.getOut_trade_no(), req.getTotal_fee(),
-                DateUtil.str2Date(req.getTime_start(), "yyyyMMddHHmmss"));
+                CommonUtil.getGmtDate(req.getTime_start()));
         logger.info("wechat recharge start trade result: " + rs.toJson());
     }
 
@@ -116,7 +114,7 @@ public class TradeByWechatPay implements PayInterface {
         }
         JsonResult rs = refundContext.finishTrade(tradeUser.getUserID(),
                 callbackInfo.getOut_trade_no(), callbackInfo.getTransaction_id(), "", new Date(),
-                DateUtil.str2Date(callbackInfo.getSuccess_time(), "yyyy-MM-dd HH:mm:ss"), "", "",
+                CommonUtil.getGmtDate(callbackInfo.getSuccess_time()), "", "",
                 callbackInfo.getRefund_fee(), status);
         logger.info("wechat refund callback trade result: " + rs.toJson());
 

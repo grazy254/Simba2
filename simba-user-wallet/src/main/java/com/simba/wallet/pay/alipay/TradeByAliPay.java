@@ -1,6 +1,5 @@
 package com.simba.wallet.pay.alipay;
 
-import java.util.Date;
 import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.logging.Log;
@@ -15,7 +14,6 @@ import com.simba.alipay.controller.form.AliPayRefundForm;
 import com.simba.alipay.controller.form.AppPayForm;
 import com.simba.alipay.interfaces.AliPayInterface;
 import com.simba.framework.util.data.ThreadDataUtil;
-import com.simba.framework.util.date.DateUtil;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.SmartUser;
 import com.simba.wallet.model.TradeUser;
@@ -23,6 +21,7 @@ import com.simba.wallet.pay.callbacktrade.CallbackTradeContext;
 import com.simba.wallet.pay.callbacktrade.impl.AliRechargeTrade;
 import com.simba.wallet.pay.callbacktrade.impl.AliRefundTrade;
 import com.simba.wallet.service.TradeUserService;
+import com.simba.wallet.util.CommonUtil;
 import com.simba.wallet.util.Constants.TradeStatus;
 import com.simba.wallet.util.Constants.TradeType;
 
@@ -50,12 +49,6 @@ public class TradeByAliPay implements AliPayInterface {
 
     }
 
-    private Date getGmtDate(String gmtDate) {
-        if (gmtDate == null) {
-            return new Date();
-        }
-        return DateUtil.str2Date(gmtDate, "yyyyMMddHHmmss");
-    }
 
     @Override
     public void dealCallback(AliPayCallbackForm callbackForm) {
@@ -75,9 +68,9 @@ public class TradeByAliPay implements AliPayInterface {
 
             JsonResult rs = rechargeContext.finishTrade(tradeUser.getUserID(),
                     callbackForm.getOut_trade_no(), callbackForm.getTrade_no(),
-                    callbackForm.getBuyer_id(), getGmtDate(callbackForm.getGmt_create()),
-                    getGmtDate(callbackForm.getGmt_payment()), "", "",
-                    NumberUtils.toInt(callbackForm.getTotal_amount()), TradeStatus.SUCCESS);
+                    callbackForm.getBuyer_id(), CommonUtil.getGmtDate(callbackForm.getGmt_create()),
+                    CommonUtil.getGmtDate(callbackForm.getGmt_payment()), "", "",
+                    NumberUtils.toLong(callbackForm.getTotal_amount()), TradeStatus.SUCCESS);
             logger.info("alipay recharge callback trade result: " + rs.toJson());
 
         } else if (com.simba.alipay.enums.TradeStatus.REFUNDSUCCESS.getName()
@@ -91,8 +84,8 @@ public class TradeByAliPay implements AliPayInterface {
 
             JsonResult rs = refundContext.finishTrade(tradeUser.getUserID(),
                     callbackForm.getOut_trade_no(), callbackForm.getTrade_no(),
-                    callbackForm.getBuyer_id(), getGmtDate(callbackForm.getGmt_create()),
-                    getGmtDate(callbackForm.getGmt_payment()), "", "",
+                    callbackForm.getBuyer_id(), CommonUtil.getGmtDate(callbackForm.getGmt_create()),
+                    CommonUtil.getGmtDate(callbackForm.getGmt_payment()), "", "",
                     NumberUtils.toLong(callbackForm.getRefund_fee()), TradeStatus.SUCCESS);
             logger.info("alipay refund callback trade result: " + rs.toJson());
 

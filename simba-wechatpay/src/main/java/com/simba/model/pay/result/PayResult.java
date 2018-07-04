@@ -1,18 +1,5 @@
 package com.simba.model.pay.result;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
-
-import org.apache.commons.lang.math.NumberUtils;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
-
 import com.simba.framework.util.common.XmlUtil;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -169,8 +156,6 @@ public class PayResult {
 	private String coupon_type_0;
 
 	private String coupon_type_1;
-
-	private List<Coupon> coupons;
 
 	public String getAppid() {
 		return appid;
@@ -412,14 +397,6 @@ public class PayResult {
 		this.time_end = time_end;
 	}
 
-	public List<Coupon> getCoupons() {
-		return coupons;
-	}
-
-	public void setCoupons(List<Coupon> coupons) {
-		this.coupons = coupons;
-	}
-
 	public String getReturn_code() {
 		return return_code;
 	}
@@ -445,97 +422,4 @@ public class PayResult {
 		return toXML();
 	}
 
-	public static class Coupon {
-		/**
-		 * <pre>
-		 * 代金券类型
-		 * coupon_type_$n
-		 * 否
-		 * String
-		 * CASH
-		 * <li>CASH--充值代金券
-		 * <li>NO_CASH---非充值代金券
-		 * 	订单使用代金券时有返回（取值：CASH、NO_CASH）。$n为下标,从0开始编号，举例：coupon_type_$0
-		 * </pre>
-		 */
-		private String couponType;
-
-		/**
-		 * <pre>
-		 * 代金券ID
-		 * coupon_id_$n
-		 * 否
-		 * String(20)
-		 * 10000
-		 * 代金券ID, $n为下标，从0开始编号
-		 * </pre>
-		 */
-		private String couponId;
-
-		/**
-		 * <pre>
-		 * 单个代金券支付金额
-		 * coupon_fee_$n
-		 * 否
-		 * Int
-		 * 100
-		 * 单个代金券支付金额, $n为下标，从0开始编号
-		 * </pre>
-		 */
-		private Integer couponFee;
-
-		public Coupon(String couponType, String couponId, Integer couponFee) {
-			this.couponType = couponType;
-			this.couponId = couponId;
-			this.couponFee = couponFee;
-		}
-
-		public String getCouponType() {
-			return this.couponType;
-		}
-
-		public void setCouponType(String couponType) {
-			this.couponType = couponType;
-		}
-
-		public String getCouponId() {
-			return this.couponId;
-		}
-
-		public void setCouponId(String couponId) {
-			this.couponId = couponId;
-		}
-
-		public Integer getCouponFee() {
-			return this.couponFee;
-		}
-
-		public void setCouponFee(Integer couponFee) {
-			this.couponFee = couponFee;
-		}
-
-	}
-
-	/**
-	 * 通过xml组装coupons属性内容
-	 * 
-	 * @throws XPathExpressionException
-	 * @throws DOMException
-	 * @throws IOException
-	 * @throws SAXException
-	 * @throws ParserConfigurationException
-	 */
-	public void composeCoupons(String xml) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
-		if (this.coupon_count != null && this.coupon_count > 0) {
-			this.coupons = new ArrayList<>();
-			Document doc = XmlUtil.parseXMLContent(xml);
-			Element root = doc.getDocumentElement();
-			for (int i = 0; i < this.coupon_count; i++) {
-				String type = ((Element) XmlUtil.selectSingleNode("/xml/coupon_type_" + i, root)).getTextContent();
-				String id = ((Element) XmlUtil.selectSingleNode("/xml/coupon_id_" + i, root)).getTextContent();
-				String fee = ((Element) XmlUtil.selectSingleNode("/xml/coupon_fee_" + i, root)).getTextContent();
-				this.coupons.add(new Coupon(type, id, NumberUtils.toInt(fee)));
-			}
-		}
-	}
 }

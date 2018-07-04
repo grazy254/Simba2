@@ -76,7 +76,6 @@ public class PayCallbackController {
 	public String orderReceive(@RequestBody String body, ModelMap model) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		logger.info("*****************************接收微信支付结果通知:" + body);
 		PayResult payResult = XmlUtil.toOject(body, PayResult.class);
-		payResult.composeCoupons(body);
 		WxPayUtil.getInstance().checkSign(payResult);
 		payService.dealResult(payResult);
 		CallbackResultRes res = new CallbackResultRes();

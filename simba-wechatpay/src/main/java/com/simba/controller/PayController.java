@@ -153,10 +153,13 @@ public class PayController {
 	/**
 	 * 完成沙箱测试用例
 	 * 
+	 * @param request
+	 * @param tradeType
 	 * @return
+	 * @throws Exception
 	 */
 	@RequestMapping("/sandbox")
-	public JsonResult sandbox(String tradeType) {
+	public JsonResult sandbox(HttpServletRequest request, String tradeType) throws Exception {
 		// 是否启用沙箱测试
 		boolean sandbox = true;
 		if ("false".equals(sandboxEnabled)) {
@@ -166,15 +169,18 @@ public class PayController {
 			throw new BussException("没有启动沙箱测试环境");
 		}
 		if ("APP".equals(tradeType)) {
-			sandboxTestApp();
+			sandboxTestApp(request);
 		}
 		return new JsonResult();
 	}
 
 	/**
 	 * 启动沙箱测试微信App支付
+	 * 
+	 * @param request
 	 */
-	private void sandboxTestApp() {
+	private void sandboxTestApp(HttpServletRequest request) {
+		logger.info("开始执行微信App支付沙箱测试用例");
 
 	}
 }

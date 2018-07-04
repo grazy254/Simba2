@@ -158,6 +158,18 @@ public class PayResult {
 	 */
 	private String time_end;
 
+	private String coupon_id_0;
+
+	private String coupon_id_1;
+
+	private String coupon_fee_0;
+
+	private String coupon_fee_1;
+
+	private String coupon_type_0;
+
+	private String coupon_type_1;
+
 	private List<Coupon> coupons;
 
 	public String getAppid() {
@@ -324,6 +336,54 @@ public class PayResult {
 		return transaction_id;
 	}
 
+	public String getCoupon_id_0() {
+		return coupon_id_0;
+	}
+
+	public void setCoupon_id_0(String coupon_id_0) {
+		this.coupon_id_0 = coupon_id_0;
+	}
+
+	public String getCoupon_id_1() {
+		return coupon_id_1;
+	}
+
+	public void setCoupon_id_1(String coupon_id_1) {
+		this.coupon_id_1 = coupon_id_1;
+	}
+
+	public String getCoupon_fee_0() {
+		return coupon_fee_0;
+	}
+
+	public void setCoupon_fee_0(String coupon_fee_0) {
+		this.coupon_fee_0 = coupon_fee_0;
+	}
+
+	public String getCoupon_fee_1() {
+		return coupon_fee_1;
+	}
+
+	public void setCoupon_fee_1(String coupon_fee_1) {
+		this.coupon_fee_1 = coupon_fee_1;
+	}
+
+	public String getCoupon_type_0() {
+		return coupon_type_0;
+	}
+
+	public void setCoupon_type_0(String coupon_type_0) {
+		this.coupon_type_0 = coupon_type_0;
+	}
+
+	public String getCoupon_type_1() {
+		return coupon_type_1;
+	}
+
+	public void setCoupon_type_1(String coupon_type_1) {
+		this.coupon_type_1 = coupon_type_1;
+	}
+
 	public void setTransaction_id(String transaction_id) {
 		this.transaction_id = transaction_id;
 	}
@@ -465,8 +525,7 @@ public class PayResult {
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
 	 */
-	public void composeCoupons(String xml)
-			throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+	public void composeCoupons(String xml) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		if (this.coupon_count != null && this.coupon_count > 0) {
 			this.coupons = new ArrayList<>();
 			Document doc = XmlUtil.parseXMLContent(xml);

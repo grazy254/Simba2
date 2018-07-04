@@ -85,6 +85,9 @@ public class SmartUser {
 	
 	@DescAnnotation(desc = "分组")
 	private  String  group;
+	
+	@DescAnnotation(desc = "uuid")
+	private  String  uuid;
 
 	public long getId() {
 		return id;
@@ -190,10 +193,18 @@ public class SmartUser {
 		this.group = group;
 	}
 
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
 	@Override
 	public String toString() {
 		return "SmartUser [id=" + id + ", account=" + account + ", name=" + name + ", email=" + email + ", telNo=" + telNo + ", password=" + password + ", createTime=" + createTime + ", status="
-				+ status + ", groupId=" + groupId + ", sex=" + sex + ", headPic=" + headPic + ", thirdSystem=" + thirdSystem + ", group=" + group + "]";
+				+ status + ", groupId=" + groupId + ", sex=" + sex + ", headPic=" + headPic + ", thirdSystem=" + thirdSystem + ", group=" + group + ", uuid=" + uuid + "]";
 	}
 
 	

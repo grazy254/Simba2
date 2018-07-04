@@ -361,7 +361,7 @@ public class HttpClientUtil {
 		String resp = null;
 		PostMethod post = new PostMethod(url);
 		try {
-			RequestEntity requestEntity = new StringRequestEntity(FileUtils.readFileToString(xmlFile), "application/xml", ConstantData.DEFAULT_CHARSET);
+			RequestEntity requestEntity = new StringRequestEntity(FileUtils.readFileToString(xmlFile), "text/xml", ConstantData.DEFAULT_CHARSET);
 			post.setRequestEntity(requestEntity);
 			// 指定请求内容的类型
 			post.setRequestHeader("Content-type", "application/xml; charset=" + ConstantData.DEFAULT_CHARSET);
@@ -403,7 +403,7 @@ public class HttpClientUtil {
 		String resp = null;
 		PostMethod post = new PostMethod(url);
 		try {
-			RequestEntity requestEntity = new StringRequestEntity(xml, "application/xml", ConstantData.DEFAULT_CHARSET);
+			RequestEntity requestEntity = new StringRequestEntity(xml, "text/xml", ConstantData.DEFAULT_CHARSET);
 			post.setRequestEntity(requestEntity);
 			// 指定请求内容的类型
 			post.setRequestHeader("Content-type", "application/xml; charset=" + ConstantData.DEFAULT_CHARSET);

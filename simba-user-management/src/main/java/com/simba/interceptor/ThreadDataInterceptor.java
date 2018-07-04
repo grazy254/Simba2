@@ -69,13 +69,10 @@ public class ThreadDataInterceptor implements HandlerInterceptor {
 	private void threadDataInterceptor(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		Object userId = session.getAttribute("userId");
-		Object openid = session.getAttribute("openid");
-		if (userId == null && openid == null) {
+		if (userId == null) {
 			logger.warn("您还未登录系统，无法set登录session进去" + request.getRequestURI());
 		}else{
 			logger.info("userId:" +userId.toString());
-			logger.info("userId:" +Long.parseLong(userId.toString()));
-			logger.info("userId:" +smartUserService);
 			ThreadDataUtil.set("account", smartUserService.get(Long.parseLong(userId.toString())));
 			SmartUser smartUser= smartUserService.get(Long.parseLong(userId.toString()));
 			//处于安全考虑，将密码设为空

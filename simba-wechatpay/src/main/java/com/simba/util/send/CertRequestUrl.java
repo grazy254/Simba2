@@ -65,6 +65,7 @@ public class CertRequestUrl {
 			httpPost.setEntity(new StringEntity(new String(xml.getBytes("UTF-8"), "ISO-8859-1")));
 			try (CloseableHttpResponse response = httpclient.execute(httpPost)) {
 				String result = EntityUtils.toString(response.getEntity(), Consts.UTF_8);
+				logger.info("微信支付带证书提交请求到:" + url + ",返回结果:" + result);
 				return result;
 			}
 		} finally {

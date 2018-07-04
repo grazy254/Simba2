@@ -2,10 +2,14 @@ package com.simba.wallet.util;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import com.relops.snowflake.Snowflake;
 import com.simba.framework.util.common.UUIDUtil;
+import com.simba.framework.util.date.DateUtil;
 import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeUser;
 import com.simba.wallet.util.Constants.AccountActiveStatus;
@@ -32,6 +36,9 @@ public class CommonUtil {
     public static void main(String[] args) {
         try {
             System.out.println(CNYToLong("1.2332"));
+            System.out.println(Date.from(LocalDate.of(1979, 1, 1).atStartOfDay()
+                    .atZone(ZoneId.systemDefault()).toInstant()));
+            System.out.println(DateUtil.str2Date("1979-01-01", DateUtil.DAY_FORMAT, new Date()));
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -264,6 +271,13 @@ public class CommonUtil {
                 }
             }
         }
+    }
+
+    public static Date getGmtDate(String gmtDate) {
+        if (gmtDate == null) {
+            return DateUtil.str2Date("1979-01-01", DateUtil.DAY_FORMAT, new Date());
+        }
+        return DateUtil.str2Date(gmtDate, "yyyyMMddHHmmss");
     }
 
 }

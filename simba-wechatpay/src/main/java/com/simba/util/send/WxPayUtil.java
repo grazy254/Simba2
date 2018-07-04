@@ -195,8 +195,8 @@ public class WxPayUtil {
 		String resp = HttpClientUtil.postXML(WxPayConstantData.getInstance().getOrderqueryUrl(), xml);
 		logger.info("查询订单返回结果:" + resp);
 		OrderQueryRes result = XmlUtil.toOject(resp, OrderQueryRes.class);
-		result.composeCoupons(resp);
 		checkSign(result);
+		result.composeCoupons(resp);
 		if (!"SUCCESS".equals(result.getReturn_code()) || !"SUCCESS".equals(result.getResult_code())) {
 			throw new BussException("微信查询订单发生异常:" + result.getReturn_msg() + "," + result.getErr_code_des());
 		}

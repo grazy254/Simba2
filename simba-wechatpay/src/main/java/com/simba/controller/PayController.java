@@ -1,5 +1,6 @@
 package com.simba.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -8,7 +9,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.ParseException;
@@ -20,8 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.simba.controller.form.RefundForm;
 import com.simba.exception.BussException;
 import com.simba.framework.util.common.ServerUtil;
+import com.simba.framework.util.common.ThreadUtil;
 import com.simba.framework.util.data.RandomUtil;
 import com.simba.framework.util.json.JsonResult;
+import com.simba.model.constant.ConstantData;
+import com.simba.model.pay.downloadbill.DownloadBillReq;
 import com.simba.model.pay.refund.RefundReq;
 import com.simba.model.pay.unifiedorder.UnifiedOrderReq;
 import com.simba.model.pay.unifiedorder.UnifiedOrderRes;
@@ -55,6 +61,9 @@ public class PayController {
 
 	@Value("${wx.pay.sandbox}")
 	private String sandboxEnabled;
+
+	@Value("${wx.pay.bill.dir}")
+	private String billDir;
 
 	@Autowired
 	private PayService payService;
@@ -178,9 +187,72 @@ public class PayController {
 	 * 启动沙箱测试微信App支付
 	 * 
 	 * @param request
+	 * @throws Exception
 	 */
-	private void sandboxTestApp(HttpServletRequest request) {
+	private void sandboxTestApp(HttpServletRequest request) throws Exception {
 		logger.info("开始执行微信App支付沙箱测试用例");
-
+		logger.info("测试用例1[APP-正常] 订单金额2.01元，用户支付成功");
+		UnifiedOrderReq req = new UnifiedOrderReq();
+		req.setBody("testwechatpay");
+		req.setDetail("testdetail");
+		req.setAttach("attach");
+		req.setDevice_info("deviceInfo");
+		req.setGoods_tag("goodsTag");
+		req.setLimit_pay("no_credit");
+		req.setProduct_id("testProductId");
+		req.setScene_info("sceneInfo");
+		req.setTotal_fee(201);
+		order(request, req);
+		ThreadUtil.sleep(6000);
+		WxPayUtil.getInstance().queryOrderByOutTradeNo(req.getOut_trade_no());
+		logger.info("测试用例2[APP-正常] 订单金额2.02元 (含0.01元充值代金券，0.02元免充值代金券)，用户支付成功");
+		req.setTotal_fee(202);
+		order(request, req);
+		ThreadUtil.sleep(6000);
+		WxPayUtil.getInstance().queryOrderByOutTradeNo(req.getOut_trade_no());
+		logger.info("测试用例3 [APP-异常] 订单金额2.30元， 用户支付成功，商户未收到微信支付结果通知");
+		req.setTotal_fee(230);
+		order(request, req);
+		ThreadUtil.sleep(6000);
+		WxPayUtil.getInstance().queryOrderByOutTradeNo(req.getOut_trade_no());
+		logger.info("测试用例4 [APP-异常] 订单金额2.31元，用户支付失败，商户未收到微信支付结果通知");
+		req.setTotal_fee(231);
+		order(request, req);
+		ThreadUtil.sleep(6000);
+		WxPayUtil.getInstance().queryOrderByOutTradeNo(req.getOut_trade_no());
+		logger.info("测试用例5 [APP-异常] 订单金额2.32元，用户支付成功，微信支付重复通知商户");
+		req.setTotal_fee(232);
+		order(request, req);
+		ThreadUtil.sleep(6000);
+		WxPayUtil.getInstance().queryOrderByOutTradeNo(req.getOut_trade_no());
+		logger.info("测试用例6 [APP-异常] 订单金额2.33元，用户支付成功，微信支付通知签名非法");
+		req.setTotal_fee(233);
+		order(request, req);
+		ThreadUtil.sleep(6000);
+		WxPayUtil.getInstance().queryOrderByOutTradeNo(req.getOut_trade_no());
+		logger.info("测试用例7 [APP-异常] 订单金额2.34元，用户支付成功，微信支付通知关键信息部一致");
+		req.setTotal_fee(234);
+		order(request, req);
+		ThreadUtil.sleep(6000);
+		WxPayUtil.getInstance().queryOrderByOutTradeNo(req.getOut_trade_no());
+		logger.info("测试用例8 [APP-对账]　订单金额2.79元，支付成功，通知失败，对账不平");
+		req.setTotal_fee(279);
+		order(request, req);
+		ThreadUtil.sleep(6000);
+		WxPayUtil.getInstance().queryOrderByOutTradeNo(req.getOut_trade_no());
+		Date yesterday = DateUtils.addDays(new Date(), -1);
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		String billDate = format.format(yesterday);
+		DownloadBillReq requestBill = new DownloadBillReq();
+		requestBill.setBill_date(billDate);
+		requestBill.setBill_type("ALL");
+		String billContent = WxPayUtil.getInstance().downloadBill(requestBill);
+		File dir = new File(billDir);
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
+		String billFile = billDir + "/" + "wechatpay" + "/" + billDate + ".txt";
+		FileUtils.write(new File(billFile), billContent, ConstantData.DEFAULT_CHARSET);
+		logger.info("写入微信支付对账单成功:" + billFile);
 	}
 }

@@ -459,7 +459,7 @@ public class WxPayUtil {
 		}
 	}
 
-	private void checkSign(Object result) {
+	public void checkSign(Object result) {
 		Map<String, String> params = BeanUtils.xmlBean2Map(result);
 		Map<String, String> signParams = new HashMap<>();
 		for (String key : params.keySet()) {

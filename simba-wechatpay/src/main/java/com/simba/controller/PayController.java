@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.simba.controller.form.RefundForm;
+import com.simba.exception.BussException;
 import com.simba.framework.util.common.ServerUtil;
 import com.simba.framework.util.data.RandomUtil;
 import com.simba.framework.util.json.JsonResult;
@@ -51,6 +52,9 @@ public class PayController {
 
 	@Value("${wx.pay.key}")
 	private String key;
+
+	@Value("${wx.pay.sandbox}")
+	private String sandboxEnabled;
 
 	@Autowired
 	private PayService payService;
@@ -152,8 +156,25 @@ public class PayController {
 	 * @return
 	 */
 	@RequestMapping("/sandbox")
-	public JsonResult sandbox() {
-
+	public JsonResult sandbox(String tradeType) {
+		// 是否启用沙箱测试
+		boolean sandbox = true;
+		if ("false".equals(sandboxEnabled)) {
+			sandbox = false;
+		}
+		if (!sandbox) {
+			throw new BussException("没有启动沙箱测试环境");
+		}
+		if ("APP".equals(tradeType)) {
+			sandboxTestApp();
+		}
 		return new JsonResult();
+	}
+
+	/**
+	 * 启动沙箱测试微信App支付
+	 */
+	private void sandboxTestApp() {
+
 	}
 }

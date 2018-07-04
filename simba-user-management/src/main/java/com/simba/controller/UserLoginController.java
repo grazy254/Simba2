@@ -69,86 +69,6 @@ public class UserLoginController {
 		return isVerif;
 	}
 
-	/////////////////////////////////////////////////////// APP相关接口开始/////////////////////////////////////////////////////////////
-	@ResponseBody
-	@RequestMapping("/toLogin")
-	public JsonResult toLogin(String code, String account, String password, HttpSession session) throws Exception {
-		JsonResult json=smartUserService.toLogin(code, account, password);
-		if(json.getCode()==200){
-			session.setAttribute("userId",json.getData());
-			return new JsonResult("登录成功",200);
-		}else{
-			return new JsonResult("登录失败",400);
-		}
-		
-	}
-	
-	@ResponseBody
-	@RequestMapping("/toLoginVerif")
-	public JsonResult toLoginVerif(String mobile, String verif, HttpSession session) throws Exception {
-		//验证短信验证码
-		if(!verif(mobile,verif)){
-			throw new BussException("短信验证码错误");
-		}
-		JsonResult json=smartUserService.toLoginVerif(mobile);
-		if(json.getCode()==200){
-			session.setAttribute("userId",json.getData());
-			return new JsonResult("登录成功",200);
-		}else{
-			return new JsonResult("登录失败",400);
-		}
-	}
-
-	@RequestMapping("/register")
-	public String register() {
-		return "userLogin/register";
-	}
-
-	@ResponseBody
-	@RequestMapping("/toRegisterApp")
-	public JsonResult toRegisterApp(String code, String account, String password, HttpSession session) throws Exception {
-		JsonResult json =new JsonResult();
-		json = smartUserService.toRegisterApp(code, account, password);
-		if(json.getCode()==200){
-			int re =Integer.parseInt(json.getData().toString());
-			if (re > 0) {
-				// 注册成功后userId写入session
-				session.setAttribute("userId", re);
-			}
-			return new JsonResult("注册成功",200);
-		}else{
-			return json;
-		}
-		
-		
-	}
-
-	@ResponseBody
-	@RequestMapping("/toResetPasswordApp")
-	public JsonResult toResetPasswordApp(String code, String account, String oldPassword, String newPassword) throws Exception {
-		return smartUserService.toResetPasswordApp(code, account, oldPassword, newPassword);
-	}
-
-	@ResponseBody
-	@RequestMapping("/toResetPasswordWithUserIdApp")
-	public JsonResult toResetPasswordWithUserIdApp(String code, long userId, String oldPassword, String newPassword) throws Exception {
-		return smartUserService.toResetPasswordWithUserIdApp(code, userId, oldPassword, newPassword);
-	}
-
-	@ResponseBody
-	@RequestMapping("/toFindPasswordApp")
-	public JsonResult toFindPasswordApp(String code, String account, String newPassword) throws Exception {
-		return smartUserService.toFindPasswordApp(code, account, newPassword);
-	}
-
-	@ResponseBody
-	@RequestMapping("/getMobileByUserId")
-	public JsonResult getMobileByUserId(long userId) {
-		 return smartUserService.getMobileByUserId(userId);
-	}
-
-	/////////////////////////////////////////////////////// APP相关接口结束/////////////////////////////////////////////////////////////
-
 	@ResponseBody
 	@RequestMapping("/toRegister")
 	public JsonResult toRegister(String account, String email, String mobilephone, String nickname, String password, HttpSession session) throws Exception {
@@ -289,5 +209,92 @@ public class UserLoginController {
 		url = "https://open.weixin.qq.com/connect/qrconnect?appid=" + appid + "&redirect_uri=" + redirectUri + "&response_type=" + code + "&scope=" + scope + "&state=" + state + "#wechat_redirect";
 		return new JsonResult(url, "返回成功", 200);
 	}
+	
+	
+	
+
+	/////////////////////////////////////////////////////// APP相关接口开始/////////////////////////////////////////////////////////////
+	@ResponseBody
+	@RequestMapping("/toLogin")
+	public JsonResult toLogin(String code, String account, String password, HttpSession session) throws Exception {
+		JsonResult json=smartUserService.toLogin(code, account, password);
+		if(json.getCode()==200){
+			session.setAttribute("userId",json.getData());
+			return new JsonResult("登录成功",200);
+		}else{
+			return new JsonResult("登录失败",400);
+		}
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping("/toLoginVerif")
+	public JsonResult toLoginVerif(String mobile, String verif, HttpSession session) throws Exception {
+		//验证短信验证码
+		if(!verif(mobile,verif)){
+			throw new BussException("短信验证码错误");
+		}
+		JsonResult json=smartUserService.toLoginVerif(mobile);
+		if(json.getCode()==200){
+			session.setAttribute("userId",json.getData());
+			return new JsonResult("登录成功",200);
+		}else{
+			return new JsonResult("登录失败",400);
+		}
+	}
+
+	@RequestMapping("/register")
+	public String register() {
+		return "userLogin/register";
+	}
+
+	@ResponseBody
+	@RequestMapping("/toRegisterApp")
+	public JsonResult toRegisterApp(String code, String account, String password, HttpSession session) throws Exception {
+		JsonResult json =new JsonResult();
+		json = smartUserService.toRegisterApp(code, account, password);
+		if(json.getCode()==200){
+			int re =Integer.parseInt(json.getData().toString());
+			if (re > 0) {
+				// 注册成功后userId写入session
+				session.setAttribute("userId", re);
+			}
+			return new JsonResult("注册成功",200);
+		}else{
+			return json;
+		}
+		
+		
+	}
+
+	@ResponseBody
+	@RequestMapping("/toResetPasswordApp")
+	public JsonResult toResetPasswordApp(String code, String account, String oldPassword, String newPassword) throws Exception {
+		return smartUserService.toResetPasswordApp(code, account, oldPassword, newPassword);
+	}
+
+	@ResponseBody
+	@RequestMapping("/toResetPasswordWithUserIdApp")
+	public JsonResult toResetPasswordWithUserIdApp(String code, long userId, String oldPassword, String newPassword) throws Exception {
+		return smartUserService.toResetPasswordWithUserIdApp(code, userId, oldPassword, newPassword);
+	}
+
+	@ResponseBody
+	@RequestMapping("/toFindPasswordApp")
+	public JsonResult toFindPasswordApp(String code, String account, String newPassword) throws Exception {
+		return smartUserService.toFindPasswordApp(code, account, newPassword);
+	}
+
+	@ResponseBody
+	@RequestMapping("/getMobileByUserId")
+	public JsonResult getMobileByUserId(long userId) {
+		 return smartUserService.getMobileByUserId(userId);
+	}
+
+	/////////////////////////////////////////////////////// APP相关接口结束/////////////////////////////////////////////////////////////
+
+	
+	
+	
 
 }

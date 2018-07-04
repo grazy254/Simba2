@@ -189,7 +189,17 @@ public class OrderQueryRes {
 
 	private String retmsg;
 
+	private String retcode;
+
 	private List<Coupon> coupons;
+
+	public String getRetcode() {
+		return retcode;
+	}
+
+	public void setRetcode(String retcode) {
+		this.retcode = retcode;
+	}
 
 	public String getRetmsg() {
 		return retmsg;

@@ -69,7 +69,7 @@ public class ThreadDataInterceptor implements HandlerInterceptor {
 	private void threadDataInterceptor(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		Object userId = session.getAttribute("userId");
-		if (userId == null) {
+		if (userId == null || "".equals(userId)){
 			logger.warn("您还未登录系统，无法set登录session进去" + request.getRequestURI());
 		}else{
 			logger.info("userId:" +userId.toString());

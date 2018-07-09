@@ -27,4 +27,66 @@ public class BusResult {
 
 	private String infocode;
 
+	/**
+	 * 公交换乘信息列表
+	 */
+	private BusRoute route;
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getInfo() {
+		return info;
+	}
+
+	public void setInfo(String info) {
+		this.info = info;
+	}
+
+	public String getCount() {
+		return count;
+	}
+
+	public void setCount(String count) {
+		this.count = count;
+	}
+
+	public String getInfocode() {
+		return infocode;
+	}
+
+	public void setInfocode(String infocode) {
+		this.infocode = infocode;
+	}
+
+	public BusRoute getRoute() {
+		return route;
+	}
+
+	public void setRoute(BusRoute route) {
+		this.route = route;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("BusResult [status=");
+		builder.append(status);
+		builder.append(", info=");
+		builder.append(info);
+		builder.append(", count=");
+		builder.append(count);
+		builder.append(", infocode=");
+		builder.append(infocode);
+		builder.append(", route=");
+		builder.append(route);
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

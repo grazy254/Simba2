@@ -8,7 +8,7 @@ import java.util.List;
  * @author caozhejun
  *
  */
-public class Route {
+public class WalkingRoute {
 
 	/**
 	 * 起点坐标

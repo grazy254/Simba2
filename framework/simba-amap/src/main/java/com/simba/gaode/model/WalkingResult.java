@@ -30,7 +30,7 @@ public class WalkingResult {
 	/**
 	 * 路线信息列表
 	 */
-	private Route route;
+	private WalkingRoute route;
 
 	public String getStatus() {
 		return status;
@@ -64,11 +64,11 @@ public class WalkingResult {
 		this.infocode = infocode;
 	}
 
-	public Route getRoute() {
+	public WalkingRoute getRoute() {
 		return route;
 	}
 
-	public void setRoute(Route route) {
+	public void setRoute(WalkingRoute route) {
 		this.route = route;
 	}
 

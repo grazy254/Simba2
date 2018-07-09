@@ -3,12 +3,12 @@ package com.simba.gaode.model;
 import java.util.List;
 
 /**
- * 公交换乘信息列表
+ * 步行导航信息列表
  * 
  * @author caozhejun
  *
  */
-public class BusRoute {
+public class WalkingSegment {
 
 	/**
 	 * 起点坐标
@@ -21,19 +21,19 @@ public class BusRoute {
 	private String destination;
 
 	/**
-	 * 起点和终点的步行距离 单位：米
+	 * 每段线路步行距离 单位：米
 	 */
 	private String distance;
 
 	/**
-	 * 出租车费用 单位：元
+	 * 步行预计时间 单位：秒
 	 */
-	private String taxi_cost;
+	private String duration;
 
 	/**
-	 * 公交换乘方案列表
+	 * 步行路段列表
 	 */
-	private List<Transit> transits;
+	private List<Step> steps;
 
 	public String getOrigin() {
 		return origin;
@@ -59,35 +59,35 @@ public class BusRoute {
 		this.distance = distance;
 	}
 
-	public String getTaxi_cost() {
-		return taxi_cost;
+	public String getDuration() {
+		return duration;
 	}
 
-	public void setTaxi_cost(String taxi_cost) {
-		this.taxi_cost = taxi_cost;
+	public void setDuration(String duration) {
+		this.duration = duration;
 	}
 
-	public List<Transit> getTransits() {
-		return transits;
+	public List<Step> getSteps() {
+		return steps;
 	}
 
-	public void setTransits(List<Transit> transits) {
-		this.transits = transits;
+	public void setSteps(List<Step> steps) {
+		this.steps = steps;
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("BusRoute [origin=");
+		builder.append("WalkingSegment [origin=");
 		builder.append(origin);
 		builder.append(", destination=");
 		builder.append(destination);
 		builder.append(", distance=");
 		builder.append(distance);
-		builder.append(", taxi_cost=");
-		builder.append(taxi_cost);
-		builder.append(", transits=");
-		builder.append(transits);
+		builder.append(", duration=");
+		builder.append(duration);
+		builder.append(", steps=");
+		builder.append(steps);
 		builder.append("]");
 		return builder.toString();
 	}

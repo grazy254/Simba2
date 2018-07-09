@@ -1,10 +1,14 @@
 package com.simba.gaode.model;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.simba.gaode.model.enums.Extensions;
 import com.simba.gaode.model.enums.NightFlag;
 import com.simba.gaode.model.enums.Strategy;
+import com.simba.model.constant.ConstantData;
 
 /**
  * 公交线路规划请求参数对象
@@ -166,11 +170,21 @@ public class BusLineParam {
 		return builder.toString();
 	}
 
-	public String toParamUrl() {
+	public String buildParamUrl() throws UnsupportedEncodingException {
 		StringBuilder builder = new StringBuilder();
 		builder.append("&origin=" + origin.toString());
 		builder.append("&destination=" + destination.toString());
-		builder.append("&city=" + city);
+		builder.append("&city=" + URLEncoder.encode(city, ConstantData.DEFAULT_CHARSET));
+		builder.append("&cityd=" + cityd);
+		builder.append("&extensions=" + extensions.getName());
+		builder.append("&strategy=" + strategy.getName());
+		builder.append("&nightflag=" + nightflag.getName());
+		if (StringUtils.isNotEmpty(date)) {
+			builder.append("&date=" + date);
+		}
+		if (StringUtils.isNotEmpty(time)) {
+			builder.append("&time=" + time);
+		}
 		return builder.toString();
 	}
 

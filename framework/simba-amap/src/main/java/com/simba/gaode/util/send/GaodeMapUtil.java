@@ -1,5 +1,7 @@
 package com.simba.gaode.util.send;
 
+import java.io.UnsupportedEncodingException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -59,12 +61,15 @@ public class GaodeMapUtil {
 		return result;
 	}
 
-	public String bus(BusLineParam param) {
-		String url = GaodeConstantData.BUSLINEURL + "&key=" + key + param.toParamUrl();
-		return null;
+	public String bus(BusLineParam param) throws UnsupportedEncodingException {
+		String url = GaodeConstantData.BUSLINEURL + "&key=" + key + param.buildParamUrl();
+		logger.info("提交高德地图[公交路径规划]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[公交路径规划]url:" + url + ",返回结果:" + res);
+		return res;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UnsupportedEncodingException {
 		MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
 		MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
 		System.out.println("步行" + GaodeMapUtil.getInstance().walking(origin, destination));

@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.simba.framework.util.http.HttpClientUtil;
 import com.simba.framework.util.json.FastJsonUtil;
+import com.simba.gaode.model.BusLineParam;
 import com.simba.gaode.model.MapAddressPoint;
 import com.simba.gaode.model.WalkingResult;
 import com.simba.gaode.util.common.GaodeConstantData;
@@ -58,10 +59,18 @@ public class GaodeMapUtil {
 		return result;
 	}
 
+	public String bus(BusLineParam param) {
+		String url = GaodeConstantData.BUSLINEURL + "&key=" + key + param.toParamUrl();
+		return null;
+	}
+
 	public static void main(String[] args) {
 		MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
 		MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
-		System.out.println(GaodeMapUtil.getInstance().walking(origin, destination));
+		System.out.println("步行" + GaodeMapUtil.getInstance().walking(origin, destination));
+
+		BusLineParam param = new BusLineParam(origin, destination, "珠海市");
+		System.out.println("公交" + GaodeMapUtil.getInstance().bus(param));
 	}
 
 }

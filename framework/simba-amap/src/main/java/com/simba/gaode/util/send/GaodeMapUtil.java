@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.simba.framework.util.http.HttpClientUtil;
 import com.simba.framework.util.json.FastJsonUtil;
+import com.simba.gaode.BikeResult;
 import com.simba.gaode.model.BusLineParam;
 import com.simba.gaode.model.BusResult;
 import com.simba.gaode.model.DriveLineParam;
@@ -96,6 +97,22 @@ public class GaodeMapUtil {
 		return result;
 	}
 
+	/**
+	 * 骑行路径规划
+	 * 
+	 * @param origin
+	 * @param destination
+	 * @return
+	 */
+	public BikeResult bike(MapAddressPoint origin, MapAddressPoint destination) {
+		String url = GaodeConstantData.BIKEURL + "&key=" + key + "&origin=" + origin.toString() + "&destination=" + destination.toString();
+		logger.info("提交高德地图[骑行路径规划]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[骑行路径规划]url:" + url + ",返回结果:" + res);
+		BikeResult result = FastJsonUtil.toObject(res, BikeResult.class);
+		return result;
+	}
+
 	public static void main(String[] args) throws UnsupportedEncodingException {
 		MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
 		MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
@@ -106,6 +123,8 @@ public class GaodeMapUtil {
 
 		DriveLineParam dparam = new DriveLineParam(origin.toString(), destination);
 		logger.info("驾车" + GaodeMapUtil.getInstance().drive(dparam));
+
+		logger.info("骑行" + GaodeMapUtil.getInstance().bike(origin, destination));
 	}
 
 }

@@ -1,5 +1,9 @@
 package com.simba.gaode.model;
 
+import java.util.List;
+
+import org.apache.commons.lang3.math.NumberUtils;
+
 /**
  * 步行路径规划结果
  * 
@@ -89,4 +93,17 @@ public class WalkingResult {
 		return builder.toString();
 	}
 
+	/**
+	 * 获取步行的总距离 单位：米
+	 * @return
+	 */
+	public double getTotalDistance() {
+		List<WalkingPath> paths = this.getRoute().getPaths();
+		double totalDistance = 0.0;
+		for(WalkingPath path:paths) {
+			String distance = path.getDistance();
+			totalDistance +=  NumberUtils.toDouble(distance);
+		}
+		return totalDistance;
+	}
 }

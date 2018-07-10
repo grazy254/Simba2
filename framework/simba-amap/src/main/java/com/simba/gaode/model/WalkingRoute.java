@@ -23,7 +23,7 @@ public class WalkingRoute {
 	/**
 	 * 路线方案
 	 */
-	private List<Path> paths;
+	private List<WalkingPath> paths;
 
 	public String getOrigin() {
 		return origin;
@@ -41,11 +41,11 @@ public class WalkingRoute {
 		this.destination = destination;
 	}
 
-	public List<Path> getPaths() {
+	public List<WalkingPath> getPaths() {
 		return paths;
 	}
 
-	public void setPaths(List<Path> paths) {
+	public void setPaths(List<WalkingPath> paths) {
 		this.paths = paths;
 	}
 

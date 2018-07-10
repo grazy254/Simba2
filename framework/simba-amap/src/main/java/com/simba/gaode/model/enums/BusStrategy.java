@@ -6,7 +6,7 @@ package com.simba.gaode.model.enums;
  * @author caozhejun
  *
  */
-public enum Strategy {
+public enum BusStrategy {
 
 	QUICK("0", "最快捷模式"),
 
@@ -30,7 +30,7 @@ public enum Strategy {
 		return description;
 	}
 
-	private Strategy(String name, String description) {
+	private BusStrategy(String name, String description) {
 		this.name = name;
 		this.description = description;
 	}

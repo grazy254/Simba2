@@ -9,6 +9,8 @@ import com.simba.framework.util.http.HttpClientUtil;
 import com.simba.framework.util.json.FastJsonUtil;
 import com.simba.gaode.model.BusLineParam;
 import com.simba.gaode.model.BusResult;
+import com.simba.gaode.model.DriveLineParam;
+import com.simba.gaode.model.DriveResult;
 import com.simba.gaode.model.MapAddressPoint;
 import com.simba.gaode.model.WalkingResult;
 import com.simba.gaode.util.common.GaodeConstantData;
@@ -78,6 +80,22 @@ public class GaodeMapUtil {
 		return result;
 	}
 
+	/**
+	 * 驾车路径规划
+	 * 
+	 * @param param
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public DriveResult drive(DriveLineParam param) throws UnsupportedEncodingException {
+		String url = GaodeConstantData.DRIVEURL + "&key=" + key + param.buildParamUrl();
+		logger.info("提交高德地图[驾车路径规划]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[驾车路径规划]url:" + url + ",返回结果:" + res);
+		DriveResult result = FastJsonUtil.toObject(res, DriveResult.class);
+		return result;
+	}
+
 	public static void main(String[] args) throws UnsupportedEncodingException {
 		MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
 		MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
@@ -85,6 +103,9 @@ public class GaodeMapUtil {
 
 		BusLineParam param = new BusLineParam(origin, destination, "珠海市");
 		logger.info("公交" + GaodeMapUtil.getInstance().bus(param));
+
+		DriveLineParam dparam = new DriveLineParam(origin.toString(), destination);
+		logger.info("驾车" + GaodeMapUtil.getInstance().drive(dparam));
 	}
 
 }

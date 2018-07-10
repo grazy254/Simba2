@@ -18,4 +18,8 @@ public interface GaodeConstantData {
 	 */
 	String BUSLINEURL = "http://restapi.amap.com/v3/direction/transit/integrated?output=JSON";
 
+	/**
+	 * 驾车路径规划
+	 */
+	String DRIVEURL = "https://restapi.amap.com/v3/direction/driving?output=JSON";
 }

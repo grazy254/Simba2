@@ -8,7 +8,7 @@ import java.util.List;
  * @author caozhejun
  *
  */
-public class Path {
+public class WalkingPath {
 
 	/**
 	 * 起点和终点的距离

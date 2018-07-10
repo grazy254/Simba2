@@ -7,7 +7,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.simba.gaode.model.enums.Extensions;
 import com.simba.gaode.model.enums.NightFlag;
-import com.simba.gaode.model.enums.Strategy;
+import com.simba.gaode.model.enums.BusStrategy;
 import com.simba.model.constant.ConstantData;
 
 /**
@@ -46,7 +46,7 @@ public class BusLineParam {
 	/**
 	 * 公交换乘策略
 	 */
-	private Strategy strategy = Strategy.QUICK;
+	private BusStrategy strategy = BusStrategy.QUICK;
 
 	/**
 	 * 是否计算夜班车
@@ -113,11 +113,11 @@ public class BusLineParam {
 		this.extensions = extensions;
 	}
 
-	public Strategy getStrategy() {
+	public BusStrategy getStrategy() {
 		return strategy;
 	}
 
-	public void setStrategy(Strategy strategy) {
+	public void setStrategy(BusStrategy strategy) {
 		this.strategy = strategy;
 	}
 

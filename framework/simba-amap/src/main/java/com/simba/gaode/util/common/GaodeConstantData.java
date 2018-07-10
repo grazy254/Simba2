@@ -43,4 +43,9 @@ public interface GaodeConstantData {
 	 */
 	String GEOURL = "https://restapi.amap.com/v3/geocode/geo?output=JSON";
 
+	/**
+	 * 逆地理编码
+	 */
+	String REGEOURL = "https://restapi.amap.com/v3/geocode/regeo?output=JSON";
+
 }

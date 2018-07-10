@@ -1,11 +1,13 @@
 package com.simba.gaode.model.truck;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.simba.gaode.model.MapAddressPoint;
 import com.simba.gaode.model.enums.TruckStrategy;
+import com.simba.model.constant.ConstantData;
 
 /**
  * 货车路径规划请求参数对象
@@ -305,7 +307,32 @@ public class TruckParam {
 		if (StringUtils.isNotEmpty(diu)) {
 			builder.append("&diu=" + diu);
 		}
-		
+		builder.append("&strategy=" + strategy.getName());
+		if (StringUtils.isNotEmpty(waypoints)) {
+			builder.append("&waypoints=" + waypoints);
+		}
+		builder.append("&size=" + size);
+		if (StringUtils.isNotEmpty(height)) {
+			builder.append("&height=" + height);
+		}
+		if (StringUtils.isNotEmpty(width)) {
+			builder.append("&width=" + width);
+		}
+		if (StringUtils.isNotEmpty(load)) {
+			builder.append("&load=" + load);
+		}
+		if (StringUtils.isNotEmpty(weight)) {
+			builder.append("&weight=" + weight);
+		}
+		if (StringUtils.isNotEmpty(axis)) {
+			builder.append("&axis=" + axis);
+		}
+		if (StringUtils.isNotEmpty(province)) {
+			builder.append("&province=" + URLEncoder.encode(province, ConstantData.DEFAULT_CHARSET));
+		}
+		if (StringUtils.isNotEmpty(number)) {
+			builder.append("&number=" + number);
+		}
 		return builder.toString();
 	}
 

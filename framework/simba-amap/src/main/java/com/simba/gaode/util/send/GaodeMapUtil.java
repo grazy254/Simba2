@@ -13,6 +13,8 @@ import com.simba.gaode.model.bus.BusLineParam;
 import com.simba.gaode.model.bus.BusResult;
 import com.simba.gaode.model.drive.DriveLineParam;
 import com.simba.gaode.model.drive.DriveResult;
+import com.simba.gaode.model.truck.TruckParam;
+import com.simba.gaode.model.truck.TruckResult;
 import com.simba.gaode.model.walking.WalkingResult;
 import com.simba.gaode.util.common.GaodeConstantData;
 
@@ -113,18 +115,37 @@ public class GaodeMapUtil {
 		return result;
 	}
 
+	/**
+	 * 货车路径规划
+	 * 
+	 * @param param
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public TruckResult truck(TruckParam param) throws UnsupportedEncodingException {
+		String url = GaodeConstantData.TRUCKURL + "?key=" + key + param.buildParamUrl();
+		logger.info("提交高德地图[货车路径规划]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[货车路径规划]url:" + url + ",返回结果:" + res);
+		TruckResult result = FastJsonUtil.toObject(res, TruckResult.class);
+		return result;
+	}
+
 	public static void main(String[] args) throws UnsupportedEncodingException {
 		MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
 		MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
-		logger.info("步行" + GaodeMapUtil.getInstance().walking(origin, destination));
+//		logger.info("步行" + GaodeMapUtil.getInstance().walking(origin, destination));
 
-		BusLineParam param = new BusLineParam(origin, destination, "珠海市");
-		logger.info("公交" + GaodeMapUtil.getInstance().bus(param));
+//		BusLineParam param = new BusLineParam(origin, destination, "珠海市");
+//		logger.info("公交" + GaodeMapUtil.getInstance().bus(param));
+//
+//		DriveLineParam dparam = new DriveLineParam(origin.toString(), destination);
+//		logger.info("驾车" + GaodeMapUtil.getInstance().drive(dparam));
+//
+//		logger.info("骑行" + GaodeMapUtil.getInstance().bike(origin, destination));
 
-		DriveLineParam dparam = new DriveLineParam(origin.toString(), destination);
-		logger.info("驾车" + GaodeMapUtil.getInstance().drive(dparam));
-
-		logger.info("骑行" + GaodeMapUtil.getInstance().bike(origin, destination));
+//		TruckParam tparam = new TruckParam(origin, destination);
+//		logger.info("货车" + GaodeMapUtil.getInstance().truck(tparam));
 	}
 
 }

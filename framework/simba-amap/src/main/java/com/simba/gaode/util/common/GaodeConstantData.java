@@ -31,6 +31,6 @@ public interface GaodeConstantData {
 	/**
 	 * 货车路径规划
 	 */
-	String TRUCKURL = "https://restapi.amap.com/v4/direction/truck?output=JSON";
+	String TRUCKURL = "https://restapi.amap.com/v4/direction/truck";
 
 }

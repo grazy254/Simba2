@@ -1,4 +1,4 @@
-package com.simba.gaode.model.drive;
+package com.simba.gaode.model;
 
 /**
  * 驾车导航详细信息

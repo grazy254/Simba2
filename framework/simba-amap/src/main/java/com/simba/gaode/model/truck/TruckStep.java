@@ -1,33 +1,21 @@
-package com.simba.gaode.model.drive;
+package com.simba.gaode.model.truck;
 
 import java.util.List;
 
 import com.simba.gaode.model.TMC;
 
 /**
- * 导航路段
+ * 具体方案
  * 
  * @author caozhejun
  *
  */
-public class DriveStep {
+public class TruckStep {
 
 	/**
-	 * 路段指示
+	 * 行驶指示 例如：沿火器营路向南行驶112米左转
 	 */
 	private String instruction;
-
-	/**
-	 * 道路名称
-	 */
-	private String road;
-
-	/**
-	 * 此路段距离
-	 * 
-	 * 单位：米
-	 */
-	private String distance;
 
 	/**
 	 * 方向
@@ -35,11 +23,22 @@ public class DriveStep {
 	private String orientation;
 
 	/**
-	 * 此段收费 单位：元
+	 * 道路名
+	 */
+	private String road;
+
+	/**
+	 * 此路段距离 单位：米
+	 */
+	private String distance;
+
+	/**
+	 * 此段收费金额 单位：元
 	 */
 	private String tolls;
 
 	/**
+	 * 
 	 * 收费路段距离 单位：米
 	 */
 	private String toll_distance;
@@ -50,17 +49,22 @@ public class DriveStep {
 	private String toll_road;
 
 	/**
-	 * 此路段坐标点串 格式为坐标串，如：116.481247,39.990704;116.481270,39.990726
+	 * 此路段预计时间
+	 */
+	private String duration;
+
+	/**
+	 * 此路段的坐标点
 	 */
 	private String polyline;
 
 	/**
-	 * 导航主要动作
+	 * 导航主要动作 例如：左转
 	 */
 	private String action;
 
 	/**
-	 * 导航辅助动作
+	 * 导航辅助动作 例如：左转
 	 */
 	private String assistant_action;
 
@@ -69,12 +73,25 @@ public class DriveStep {
 	 */
 	private List<TMC> tmcs;
 
+	/**
+	 * 途径城市列表（此节点及子节点目前还在开发，会在日后实现）
+	 */
+	private List<City> cities;
+
 	public String getInstruction() {
 		return instruction;
 	}
 
 	public void setInstruction(String instruction) {
 		this.instruction = instruction;
+	}
+
+	public String getOrientation() {
+		return orientation;
+	}
+
+	public void setOrientation(String orientation) {
+		this.orientation = orientation;
 	}
 
 	public String getRoad() {
@@ -91,14 +108,6 @@ public class DriveStep {
 
 	public void setDistance(String distance) {
 		this.distance = distance;
-	}
-
-	public String getOrientation() {
-		return orientation;
-	}
-
-	public void setOrientation(String orientation) {
-		this.orientation = orientation;
 	}
 
 	public String getTolls() {
@@ -123,6 +132,14 @@ public class DriveStep {
 
 	public void setToll_road(String toll_road) {
 		this.toll_road = toll_road;
+	}
+
+	public String getDuration() {
+		return duration;
+	}
+
+	public void setDuration(String duration) {
+		this.duration = duration;
 	}
 
 	public String getPolyline() {
@@ -157,23 +174,33 @@ public class DriveStep {
 		this.tmcs = tmcs;
 	}
 
+	public List<City> getCities() {
+		return cities;
+	}
+
+	public void setCities(List<City> cities) {
+		this.cities = cities;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("DriveStep [instruction=");
+		builder.append("TruckStep [instruction=");
 		builder.append(instruction);
+		builder.append(", orientation=");
+		builder.append(orientation);
 		builder.append(", road=");
 		builder.append(road);
 		builder.append(", distance=");
 		builder.append(distance);
-		builder.append(", orientation=");
-		builder.append(orientation);
 		builder.append(", tolls=");
 		builder.append(tolls);
 		builder.append(", toll_distance=");
 		builder.append(toll_distance);
 		builder.append(", toll_road=");
 		builder.append(toll_road);
+		builder.append(", duration=");
+		builder.append(duration);
 		builder.append(", polyline=");
 		builder.append(polyline);
 		builder.append(", action=");
@@ -182,6 +209,8 @@ public class DriveStep {
 		builder.append(assistant_action);
 		builder.append(", tmcs=");
 		builder.append(tmcs);
+		builder.append(", cities=");
+		builder.append(cities);
 		builder.append("]");
 		return builder.toString();
 	}

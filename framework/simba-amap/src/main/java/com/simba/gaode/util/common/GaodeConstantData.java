@@ -28,4 +28,9 @@ public interface GaodeConstantData {
 	 */
 	String BIKEURL = "https://restapi.amap.com/v4/direction/bicycling?output=JSON";
 
+	/**
+	 * 货车路径规划
+	 */
+	String TRUCKURL = "https://restapi.amap.com/v4/direction/truck?output=JSON";
+
 }

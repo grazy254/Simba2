@@ -38,4 +38,9 @@ public interface GaodeConstantData {
 	 */
 	String DISTANCEURL = "https://restapi.amap.com/v3/distance?output=JSON";
 
+	/**
+	 * 地理编码
+	 */
+	String GEOURL = "https://restapi.amap.com/v3/geocode/geo?output=JSON";
+
 }

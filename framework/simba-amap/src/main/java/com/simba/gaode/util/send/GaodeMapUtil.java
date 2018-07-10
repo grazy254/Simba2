@@ -17,6 +17,8 @@ import com.simba.gaode.model.drive.DriveLineParam;
 import com.simba.gaode.model.drive.DriveResult;
 import com.simba.gaode.model.geo.GeoParam;
 import com.simba.gaode.model.geo.GeoResult;
+import com.simba.gaode.model.geo.RegeoParam;
+import com.simba.gaode.model.geo.RegeoResult;
 import com.simba.gaode.model.truck.TruckParam;
 import com.simba.gaode.model.truck.TruckResult;
 import com.simba.gaode.model.walking.WalkingResult;
@@ -166,9 +168,24 @@ public class GaodeMapUtil {
 		return result;
 	}
 
+	/**
+	 * 逆地理编码
+	 * 
+	 * @param param
+	 * @return
+	 */
+	public RegeoResult regeo(RegeoParam param) {
+		String url = GaodeConstantData.REGEOURL + "&key=" + key + param.buildParamUrl();
+		logger.info("提交高德地图[逆地理编码]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[逆地理编码]url:" + url + ",返回结果:" + res);
+		RegeoResult result = FastJsonUtil.toObject(res, RegeoResult.class);
+		return result;
+	}
+
 	public static void main(String[] args) throws UnsupportedEncodingException {
-//		MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
-//		MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
+		// MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
+		// MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
 		// logger.info("步行" + GaodeMapUtil.getInstance().walking(origin, destination));
 
 		// BusLineParam param = new BusLineParam(origin, destination, "珠海市");
@@ -186,8 +203,8 @@ public class GaodeMapUtil {
 		// destination,"1");
 		// logger.info("距离测量" + GaodeMapUtil.getInstance().distance(dparam));
 
-//		GeoParam gparam = new GeoParam("方恒国际中心A座");
-//		logger.info("地理编码" + GaodeMapUtil.getInstance().geo(gparam));
+		// GeoParam gparam = new GeoParam("方恒国际中心A座");
+		// logger.info("地理编码" + GaodeMapUtil.getInstance().geo(gparam));
 	}
 
 }

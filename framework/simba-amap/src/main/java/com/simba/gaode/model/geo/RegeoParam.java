@@ -1,5 +1,7 @@
 package com.simba.gaode.model.geo;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * 逆地理编码请求参数对象
  * 
@@ -51,6 +53,10 @@ public class RegeoParam {
 	 * 字段的poi顺序。 2：综合大数据分析将公司相关的 POI 内容优先返回，即优化返回结果中 pois 字段的poi顺序。
 	 */
 	private String homeorcorp;
+
+	public RegeoParam() {
+
+	}
 
 	public String getLocation() {
 		return location;
@@ -129,4 +135,27 @@ public class RegeoParam {
 		return builder.toString();
 	}
 
+	public String buildParamUrl() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("&location=" + location);
+		if (StringUtils.isNotEmpty(poitype)) {
+			builder.append("&poitype=" + poitype);
+		}
+		if (StringUtils.isNotEmpty(radius)) {
+			builder.append("&radius=" + radius);
+		}
+		if (StringUtils.isNotEmpty(extensions)) {
+			builder.append("&extensions=" + extensions);
+		}
+		if (StringUtils.isNotEmpty(batch)) {
+			builder.append("&batch=" + batch);
+		}
+		if (StringUtils.isNotEmpty(roadlevel)) {
+			builder.append("&roadlevel=" + roadlevel);
+		}
+		if (StringUtils.isNotEmpty(homeorcorp)) {
+			builder.append("&homeorcorp=" + homeorcorp);
+		}
+		return builder.toString();
+	}
 }

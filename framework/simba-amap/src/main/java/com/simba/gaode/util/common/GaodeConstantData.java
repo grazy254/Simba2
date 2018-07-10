@@ -33,4 +33,9 @@ public interface GaodeConstantData {
 	 */
 	String TRUCKURL = "https://restapi.amap.com/v4/direction/truck";
 
+	/**
+	 * 距离测量
+	 */
+	String DISTANCEURL = "https://restapi.amap.com/v3/distance?output=JSON";
+
 }

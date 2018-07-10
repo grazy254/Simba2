@@ -345,7 +345,4 @@ call mvn clean -U
 cd ../
 cd simba-config-client
 call mvn clean -U 
-cd ../
-cd simbaRoot
-call mvn clean -U
 echo " clean all finish "

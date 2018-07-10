@@ -26,6 +26,12 @@ public class MapAddressPoint {
 		this.lat = lat;
 	}
 
+	public MapAddressPoint(String point) {
+		String[] address = point.split(",");
+		this.lon = address[0];
+		this.lat = address[1];
+	}
+
 	public String getLon() {
 		return lon;
 	}

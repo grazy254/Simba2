@@ -1,4 +1,4 @@
-package com.simba.gaode.model;
+package com.simba.gaode.model.drive;
 
 /**
  * 驾车路径规划返回结果

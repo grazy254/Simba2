@@ -1,4 +1,4 @@
-package com.simba.gaode.model;
+package com.simba.gaode.model.drive;
 
 import java.util.List;
 

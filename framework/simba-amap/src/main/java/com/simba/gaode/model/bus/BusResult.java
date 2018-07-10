@@ -1,4 +1,4 @@
-package com.simba.gaode.model;
+package com.simba.gaode.model.bus;
 
 /**
  * 公交路线规划结果

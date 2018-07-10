@@ -1,4 +1,7 @@
-package com.simba.gaode.model;
+package com.simba.gaode.model.walking;
+
+import com.simba.gaode.model.bus.BusSegment;
+import com.simba.gaode.model.bus.RailwaySegment;
 
 /**
  * 换乘路段列表

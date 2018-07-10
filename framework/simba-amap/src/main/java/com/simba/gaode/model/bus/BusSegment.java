@@ -1,4 +1,4 @@
-package com.simba.gaode.model;
+package com.simba.gaode.model.bus;
 
 import java.util.List;
 

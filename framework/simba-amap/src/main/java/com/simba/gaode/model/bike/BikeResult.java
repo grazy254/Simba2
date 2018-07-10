@@ -1,4 +1,4 @@
-package com.simba.gaode.model;
+package com.simba.gaode.model.bike;
 
 /**
  * 骑行路径规划返回结果

@@ -1,4 +1,4 @@
-package com.simba.gaode.model;
+package com.simba.gaode.model.bus;
 
 /**
  * 聚合的备选方案

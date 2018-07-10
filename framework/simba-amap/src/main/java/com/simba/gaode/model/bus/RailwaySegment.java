@@ -1,6 +1,8 @@
-package com.simba.gaode.model;
+package com.simba.gaode.model.bus;
 
 import java.util.List;
+
+import com.simba.gaode.model.Stop;
 
 /**
  * 火车乘坐信息列表

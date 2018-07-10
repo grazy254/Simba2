@@ -7,13 +7,13 @@ import org.apache.commons.logging.LogFactory;
 
 import com.simba.framework.util.http.HttpClientUtil;
 import com.simba.framework.util.json.FastJsonUtil;
-import com.simba.gaode.model.BikeResult;
-import com.simba.gaode.model.BusLineParam;
-import com.simba.gaode.model.BusResult;
-import com.simba.gaode.model.DriveLineParam;
-import com.simba.gaode.model.DriveResult;
 import com.simba.gaode.model.MapAddressPoint;
-import com.simba.gaode.model.WalkingResult;
+import com.simba.gaode.model.bike.BikeResult;
+import com.simba.gaode.model.bus.BusLineParam;
+import com.simba.gaode.model.bus.BusResult;
+import com.simba.gaode.model.drive.DriveLineParam;
+import com.simba.gaode.model.drive.DriveResult;
+import com.simba.gaode.model.walking.WalkingResult;
 import com.simba.gaode.util.common.GaodeConstantData;
 
 /**

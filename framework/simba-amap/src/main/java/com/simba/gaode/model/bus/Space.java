@@ -1,4 +1,4 @@
-package com.simba.gaode.model;
+package com.simba.gaode.model.bus;
 
 /**
  * 仓位及价格信息

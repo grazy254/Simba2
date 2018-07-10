@@ -1,4 +1,4 @@
-package com.simba.gaode.model;
+package com.simba.gaode.model.bus;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.simba.gaode.model.enums.Extensions;
 import com.simba.gaode.model.enums.NightFlag;
+import com.simba.gaode.model.MapAddressPoint;
 import com.simba.gaode.model.enums.BusStrategy;
 import com.simba.model.constant.ConstantData;
 

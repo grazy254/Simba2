@@ -1,55 +1,35 @@
-package com.simba.gaode.model;
+package com.simba.gaode.model.walking;
 
 import java.util.List;
 
+import com.simba.gaode.model.Step;
+
 /**
- * 步行导航信息列表
+ * 路径方案
  * 
  * @author caozhejun
  *
  */
-public class WalkingSegment {
+public class WalkingPath {
 
 	/**
-	 * 起点坐标
-	 */
-	private String origin;
-
-	/**
-	 * 终点坐标
-	 */
-	private String destination;
-
-	/**
-	 * 每段线路步行距离 单位：米
+	 * 起点和终点的距离
+	 * 
+	 * 单位：米
 	 */
 	private String distance;
 
 	/**
-	 * 步行预计时间 单位：秒
+	 * 时间预计
+	 * 
+	 * 单位：秒
 	 */
 	private String duration;
 
 	/**
-	 * 步行路段列表
+	 * 返回结果列表
 	 */
 	private List<Step> steps;
-
-	public String getOrigin() {
-		return origin;
-	}
-
-	public void setOrigin(String origin) {
-		this.origin = origin;
-	}
-
-	public String getDestination() {
-		return destination;
-	}
-
-	public void setDestination(String destination) {
-		this.destination = destination;
-	}
 
 	public String getDistance() {
 		return distance;
@@ -78,11 +58,7 @@ public class WalkingSegment {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("WalkingSegment [origin=");
-		builder.append(origin);
-		builder.append(", destination=");
-		builder.append(destination);
-		builder.append(", distance=");
+		builder.append("Path [distance=");
 		builder.append(distance);
 		builder.append(", duration=");
 		builder.append(duration);

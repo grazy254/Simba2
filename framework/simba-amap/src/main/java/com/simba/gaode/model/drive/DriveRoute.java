@@ -1,39 +1,34 @@
-package com.simba.gaode.model;
+package com.simba.gaode.model.drive;
 
 import java.util.List;
 
 /**
- * 公交换乘信息列表
+ * 驾车路径规划信息列表
  * 
  * @author caozhejun
  *
  */
-public class BusRoute {
+public class DriveRoute {
 
 	/**
-	 * 起点坐标
+	 * 起点坐标 规则： lon，lat（经度，纬度）， “,”分割，如117.500244, 40.417801 经纬度小数点不超过6位
 	 */
 	private String origin;
 
 	/**
-	 * 终点坐标
+	 * 终点坐标 规则： lon，lat（经度，纬度）， “,”分割，如117.500244, 40.417801 经纬度小数点不超过6位
 	 */
 	private String destination;
 
 	/**
-	 * 起点和终点的步行距离 单位：米
-	 */
-	private String distance;
-
-	/**
-	 * 出租车费用 单位：元
+	 * 打车费用 单位：元
 	 */
 	private String taxi_cost;
 
 	/**
-	 * 公交换乘方案列表
+	 * 驾车换乘方案
 	 */
-	private List<Transit> transits;
+	private List<DrivePath> paths;
 
 	public String getOrigin() {
 		return origin;
@@ -51,14 +46,6 @@ public class BusRoute {
 		this.destination = destination;
 	}
 
-	public String getDistance() {
-		return distance;
-	}
-
-	public void setDistance(String distance) {
-		this.distance = distance;
-	}
-
 	public String getTaxi_cost() {
 		return taxi_cost;
 	}
@@ -67,27 +54,25 @@ public class BusRoute {
 		this.taxi_cost = taxi_cost;
 	}
 
-	public List<Transit> getTransits() {
-		return transits;
+	public List<DrivePath> getPaths() {
+		return paths;
 	}
 
-	public void setTransits(List<Transit> transits) {
-		this.transits = transits;
+	public void setPaths(List<DrivePath> paths) {
+		this.paths = paths;
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("BusRoute [origin=");
+		builder.append("DriveRoute [origin=");
 		builder.append(origin);
 		builder.append(", destination=");
 		builder.append(destination);
-		builder.append(", distance=");
-		builder.append(distance);
 		builder.append(", taxi_cost=");
 		builder.append(taxi_cost);
-		builder.append(", transits=");
-		builder.append(transits);
+		builder.append(", paths=");
+		builder.append(paths);
 		builder.append("]");
 		return builder.toString();
 	}

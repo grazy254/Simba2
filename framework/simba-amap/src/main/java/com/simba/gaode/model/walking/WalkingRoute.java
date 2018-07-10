@@ -1,4 +1,4 @@
-package com.simba.gaode.model;
+package com.simba.gaode.model.walking;
 
 import java.util.List;
 

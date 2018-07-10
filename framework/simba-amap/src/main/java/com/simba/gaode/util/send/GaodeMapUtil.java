@@ -7,7 +7,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.simba.framework.util.http.HttpClientUtil;
 import com.simba.framework.util.json.FastJsonUtil;
-import com.simba.gaode.BikeResult;
+import com.simba.gaode.model.BikeResult;
 import com.simba.gaode.model.BusLineParam;
 import com.simba.gaode.model.BusResult;
 import com.simba.gaode.model.DriveLineParam;

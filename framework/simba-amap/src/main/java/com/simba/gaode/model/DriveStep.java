@@ -1,8 +1,6 @@
-package com.simba.gaode;
+package com.simba.gaode.model;
 
 import java.util.List;
-
-import com.simba.gaode.model.TMC;
 
 /**
  * 导航路段

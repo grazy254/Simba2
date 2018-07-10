@@ -2,8 +2,6 @@ package com.simba.gaode.model;
 
 import java.util.List;
 
-import com.simba.gaode.DriveStep;
-
 /**
  * 驾车换乘方案
  * 

@@ -117,6 +117,86 @@ public class RefundQueryRes {
 
 	private List<RefundRecord> refundRecords;
 
+	private String refund_id_0;
+
+	private String refund_recv_accout_0;
+
+	private String refund_status_0;
+
+	private String refund_success_time_0;
+
+	private String refund_fee_0;
+
+	private String out_refund_no_0;
+
+	private String refund_account_0;
+
+	private String refund_channel_0;
+
+	public String getRefund_id_0() {
+		return refund_id_0;
+	}
+
+	public void setRefund_id_0(String refund_id_0) {
+		this.refund_id_0 = refund_id_0;
+	}
+
+	public String getRefund_recv_accout_0() {
+		return refund_recv_accout_0;
+	}
+
+	public void setRefund_recv_accout_0(String refund_recv_accout_0) {
+		this.refund_recv_accout_0 = refund_recv_accout_0;
+	}
+
+	public String getRefund_status_0() {
+		return refund_status_0;
+	}
+
+	public void setRefund_status_0(String refund_status_0) {
+		this.refund_status_0 = refund_status_0;
+	}
+
+	public String getRefund_success_time_0() {
+		return refund_success_time_0;
+	}
+
+	public void setRefund_success_time_0(String refund_success_time_0) {
+		this.refund_success_time_0 = refund_success_time_0;
+	}
+
+	public String getRefund_fee_0() {
+		return refund_fee_0;
+	}
+
+	public void setRefund_fee_0(String refund_fee_0) {
+		this.refund_fee_0 = refund_fee_0;
+	}
+
+	public String getOut_refund_no_0() {
+		return out_refund_no_0;
+	}
+
+	public void setOut_refund_no_0(String out_refund_no_0) {
+		this.out_refund_no_0 = out_refund_no_0;
+	}
+
+	public String getRefund_account_0() {
+		return refund_account_0;
+	}
+
+	public void setRefund_account_0(String refund_account_0) {
+		this.refund_account_0 = refund_account_0;
+	}
+
+	public String getRefund_channel_0() {
+		return refund_channel_0;
+	}
+
+	public void setRefund_channel_0(String refund_channel_0) {
+		this.refund_channel_0 = refund_channel_0;
+	}
+
 	public String getReturn_code() {
 		return return_code;
 	}
@@ -628,6 +708,22 @@ public class RefundQueryRes {
 		builder.append(refund_count);
 		builder.append(", refundRecords=");
 		builder.append(refundRecords);
+		builder.append(", refund_id_0=");
+		builder.append(refund_id_0);
+		builder.append(", refund_recv_accout_0=");
+		builder.append(refund_recv_accout_0);
+		builder.append(", refund_status_0=");
+		builder.append(refund_status_0);
+		builder.append(", refund_success_time_0=");
+		builder.append(refund_success_time_0);
+		builder.append(", refund_fee_0=");
+		builder.append(refund_fee_0);
+		builder.append(", out_refund_no_0=");
+		builder.append(out_refund_no_0);
+		builder.append(", refund_account_0=");
+		builder.append(refund_account_0);
+		builder.append(", refund_channel_0=");
+		builder.append(refund_channel_0);
 		builder.append("]");
 		return builder.toString();
 	}

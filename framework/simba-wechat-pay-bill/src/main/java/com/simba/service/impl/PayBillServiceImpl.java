@@ -26,6 +26,7 @@ import org.xml.sax.SAXException;
 import com.simba.cache.Redis;
 import com.simba.controller.form.PayBillSearchForm;
 import com.simba.dao.PayBillDao;
+import com.simba.framework.util.date.DateUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.PayBill;
 import com.simba.model.constant.ConstantData;
@@ -281,10 +282,18 @@ public class PayBillServiceImpl implements PayBillService {
 	private void dealRefundOrder(PayBill bill) throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		WxPayUtil.getInstance().refundQueryByOutTradeNo(bill.getOutTradeNo());
 		RefundResult refundResult = new RefundResult();
+		refundResult.setAppid(bill.getAppid());
+		refundResult.setMch_id(bill.getMchId());
+		refundResult.setReturn_msg("SUCCESS");
+		refundResult.setReturn_code("SUCCESS");
 		RefundCallbackInfo callbackInfo = new RefundCallbackInfo();
 		callbackInfo.setOut_trade_no(bill.getOutTradeNo());
 		callbackInfo.setRefund_status("SUCCESS");
 		callbackInfo.setTransaction_id(StringUtils.EMPTY);
+		callbackInfo.setSuccess_time(DateUtil.date2String(new Date(), "yyyy-MM-dd HH:mm:ss"));
+		callbackInfo.setRefund_id(StringUtils.EMPTY);
+		callbackInfo.setTotal_fee(bill.getFee());
+		callbackInfo.setRefund_fee(bill.getFee());
 		payService.dealRefundCallback(refundResult, callbackInfo);
 	}
 

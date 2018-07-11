@@ -297,14 +297,12 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
 		TradeAccount departmentTradeAccount = tradeAccountDao.get(tradeDeptNO, TradeUserType.DEPARTMENT);
 		TradeAccount channelTradeAccount = tradeAccountDao.get(channelType.getName(), TradeUserType.CHANNEL);
 
-		channelOrderNO = StringUtils.defaultString(channelOrderNO);
-		tradeChannelDetail.setOrderNO(channelOrderNO);
 		if (channelStartTime != null) {
 			tradeChannelDetail.setOrderCreateTime(channelStartTime);
 		}
 		tradeChannelDetail.setPaymentTime(channelPaymentTime);
-		tradeChannelDetail.setOpenID(openID);
-		tradeChannelDetail.setOrderNO(channelOrderNO);
+		tradeChannelDetail.setOpenID(StringUtils.defaultString(openID));
+		tradeChannelDetail.setOrderNO(StringUtils.defaultString(channelOrderNO));
 		tradeChannelDetail.setErrorCode(StringUtils.defaultString(channelErrorCode));
 		tradeChannelDetail.setErrorMsg(StringUtils.defaultString(channelErrorMsg));
 

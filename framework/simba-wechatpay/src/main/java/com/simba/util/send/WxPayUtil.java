@@ -347,7 +347,6 @@ public class WxPayUtil {
 		String resp = HttpClientUtil.postXML(WxPayConstantData.getInstance().getRefundqueryUrl(), xml);
 		logger.info("查询退款返回结果:" + resp);
 		RefundQueryRes result = XmlUtil.toOject(resp, RefundQueryRes.class);
-		result.composeRefundRecords(resp);
 		checkSign(result);
 		if (!"SUCCESS".equals(result.getReturn_code()) || !"SUCCESS".equals(result.getResult_code())) {
 			throw new BussException("微信查询退款发生异常:" + result.getReturn_msg() + "," + result.getErr_code_des());

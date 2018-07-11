@@ -1,29 +1,5 @@
 package com.simba.service.impl;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.csource.common.FastdfsException;
-import org.eclipse.jgit.api.errors.AbortedByHookException;
-import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.api.errors.NoHeadException;
-import org.eclipse.jgit.api.errors.NoMessageException;
-import org.eclipse.jgit.api.errors.UnmergedPathsException;
-import org.eclipse.jgit.api.errors.WrongRepositoryStateException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.simba.dao.IOSVersionDao;
 import com.simba.framework.util.freemarker.FreemarkerUtil;
 import com.simba.framework.util.jdbc.Pager;
@@ -32,11 +8,24 @@ import com.simba.git.GitUtil;
 import com.simba.model.IOSVersion;
 import com.simba.model.constant.ConstantData;
 import com.simba.service.IOSVersionService;
-
-import freemarker.core.ParseException;
-import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.TemplateException;
-import freemarker.template.TemplateNotFoundException;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.csource.common.FastdfsException;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * IOS安装包版本管理 Service实现类
@@ -220,8 +209,7 @@ public class IOSVersionServiceImpl implements IOSVersionService {
 	}
 
 	@Override
-	public void publish(int id) throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException, NoHeadException, NoMessageException,
-			UnmergedPathsException, ConcurrentRefUpdateException, WrongRepositoryStateException, AbortedByHookException, GitAPIException {
+	public void publish(int id) throws IOException, TemplateException, GitAPIException {
 		IOSVersion iosVersion = this.get(id);
 		Map<String, Object> params = new HashMap<>();
 		String ipa = iosVersion.getIpaFileUrl();

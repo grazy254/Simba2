@@ -72,7 +72,7 @@ public class IOSVersionController {
 	private String githubWorkDir;
 
 	@PostConstruct
-	private void init() throws InvalidRemoteException, TransportException, GitAPIException {
+	private void init() throws GitAPIException {
 		if (StringUtils.isEmpty(githubAddress)) {
 			return;
 		}
@@ -91,8 +91,8 @@ public class IOSVersionController {
 
 	@ResponseBody
 	@RequestMapping("/publish")
-	public JsonResult publish(int id) throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException, NoHeadException, NoMessageException,
-			UnmergedPathsException, ConcurrentRefUpdateException, WrongRepositoryStateException, AbortedByHookException, GitAPIException {
+	public JsonResult publish(int id) throws IOException, TemplateException,
+			GitAPIException {
 		iOSVersionService.publish(id);
 		return new JsonResult();
 	}
@@ -159,7 +159,7 @@ public class IOSVersionController {
 	@RequestMapping("/add")
 	public String add(IOSVersion iOSVersion, MultipartFile ipaFile, MultipartFile fullImageFile, MultipartFile logFile) throws IOException, FastdfsException {
 		iOSVersionService.add(iOSVersion, ipaFile, fullImageFile, logFile);
-		return "redirect:/iOSVersion/lis?typeId=" + iOSVersion.getTypeId();
+		return "redirect:/iOSVersion/list?typeId=" + iOSVersion.getTypeId();
 	}
 
 	@RequestMapping("/toUpdate")
@@ -175,7 +175,7 @@ public class IOSVersionController {
 	@RequestMapping("/update")
 	public String update(IOSVersion iOSVersion, MultipartFile ipaFile, MultipartFile fullImageFile, MultipartFile logFile) throws IOException, FastdfsException {
 		iOSVersionService.update(iOSVersion, ipaFile, fullImageFile, logFile);
-		return "redirect:/iOSVersion/lis?typeId=" + iOSVersion.getTypeId();
+		return "redirect:/iOSVersion/list?typeId=" + iOSVersion.getTypeId();
 	}
 
 	@ResponseBody

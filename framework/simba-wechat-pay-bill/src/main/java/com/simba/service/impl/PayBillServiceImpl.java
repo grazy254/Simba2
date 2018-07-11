@@ -11,6 +11,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -283,6 +284,7 @@ public class PayBillServiceImpl implements PayBillService {
 		RefundCallbackInfo callbackInfo = new RefundCallbackInfo();
 		callbackInfo.setOut_trade_no(bill.getOutTradeNo());
 		callbackInfo.setRefund_status("SUCCESS");
+		callbackInfo.setTransaction_id(StringUtils.EMPTY);
 		payService.dealRefundCallback(refundResult, callbackInfo);
 	}
 

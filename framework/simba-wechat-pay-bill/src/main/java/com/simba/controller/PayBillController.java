@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +35,8 @@ import com.simba.service.PayService;
 @RequestMapping("/payBill")
 public class PayBillController {
 
+	private static final Log logger = LogFactory.getLog(PayBillController.class);
+
 	@Value("${wx.pay.domain}")
 	private String wxPayDomain;
 
@@ -46,6 +50,7 @@ public class PayBillController {
 	@ResponseBody
 	public JsonResult close(long id) {
 		PayBill bill = payBillService.get(id);
+		logger.info("接收到微信关闭请求" + bill.toString());
 		payService.closeOrder(bill.getOutTradeNo());
 		return new JsonResult();
 	}
@@ -54,16 +59,18 @@ public class PayBillController {
 	@ResponseBody
 	public JsonResult refund(long id) throws ParseException, IOException {
 		PayBill bill = payBillService.get(id);
+		logger.info("接收到微信退款请求" + bill.toString());
 		RefundReq refundReq = new RefundReq();
 		refundReq.setDevice_info(bill.getDeviceInfo());
 		refundReq.setOp_user_id(StringUtils.EMPTY);
 		refundReq.setOut_refund_no(RandomUtil.random32Chars());
 		refundReq.setOut_trade_no(bill.getOutTradeNo());
-		refundReq.setRefund_account(StringUtils.EMPTY);
+		refundReq.setRefund_account("REFUND_SOURCE_UNSETTLED_FUNDS");
 		refundReq.setTransaction_id(StringUtils.EMPTY);
 		refundReq.setNotify_url(wxPayDomain + "/payCallback/refundReceive");
 		refundReq.setTotal_fee(bill.getFee());
 		refundReq.setRefund_fee(bill.getFee());
+		refundReq.setRefund_desc("商家退款");
 		payService.refund(refundReq);
 		return new JsonResult();
 	}

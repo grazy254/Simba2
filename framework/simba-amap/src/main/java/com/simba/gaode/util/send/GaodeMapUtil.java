@@ -203,8 +203,11 @@ public class GaodeMapUtil {
 		// destination,"1");
 		// logger.info("距离测量" + GaodeMapUtil.getInstance().distance(dparam));
 
-		// GeoParam gparam = new GeoParam("方恒国际中心A座");
-		// logger.info("地理编码" + GaodeMapUtil.getInstance().geo(gparam));
+//		 GeoParam gparam = new GeoParam("方恒国际中心A座");
+//		 logger.info("地理编码" + GaodeMapUtil.getInstance().geo(gparam));
+		 
+//		 RegeoParam rparam = new RegeoParam("113.561166,22.267807") ;
+//		 logger.info("逆地理编码" + GaodeMapUtil.getInstance().regeo(rparam));
 	}
 
 }

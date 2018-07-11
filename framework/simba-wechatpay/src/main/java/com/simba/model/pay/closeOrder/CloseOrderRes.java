@@ -31,6 +31,8 @@ public class CloseOrderRes {
 	 */
 	private String mch_id;
 
+	private String sub_mch_id;
+
 	/**
 	 * 微信返回的随机字符串
 	 */
@@ -141,6 +143,14 @@ public class CloseOrderRes {
 		this.err_code_des = err_code_des;
 	}
 
+	public String getSub_mch_id() {
+		return sub_mch_id;
+	}
+
+	public void setSub_mch_id(String sub_mch_id) {
+		this.sub_mch_id = sub_mch_id;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -152,6 +162,8 @@ public class CloseOrderRes {
 		builder.append(appid);
 		builder.append(", mch_id=");
 		builder.append(mch_id);
+		builder.append(", sub_mch_id=");
+		builder.append(sub_mch_id);
 		builder.append(", nonce_str=");
 		builder.append(nonce_str);
 		builder.append(", sign=");

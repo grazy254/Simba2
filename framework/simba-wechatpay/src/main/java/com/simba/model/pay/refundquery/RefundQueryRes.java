@@ -133,6 +133,16 @@ public class RefundQueryRes {
 
 	private String refund_channel_0;
 
+	private String refund_fee;
+
+	public String getRefund_fee() {
+		return refund_fee;
+	}
+
+	public void setRefund_fee(String refund_fee) {
+		this.refund_fee = refund_fee;
+	}
+
 	public String getRefund_id_0() {
 		return refund_id_0;
 	}
@@ -724,6 +734,8 @@ public class RefundQueryRes {
 		builder.append(refund_account_0);
 		builder.append(", refund_channel_0=");
 		builder.append(refund_channel_0);
+		builder.append(", refund_fee=");
+		builder.append(refund_fee);
 		builder.append("]");
 		return builder.toString();
 	}

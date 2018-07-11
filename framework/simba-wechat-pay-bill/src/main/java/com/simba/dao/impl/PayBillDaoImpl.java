@@ -1,8 +1,10 @@
 package com.simba.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -233,11 +235,14 @@ public class PayBillDaoImpl implements PayBillDao {
 
 	@Override
 	public List<PayBill> listUnfinish() {
-		String sql = "select * from " + table + " where status in (?,?,?)";
+		String sql = "select * from " + table + " where status in (?,?,?) and createTime > ? and createTime < ? ";
 		StatementParameter params = new StatementParameter();
 		params.setString("NOTPAY");
 		params.setString("USERPAYING");
 		params.setString("REFUND");
+		Date now = new Date();
+		params.setDate(DateUtils.addDays(now, -3));
+		params.setDate(now);
 		return jdbc.queryForList(sql, PayBill.class, params);
 	}
 }

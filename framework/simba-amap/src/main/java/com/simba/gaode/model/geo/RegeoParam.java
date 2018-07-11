@@ -58,6 +58,10 @@ public class RegeoParam {
 
 	}
 
+	public RegeoParam(String location) {
+		this.location = location;
+	}
+
 	public String getLocation() {
 		return location;
 	}

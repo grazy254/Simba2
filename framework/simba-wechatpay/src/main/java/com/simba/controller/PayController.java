@@ -99,14 +99,16 @@ public class PayController {
 		String codeUrl = res.getCode_url();
 		String mwebUrl = res.getMweb_url();
 		Map<String, String> params = new HashMap<>();
-		params.put("appId", appid);
-		params.put("timeStamp", now.getTime() / 1000 + "");
-		params.put("nonceStr", RandomUtil.random32Chars());
-		params.put("package", "prepay_id=" + prePayId);
-		params.put("signType", "MD5");
+		params.put("appid", appid);
+		params.put("partnerid", mchId);
+		params.put("prepayid", prePayId);
+		params.put("package", "Sign=WXPay");
+		params.put("noncestr", RandomUtil.random32Chars());
+		params.put("timestamp", now.getTime() / 1000 + "");
+		//此签名仅用于App，其他方式的支付，参数不一样
 		String sign = SignUtil.getInstance().createSign(params, key);
+		params.put("signType", "MD5");
 		params.put("paySign", sign);
-		params.put("prePayId", prePayId);
 		params.put("codeUrl", codeUrl);
 		params.put("mchId", mchId);
 		params.put("mwebUrl", mwebUrl);

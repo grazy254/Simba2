@@ -49,7 +49,7 @@ public class WXRefundTrade extends BaseCallbackTrade {
             String channelErrorCode, long paymentAmount, TradeStatus tradeStatus) {
 
         return finishTrade(userID,
-                CommonUtil.getChannelType(RegistryUtil.get("trade.channel.weixin")), orderNO,
+                CommonUtil.getChannelType(RegistryUtil.get("trade.channel.wxpay")), orderNO,
                 channelOrderNO, openID, channelStartTime, channelPaymentTime, channelErrorMsg,
                 channelErrorCode, paymentAmount, tradeStatus,
                 RegistryUtil.get("trade.department.refund"), TradeType.REFUND);
@@ -62,7 +62,7 @@ public class WXRefundTrade extends BaseCallbackTrade {
         return startTrade(userID, ip, location, orderNO, orderName, orderDesc, orderAddress,
                 originalAmount, paymentAmount, new Date(), channelStartTime,
                 RegistryUtil.get("trade.department.refund"),
-                CommonUtil.getChannelType(RegistryUtil.get("trade.channel.weixin")),
+                CommonUtil.getChannelType(RegistryUtil.get("trade.channel.wxpay")),
                 TradeType.REFUND);
     }
 

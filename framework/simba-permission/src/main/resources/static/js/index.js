@@ -15,14 +15,14 @@ window.onresize = function() {
 
 function initUser() {
 	$.ajax({
-		type : "get",
-		url : contextPath + "/user/getCurrentUserInfo",
-		async : true,
-		dataType : "json",
-		success : function(data) {
-			if (data.code == 200) {
+		type: "get",
+		url: contextPath + "/user/getCurrentUserInfo",
+		async: true,
+		dataType: "json",
+		success: function(data) {
+			if(data.code == 200) {
 				$("#loginName").html(data.data.userName);
-				if (data.data.isAdmin) {
+				if(data.data.isAdmin) {
 					$("#profile").hide();
 				}
 			} else {
@@ -34,11 +34,11 @@ function initUser() {
 
 function initMenu() {
 	$.ajax({
-		type : "get",
-		url : contextPath + "/menu/showAllMenus",
-		async : true,
-		dataType : "html",
-		success : function(html) {
+		type: "get",
+		url: contextPath + "/menu/showAllMenus",
+		async: true,
+		dataType: "html",
+		success: function(html) {
 			$("#menuTree").append(html);
 		}
 	});
@@ -46,7 +46,7 @@ function initMenu() {
 }
 
 function forwardMenu(url) {
-	if (!!url) {
+	if(!!url) {
 		$("#contentiframe").attr("src", url);
 	}
 }
@@ -69,7 +69,7 @@ function logout() {
 function showModal(title, url, height) {
 	$("#myModalLabel").html(title);
 	$("#modalbodyiframe").prop("src", url);
-	if (!!height) {
+	if(!!height) {
 		$("#modalbodyiframe").css("height", height);
 	} else {
 		$("#modalbodyiframe").css("height", 500);
@@ -146,4 +146,42 @@ function hideSuccessInfo() {
  */
 function changeContentFrameUrl(url) {
 	top.contentiframe.window.location.href = url;
+}
+
+function changeSkin(skin) {
+	var bodyClasses = $("body").attr("class");
+	var classArray = bodyClasses.split(" ");
+	for(var i = 0; i < classArray.length; i++) {
+		var classContent = classArray[i];
+		if(classContent.startsWith("skin-")) {
+			$("body").removeClass(classContent);
+		}
+	}
+	$("body").addClass(skin);
+	$.ajax({
+		type: "post",
+		url: contextPath + "/user/saveSkin",
+		async: true,
+		dataType: "json",
+		data: {
+			"skin": skin
+		},
+		success: function(data) {}
+	});
+}
+
+function initSkin() {
+	$.ajax({
+		type: "get",
+		url: contextPath + "/user/getSkin",
+		async: true,
+		dataType: "json",
+		success: function(data) {
+			if(data.code == 200) {
+				if(!!data.data) {
+					changeSkin(data.data);
+				}
+			}
+		}
+	});
 }

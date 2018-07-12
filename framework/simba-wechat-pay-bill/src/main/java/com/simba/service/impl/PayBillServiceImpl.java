@@ -294,6 +294,8 @@ public class PayBillServiceImpl implements PayBillService {
 		callbackInfo.setRefund_id(StringUtils.EMPTY);
 		callbackInfo.setTotal_fee(bill.getFee());
 		callbackInfo.setRefund_fee(bill.getFee());
+		callbackInfo.setSettlement_refund_fee(bill.getFee());
+		callbackInfo.setSettlement_total_fee(bill.getFee());
 		payService.dealRefundCallback(refundResult, callbackInfo);
 	}
 

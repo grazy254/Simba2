@@ -48,4 +48,9 @@ public interface GaodeConstantData {
 	 */
 	String REGEOURL = "https://restapi.amap.com/v3/geocode/regeo?output=JSON";
 
+	/**
+	 * 行政区域查询
+	 */
+	String AREAURL = "https://restapi.amap.com/v3/config/district?output=JSON";
+
 }

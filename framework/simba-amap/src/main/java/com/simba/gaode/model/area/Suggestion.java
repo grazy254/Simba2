@@ -12,7 +12,7 @@ public class Suggestion {
 
 	private List<String> keywords;
 
-	private List<String> cites;
+	private List<City> cites;
 
 	public List<String> getKeywords() {
 		return keywords;
@@ -22,11 +22,11 @@ public class Suggestion {
 		this.keywords = keywords;
 	}
 
-	public List<String> getCites() {
+	public List<City> getCites() {
 		return cites;
 	}
 
-	public void setCites(List<String> cites) {
+	public void setCites(List<City> cites) {
 		this.cites = cites;
 	}
 

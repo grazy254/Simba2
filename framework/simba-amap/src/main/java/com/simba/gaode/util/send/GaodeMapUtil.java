@@ -12,6 +12,8 @@ import com.simba.gaode.model.MapAddressPoint;
 import com.simba.gaode.model.area.AreaParam;
 import com.simba.gaode.model.area.AreaResult;
 import com.simba.gaode.model.around.AroundParam;
+import com.simba.gaode.model.autograsp.AutoGraspParam;
+import com.simba.gaode.model.autograsp.AutoGraspResult;
 import com.simba.gaode.model.bike.BikeResult;
 import com.simba.gaode.model.bus.BusLineParam;
 import com.simba.gaode.model.bus.BusResult;
@@ -289,6 +291,22 @@ public class GaodeMapUtil {
 		return result;
 	}
 
+	/**
+	 * 抓路服务
+	 * 
+	 * @param param
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public AutoGraspResult autoGrasp(AutoGraspParam param) throws UnsupportedEncodingException {
+		String url = GaodeConstantData.AUTOGRASPURL + "&key=" + key + "&param=" + param.buildParamUrl();
+		logger.info("提交高德地图[抓路服务]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[抓路服务]url:" + url + ",返回结果:" + res);
+		AutoGraspResult result = FastJsonUtil.toObject(res, AutoGraspResult.class);
+		return result;
+	}
+
 	public static void main(String[] args) throws UnsupportedEncodingException {
 		// MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
 		// MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
@@ -331,6 +349,14 @@ public class GaodeMapUtil {
 		// logger.info("ID查询" + GaodeMapUtil.getInstance().idSearch("B0FFFAB6J2"));
 
 		// logger.info("IP定位查询" + GaodeMapUtil.getInstance().ip(""));
+
+		// AutoGraspParam aparam = new AutoGraspParam();
+		// aparam.setCarid("12345");
+		// aparam.setDirection("1,1,2");
+		// aparam.setLocations("116.496167,39.917066|116.496149,39.917205|116.496149,39.917326");
+		// aparam.setSpeed("1,1,2");
+		// aparam.setTime("1434077500,1434077501,1434077510");
+		// logger.info("抓路服务" + GaodeMapUtil.getInstance().autoGrasp(aparam));
 	}
 
 }

@@ -77,4 +77,9 @@ public interface GaodeConstantData {
 	 * IP定位
 	 */
 	String IPURL = "https://restapi.amap.com/v3/ip?output=JSON";
+
+	/**
+	 * 抓路服务
+	 */
+	String AUTOGRASPURL = "https://restapi.amap.com/v3/autograsp?output=JSON";
 }

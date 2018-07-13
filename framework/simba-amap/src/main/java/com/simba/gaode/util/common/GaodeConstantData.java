@@ -72,4 +72,9 @@ public interface GaodeConstantData {
 	 * ID查询
 	 */
 	String IDSEARCHURL = "https://restapi.amap.com/v3/place/detail?output=JSON";
+
+	/**
+	 * IP定位
+	 */
+	String IPURL = "https://restapi.amap.com/v3/ip?output=JSON";
 }

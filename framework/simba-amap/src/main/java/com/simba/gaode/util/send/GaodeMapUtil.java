@@ -2,6 +2,7 @@ package com.simba.gaode.util.send;
 
 import java.io.UnsupportedEncodingException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -22,6 +23,7 @@ import com.simba.gaode.model.geo.GeoParam;
 import com.simba.gaode.model.geo.GeoResult;
 import com.simba.gaode.model.geo.RegeoParam;
 import com.simba.gaode.model.geo.RegeoResult;
+import com.simba.gaode.model.ip.IPResult;
 import com.simba.gaode.model.keywords.KeyWordsParam;
 import com.simba.gaode.model.keywords.KeyWordsResult;
 import com.simba.gaode.model.polygon.PolygonParam;
@@ -269,6 +271,24 @@ public class GaodeMapUtil {
 		return result;
 	}
 
+	/**
+	 * IP定位查询
+	 * 
+	 * @param ip
+	 * @return
+	 */
+	public IPResult ip(String ip) {
+		String url = GaodeConstantData.IPURL + "&key=" + key;
+		if (StringUtils.isNotEmpty(ip)) {
+			url = url + "&ip=" + ip;
+		}
+		logger.info("提交高德地图[IP定位查询]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[IP定位查询]url:" + url + ",返回结果:" + res);
+		IPResult result = FastJsonUtil.toObject(res, IPResult.class);
+		return result;
+	}
+
 	public static void main(String[] args) throws UnsupportedEncodingException {
 		// MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
 		// MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
@@ -309,6 +329,8 @@ public class GaodeMapUtil {
 		// logger.info("多边形搜索" + GaodeMapUtil.getInstance().polygon(pparam));
 
 		// logger.info("ID查询" + GaodeMapUtil.getInstance().idSearch("B0FFFAB6J2"));
+
+		// logger.info("IP定位查询" + GaodeMapUtil.getInstance().ip(""));
 	}
 
 }

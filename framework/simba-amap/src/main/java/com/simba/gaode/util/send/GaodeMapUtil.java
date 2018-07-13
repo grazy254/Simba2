@@ -21,6 +21,8 @@ import com.simba.gaode.model.geo.GeoParam;
 import com.simba.gaode.model.geo.GeoResult;
 import com.simba.gaode.model.geo.RegeoParam;
 import com.simba.gaode.model.geo.RegeoResult;
+import com.simba.gaode.model.keywords.KeyWordsParam;
+import com.simba.gaode.model.keywords.KeyWordsResult;
 import com.simba.gaode.model.truck.TruckParam;
 import com.simba.gaode.model.truck.TruckResult;
 import com.simba.gaode.model.walking.WalkingResult;
@@ -201,6 +203,22 @@ public class GaodeMapUtil {
 		return result;
 	}
 
+	/**
+	 * 关键字搜索
+	 * 
+	 * @param param
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public KeyWordsResult keywords(KeyWordsParam param) throws UnsupportedEncodingException {
+		String url = GaodeConstantData.KEYWORDSURL + "&key=" + key + param.buildParamUrl();
+		logger.info("提交高德地图[关键字搜索]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[关键字搜索]url:" + url + ",返回结果:" + res);
+		KeyWordsResult result = FastJsonUtil.toObject(res, KeyWordsResult.class);
+		return result;
+	}
+
 	public static void main(String[] args) throws UnsupportedEncodingException {
 		// MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
 		// MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
@@ -228,6 +246,11 @@ public class GaodeMapUtil {
 		// logger.info("逆地理编码" + GaodeMapUtil.getInstance().regeo(rparam));
 
 		// logger.info("行政区域查询" + GaodeMapUtil.getInstance().area(new AreaParam()));
+
+		KeyWordsParam kparam = new KeyWordsParam();
+		kparam.setKeywords("天安门");
+		logger.info("关键字搜索" + GaodeMapUtil.getInstance().keywords(kparam));
+
 	}
 
 }

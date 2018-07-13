@@ -53,4 +53,14 @@ public interface GaodeConstantData {
 	 */
 	String AREAURL = "https://restapi.amap.com/v3/config/district?output=JSON";
 
+	/**
+	 * 关键字搜索
+	 */
+	String KEYWORDSURL = "https://restapi.amap.com/v3/place/text?output=JSON";
+
+	/**
+	 * 周边搜索
+	 */
+	String AROUDURL = "https://restapi.amap.com/v3/place/around?output=JSON";
+
 }

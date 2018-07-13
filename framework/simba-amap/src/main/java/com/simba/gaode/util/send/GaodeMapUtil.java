@@ -254,6 +254,21 @@ public class GaodeMapUtil {
 		return result;
 	}
 
+	/**
+	 * ID查询
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public KeyWordsResult idSearch(String id) {
+		String url = GaodeConstantData.IDSEARCHURL + "&key=" + key + "&id=" + id;
+		logger.info("提交高德地图[ID查询]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[ID查询]url:" + url + ",返回结果:" + res);
+		KeyWordsResult result = FastJsonUtil.toObject(res, KeyWordsResult.class);
+		return result;
+	}
+
 	public static void main(String[] args) throws UnsupportedEncodingException {
 		// MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
 		// MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
@@ -292,6 +307,8 @@ public class GaodeMapUtil {
 		// PolygonParam pparam = new
 		// PolygonParam("113.561166,22.267807|113.552068,22.247789");
 		// logger.info("多边形搜索" + GaodeMapUtil.getInstance().polygon(pparam));
+
+		// logger.info("ID查询" + GaodeMapUtil.getInstance().idSearch("B0FFFAB6J2"));
 	}
 
 }

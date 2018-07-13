@@ -69,6 +69,13 @@ public class StatementParameter {
 		list.add(value);
 	}
 
+	public void setByte(Byte value) {
+		if (value == null) {
+			throw new RuntimeException("参数值[" + list.size() + "]不能为空.");
+		}
+		list.add(value);
+	}
+
 	public void setEnum(Enum<?> value) {
 		if (value == null) {
 			throw new RuntimeException("参数值[" + list.size() + "]不能为空.");
@@ -141,6 +148,13 @@ public class StatementParameter {
 		list.add(value);
 	}
 
+	public void set(Byte value) {
+		if (value == null) {
+			throw new RuntimeException("参数值[" + list.size() + "]不能为空.");
+		}
+		list.add(value);
+	}
+
 	public void set(Enum<?> value) {
 		if (value == null) {
 			// throw new RuntimeException("参数值[" + list.size() + "]不能为空.");
@@ -196,6 +210,11 @@ public class StatementParameter {
 		return (Double) value;
 	}
 
+	public byte getByte(int index) {
+		Object value = this.getObject(index);
+		return (Byte) value;
+	}
+
 	public Object getObject(int index) {
 		return list.get(index);
 	}
@@ -218,6 +237,8 @@ public class StatementParameter {
 			return Types.DOUBLE;
 		} else if (value instanceof Float) {
 			return Types.FLOAT;
+		} else if (value instanceof Byte) {
+			return Types.TINYINT;
 		} else {
 			throw new RuntimeException("未知参数类型[" + value + "].");
 		}
@@ -266,6 +287,8 @@ public class StatementParameter {
 						pstmt.setDouble(i, (Double) value);
 					} else if (value instanceof Float) {
 						pstmt.setFloat(i, (Float) value);
+					} else if (value instanceof Byte) {
+						pstmt.setByte(i, (Byte) value);
 					} else {
 						throw new RuntimeException("未知参数类型[" + i + "." + value + "].");
 					}

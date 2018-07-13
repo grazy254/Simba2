@@ -94,6 +94,13 @@ public class SimpleStatementParameter {
 		map.put(column, value);
 	}
 
+	public void setByte(String column, Byte value) {
+		if (value == null) {
+			throw new RuntimeException("参数值[" + map.size() + "]不能为空.");
+		}
+		map.put(column, value);
+	}
+
 	public Map<String, Object> getParameters() {
 		return map;
 	}

@@ -36,6 +36,8 @@ public class SqlUtil {
 				value = Double.toString(param.getDouble(i));
 			} else if (type == Types.BIGINT) {
 				value = Long.toString(param.getLong(i));
+			} else if (type == Types.TINYINT) {
+				value = Long.toString(param.getByte(i));
 			} else {
 				throw new RuntimeException("未知数据类型[" + type + "]");
 			}
@@ -236,6 +238,13 @@ public class SqlUtil {
 			return this;
 		}
 
+		public SQLSetBuilder add(String name, Byte value) {
+			if (set(name, value)) {
+				param.setByte(value);
+			}
+			return this;
+		}
+
 		public SQLSetBuilder add(String name, String value) {
 			if (set(name, value)) {
 				param.setString(value);
@@ -428,6 +437,8 @@ public class SqlUtil {
 				param.setInt((Integer) value);
 			} else if (value instanceof Long) {
 				param.setLong((Long) value);
+			} else if (value instanceof Byte) {
+				param.setByte((Byte) value);
 			} else if (value instanceof Enum) {
 				param.setString(((Enum<?>) value).name());
 			} else {

@@ -18,4 +18,6 @@ public class PolygonParam {
 	 * 查询关键字 规则： 多个关键字用“|”分割
 	 */
 	private String keywords;
+	
+	
 }

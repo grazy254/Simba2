@@ -82,6 +82,10 @@
 							<li>
 								<a href="#" onclick="logout();" data-toggle="control-sidebar" title="退出"><i class="fa fa-power-off"></i></a>
 							</li>
+
+							<li>
+								<a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+							</li>
 						</ul>
 					</div>
 				</nav>
@@ -110,15 +114,117 @@
 				<div class="pull-right hidden-xs">
 					<b>版本</b> 2.0.0
 				</div>
-				<strong>Copyright &copy; 2014-2016 .</strong> All rights reserved.
+				<strong>Copyright &copy; 2014-2018 .</strong> All rights reserved.
 			</footer>
+
+			<!-- Control Sidebar -->
+			<aside class="control-sidebar control-sidebar-dark">
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div id="control-sidebar-theme-demo-options-tab" class="tab-pane active">
+						<div>
+							<h4 class="control-sidebar-heading">皮肤</h4>
+							<ul class="list-unstyled clearfix">
+								<li style="float:left; width: 33.33333%; padding: 5px;">
+									<a href="javascript:changeSkin('skin-blue-light');" data-skin="skin-blue-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+										<div><span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9;"></span><span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span></div>
+										<div><span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div>
+									</a>
+									<p class="text-center no-margin" style="font-size: 12px">浅蓝</p>
+								</li>
+								<li style="float:left; width: 33.33333%; padding: 5px;">
+									<a href="javascript:changeSkin('skin-black-light');" data-skin="skin-black-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+										<div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix"><span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe;"></span><span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe;"></span></div>
+										<div><span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div>
+									</a>
+									<p class="text-center no-margin" style="font-size: 12px">浅黑</p>
+								</li>
+								<li style="float:left; width: 33.33333%; padding: 5px;">
+									<a href="javascript:changeSkin('skin-purple-light');" data-skin="skin-purple-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+										<div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span><span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;"></span></div>
+										<div><span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div>
+									</a>
+									<p class="text-center no-margin" style="font-size: 12px">浅紫</p>
+								</li>
+								<li style="float:left; width: 33.33333%; padding: 5px;">
+									<a href="javascript:changeSkin('skin-green-light');" data-skin="skin-green-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+										<div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span><span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;"></span></div>
+										<div><span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div>
+									</a>
+									<p class="text-center no-margin" style="font-size: 12px">浅绿</p>
+								</li>
+								<li style="float:left; width: 33.33333%; padding: 5px;">
+									<a href="javascript:changeSkin('skin-red-light');" data-skin="skin-red-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+										<div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span><span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;"></span></div>
+										<div><span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div>
+									</a>
+									<p class="text-center no-margin" style="font-size: 12px">浅红</p>
+								</li>
+								<li style="float:left; width: 33.33333%; padding: 5px;">
+									<a href="javascript:changeSkin('skin-yellow-light');" data-skin="skin-yellow-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+										<div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span><span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;"></span></div>
+										<div><span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div>
+									</a>
+									<p class="text-center no-margin" style="font-size: 12px;">浅黄</p>
+								</li>
+								<li style="float:left; width: 33.33333%; padding: 5px;">
+									<a href="javascript:changeSkin('skin-blue');" data-skin="skin-blue" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+										<div><span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9;"></span><span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span></div>
+										<div><span style="display:block; width: 20%; float: left; height: 20px; background: #222d32;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div>
+									</a>
+									<p class="text-center no-margin">兰</p>
+								</li>
+								<li style="float:left; width: 33.33333%; padding: 5px;">
+									<a href="javascript:changeSkin('skin-black');" data-skin="skin-black" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+										<div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix"><span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe;"></span><span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe;"></span></div>
+										<div><span style="display:block; width: 20%; float: left; height: 20px; background: #222;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div>
+									</a>
+									<p class="text-center no-margin">黑</p>
+								</li>
+								<li style="float:left; width: 33.33333%; padding: 5px;">
+									<a href="javascript:changeSkin('skin-purple');" data-skin="skin-purple" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+										<div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span><span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;"></span></div>
+										<div><span style="display:block; width: 20%; float: left; height: 20px; background: #222d32;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div>
+									</a>
+									<p class="text-center no-margin">紫</p>
+								</li>
+								<li style="float:left; width: 33.33333%; padding: 5px;">
+									<a href="javascript:changeSkin('skin-green');" data-skin="skin-green" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+										<div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span><span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;"></span></div>
+										<div><span style="display:block; width: 20%; float: left; height: 20px; background: #222d32;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div>
+									</a>
+									<p class="text-center no-margin">绿</p>
+								</li>
+								<li style="float:left; width: 33.33333%; padding: 5px;">
+									<a href="javascript:changeSkin('skin-red');" data-skin="skin-red" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+										<div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span><span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;"></span></div>
+										<div><span style="display:block; width: 20%; float: left; height: 20px; background: #222d32;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div>
+									</a>
+									<p class="text-center no-margin">红</p>
+								</li>
+								<li style="float:left; width: 33.33333%; padding: 5px;">
+									<a href="javascript:changeSkin('skin-yellow');" data-skin="skin-yellow" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+										<div><span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span><span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;"></span></div>
+										<div><span style="display:block; width: 20%; float: left; height: 20px; background: #222d32;"></span><span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7;"></span></div>
+									</a>
+									<p class="text-center no-margin">黄</p>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</aside>
 
 			<!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
 			<div class="control-sidebar-bg"></div>
 		</div>
 		<!-- ./wrapper -->
-
+		<script type="application/javascript">
+			$(document).ready(function() {
+				initSkin();
+			});
+		</script>
 	</body>
 
 </html>

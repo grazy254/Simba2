@@ -3,7 +3,7 @@ package com.simba.wallet.pay.callbacktrade;
 import java.util.Date;
 import java.util.Objects;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -297,13 +297,12 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
 		TradeAccount departmentTradeAccount = tradeAccountDao.get(tradeDeptNO, TradeUserType.DEPARTMENT);
 		TradeAccount channelTradeAccount = tradeAccountDao.get(channelType.getName(), TradeUserType.CHANNEL);
 
-		tradeChannelDetail.setOrderNO(channelOrderNO);
 		if (channelStartTime != null) {
 			tradeChannelDetail.setOrderCreateTime(channelStartTime);
 		}
 		tradeChannelDetail.setPaymentTime(channelPaymentTime);
-		tradeChannelDetail.setOpenID(openID);
-		tradeChannelDetail.setOrderNO(channelOrderNO);
+		tradeChannelDetail.setOpenID(StringUtils.defaultString(openID));
+		tradeChannelDetail.setOrderNO(StringUtils.defaultString(channelOrderNO));
 		tradeChannelDetail.setErrorCode(StringUtils.defaultString(channelErrorCode));
 		tradeChannelDetail.setErrorMsg(StringUtils.defaultString(channelErrorMsg));
 

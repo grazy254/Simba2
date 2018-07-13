@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -18,6 +19,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.simba.cache.Redis;
 import com.simba.framework.util.collection.ListUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
@@ -49,6 +51,38 @@ public class UserController {
 
 	@Autowired
 	private OrgService orgService;
+
+	@Resource
+	private Redis redisUtil;
+
+	/**
+	 * 保存皮肤
+	 * 
+	 * @param sessAccount
+	 * @param skin
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/saveSkin")
+	public JsonResult saveSkin(String sessAccount, String skin) {
+		String key = "skin_" + sessAccount;
+		redisUtil.set(key, skin);
+		return new JsonResult();
+	}
+
+	/**
+	 * 获取皮肤
+	 * 
+	 * @param sessAccount
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getSkin")
+	public JsonResult getSkin(String sessAccount) {
+		String key = "skin_" + sessAccount;
+		String skin = (String) redisUtil.get(key);
+		return new JsonResult(skin);
+	}
 
 	@RequestMapping("/list")
 	public String list(Integer orgID, ModelMap model) {
@@ -149,8 +183,7 @@ public class UserController {
 	}
 
 	@RequestMapping("/toUpdate")
-	public String toUpdate(String account, HttpServletRequest request, ModelMap model)
-			throws UnsupportedEncodingException {
+	public String toUpdate(String account, HttpServletRequest request, ModelMap model) throws UnsupportedEncodingException {
 		User loginUser = SessionUtil.getUser(request.getSession());
 		User user = null;
 		boolean self = true;
@@ -238,8 +271,7 @@ public class UserController {
 
 	@ResponseBody
 	@RequestMapping("/modifyPwd")
-	public JsonResult modifyPwd(HttpServletRequest request, String oldPwd, String newPwd, String confirmPwd,
-			ModelMap model) {
+	public JsonResult modifyPwd(HttpServletRequest request, String oldPwd, String newPwd, String confirmPwd, ModelMap model) {
 		if (!confirmPwd.equals(newPwd)) {
 			throw new RuntimeException("确认密码和新密码不一致");
 		}

@@ -333,4 +333,9 @@ public class RedisClusterUtil implements Redis {
 	public void lremString(String key, long count, String value) {
 		jedisCluster.lrem(key, count, value);
 	}
+
+	@Override
+	public String getString(String key) {
+		return jedisCluster.get(key);
+	}
 }

@@ -5,8 +5,10 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
@@ -22,7 +24,6 @@ import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 
 import com.itextpdf.text.pdf.codec.Base64;
-import com.simba.framework.util.code.AESUtil;
 import com.simba.framework.util.code.EncryptUtil;
 import com.simba.framework.util.common.XmlUtil;
 import com.simba.model.pay.result.CallbackResultRes;
@@ -125,7 +126,15 @@ public class PayCallbackController {
 	 * @throws InvalidKeyException
 	 */
 	private String decode(String info) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
-		return new String(AESUtil.decrypt(Base64.decode(info), EncryptUtil.md5(key).toLowerCase().getBytes()));
+		logger.info("解密前:" + info);
+		byte[] bs = Base64.decode(info);
+		String okey = EncryptUtil.md5(key).toLowerCase();
+		Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+		SecretKeySpec skey = new SecretKeySpec(okey.getBytes(), "AES");
+		cipher.init(Cipher.DECRYPT_MODE, skey);
+		String content = new String(cipher.doFinal(bs));
+		logger.info("解密后:" + content);
+		return content;
 	}
 
 }

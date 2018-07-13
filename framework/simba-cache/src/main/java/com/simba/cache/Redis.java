@@ -19,6 +19,8 @@ public interface Redis {
 
 	void setString(String key, String value, int second);
 
+	String getString(String key);
+
 	void hset(String key, String field, Object value);
 
 	void hsetString(String key, String field, String value);
@@ -105,9 +107,9 @@ public interface Redis {
 	Set<String> hkeysString(String key);
 
 	/**
-	 * 从存于 key 的列表里移除前 count 次出现的值为 value 的元素。 这个 count 参数通过下面几种方式影响这个操作： count
-	 * > 0: 从头往尾移除值为 value 的元素。 count < 0: 从尾往头移除值为 value 的元素。 count = 0: 移除所有值为
-	 * value 的元素。
+	 * 从存于 key 的列表里移除前 count 次出现的值为 value 的元素。 这个 count 参数通过下面几种方式影响这个操作： count > 0:
+	 * 从头往尾移除值为 value 的元素。 count < 0: 从尾往头移除值为 value 的元素。 count = 0: 移除所有值为 value
+	 * 的元素。
 	 * 
 	 * @param key
 	 * @param count

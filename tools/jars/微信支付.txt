@@ -1,0 +1,1 @@
+把里面的两个jar包：local_policy.jar 和 US_export_policy.jar 替换掉原来jdk安装目录%JAVA_HOME%\jre\lib\security 下的两个jar包接可以了

@@ -309,7 +309,7 @@ public class TruckParam {
 		}
 		builder.append("&strategy=" + strategy.getName());
 		if (StringUtils.isNotEmpty(waypoints)) {
-			builder.append("&waypoints=" + waypoints);
+			builder.append("&waypoints=" + URLEncoder.encode(waypoints, ConstantData.DEFAULT_CHARSET));
 		}
 		builder.append("&size=" + size);
 		if (StringUtils.isNotEmpty(height)) {

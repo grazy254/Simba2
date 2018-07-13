@@ -48,4 +48,43 @@ public interface GaodeConstantData {
 	 */
 	String REGEOURL = "https://restapi.amap.com/v3/geocode/regeo?output=JSON";
 
+	/**
+	 * 行政区域查询
+	 */
+	String AREAURL = "https://restapi.amap.com/v3/config/district?output=JSON";
+
+	/**
+	 * 关键字搜索
+	 */
+	String KEYWORDSURL = "https://restapi.amap.com/v3/place/text?output=JSON";
+
+	/**
+	 * 周边搜索
+	 */
+	String AROUDURL = "https://restapi.amap.com/v3/place/around?output=JSON";
+
+	/**
+	 * 多边形搜索
+	 */
+	String POLYGONURL = "https://restapi.amap.com/v3/place/polygon?output=JSON";
+
+	/**
+	 * ID查询
+	 */
+	String IDSEARCHURL = "https://restapi.amap.com/v3/place/detail?output=JSON";
+
+	/**
+	 * IP定位
+	 */
+	String IPURL = "https://restapi.amap.com/v3/ip?output=JSON";
+
+	/**
+	 * 抓路服务
+	 */
+	String AUTOGRASPURL = "https://restapi.amap.com/v3/autograsp?output=JSON";
+
+	/**
+	 * 静态地图
+	 */
+	String STATICMAPURL = "https://restapi.amap.com/v3/staticmap";
 }

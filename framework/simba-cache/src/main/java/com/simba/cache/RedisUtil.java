@@ -813,4 +813,20 @@ public class RedisUtil implements Redis {
 		}
 	}
 
+	@Override
+	public String getString(String key) {
+		Jedis jedis = null;
+		String value = null;
+		try {
+			jedis = pool.getResource();
+			value = (String) jedis.get(key);
+		} catch (Exception e) {
+			logger.error("Redis出现错误", e);
+			throw new RuntimeException("Redis出现错误！", e);
+		} finally {
+			close(jedis);
+		}
+		return value;
+	}
+
 }

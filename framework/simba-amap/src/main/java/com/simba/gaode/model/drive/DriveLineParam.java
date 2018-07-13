@@ -238,7 +238,7 @@ public class DriveLineParam {
 		builder.append("&origin=" + origin);
 		builder.append("&destination=" + destination.toString());
 		if (StringUtils.isNotEmpty(originid)) {
-			builder.append("&originid=" + originid);
+			builder.append("&originid=" + URLEncoder.encode(originid, ConstantData.DEFAULT_CHARSET));
 		}
 		if (StringUtils.isNotEmpty(destinationid)) {
 			builder.append("&destinationid=" + destinationid);
@@ -251,10 +251,10 @@ public class DriveLineParam {
 		}
 		builder.append("&strategy=" + strategy.getName());
 		if (StringUtils.isNotEmpty(waypoints)) {
-			builder.append("&waypoints=" + waypoints);
+			builder.append("&waypoints=" + URLEncoder.encode(waypoints, ConstantData.DEFAULT_CHARSET));
 		}
 		if (StringUtils.isNotEmpty(avoidpolygons)) {
-			builder.append("&avoidpolygons=" + avoidpolygons);
+			builder.append("&avoidpolygons=" + URLEncoder.encode(avoidpolygons, ConstantData.DEFAULT_CHARSET));
 		}
 		if (StringUtils.isNotEmpty(avoidroad)) {
 			builder.append("&avoidroad=" + URLEncoder.encode(avoidroad, ConstantData.DEFAULT_CHARSET));

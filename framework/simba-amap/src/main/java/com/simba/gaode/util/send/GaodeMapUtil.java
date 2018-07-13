@@ -10,6 +10,8 @@ import com.simba.framework.util.json.FastJsonUtil;
 import com.simba.gaode.model.MapAddressPoint;
 import com.simba.gaode.model.area.AreaParam;
 import com.simba.gaode.model.area.AreaResult;
+import com.simba.gaode.model.around.AroundParam;
+import com.simba.gaode.model.around.AroundResult;
 import com.simba.gaode.model.bike.BikeResult;
 import com.simba.gaode.model.bus.BusLineParam;
 import com.simba.gaode.model.bus.BusResult;
@@ -219,6 +221,22 @@ public class GaodeMapUtil {
 		return result;
 	}
 
+	/**
+	 * 周边搜索
+	 * 
+	 * @param param
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public AroundResult around(AroundParam param) throws UnsupportedEncodingException {
+		String url = GaodeConstantData.AROUDURL + "&key=" + key + param.buildParamUrl();
+		logger.info("提交高德地图[周边搜索]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[周边搜索]url:" + url + ",返回结果:" + res);
+		AroundResult result = FastJsonUtil.toObject(res, AroundResult.class);
+		return result;
+	}
+
 	public static void main(String[] args) throws UnsupportedEncodingException {
 		// MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
 		// MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
@@ -247,9 +265,12 @@ public class GaodeMapUtil {
 
 		// logger.info("行政区域查询" + GaodeMapUtil.getInstance().area(new AreaParam()));
 
-		KeyWordsParam kparam = new KeyWordsParam();
-		kparam.setKeywords("天安门");
-		logger.info("关键字搜索" + GaodeMapUtil.getInstance().keywords(kparam));
+		// KeyWordsParam kparam = new KeyWordsParam();
+		// kparam.setKeywords("天安门");
+		// logger.info("关键字搜索" + GaodeMapUtil.getInstance().keywords(kparam));
+
+		// AroundParam aparam = new AroundParam("113.561166,22.267807");
+		// logger.info("周边搜索" + GaodeMapUtil.getInstance().around(aparam));
 
 	}
 

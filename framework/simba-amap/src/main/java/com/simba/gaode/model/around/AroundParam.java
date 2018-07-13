@@ -200,7 +200,7 @@ public class AroundParam {
 			builder.append("&extensions=" + extensions);
 		}
 		if (StringUtils.isNotEmpty(types)) {
-			builder.append("&types=" + types);
+			builder.append("&types=" + URLEncoder.encode(types, ConstantData.DEFAULT_CHARSET));
 		}
 		return builder.toString();
 	}

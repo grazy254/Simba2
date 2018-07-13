@@ -201,7 +201,7 @@ public class KeyWordsParam {
 			builder.append("&keywords=" + URLEncoder.encode(keywords, ConstantData.DEFAULT_CHARSET));
 		}
 		if (StringUtils.isNotEmpty(types)) {
-			builder.append("&types=" + types);
+			builder.append("&types=" + URLEncoder.encode(types, ConstantData.DEFAULT_CHARSET));
 		}
 		if (StringUtils.isNotEmpty(city)) {
 			builder.append("&city=" + URLEncoder.encode(city, ConstantData.DEFAULT_CHARSET));

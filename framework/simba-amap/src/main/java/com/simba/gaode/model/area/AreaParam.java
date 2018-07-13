@@ -135,7 +135,7 @@ public class AreaParam {
 			builder.append("&extensions=" + extensions);
 		}
 		if (StringUtils.isNotEmpty(filter)) {
-			builder.append("&filter=" + filter);
+			builder.append("&filter=" + URLEncoder.encode(filter, ConstantData.DEFAULT_CHARSET));
 		}
 		return builder.toString();
 	}

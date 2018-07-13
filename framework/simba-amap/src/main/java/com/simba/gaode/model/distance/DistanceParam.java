@@ -1,6 +1,10 @@
 package com.simba.gaode.model.distance;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import com.simba.gaode.model.MapAddressPoint;
+import com.simba.model.constant.ConstantData;
 
 /**
  * 距离测量请求参数对象
@@ -80,9 +84,9 @@ public class DistanceParam {
 		return builder.toString();
 	}
 
-	public String buildParamUrl() {
+	public String buildParamUrl() throws UnsupportedEncodingException {
 		StringBuilder builder = new StringBuilder();
-		builder.append("&origins=" + origins);
+		builder.append("&origins=" + URLEncoder.encode(origins, ConstantData.DEFAULT_CHARSET));
 		builder.append("&destination=" + destination.toString());
 		builder.append("&type=" + type);
 		return builder.toString();

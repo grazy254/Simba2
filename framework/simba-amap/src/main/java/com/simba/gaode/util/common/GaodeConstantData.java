@@ -82,4 +82,9 @@ public interface GaodeConstantData {
 	 * 抓路服务
 	 */
 	String AUTOGRASPURL = "https://restapi.amap.com/v3/autograsp?output=JSON";
+
+	/**
+	 * 静态地图
+	 */
+	String STATICMAPURL = "https://restapi.amap.com/v3/staticmap";
 }

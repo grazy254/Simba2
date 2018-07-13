@@ -1,5 +1,6 @@
 package com.simba.gaode.util.send;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.lang.StringUtils;
@@ -29,6 +30,7 @@ import com.simba.gaode.model.ip.IPResult;
 import com.simba.gaode.model.keywords.KeyWordsParam;
 import com.simba.gaode.model.keywords.KeyWordsResult;
 import com.simba.gaode.model.polygon.PolygonParam;
+import com.simba.gaode.model.staticmap.StaticMapParam;
 import com.simba.gaode.model.truck.TruckParam;
 import com.simba.gaode.model.truck.TruckResult;
 import com.simba.gaode.model.walking.WalkingResult;
@@ -299,7 +301,7 @@ public class GaodeMapUtil {
 	 * @throws UnsupportedEncodingException
 	 */
 	public AutoGraspResult autoGrasp(AutoGraspParam param) throws UnsupportedEncodingException {
-		String url = GaodeConstantData.AUTOGRASPURL + "&key=" + key + "&param=" + param.buildParamUrl();
+		String url = GaodeConstantData.AUTOGRASPURL + "&key=" + key + param.buildParamUrl();
 		logger.info("提交高德地图[抓路服务]url:" + url);
 		String res = HttpClientUtil.get(url);
 		logger.info("提交高德地图[抓路服务]url:" + url + ",返回结果:" + res);
@@ -307,7 +309,22 @@ public class GaodeMapUtil {
 		return result;
 	}
 
-	public static void main(String[] args) throws UnsupportedEncodingException {
+	/**
+	 * 静态地图
+	 * 
+	 * @param param
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public byte[] staticMap(StaticMapParam param) throws UnsupportedEncodingException {
+		String url = GaodeConstantData.STATICMAPURL + "?key=" + key + param.buildParamUrl();
+		logger.info("提交高德地图[静态地图]url:" + url);
+		byte[] result = HttpClientUtil.getBytes(url);
+		logger.info("提交高德地图[静态地图]url:" + url + "地图图片生成完成");
+		return result;
+	}
+
+	public static void main(String[] args) throws IOException {
 		// MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
 		// MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
 		// logger.info("步行" + GaodeMapUtil.getInstance().walking(origin, destination));
@@ -357,6 +374,13 @@ public class GaodeMapUtil {
 		// aparam.setSpeed("1,1,2");
 		// aparam.setTime("1434077500,1434077501,1434077510");
 		// logger.info("抓路服务" + GaodeMapUtil.getInstance().autoGrasp(aparam));
+
+		// StaticMapParam sparam = new StaticMapParam();
+		// sparam.setSize("500*500");
+		// sparam.setZoom("15");
+		// sparam.setPaths("10,0x0000ff,1,,:116.31604,39.96491;116.320816,39.966606;116.321785,39.966827;116.32361,39.966957");
+		// byte[] file = GaodeMapUtil.getInstance().staticMap(sparam);
+		// FileUtils.writeByteArrayToFile(new File("D:/gaodemap.png"), file);
 	}
 
 }

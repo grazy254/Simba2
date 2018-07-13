@@ -63,4 +63,8 @@ public interface GaodeConstantData {
 	 */
 	String AROUDURL = "https://restapi.amap.com/v3/place/around?output=JSON";
 
+	/**
+	 * 多边形搜索
+	 */
+	String POLYGONURL = "https://restapi.amap.com/v3/place/polygon?output=JSON";
 }

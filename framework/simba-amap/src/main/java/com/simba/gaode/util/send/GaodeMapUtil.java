@@ -11,7 +11,6 @@ import com.simba.gaode.model.MapAddressPoint;
 import com.simba.gaode.model.area.AreaParam;
 import com.simba.gaode.model.area.AreaResult;
 import com.simba.gaode.model.around.AroundParam;
-import com.simba.gaode.model.around.AroundResult;
 import com.simba.gaode.model.bike.BikeResult;
 import com.simba.gaode.model.bus.BusLineParam;
 import com.simba.gaode.model.bus.BusResult;
@@ -228,12 +227,12 @@ public class GaodeMapUtil {
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
-	public AroundResult around(AroundParam param) throws UnsupportedEncodingException {
+	public KeyWordsResult around(AroundParam param) throws UnsupportedEncodingException {
 		String url = GaodeConstantData.AROUDURL + "&key=" + key + param.buildParamUrl();
 		logger.info("提交高德地图[周边搜索]url:" + url);
 		String res = HttpClientUtil.get(url);
 		logger.info("提交高德地图[周边搜索]url:" + url + ",返回结果:" + res);
-		AroundResult result = FastJsonUtil.toObject(res, AroundResult.class);
+		KeyWordsResult result = FastJsonUtil.toObject(res, KeyWordsResult.class);
 		return result;
 	}
 

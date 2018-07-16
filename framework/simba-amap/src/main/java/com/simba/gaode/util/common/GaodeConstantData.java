@@ -87,4 +87,9 @@ public interface GaodeConstantData {
 	 * 静态地图
 	 */
 	String STATICMAPURL = "https://restapi.amap.com/v3/staticmap";
+
+	/**
+	 * 坐标转换
+	 */
+	String CONVERTERURL = "https://restapi.amap.com/v3/assistant/coordinate/convert?output=JSON";
 }

@@ -2,6 +2,7 @@ package com.simba.gaode.util.send;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -18,6 +19,7 @@ import com.simba.gaode.model.autograsp.AutoGraspResult;
 import com.simba.gaode.model.bike.BikeResult;
 import com.simba.gaode.model.bus.BusLineParam;
 import com.simba.gaode.model.bus.BusResult;
+import com.simba.gaode.model.converter.MapConverterResult;
 import com.simba.gaode.model.distance.DistanceParam;
 import com.simba.gaode.model.distance.DistanceResult;
 import com.simba.gaode.model.drive.DriveLineParam;
@@ -35,6 +37,7 @@ import com.simba.gaode.model.truck.TruckParam;
 import com.simba.gaode.model.truck.TruckResult;
 import com.simba.gaode.model.walking.WalkingResult;
 import com.simba.gaode.util.common.GaodeConstantData;
+import com.simba.model.constant.ConstantData;
 
 /**
  * 高德地图Java版Web Api 工具类
@@ -324,6 +327,25 @@ public class GaodeMapUtil {
 		return result;
 	}
 
+	/**
+	 * 坐标转换
+	 * 
+	 * @param locations
+	 *            坐标点 经度和纬度用","分割，经度在前，纬度在后，经纬度小数点后不得超过6位。多个坐标对之间用”|”进行分隔最多支持40对坐标。
+	 * @param coordsys
+	 *            原坐标系 可选值： gps; mapbar; baidu; autonavi(不进行转换)
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public MapConverterResult converter(String locations, String coordsys) throws UnsupportedEncodingException {
+		String url = GaodeConstantData.CONVERTERURL + "&key=" + key + "&locations=" + URLEncoder.encode(locations, ConstantData.DEFAULT_CHARSET) + "&coordsys=" + coordsys;
+		logger.info("提交高德地图[坐标转换]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[坐标转换]url:" + url + ",返回结果:" + res);
+		MapConverterResult result = FastJsonUtil.toObject(res, MapConverterResult.class);
+		return result;
+	}
+
 	public static void main(String[] args) throws IOException {
 		// MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
 		// MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
@@ -381,6 +403,13 @@ public class GaodeMapUtil {
 		// sparam.setPaths("10,0x0000ff,1,,:116.31604,39.96491;116.320816,39.966606;116.321785,39.966827;116.32361,39.966957");
 		// byte[] file = GaodeMapUtil.getInstance().staticMap(sparam);
 		// FileUtils.writeByteArrayToFile(new File("D:/gaodemap.png"), file);
+
+		// logger.info("坐标转换" +
+		// GaodeMapUtil.getInstance().converter("116.481499,39.990475|116.481499,39.990375",
+		// "gps"));
+		
+		
+
 	}
 
 }

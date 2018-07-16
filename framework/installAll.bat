@@ -64,6 +64,9 @@ cd ../
 cd simba-httpclient
 call mvn clean -U install
 cd ../
+cd simba-okhttp
+call mvn clean -U install
+cd ../
 cd simba-database
 call mvn clean -U install
 cd ../
@@ -206,6 +209,9 @@ cd simba-job
 call mvn clean -U install
 cd ../
 cd simba-log
+call mvn clean -U install
+cd ../
+cd simba-data-dictionary
 call mvn clean -U install
 cd ../
 cd simba-third-login

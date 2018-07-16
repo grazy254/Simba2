@@ -1,6 +1,12 @@
 cd simba-auto-deploy
 call mvn clean -U 
 cd ../
+cd simba-okhttp
+call mvn clean -U 
+cd ../
+cd simba-data-dictionary
+call mvn clean -U 
+cd ../
 cd simba-rule
 call mvn clean -U 
 cd ../

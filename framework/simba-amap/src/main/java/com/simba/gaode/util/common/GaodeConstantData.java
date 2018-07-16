@@ -117,4 +117,9 @@ public interface GaodeConstantData {
 	 * 指定线路交通态势
 	 */
 	String ROADSTATUSURL = "https://restapi.amap.com/v3/traffic/status/road?output=JSON";
+
+	/**
+	 * 创建围栏
+	 */
+	String CREATEFENCEURL = "https://restapi.amap.com/v4/geofence/meta";
 }

@@ -24,6 +24,8 @@ import com.simba.gaode.model.distance.DistanceParam;
 import com.simba.gaode.model.distance.DistanceResult;
 import com.simba.gaode.model.drive.DriveLineParam;
 import com.simba.gaode.model.drive.DriveResult;
+import com.simba.gaode.model.fence.CreateFenceParam;
+import com.simba.gaode.model.fence.CreateFenceResult;
 import com.simba.gaode.model.geo.GeoParam;
 import com.simba.gaode.model.geo.GeoResult;
 import com.simba.gaode.model.geo.RegeoParam;
@@ -436,6 +438,21 @@ public class GaodeMapUtil {
 		return result;
 	}
 
+	/**
+	 * 创建围栏
+	 * 
+	 * @param param
+	 * @return
+	 */
+	public CreateFenceResult createFence(CreateFenceParam param) {
+		String url = GaodeConstantData.CREATEFENCEURL + "?key=" + key;
+		String json = param.toJson();
+		String res = HttpClientUtil.postJson(url, json);
+		logger.info("提交高德地图[创建围栏]url:" + url + ",返回结果:" + res);
+		CreateFenceResult result = FastJsonUtil.toObject(res, CreateFenceResult.class);
+		return result;
+	}
+
 	public static void main(String[] args) throws IOException {
 		// MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
 		// MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
@@ -515,6 +532,13 @@ public class GaodeMapUtil {
 		// rparam.setCity("珠海市");
 		// logger.info("指定线路交通态势" + GaodeMapUtil.getInstance().road(rparam));
 
+		CreateFenceParam cparam = new CreateFenceParam();
+		cparam.setName("测试围栏");
+		cparam.setCenter("116.481499,39.990475");
+		cparam.setRadius("1000");
+		cparam.setRepeat("Mon,Sat");
+		// gid=af7ae38d-8ef4-4f01-b9e0-d0f40ba1c963
+		logger.info("创建围栏" + GaodeMapUtil.getInstance().createFence(cparam));
 	}
 
 }

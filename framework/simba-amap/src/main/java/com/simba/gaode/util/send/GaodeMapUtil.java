@@ -26,6 +26,8 @@ import com.simba.gaode.model.drive.DriveLineParam;
 import com.simba.gaode.model.drive.DriveResult;
 import com.simba.gaode.model.fence.CreateFenceParam;
 import com.simba.gaode.model.fence.CreateFenceResult;
+import com.simba.gaode.model.fence.QueryFenceParam;
+import com.simba.gaode.model.fence.QueryFenceResult;
 import com.simba.gaode.model.geo.GeoParam;
 import com.simba.gaode.model.geo.GeoResult;
 import com.simba.gaode.model.geo.RegeoParam;
@@ -453,6 +455,22 @@ public class GaodeMapUtil {
 		return result;
 	}
 
+	/**
+	 * 查询围栏
+	 * 
+	 * @param param
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public QueryFenceResult queryFence(QueryFenceParam param) throws UnsupportedEncodingException {
+		String url = GaodeConstantData.QUERYFENCEURL + "?key=" + key + param.buildParamUrl();
+		logger.info("提交高德地图[查询围栏]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[查询围栏]url:" + url + ",返回结果:" + res);
+		QueryFenceResult result = FastJsonUtil.toObject(res, QueryFenceResult.class);
+		return result;
+	}
+
 	public static void main(String[] args) throws IOException {
 		// MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
 		// MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
@@ -532,13 +550,16 @@ public class GaodeMapUtil {
 		// rparam.setCity("珠海市");
 		// logger.info("指定线路交通态势" + GaodeMapUtil.getInstance().road(rparam));
 
-		CreateFenceParam cparam = new CreateFenceParam();
-		cparam.setName("测试围栏");
-		cparam.setCenter("116.481499,39.990475");
-		cparam.setRadius("1000");
-		cparam.setRepeat("Mon,Sat");
+		// CreateFenceParam cparam = new CreateFenceParam();
+		// cparam.setName("测试围栏");
+		// cparam.setCenter("116.481499,39.990475");
+		// cparam.setRadius("1000");
+		// cparam.setRepeat("Mon,Sat");
+		// logger.info("创建围栏" + GaodeMapUtil.getInstance().createFence(cparam));
 		// gid=af7ae38d-8ef4-4f01-b9e0-d0f40ba1c963
-		logger.info("创建围栏" + GaodeMapUtil.getInstance().createFence(cparam));
+
+		// logger.info("查询围栏" + GaodeMapUtil.getInstance().queryFence(new
+		// QueryFenceParam()));
 	}
 
 }

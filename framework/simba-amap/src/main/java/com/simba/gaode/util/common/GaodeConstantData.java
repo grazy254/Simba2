@@ -122,4 +122,9 @@ public interface GaodeConstantData {
 	 * 创建围栏
 	 */
 	String CREATEFENCEURL = "https://restapi.amap.com/v4/geofence/meta";
+
+	/**
+	 * 查询围栏
+	 */
+	String QUERYFENCEURL = "https://restapi.amap.com/v4/geofence/meta";
 }

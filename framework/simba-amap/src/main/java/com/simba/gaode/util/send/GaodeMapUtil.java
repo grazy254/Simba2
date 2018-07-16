@@ -36,6 +36,7 @@ import com.simba.gaode.model.staticmap.StaticMapParam;
 import com.simba.gaode.model.truck.TruckParam;
 import com.simba.gaode.model.truck.TruckResult;
 import com.simba.gaode.model.walking.WalkingResult;
+import com.simba.gaode.model.weather.WeatherResult;
 import com.simba.gaode.util.common.GaodeConstantData;
 import com.simba.model.constant.ConstantData;
 
@@ -346,6 +347,25 @@ public class GaodeMapUtil {
 		return result;
 	}
 
+	/**
+	 * 天气查询
+	 * 
+	 * @param city
+	 *            城市名称 输入adcode
+	 * @param extensions
+	 *            气象类型 可选值：base/all base:返回实况天气 all:返回预报天气
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public WeatherResult weather(String city, String extensions) throws UnsupportedEncodingException {
+		String url = GaodeConstantData.WEATHERURL + "&key=" + key + "&city=" + URLEncoder.encode(city, ConstantData.DEFAULT_CHARSET) + "&extensions=" + extensions;
+		logger.info("提交高德地图[天气查询]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[天气查询]url:" + url + ",返回结果:" + res);
+		WeatherResult result = FastJsonUtil.toObject(res, WeatherResult.class);
+		return result;
+	}
+
 	public static void main(String[] args) throws IOException {
 		// MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
 		// MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
@@ -407,8 +427,9 @@ public class GaodeMapUtil {
 		// logger.info("坐标转换" +
 		// GaodeMapUtil.getInstance().converter("116.481499,39.990475|116.481499,39.990375",
 		// "gps"));
-		
-		
+
+		// logger.info("天气查询" + GaodeMapUtil.getInstance().weather("110101", "all"));
+		// logger.info("天气查询" + GaodeMapUtil.getInstance().weather("110101", "base"));
 
 	}
 

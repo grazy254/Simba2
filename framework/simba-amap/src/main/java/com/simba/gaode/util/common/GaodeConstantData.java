@@ -92,4 +92,10 @@ public interface GaodeConstantData {
 	 * 坐标转换
 	 */
 	String CONVERTERURL = "https://restapi.amap.com/v3/assistant/coordinate/convert?output=JSON";
+
+	/**
+	 * 天气查询
+	 */
+	String WEATHERURL = "https://restapi.amap.com/v3/weather/weatherInfo?output=JSON";
+
 }

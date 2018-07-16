@@ -33,6 +33,12 @@ import com.simba.gaode.model.keywords.KeyWordsParam;
 import com.simba.gaode.model.keywords.KeyWordsResult;
 import com.simba.gaode.model.polygon.PolygonParam;
 import com.simba.gaode.model.staticmap.StaticMapParam;
+import com.simba.gaode.model.status.CircleStatusParam;
+import com.simba.gaode.model.status.ReactangleStatusParam;
+import com.simba.gaode.model.status.RoadStatusParam;
+import com.simba.gaode.model.status.StatusResult;
+import com.simba.gaode.model.tip.TipParam;
+import com.simba.gaode.model.tip.TipResult;
 import com.simba.gaode.model.truck.TruckParam;
 import com.simba.gaode.model.truck.TruckResult;
 import com.simba.gaode.model.walking.WalkingResult;
@@ -186,21 +192,6 @@ public class GaodeMapUtil {
 	}
 
 	/**
-	 * 逆地理编码
-	 * 
-	 * @param param
-	 * @return
-	 */
-	public RegeoResult regeo(RegeoParam param) {
-		String url = GaodeConstantData.REGEOURL + "&key=" + key + param.buildParamUrl();
-		logger.info("提交高德地图[逆地理编码]url:" + url);
-		String res = HttpClientUtil.get(url);
-		logger.info("提交高德地图[逆地理编码]url:" + url + ",返回结果:" + res);
-		RegeoResult result = FastJsonUtil.toObject(res, RegeoResult.class);
-		return result;
-	}
-
-	/**
 	 * 行政区域查询
 	 * 
 	 * @param param
@@ -213,6 +204,21 @@ public class GaodeMapUtil {
 		String res = HttpClientUtil.get(url);
 		logger.info("提交高德地图[行政区域查询]url:" + url + ",返回结果:" + res);
 		AreaResult result = FastJsonUtil.toObject(res, AreaResult.class);
+		return result;
+	}
+
+	/**
+	 * 逆地理编码
+	 * 
+	 * @param param
+	 * @return
+	 */
+	public RegeoResult regeo(RegeoParam param) {
+		String url = GaodeConstantData.REGEOURL + "&key=" + key + param.buildParamUrl();
+		logger.info("提交高德地图[逆地理编码]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[逆地理编码]url:" + url + ",返回结果:" + res);
+		RegeoResult result = FastJsonUtil.toObject(res, RegeoResult.class);
 		return result;
 	}
 
@@ -366,6 +372,70 @@ public class GaodeMapUtil {
 		return result;
 	}
 
+	/**
+	 * 输入提示
+	 * 
+	 * @param param
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public TipResult tip(TipParam param) throws UnsupportedEncodingException {
+		String url = GaodeConstantData.TIPURL + "&key=" + key + param.buildParamUrl();
+		logger.info("提交高德地图[输入提示]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[输入提示]url:" + url + ",返回结果:" + res);
+		TipResult result = FastJsonUtil.toObject(res, TipResult.class);
+		return result;
+	}
+
+	/**
+	 * 矩形区域交通态势
+	 * 
+	 * @param param
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public StatusResult reactangle(ReactangleStatusParam param) throws UnsupportedEncodingException {
+		String url = GaodeConstantData.REACTANGLESTATUSURL + "&key=" + key + param.buildParamUrl();
+		logger.info("提交高德地图[矩形区域交通态势]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[矩形区域交通态势]url:" + url + ",返回结果:" + res);
+		StatusResult result = FastJsonUtil.toObject(res, StatusResult.class);
+		return result;
+	}
+
+	/**
+	 * 圆形区域交通态势
+	 * 
+	 * @param param
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public StatusResult circle(CircleStatusParam param) throws UnsupportedEncodingException {
+		String url = GaodeConstantData.CIRCLESTATUSURL + "&key=" + key + param.buildParamUrl();
+		logger.info("提交高德地图[圆形区域交通态势]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[圆形区域交通态势]url:" + url + ",返回结果:" + res);
+		StatusResult result = FastJsonUtil.toObject(res, StatusResult.class);
+		return result;
+	}
+
+	/**
+	 * 指定线路交通态势
+	 * 
+	 * @param param
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public StatusResult road(RoadStatusParam param) throws UnsupportedEncodingException {
+		String url = GaodeConstantData.ROADSTATUSURL + "&key=" + key + param.buildParamUrl();
+		logger.info("提交高德地图[指定线路交通态势]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[指定线路交通态势]url:" + url + ",返回结果:" + res);
+		StatusResult result = FastJsonUtil.toObject(res, StatusResult.class);
+		return result;
+	}
+
 	public static void main(String[] args) throws IOException {
 		// MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
 		// MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
@@ -430,6 +500,20 @@ public class GaodeMapUtil {
 
 		// logger.info("天气查询" + GaodeMapUtil.getInstance().weather("110101", "all"));
 		// logger.info("天气查询" + GaodeMapUtil.getInstance().weather("110101", "base"));
+
+		// logger.info("输入提示" + GaodeMapUtil.getInstance().tip(new TipParam("天安门")));
+
+		// ReactangleStatusParam rparam = new
+		// ReactangleStatusParam("116.351147,39.966309;116.357134,39.968727");
+		// logger.info("矩形区域交通态势" + GaodeMapUtil.getInstance().reactangle(rparam));
+
+		// logger.info("圆形区域交通态势" + GaodeMapUtil.getInstance().circle(new
+		// CircleStatusParam("116.496167,39.917066")));
+
+		// RoadStatusParam rparam = new RoadStatusParam();
+		// rparam.setName("兴业路");
+		// rparam.setCity("珠海市");
+		// logger.info("指定线路交通态势" + GaodeMapUtil.getInstance().road(rparam));
 
 	}
 

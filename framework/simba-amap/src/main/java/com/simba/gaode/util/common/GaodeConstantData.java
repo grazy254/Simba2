@@ -98,4 +98,23 @@ public interface GaodeConstantData {
 	 */
 	String WEATHERURL = "https://restapi.amap.com/v3/weather/weatherInfo?output=JSON";
 
+	/**
+	 * 输入提示
+	 */
+	String TIPURL = "https://restapi.amap.com/v3/assistant/inputtips?output=JSON";
+
+	/**
+	 * 矩形区域交通态势
+	 */
+	String REACTANGLESTATUSURL = "https://restapi.amap.com/v3/traffic/status/rectangle?output=JSON";
+
+	/**
+	 * 圆形区域交通态势
+	 */
+	String CIRCLESTATUSURL = "https://restapi.amap.com/v3/traffic/status/circle?output=JSON";
+
+	/**
+	 * 指定线路交通态势
+	 */
+	String ROADSTATUSURL = "https://restapi.amap.com/v3/traffic/status/road?output=JSON";
 }

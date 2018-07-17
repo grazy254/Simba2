@@ -1,15 +1,17 @@
 package com.simba.gaode.util.send;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.simba.common.EnvironmentUtil;
+import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.framework.util.http.HttpClientUtil;
 import com.simba.framework.util.json.FastJsonUtil;
 import com.simba.gaode.model.MapAddressPoint;
@@ -22,6 +24,8 @@ import com.simba.gaode.model.bike.BikeResult;
 import com.simba.gaode.model.bus.BusLineParam;
 import com.simba.gaode.model.bus.BusResult;
 import com.simba.gaode.model.converter.MapConverterResult;
+import com.simba.gaode.model.correct.CorrectData;
+import com.simba.gaode.model.correct.CorrectResult;
 import com.simba.gaode.model.distance.DistanceParam;
 import com.simba.gaode.model.distance.DistanceResult;
 import com.simba.gaode.model.drive.DriveLineParam;
@@ -72,10 +76,8 @@ public class GaodeMapUtil {
 	}
 
 	private void init() {
-		key = "cc3ce763d853914058ea2fd86149678f";
-		// EnvironmentUtil environmentUtil =
-		// ApplicationContextUtil.getBean(EnvironmentUtil.class);
-		// key = environmentUtil.get("gaode.map.web.api.key");
+		EnvironmentUtil environmentUtil = ApplicationContextUtil.getBean(EnvironmentUtil.class);
+		key = environmentUtil.get("gaode.map.web.api.key");
 	}
 
 	private static final class GaodeMapUtilHolder {
@@ -545,126 +547,19 @@ public class GaodeMapUtil {
 		return result;
 	}
 
-	public static void main(String[] args) throws IOException {
-		// MapAddressPoint origin = new MapAddressPoint("113.561166",
-		// "22.267807");
-		// MapAddressPoint destination = new MapAddressPoint("113.552068",
-		// "22.247789");
-		// logger.info("步行" + GaodeMapUtil.getInstance().walking(origin,
-		// destination));
-
-		// BusLineParam param = new BusLineParam(origin, destination, "珠海市");
-		// logger.info("公交" + GaodeMapUtil.getInstance().bus(param));
-		//
-		// DriveLineParam dparam = new DriveLineParam(origin.toString(),
-		// destination);
-		// logger.info("驾车" + GaodeMapUtil.getInstance().drive(dparam));
-		//
-		// logger.info("骑行" + GaodeMapUtil.getInstance().bike(origin,
-		// destination));
-
-		// TruckParam tparam = new TruckParam(origin, destination);
-		// logger.info("货车" + GaodeMapUtil.getInstance().truck(tparam));
-
-		// DistanceParam dparam = new DistanceParam("113.561166,22.267807",
-		// destination,"1");
-		// logger.info("距离测量" + GaodeMapUtil.getInstance().distance(dparam));
-
-		// GeoParam gparam = new GeoParam("方恒国际中心A座");
-		// logger.info("地理编码" + GaodeMapUtil.getInstance().geo(gparam));
-
-		// RegeoParam rparam = new RegeoParam("113.561166,22.267807") ;
-		// logger.info("逆地理编码" + GaodeMapUtil.getInstance().regeo(rparam));
-
-		// logger.info("行政区域查询" + GaodeMapUtil.getInstance().area(new
-		// AreaParam()));
-
-		// KeyWordsParam kparam = new KeyWordsParam();
-		// kparam.setKeywords("天安门");
-		// logger.info("关键字搜索" + GaodeMapUtil.getInstance().keywords(kparam));
-
-		// AroundParam aparam = new AroundParam("113.561166,22.267807");
-		// logger.info("周边搜索" + GaodeMapUtil.getInstance().around(aparam));
-
-		// PolygonParam pparam = new
-		// PolygonParam("113.561166,22.267807|113.552068,22.247789");
-		// logger.info("多边形搜索" + GaodeMapUtil.getInstance().polygon(pparam));
-
-		// logger.info("ID查询" +
-		// GaodeMapUtil.getInstance().idSearch("B0FFFAB6J2"));
-
-		// logger.info("IP定位查询" + GaodeMapUtil.getInstance().ip(""));
-
-		// AutoGraspParam aparam = new AutoGraspParam();
-		// aparam.setCarid("12345");
-		// aparam.setDirection("1,1,2");
-		// aparam.setLocations("116.496167,39.917066|116.496149,39.917205|116.496149,39.917326");
-		// aparam.setSpeed("1,1,2");
-		// aparam.setTime("1434077500,1434077501,1434077510");
-		// logger.info("抓路服务" + GaodeMapUtil.getInstance().autoGrasp(aparam));
-
-		// StaticMapParam sparam = new StaticMapParam();
-		// sparam.setSize("500*500");
-		// sparam.setZoom("15");
-		// sparam.setPaths("10,0x0000ff,1,,:116.31604,39.96491;116.320816,39.966606;116.321785,39.966827;116.32361,39.966957");
-		// byte[] file = GaodeMapUtil.getInstance().staticMap(sparam);
-		// FileUtils.writeByteArrayToFile(new File("D:/gaodemap.png"), file);
-
-		// logger.info("坐标转换" +
-		// GaodeMapUtil.getInstance().converter("116.481499,39.990475|116.481499,39.990375",
-		// "gps"));
-
-		// logger.info("天气查询" + GaodeMapUtil.getInstance().weather("110101",
-		// "all"));
-		// logger.info("天气查询" + GaodeMapUtil.getInstance().weather("110101",
-		// "base"));
-
-		// logger.info("输入提示" + GaodeMapUtil.getInstance().tip(new
-		// TipParam("天安门")));
-
-		// ReactangleStatusParam rparam = new
-		// ReactangleStatusParam("116.351147,39.966309;116.357134,39.968727");
-		// logger.info("矩形区域交通态势" +
-		// GaodeMapUtil.getInstance().reactangle(rparam));
-
-		// logger.info("圆形区域交通态势" + GaodeMapUtil.getInstance().circle(new
-		// CircleStatusParam("116.496167,39.917066")));
-
-		// RoadStatusParam rparam = new RoadStatusParam();
-		// rparam.setName("兴业路");
-		// rparam.setCity("珠海市");
-		// logger.info("指定线路交通态势" + GaodeMapUtil.getInstance().road(rparam));
-
-//		FenceParam cparam = new FenceParam();
-//		cparam.setName("测试围栏");
-//		cparam.setCenter("116.481499,39.990475");
-//		cparam.setRadius("1000");
-//		cparam.setRepeat("Mon,Sat");
-//		logger.info("创建围栏" + GaodeMapUtil.getInstance().createFence(cparam));
-		// gid=af7ae38d-8ef4-4f01-b9e0-d0f40ba1c963
-
-		// FenceParam cparam = new FenceParam();
-		// cparam.setName("测试围栏2");
-		// cparam.setCenter("116.481499,39.990475");
-		// cparam.setRadius("300");
-		// cparam.setRepeat("Mon,Sat");
-		// logger.info("更新围栏" +
-		// GaodeMapUtil.getInstance().updateFence("af7ae38d-8ef4-4f01-b9e0-d0f40ba1c963",
-		// cparam));
-
-		// logger.info("查询围栏" + GaodeMapUtil.getInstance().queryFence(new
-		// QueryFenceParam()));
-
-		// logger.info("围栏启动&停止" +
-		// GaodeMapUtil.getInstance().enableFence("af7ae38d-8ef4-4f01-b9e0-d0f40ba1c963",
-		// false));
-
-		// logger.info("删除围栏" +
-		// GaodeMapUtil.getInstance().deleteFence("af7ae38d-8ef4-4f01-b9e0-d0f401ba1c963"));
-
-		// MonitorFenceParam mparam = new MonitorFenceParam("aaa",
-		// "116.481499,39.990475," + System.currentTimeMillis()/1000 );
-		// logger.info("围栏设备监控" + GaodeMapUtil.getInstance().monitorFence(mparam));
+	/**
+	 * 轨迹纠偏
+	 * 
+	 * @param datas
+	 * @return
+	 */
+	public CorrectResult correct(List<CorrectData> datas) {
+		String url = GaodeConstantData.CORRECTIONDRIVEURL + "?key=" + key;
+		String json = FastJsonUtil.toJson(datas);
+		String res = HttpClientUtil.postJson(url, json);
+		logger.info("提交高德地图[轨迹纠偏]url:" + url + ",json:" + json + ",返回结果:" + res);
+		CorrectResult result = FastJsonUtil.toObject(res, CorrectResult.class);
+		return result;
 	}
 
 }

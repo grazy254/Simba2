@@ -147,4 +147,9 @@ public interface GaodeConstantData {
 	 * 围栏设备监控
 	 */
 	String MONITORFENCEURL = "https://restapi.amap.com/v4/geofence/status";
+
+	/**
+	 * 轨迹纠偏
+	 */
+	String CORRECTIONDRIVEURL = "https://restapi.amap.com/v4/grasproad/driving";
 }

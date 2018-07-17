@@ -6,7 +6,7 @@ package com.simba.gaode.model.fence;
  * @author caozhejun
  *
  */
-public class UpdateFenceData {
+public class FenceData {
 
 	/**
 	 * 状态说明信息

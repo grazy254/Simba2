@@ -3,6 +3,8 @@ package com.simba.gaode.util.send;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -26,9 +28,9 @@ import com.simba.gaode.model.drive.DriveLineParam;
 import com.simba.gaode.model.drive.DriveResult;
 import com.simba.gaode.model.fence.CreateFenceResult;
 import com.simba.gaode.model.fence.FenceParam;
+import com.simba.gaode.model.fence.FenceResult;
 import com.simba.gaode.model.fence.QueryFenceParam;
 import com.simba.gaode.model.fence.QueryFenceResult;
-import com.simba.gaode.model.fence.UpdateFenceResult;
 import com.simba.gaode.model.geo.GeoParam;
 import com.simba.gaode.model.geo.GeoResult;
 import com.simba.gaode.model.geo.RegeoParam;
@@ -481,12 +483,47 @@ public class GaodeMapUtil {
 	 * @param param
 	 * @return
 	 */
-	public UpdateFenceResult updateFence(String gid, FenceParam param) {
+	public FenceResult updateFence(String gid, FenceParam param) {
 		String url = GaodeConstantData.UPDATEFENCEURL + "&key=" + key + "&gid=" + gid;
 		String json = param.toJson();
 		String res = HttpClientUtil.postJson(url, json);
 		logger.info("提交高德地图[更新围栏]url:" + url + ",返回结果:" + res);
-		UpdateFenceResult result = FastJsonUtil.toObject(res, UpdateFenceResult.class);
+		FenceResult result = FastJsonUtil.toObject(res, FenceResult.class);
+		return result;
+	}
+
+	/**
+	 * 围栏启动&停止
+	 * 
+	 * @param gid
+	 *            围栏全局id
+	 * @param enable
+	 *            围栏激活状态；不能与更新围栏参数同时存在
+	 * @return
+	 */
+	public FenceResult enableFence(String gid, boolean enable) {
+		String url = GaodeConstantData.ENABLEFENCEURL + "&key=" + key + "&gid=" + gid;
+		Map<String, Object> param = new HashMap<>();
+		param.put("enable", enable);
+		String json = FastJsonUtil.toJson(param);
+		String res = HttpClientUtil.postJson(url, json);
+		logger.info("提交高德地图[围栏启动&停止]url:" + url + ",返回结果:" + res);
+		FenceResult result = FastJsonUtil.toObject(res, FenceResult.class);
+		return result;
+	}
+
+	/**
+	 * 删除围栏
+	 * 
+	 * @param gid
+	 *            围栏全局id
+	 * @return
+	 */
+	public FenceResult deleteFence(String gid) {
+		String url = GaodeConstantData.DELETEFENCEURL + "&key=" + key + "&gid=" + gid;
+		String res = HttpClientUtil.post(url);
+		logger.info("提交高德地图[删除围栏]url:" + url + ",返回结果:" + res);
+		FenceResult result = FastJsonUtil.toObject(res, FenceResult.class);
 		return result;
 	}
 
@@ -588,15 +625,23 @@ public class GaodeMapUtil {
 		// logger.info("创建围栏" + GaodeMapUtil.getInstance().createFence(cparam));
 		// gid=af7ae38d-8ef4-4f01-b9e0-d0f40ba1c963
 
-//		FenceParam cparam = new FenceParam();
-//		cparam.setName("测试围栏2");
-//		cparam.setCenter("116.481499,39.990475");
-//		cparam.setRadius("300");
-//		cparam.setRepeat("Mon,Sat");
-//		logger.info("更新围栏" + GaodeMapUtil.getInstance().updateFence("af7ae38d-8ef4-4f01-b9e0-d0f40ba1c963", cparam));
+		// FenceParam cparam = new FenceParam();
+		// cparam.setName("测试围栏2");
+		// cparam.setCenter("116.481499,39.990475");
+		// cparam.setRadius("300");
+		// cparam.setRepeat("Mon,Sat");
+		// logger.info("更新围栏" +
+		// GaodeMapUtil.getInstance().updateFence("af7ae38d-8ef4-4f01-b9e0-d0f40ba1c963",
+		// cparam));
 
-//		logger.info("查询围栏" + GaodeMapUtil.getInstance().queryFence(new QueryFenceParam()));
+		// logger.info("查询围栏" + GaodeMapUtil.getInstance().queryFence(new
+		// QueryFenceParam()));
 
+		// logger.info("围栏启动&停止" +
+		// GaodeMapUtil.getInstance().enableFence("af7ae38d-8ef4-4f01-b9e0-d0f40ba1c963",
+		// false));
+
+		logger.info("删除围栏" + GaodeMapUtil.getInstance().deleteFence("af7ae38d-8ef4-4f01-b9e0-d0f401ba1c963"));
 	}
 
 }

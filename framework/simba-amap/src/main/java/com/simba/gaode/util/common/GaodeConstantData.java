@@ -132,4 +132,14 @@ public interface GaodeConstantData {
 	 * 更新围栏
 	 */
 	String UPDATEFENCEURL = "https://restapi.amap.com/v4/geofence/meta?method=patch";
+
+	/**
+	 * 围栏启动&停止
+	 */
+	String ENABLEFENCEURL = "https://restapi.amap.com/v4/geofence/meta?method=patch";
+
+	/**
+	 * 删除围栏
+	 */
+	String DELETEFENCEURL = "https://restapi.amap.com/v4/geofence/meta?method=delete";
 }

@@ -6,12 +6,12 @@ package com.simba.gaode.model.fence;
  * @author caozhejun
  *
  */
-public class UpdateFenceResult {
+public class FenceResult {
 
 	/**
 	 * 返回数据内容消息体
 	 */
-	private UpdateFenceData data;
+	private FenceData data;
 
 	/**
 	 * 错误码
@@ -23,11 +23,11 @@ public class UpdateFenceResult {
 	 */
 	private String errmsg;
 
-	public UpdateFenceData getData() {
+	public FenceData getData() {
 		return data;
 	}
 
-	public void setData(UpdateFenceData data) {
+	public void setData(FenceData data) {
 		this.data = data;
 	}
 

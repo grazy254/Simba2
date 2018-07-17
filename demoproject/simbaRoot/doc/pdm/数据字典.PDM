@@ -2748,11 +2748,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <c:Tables>
 <o:Table Id="o7">
 <a:ObjectID>5A25826E-225D-4A3C-A3B8-CAB7AFD2C40B</a:ObjectID>
-<a:Name>directionaryType</a:Name>
+<a:Name>dictionaryType</a:Name>
 <a:Code>dictionaryType</a:Code>
 <a:CreationDate>1531816561</a:CreationDate>
 <a:Creator>caozhejun</a:Creator>
-<a:ModificationDate>1531816881</a:ModificationDate>
+<a:ModificationDate>1531819053</a:ModificationDate>
 <a:Modifier>caozhejun</a:Modifier>
 <a:Comment>字典类型</a:Comment>
 <c:Columns>
@@ -2829,11 +2829,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 </o:Table>
 <o:Table Id="o9">
 <a:ObjectID>78F7F11B-95A6-451C-B043-5333A12C334D</a:ObjectID>
-<a:Name>directionary</a:Name>
-<a:Code>directionary</a:Code>
+<a:Name>dictionary</a:Name>
+<a:Code>dictionary</a:Code>
 <a:CreationDate>1531816563</a:CreationDate>
 <a:Creator>caozhejun</a:Creator>
-<a:ModificationDate>1531817270</a:ModificationDate>
+<a:ModificationDate>1531819063</a:ModificationDate>
 <a:Modifier>caozhejun</a:Modifier>
 <a:Comment>字典</a:Comment>
 <c:Columns>

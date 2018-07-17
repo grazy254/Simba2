@@ -1,12 +1,27 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2018/7/17 星期二 16:48:24                       */
+/* Created on:     2018/7/17 星期二 17:17:57                       */
 /*==============================================================*/
 
 
+drop table if exists dictionary;
+
 drop table if exists dictionaryType;
 
-drop table if exists directionary;
+/*==============================================================*/
+/* Table: dictionary                                            */
+/*==============================================================*/
+create table dictionary
+(
+   id                   bigint not null auto_increment,
+   typeId               bigint not null comment '类型id',
+   name                 varchar(128) comment '名称',
+   value                varchar(128) comment '值',
+   primary key (id),
+   key AK_Key_typeId (typeId)
+);
+
+alter table dictionary comment '字典';
 
 /*==============================================================*/
 /* Table: dictionaryType                                        */
@@ -21,19 +36,4 @@ create table dictionaryType
 );
 
 alter table dictionaryType comment '字典类型';
-
-/*==============================================================*/
-/* Table: directionary                                          */
-/*==============================================================*/
-create table directionary
-(
-   id                   bigint not null auto_increment,
-   typeId               bigint not null comment '类型id',
-   name                 varchar(128) comment '名称',
-   value                varchar(128) comment '值',
-   primary key (id),
-   key AK_Key_typeId (typeId)
-);
-
-alter table directionary comment '字典';
 

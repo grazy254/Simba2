@@ -24,10 +24,11 @@ import com.simba.gaode.model.distance.DistanceParam;
 import com.simba.gaode.model.distance.DistanceResult;
 import com.simba.gaode.model.drive.DriveLineParam;
 import com.simba.gaode.model.drive.DriveResult;
-import com.simba.gaode.model.fence.CreateFenceParam;
 import com.simba.gaode.model.fence.CreateFenceResult;
+import com.simba.gaode.model.fence.FenceParam;
 import com.simba.gaode.model.fence.QueryFenceParam;
 import com.simba.gaode.model.fence.QueryFenceResult;
+import com.simba.gaode.model.fence.UpdateFenceResult;
 import com.simba.gaode.model.geo.GeoParam;
 import com.simba.gaode.model.geo.GeoResult;
 import com.simba.gaode.model.geo.RegeoParam;
@@ -342,7 +343,8 @@ public class GaodeMapUtil {
 	 * 坐标转换
 	 * 
 	 * @param locations
-	 *            坐标点 经度和纬度用","分割，经度在前，纬度在后，经纬度小数点后不得超过6位。多个坐标对之间用”|”进行分隔最多支持40对坐标。
+	 *            坐标点
+	 *            经度和纬度用","分割，经度在前，纬度在后，经纬度小数点后不得超过6位。多个坐标对之间用”|”进行分隔最多支持40对坐标。
 	 * @param coordsys
 	 *            原坐标系 可选值： gps; mapbar; baidu; autonavi(不进行转换)
 	 * @return
@@ -446,7 +448,7 @@ public class GaodeMapUtil {
 	 * @param param
 	 * @return
 	 */
-	public CreateFenceResult createFence(CreateFenceParam param) {
+	public CreateFenceResult createFence(FenceParam param) {
 		String url = GaodeConstantData.CREATEFENCEURL + "?key=" + key;
 		String json = param.toJson();
 		String res = HttpClientUtil.postJson(url, json);
@@ -471,18 +473,40 @@ public class GaodeMapUtil {
 		return result;
 	}
 
+	/**
+	 * 更新围栏
+	 * 
+	 * @param gid
+	 *            围栏全局id
+	 * @param param
+	 * @return
+	 */
+	public UpdateFenceResult updateFence(String gid, FenceParam param) {
+		String url = GaodeConstantData.UPDATEFENCEURL + "&key=" + key + "&gid=" + gid;
+		String json = param.toJson();
+		String res = HttpClientUtil.postJson(url, json);
+		logger.info("提交高德地图[更新围栏]url:" + url + ",返回结果:" + res);
+		UpdateFenceResult result = FastJsonUtil.toObject(res, UpdateFenceResult.class);
+		return result;
+	}
+
 	public static void main(String[] args) throws IOException {
-		// MapAddressPoint origin = new MapAddressPoint("113.561166", "22.267807");
-		// MapAddressPoint destination = new MapAddressPoint("113.552068", "22.247789");
-		// logger.info("步行" + GaodeMapUtil.getInstance().walking(origin, destination));
+		// MapAddressPoint origin = new MapAddressPoint("113.561166",
+		// "22.267807");
+		// MapAddressPoint destination = new MapAddressPoint("113.552068",
+		// "22.247789");
+		// logger.info("步行" + GaodeMapUtil.getInstance().walking(origin,
+		// destination));
 
 		// BusLineParam param = new BusLineParam(origin, destination, "珠海市");
 		// logger.info("公交" + GaodeMapUtil.getInstance().bus(param));
 		//
-		// DriveLineParam dparam = new DriveLineParam(origin.toString(), destination);
+		// DriveLineParam dparam = new DriveLineParam(origin.toString(),
+		// destination);
 		// logger.info("驾车" + GaodeMapUtil.getInstance().drive(dparam));
 		//
-		// logger.info("骑行" + GaodeMapUtil.getInstance().bike(origin, destination));
+		// logger.info("骑行" + GaodeMapUtil.getInstance().bike(origin,
+		// destination));
 
 		// TruckParam tparam = new TruckParam(origin, destination);
 		// logger.info("货车" + GaodeMapUtil.getInstance().truck(tparam));
@@ -497,7 +521,8 @@ public class GaodeMapUtil {
 		// RegeoParam rparam = new RegeoParam("113.561166,22.267807") ;
 		// logger.info("逆地理编码" + GaodeMapUtil.getInstance().regeo(rparam));
 
-		// logger.info("行政区域查询" + GaodeMapUtil.getInstance().area(new AreaParam()));
+		// logger.info("行政区域查询" + GaodeMapUtil.getInstance().area(new
+		// AreaParam()));
 
 		// KeyWordsParam kparam = new KeyWordsParam();
 		// kparam.setKeywords("天安门");
@@ -510,7 +535,8 @@ public class GaodeMapUtil {
 		// PolygonParam("113.561166,22.267807|113.552068,22.247789");
 		// logger.info("多边形搜索" + GaodeMapUtil.getInstance().polygon(pparam));
 
-		// logger.info("ID查询" + GaodeMapUtil.getInstance().idSearch("B0FFFAB6J2"));
+		// logger.info("ID查询" +
+		// GaodeMapUtil.getInstance().idSearch("B0FFFAB6J2"));
 
 		// logger.info("IP定位查询" + GaodeMapUtil.getInstance().ip(""));
 
@@ -533,14 +559,18 @@ public class GaodeMapUtil {
 		// GaodeMapUtil.getInstance().converter("116.481499,39.990475|116.481499,39.990375",
 		// "gps"));
 
-		// logger.info("天气查询" + GaodeMapUtil.getInstance().weather("110101", "all"));
-		// logger.info("天气查询" + GaodeMapUtil.getInstance().weather("110101", "base"));
+		// logger.info("天气查询" + GaodeMapUtil.getInstance().weather("110101",
+		// "all"));
+		// logger.info("天气查询" + GaodeMapUtil.getInstance().weather("110101",
+		// "base"));
 
-		// logger.info("输入提示" + GaodeMapUtil.getInstance().tip(new TipParam("天安门")));
+		// logger.info("输入提示" + GaodeMapUtil.getInstance().tip(new
+		// TipParam("天安门")));
 
 		// ReactangleStatusParam rparam = new
 		// ReactangleStatusParam("116.351147,39.966309;116.357134,39.968727");
-		// logger.info("矩形区域交通态势" + GaodeMapUtil.getInstance().reactangle(rparam));
+		// logger.info("矩形区域交通态势" +
+		// GaodeMapUtil.getInstance().reactangle(rparam));
 
 		// logger.info("圆形区域交通态势" + GaodeMapUtil.getInstance().circle(new
 		// CircleStatusParam("116.496167,39.917066")));
@@ -550,7 +580,7 @@ public class GaodeMapUtil {
 		// rparam.setCity("珠海市");
 		// logger.info("指定线路交通态势" + GaodeMapUtil.getInstance().road(rparam));
 
-		// CreateFenceParam cparam = new CreateFenceParam();
+		// FenceParam cparam = new FenceParam();
 		// cparam.setName("测试围栏");
 		// cparam.setCenter("116.481499,39.990475");
 		// cparam.setRadius("1000");
@@ -558,8 +588,15 @@ public class GaodeMapUtil {
 		// logger.info("创建围栏" + GaodeMapUtil.getInstance().createFence(cparam));
 		// gid=af7ae38d-8ef4-4f01-b9e0-d0f40ba1c963
 
-		// logger.info("查询围栏" + GaodeMapUtil.getInstance().queryFence(new
-		// QueryFenceParam()));
+//		FenceParam cparam = new FenceParam();
+//		cparam.setName("测试围栏2");
+//		cparam.setCenter("116.481499,39.990475");
+//		cparam.setRadius("300");
+//		cparam.setRepeat("Mon,Sat");
+//		logger.info("更新围栏" + GaodeMapUtil.getInstance().updateFence("af7ae38d-8ef4-4f01-b9e0-d0f40ba1c963", cparam));
+
+//		logger.info("查询围栏" + GaodeMapUtil.getInstance().queryFence(new QueryFenceParam()));
+
 	}
 
 }

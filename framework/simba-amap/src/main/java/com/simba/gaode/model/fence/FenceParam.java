@@ -8,7 +8,7 @@ import com.simba.framework.util.json.FastJsonUtil;
  * @author caozhejun
  *
  */
-public class CreateFenceParam {
+public class FenceParam {
 
 	/**
 	 * 

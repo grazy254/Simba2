@@ -127,4 +127,9 @@ public interface GaodeConstantData {
 	 * 查询围栏
 	 */
 	String QUERYFENCEURL = "https://restapi.amap.com/v4/geofence/meta";
+
+	/**
+	 * 更新围栏
+	 */
+	String UPDATEFENCEURL = "https://restapi.amap.com/v4/geofence/meta?method=patch";
 }

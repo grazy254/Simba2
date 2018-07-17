@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2018/7/17 ĞÇÆÚ¶ş 16:48:24                       */
+/* Created on:     2018/7/17 æ˜ŸæœŸäºŒ 16:48:24                       */
 /*==============================================================*/
 
 
@@ -14,13 +14,13 @@ drop table if exists directionary;
 create table dictionaryType
 (
    id                   bigint not null auto_increment,
-   code                 varchar(64) not null comment '±àÂë',
-   description          varchar(128) comment 'ÃèÊö',
+   code                 varchar(64) not null comment 'ç¼–ç ',
+   description          varchar(128) comment 'æè¿°',
    primary key (id),
    unique key AK_Key_code (code)
 );
 
-alter table dictionaryType comment '×ÖµäÀàĞÍ';
+alter table dictionaryType comment 'å­—å…¸ç±»å‹';
 
 /*==============================================================*/
 /* Table: directionary                                          */
@@ -28,12 +28,12 @@ alter table dictionaryType comment '×ÖµäÀàĞÍ';
 create table directionary
 (
    id                   bigint not null auto_increment,
-   typeId               bigint not null comment 'ÀàĞÍid',
-   name                 varchar(128) comment 'Ãû³Æ',
-   value                varchar(128) comment 'Öµ',
+   typeId               bigint not null comment 'ç±»å‹id',
+   name                 varchar(128) comment 'åç§°',
+   value                varchar(128) comment 'å€¼',
    primary key (id),
    key AK_Key_typeId (typeId)
 );
 
-alter table directionary comment '×Öµä';
+alter table directionary comment 'å­—å…¸';
 

@@ -641,7 +641,8 @@ public class GaodeMapUtil {
 		// GaodeMapUtil.getInstance().enableFence("af7ae38d-8ef4-4f01-b9e0-d0f40ba1c963",
 		// false));
 
-		logger.info("删除围栏" + GaodeMapUtil.getInstance().deleteFence("af7ae38d-8ef4-4f01-b9e0-d0f401ba1c963"));
+		// logger.info("删除围栏" +
+		// GaodeMapUtil.getInstance().deleteFence("af7ae38d-8ef4-4f01-b9e0-d0f401ba1c963"));
 	}
 
 }

@@ -16,24 +16,24 @@ import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.framework.util.common.PathUtil;
 
 /**
- * 禁止访问拦截器
+ * 允许访问拦截器
  * 
  * @author caozj
  */
-public class ForbidInterceptor implements HandlerInterceptor {
+public class AllowInterceptor implements HandlerInterceptor {
 
 	private String includeUrl;
 
 	private List<String> includeUrls = new ArrayList<String>();
 
-	public ForbidInterceptor() {
+	public AllowInterceptor() {
 		super();
 		init();
 	}
 
 	private void init() {
 		EnvironmentUtil environmentUtil = ApplicationContextUtil.getBean(EnvironmentUtil.class);
-		includeUrl = environmentUtil.get("forbid.interceptor.include.url");
+		includeUrl = environmentUtil.get("allow.interceptor.include.url");
 		if (StringUtils.isEmpty(includeUrl)) {
 			return;
 		}
@@ -50,10 +50,10 @@ public class ForbidInterceptor implements HandlerInterceptor {
 		String requestUri = getRequestUri(request);
 		for (String includeUrl : includeUrls) {
 			if (PathUtil.match(requestUri, includeUrl)) {
-				throw new ForbidException("不能访问" + requestUri);
+				return true;
 			}
 		}
-		return true;
+		throw new ForbidException("不能访问" + requestUri);
 	}
 
 	@Override

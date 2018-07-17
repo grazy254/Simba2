@@ -29,6 +29,8 @@ import com.simba.gaode.model.drive.DriveResult;
 import com.simba.gaode.model.fence.CreateFenceResult;
 import com.simba.gaode.model.fence.FenceParam;
 import com.simba.gaode.model.fence.FenceResult;
+import com.simba.gaode.model.fence.MonitorFenceParam;
+import com.simba.gaode.model.fence.MonitorFenceResult;
 import com.simba.gaode.model.fence.QueryFenceParam;
 import com.simba.gaode.model.fence.QueryFenceResult;
 import com.simba.gaode.model.geo.GeoParam;
@@ -527,6 +529,22 @@ public class GaodeMapUtil {
 		return result;
 	}
 
+	/**
+	 * 围栏设备监控
+	 * 
+	 * @param param
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public MonitorFenceResult monitorFence(MonitorFenceParam param) throws UnsupportedEncodingException {
+		String url = GaodeConstantData.MONITORFENCEURL + "?key=" + key + param.buildParamUrl();
+		logger.info("提交高德地图[围栏设备监控]url:" + url);
+		String res = HttpClientUtil.get(url);
+		logger.info("提交高德地图[围栏设备监控]url:" + url + ",返回结果:" + res);
+		MonitorFenceResult result = FastJsonUtil.toObject(res, MonitorFenceResult.class);
+		return result;
+	}
+
 	public static void main(String[] args) throws IOException {
 		// MapAddressPoint origin = new MapAddressPoint("113.561166",
 		// "22.267807");
@@ -617,12 +635,12 @@ public class GaodeMapUtil {
 		// rparam.setCity("珠海市");
 		// logger.info("指定线路交通态势" + GaodeMapUtil.getInstance().road(rparam));
 
-		// FenceParam cparam = new FenceParam();
-		// cparam.setName("测试围栏");
-		// cparam.setCenter("116.481499,39.990475");
-		// cparam.setRadius("1000");
-		// cparam.setRepeat("Mon,Sat");
-		// logger.info("创建围栏" + GaodeMapUtil.getInstance().createFence(cparam));
+//		FenceParam cparam = new FenceParam();
+//		cparam.setName("测试围栏");
+//		cparam.setCenter("116.481499,39.990475");
+//		cparam.setRadius("1000");
+//		cparam.setRepeat("Mon,Sat");
+//		logger.info("创建围栏" + GaodeMapUtil.getInstance().createFence(cparam));
 		// gid=af7ae38d-8ef4-4f01-b9e0-d0f40ba1c963
 
 		// FenceParam cparam = new FenceParam();
@@ -643,6 +661,10 @@ public class GaodeMapUtil {
 
 		// logger.info("删除围栏" +
 		// GaodeMapUtil.getInstance().deleteFence("af7ae38d-8ef4-4f01-b9e0-d0f401ba1c963"));
+
+		// MonitorFenceParam mparam = new MonitorFenceParam("aaa",
+		// "116.481499,39.990475," + System.currentTimeMillis()/1000 );
+		// logger.info("围栏设备监控" + GaodeMapUtil.getInstance().monitorFence(mparam));
 	}
 
 }

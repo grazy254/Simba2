@@ -142,4 +142,9 @@ public interface GaodeConstantData {
 	 * 删除围栏
 	 */
 	String DELETEFENCEURL = "https://restapi.amap.com/v4/geofence/meta?method=delete";
+
+	/**
+	 * 围栏设备监控
+	 */
+	String MONITORFENCEURL = "https://restapi.amap.com/v4/geofence/status";
 }

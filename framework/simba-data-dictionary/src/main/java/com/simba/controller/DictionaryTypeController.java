@@ -93,14 +93,14 @@ public class DictionaryTypeController {
 	public String getList(Pager pager, ModelMap model) {
 		List<DictionaryType> list = dictionaryTypeService.page(pager);
 		model.put("list", list);
-		return "dictionaryType/table";
+		return "dictionaryType/typeTable";
 	}
 
 	@RequestMapping("/doSearch")
 	public String getList(Pager pager, SearchDictionaryTypeForm searchDictionaryTypeForm, ModelMap model) {
 		List<DictionaryType> list = dictionaryTypeService.page(pager, searchDictionaryTypeForm);
 		model.put("list", list);
-		return "dictionaryType/table";
+		return "dictionaryType/typeTable";
 	}
 
 	@ResponseBody

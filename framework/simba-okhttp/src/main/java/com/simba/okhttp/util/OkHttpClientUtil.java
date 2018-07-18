@@ -6,6 +6,7 @@ import java.util.Map;
 import com.simba.exception.BussException;
 
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -135,7 +136,61 @@ public class OkHttpClientUtil {
 		return queryString.toString();
 	}
 
-	public String post(String url) {
-		return null;
+	/**
+	 * 同步发送http请求
+	 * 
+	 * @param url
+	 * @return
+	 * @throws IOException
+	 */
+	public String post(String url) throws IOException {
+		FormBody.Builder builder = new FormBody.Builder();
+		Request request = new Request.Builder().url(url).post(builder.build()).build();
+		return execute(request);
+	}
+
+	/**
+	 * 异步发送http请求
+	 * 
+	 * @param url
+	 * @param callback
+	 */
+	public void post(String url, Callback callback) {
+		FormBody.Builder builder = new FormBody.Builder();
+		Request request = new Request.Builder().url(url).post(builder.build()).build();
+		asyncExecute(request, callback);
+	}
+
+	/**
+	 * 同步发送http请求
+	 * 
+	 * @param url
+	 * @param param
+	 * @return
+	 * @throws IOException
+	 */
+	public String post(String url, Map<String, String> param) throws IOException {
+		FormBody.Builder builder = new FormBody.Builder();
+		param.forEach((key, value) -> {
+			builder.add(key, value);
+		});
+		Request request = new Request.Builder().url(url).post(builder.build()).build();
+		return execute(request);
+	}
+
+	/**
+	 * 异步发送http请求
+	 * 
+	 * @param url
+	 * @param param
+	 * @param callback
+	 */
+	public void post(String url, Map<String, String> param, Callback callback) {
+		FormBody.Builder builder = new FormBody.Builder();
+		param.forEach((key, value) -> {
+			builder.add(key, value);
+		});
+		Request request = new Request.Builder().url(url).post(builder.build()).build();
+		asyncExecute(request, callback);
 	}
 }

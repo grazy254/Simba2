@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,51 +33,50 @@
                 新增</button>
 										<button type="button" class="btn btn-default btn-sm" onclick="DictionaryType.batchDelete();"><i class="fa fa-remove"></i>删除</button>
 										<div class="pull-right">
-
+											<button type="button" class="btn btn-default btn-sm" onclick="DictionaryType.exportSql();"><i class="fa fa-paper-plane"></i>导出所有SQL数据</button>
 										</div>
 									</div>
 									<!-- /.pull-right -->
 									<div class="mailbox-controls">
 										<label for="code">编码:</label>
-										<input type="text" id="code"  name="code" placeholder="请输入编码">
-										&nbsp;&nbsp;
+										<input type="text" id="code" name="code" placeholder="请输入编码"> &nbsp;&nbsp;
 										<!-- Check all button -->
 										<button type="button" class="btn btn-default btn-sm" onclick="DictionaryType.toSearch();"><i class="fa fa-search"></i>查询</button>
 										<div class="pull-right">
-										
-									</div>
-								</div>
-								<div class="table-responsive">
-									<table class="table table-hover table-striped table-bordered" id="table">
-										<thead>
-											<tr>
-												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
-												<th>编码</th>
-												<th>描述</th>
-												<th>操作</th>
-											</tr>
-										</thead>
-										<tbody>
 
-										</tbody>
-									</table>
-									<!-- /.table -->
-									<div id="page">
+										</div>
 									</div>
+									<div class="table-responsive">
+										<table class="table table-hover table-striped table-bordered" id="table">
+											<thead>
+												<tr>
+													<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
+													<th>编码</th>
+													<th>描述</th>
+													<th>操作</th>
+												</tr>
+											</thead>
+											<tbody>
+
+											</tbody>
+										</table>
+										<!-- /.table -->
+										<div id="page">
+										</div>
+									</div>
+									<!-- /.mail-box-messages -->
 								</div>
-								<!-- /.mail-box-messages -->
 							</div>
+							<!-- /. box -->
 						</div>
-						<!-- /. box -->
+						<!-- /.col -->
 					</div>
-					<!-- /.col -->
+					<!-- /.row -->
+				</section>
+				<!-- /.content -->
 			</div>
-			<!-- /.row -->
-			</section>
-			<!-- /.content -->
-		</div>
-		<!-- /.content-wrapper -->
-		<!-- Add the sidebar's background. This div must be placed
+			<!-- /.content-wrapper -->
+			<!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
 		</div>
 		<!-- ./wrapper -->

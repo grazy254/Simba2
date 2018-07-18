@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -38,6 +39,7 @@
 									<!-- /.pull-right -->
 								</div>
 								<div class="table-responsive">
+									<input type="hidden" id="typeId" name="typeId" value="${typeId}" />
 									<table class="table table-hover table-striped table-bordered" id="table">
 										<thead>
 											<tr>
@@ -64,6 +66,7 @@
 					<!-- /.col -->
 			</div>
 			<!-- /.row -->
+			<div id="errInfo" style="color: red;"></div>
 			</section>
 			<!-- /.content -->
 		</div>

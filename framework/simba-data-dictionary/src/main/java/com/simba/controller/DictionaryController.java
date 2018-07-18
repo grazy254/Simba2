@@ -13,6 +13,7 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.Dictionary;
 import com.simba.service.DictionaryService;
+
 /**
  * 字典控制器
  * 
@@ -27,26 +28,28 @@ public class DictionaryController {
 	private DictionaryService dictionaryService;
 
 	@RequestMapping("/list")
-	public String list() {
+	public String list(Long typeId, ModelMap model) {
+		model.put("typeId", typeId);
 		return "dictionary/list";
 	}
-	
+
 	@RequestMapping("/getList")
-	public String getList(Pager pager,ModelMap model){
-		List<Dictionary> list = dictionaryService.page(pager);
+	public String getList(Long typeId, Pager pager, ModelMap model) {
+		List<Dictionary> list = dictionaryService.pageBy("typeId", typeId, pager);
 		model.put("list", list);
 		return "dictionary/table";
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/count")
-	public JsonResult count() {
-		Long count = dictionaryService.count();
+	public JsonResult count(Long typeId) {
+		Long count = dictionaryService.countBy("typeId", typeId);
 		return new JsonResult(count, "", 200);
 	}
-	
+
 	@RequestMapping("/toAdd")
-	public String toAdd() {
+	public String toAdd(Long typeId, ModelMap model) {
+		model.put("typeId", typeId);
 		return "dictionary/add";
 	}
 
@@ -82,7 +85,5 @@ public class DictionaryController {
 		dictionaryService.batchDelete(Arrays.asList(id));
 		return new JsonResult();
 	}
-
-	
 
 }

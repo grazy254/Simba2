@@ -1,8 +1,17 @@
 var DictionaryType = {
+
+	"exportSql": function() {
+		window.self.location.href = contextPath + "/dictionaryType/exportSql";
+	},
+
+	"showDictionary": function() {
+		parent.showModal("显示列表项", contextPath + "/dictionary/list?typeId=" + id, 500);
+	},
+
 	"toSearch": function() {
 		DictionaryType.initDictionaryTypeList(0, Page.size, "doSearch");
 	},
-	
+
 	"toAdd": function() {
 		window.self.location.href = contextPath + "/dictionaryType/toAdd";
 	},
@@ -40,7 +49,7 @@ var DictionaryType = {
 		var data2 = {};
 		method = method || "getList";
 		data["code"] = $("#code").val();
-		$.extend(data2,data);
+		$.extend(data2, data);
 		data["pageStart"] = start;
 		data["pageSize"] = pageSize;
 		$.ajax({

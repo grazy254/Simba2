@@ -2,15 +2,20 @@ package com.simba.service.impl;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import com.simba.cache.Redis;
 import com.simba.dao.DictionaryDao;
+import com.simba.dao.DictionaryTypeDao;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.Dictionary;
+import com.simba.model.DictionaryType;
 import com.simba.service.DictionaryService;
+
 /**
  * 字典 Service实现类
  * 
@@ -24,14 +29,27 @@ public class DictionaryServiceImpl implements DictionaryService {
 	@Autowired
 	private DictionaryDao dictionaryDao;
 
+	@Autowired
+	private DictionaryTypeDao dictionaryTypeDao;
+
+	@Resource
+	private Redis redisUtil;
+
 	@Override
 	public void add(Dictionary dictionary) {
 		dictionaryDao.add(dictionary);
+		DictionaryType type = dictionaryTypeDao.get(dictionary.getTypeId());
+		String key = "dictionary_" + type.getCode();
+		redisUtil.remove(key);
 	}
 
 	@Override
 	public void delete(Long id) {
+		Dictionary dictionary = this.get(id);
 		dictionaryDao.delete(id);
+		DictionaryType type = dictionaryTypeDao.get(dictionary.getTypeId());
+		String key = "dictionary_" + type.getCode();
+		redisUtil.remove(key);
 	}
 
 	@Override
@@ -45,22 +63,22 @@ public class DictionaryServiceImpl implements DictionaryService {
 	public List<Dictionary> page(Pager page) {
 		return dictionaryDao.page(page);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public Long count() {
 		return dictionaryDao.count();
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Long countBy(String field, Object value){
-		return dictionaryDao.countBy(field,value);
+	public Long countBy(String field, Object value) {
+		return dictionaryDao.countBy(field, value);
 	}
-	
+
 	@Override
-	public void deleteBy(String field, Object value){
-		dictionaryDao.deleteBy(field,value);
+	public void deleteBy(String field, Object value) {
+		dictionaryDao.deleteBy(field, value);
 	}
 
 	@Override
@@ -72,15 +90,18 @@ public class DictionaryServiceImpl implements DictionaryService {
 	@Override
 	public void update(Dictionary dictionary) {
 		dictionaryDao.update(dictionary);
+		DictionaryType type = dictionaryTypeDao.get(dictionary.getTypeId());
+		String key = "dictionary_" + type.getCode();
+		redisUtil.remove(key);
 	}
-	
+
 	@Override
 	public void batchDelete(List<Long> idList) {
 		for (Long id : idList) {
 			this.delete(id);
 		}
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public Dictionary getBy(String field, Object value) {
@@ -134,26 +155,26 @@ public class DictionaryServiceImpl implements DictionaryService {
 	public List<Dictionary> pageByOr(String field1, Object value1, String field2, Object value2, Pager page) {
 		return dictionaryDao.pageByOr(field1, value1, field2, value2, page);
 	}
-	
+
 	@Override
-	public void deleteByAnd(String field1, Object value1, String field2, Object value2){
-		dictionaryDao.deleteByAnd(field1,value1,field2,value2);
+	public void deleteByAnd(String field1, Object value1, String field2, Object value2) {
+		dictionaryDao.deleteByAnd(field1, value1, field2, value2);
 	}
-	
+
 	@Override
-	public void deleteByOr(String field1, Object value1, String field2, Object value2){
-		dictionaryDao.deleteByOr(field1,value1,field2,value2);
+	public void deleteByOr(String field1, Object value1, String field2, Object value2) {
+		dictionaryDao.deleteByOr(field1, value1, field2, value2);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Long countByAnd(String field1, Object value1, String field2, Object value2){
-		return dictionaryDao.countByAnd(field1,value1,field2,value2);
+	public Long countByAnd(String field1, Object value1, String field2, Object value2) {
+		return dictionaryDao.countByAnd(field1, value1, field2, value2);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Long countByOr(String field1, Object value1, String field2, Object value2){
-		return dictionaryDao.countByOr(field1,value1,field2,value2);
+	public Long countByOr(String field1, Object value1, String field2, Object value2) {
+		return dictionaryDao.countByOr(field1, value1, field2, value2);
 	}
 }

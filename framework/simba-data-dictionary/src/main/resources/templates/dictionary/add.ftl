@@ -23,6 +23,7 @@
 									<h3 class="box-title">新增字典</h3>
 								</div>
 								<form role="form" onsubmit="return Dictionary.checkForm();" id="form" action="${base}/dictionary/add">
+									<input type="hidden" id="typeId" name="typeId" value="${typeId}" />
 									<div class="box-body">
 										<div class="form-group">
 											<label for="typeId">类型id</label>

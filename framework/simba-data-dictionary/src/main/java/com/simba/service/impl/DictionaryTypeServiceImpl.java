@@ -2,16 +2,21 @@ package com.simba.service.impl;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import com.simba.cache.Redis;
+import com.simba.dao.DictionaryDao;
 import com.simba.dao.DictionaryTypeDao;
 import com.simba.framework.util.jdbc.Pager;
+import com.simba.model.Dictionary;
 import com.simba.model.DictionaryType;
-import com.simba.service.DictionaryTypeService;
 import com.simba.model.form.SearchDictionaryTypeForm;
+import com.simba.service.DictionaryTypeService;
+
 /**
  * 字典类型 Service实现类
  * 
@@ -25,6 +30,12 @@ public class DictionaryTypeServiceImpl implements DictionaryTypeService {
 	@Autowired
 	private DictionaryTypeDao dictionaryTypeDao;
 
+	@Autowired
+	private DictionaryDao dictionaryDao;
+
+	@Resource
+	private Redis redisUtil;
+
 	@Override
 	public void add(DictionaryType dictionaryType) {
 		dictionaryTypeDao.add(dictionaryType);
@@ -32,7 +43,11 @@ public class DictionaryTypeServiceImpl implements DictionaryTypeService {
 
 	@Override
 	public void delete(Long id) {
+		DictionaryType type = this.get(id);
 		dictionaryTypeDao.delete(id);
+		dictionaryDao.deleteBy("typeId", id);
+		String key = "dictionary_" + type.getCode();
+		redisUtil.remove(key);
 	}
 
 	@Override
@@ -46,32 +61,34 @@ public class DictionaryTypeServiceImpl implements DictionaryTypeService {
 	public List<DictionaryType> page(Pager page) {
 		return dictionaryTypeDao.page(page);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<DictionaryType> page(Pager page, SearchDictionaryTypeForm searchDictionaryTypeForm) {
 		return dictionaryTypeDao.page(page, searchDictionaryTypeForm);
 	}
+
 	@Override
 	@Transactional(readOnly = true)
 	public Long count() {
 		return dictionaryTypeDao.count();
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public Long count(SearchDictionaryTypeForm searchDictionaryTypeForm) {
 		return dictionaryTypeDao.count(searchDictionaryTypeForm);
 	}
+
 	@Override
 	@Transactional(readOnly = true)
-	public Long countBy(String field, Object value){
-		return dictionaryTypeDao.countBy(field,value);
+	public Long countBy(String field, Object value) {
+		return dictionaryTypeDao.countBy(field, value);
 	}
-	
+
 	@Override
-	public void deleteBy(String field, Object value){
-		dictionaryTypeDao.deleteBy(field,value);
+	public void deleteBy(String field, Object value) {
+		dictionaryTypeDao.deleteBy(field, value);
 	}
 
 	@Override
@@ -82,16 +99,21 @@ public class DictionaryTypeServiceImpl implements DictionaryTypeService {
 
 	@Override
 	public void update(DictionaryType dictionaryType) {
+		DictionaryType type = this.get(dictionaryType.getId());
 		dictionaryTypeDao.update(dictionaryType);
+		if (!type.getCode().equals(dictionaryType.getCode())) {
+			String key = "dictionary_" + type.getCode();
+			redisUtil.remove(key);
+		}
 	}
-	
+
 	@Override
 	public void batchDelete(List<Long> idList) {
 		for (Long id : idList) {
 			this.delete(id);
 		}
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public DictionaryType getBy(String field, Object value) {
@@ -145,26 +167,40 @@ public class DictionaryTypeServiceImpl implements DictionaryTypeService {
 	public List<DictionaryType> pageByOr(String field1, Object value1, String field2, Object value2, Pager page) {
 		return dictionaryTypeDao.pageByOr(field1, value1, field2, value2, page);
 	}
-	
+
 	@Override
-	public void deleteByAnd(String field1, Object value1, String field2, Object value2){
-		dictionaryTypeDao.deleteByAnd(field1,value1,field2,value2);
+	public void deleteByAnd(String field1, Object value1, String field2, Object value2) {
+		dictionaryTypeDao.deleteByAnd(field1, value1, field2, value2);
 	}
-	
+
 	@Override
-	public void deleteByOr(String field1, Object value1, String field2, Object value2){
-		dictionaryTypeDao.deleteByOr(field1,value1,field2,value2);
+	public void deleteByOr(String field1, Object value1, String field2, Object value2) {
+		dictionaryTypeDao.deleteByOr(field1, value1, field2, value2);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Long countByAnd(String field1, Object value1, String field2, Object value2){
-		return dictionaryTypeDao.countByAnd(field1,value1,field2,value2);
+	public Long countByAnd(String field1, Object value1, String field2, Object value2) {
+		return dictionaryTypeDao.countByAnd(field1, value1, field2, value2);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Long countByOr(String field1, Object value1, String field2, Object value2){
-		return dictionaryTypeDao.countByOr(field1,value1,field2,value2);
+	public Long countByOr(String field1, Object value1, String field2, Object value2) {
+		return dictionaryTypeDao.countByOr(field1, value1, field2, value2);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Dictionary> listByCode(String code) {
+		String key = "dictionary_" + code;
+		List<Dictionary> list = (List<Dictionary>) redisUtil.get(key);
+		if (list != null) {
+			return list;
+		}
+		DictionaryType type = dictionaryTypeDao.getBy("code", code);
+		list = dictionaryDao.listBy("typeId", type.getId());
+		redisUtil.set(key, list);
+		return list;
 	}
 }

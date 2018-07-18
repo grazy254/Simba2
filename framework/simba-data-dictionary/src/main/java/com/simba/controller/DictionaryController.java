@@ -56,7 +56,7 @@ public class DictionaryController {
 	@RequestMapping("/add")
 	public String add(Dictionary dictionary) {
 		dictionaryService.add(dictionary);
-		return "redirect:/dictionary/list";
+		return "redirect:/dictionary/list?typeId=" +dictionary.getTypeId();
 	}
 
 	@RequestMapping("/toUpdate")
@@ -69,7 +69,7 @@ public class DictionaryController {
 	@RequestMapping("/update")
 	public String update(Dictionary dictionary) {
 		dictionaryService.update(dictionary);
-		return "redirect:/dictionary/list";
+		return "redirect:/dictionary/list?typeId=" +dictionary.getTypeId();
 	}
 
 	@ResponseBody

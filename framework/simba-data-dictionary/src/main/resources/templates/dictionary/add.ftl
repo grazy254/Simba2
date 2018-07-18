@@ -26,10 +26,6 @@
 									<input type="hidden" id="typeId" name="typeId" value="${typeId}" />
 									<div class="box-body">
 										<div class="form-group">
-											<label for="typeId">类型id</label>
-											<input type="text" class="form-control" id="typeId" name="typeId" placeholder="请输入类型id">
-										</div>
-										<div class="form-group">
 											<label for="name">名称</label>
 											<input type="text" class="form-control" id="name" name="name" placeholder="请输入名称">
 										</div>

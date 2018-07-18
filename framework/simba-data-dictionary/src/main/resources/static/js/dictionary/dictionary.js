@@ -1,30 +1,30 @@
 var Dictionary = {
 
-	"toAdd": function() {
+	"toAdd" : function() {
 		window.self.location.href = contextPath + "/dictionary/toAdd?typeId=" + $("#typeId").val();
 	},
 
-	"batchDelete": function() {
+	"batchDelete" : function() {
 		var ids = new Array();
 		$("input[name='dictionary']").each(function() {
-			if(true == $(this).is(':checked')) {
+			if (true == $(this).is(':checked')) {
 				ids.push($(this).val());
 			}
 		});
-		if(ids.length == 0) {
+		if (ids.length == 0) {
 			Dictionary.showInfo("请选择要删除的记录");
 			return false;
 		}
 		$.ajax({
-			type: "post",
-			url: contextPath + "/dictionary/batchDelete",
-			data: {
-				"id": ids.join(",")
+			type : "post",
+			url : contextPath + "/dictionary/batchDelete",
+			data : {
+				"id" : ids.join(",")
 			},
-			async: true,
-			dataType: "json",
-			success: function(data) {
-				if(data.code == 200) {
+			async : true,
+			dataType : "json",
+			success : function(data) {
+				if (data.code == 200) {
 					Dictionary.initDictionaryList(0, Page.size);
 				} else {
 					Dictionary.showInfo(data.msg);
@@ -32,7 +32,7 @@ var Dictionary = {
 			}
 		});
 	},
-	"initDictionaryList": function(start, pageSize, method) {
+	"initDictionaryList" : function(start, pageSize, method) {
 		var data = {};
 		var data2 = {};
 		method = method || "getList";
@@ -42,49 +42,49 @@ var Dictionary = {
 		data["typeId"] = $("#typeId").val();
 		data2["typeId"] = $("#typeId").val();
 		$.ajax({
-			type: "get",
-			url: contextPath + "/dictionary/" + method,
-			data: data,
-			async: true,
-			dataType: "html",
-			success: function(html) {
+			type : "get",
+			url : contextPath + "/dictionary/" + method,
+			data : data,
+			async : true,
+			dataType : "html",
+			success : function(html) {
 				$("#table").find("tbody").html(html);
 				CheckBox.init();
 				setTimeout("CheckBox.bindCheckAll();", 1000);
 			}
 		});
 		$.ajax({
-			type: "get",
-			url: contextPath + "/dictionary/count",
-			async: true,
-			data: data2,
-			dataType: "json",
-			success: function(data) {
+			type : "get",
+			url : contextPath + "/dictionary/count",
+			async : true,
+			data : data2,
+			dataType : "json",
+			success : function(data) {
 				var total = data.data;
 				var pageHtml = Page.init(total, start, pageSize, "Dictionary.clickPager");
 				$("#page").html(pageHtml);
 			}
 		});
 	},
-	"clickPager": function(start, pageSize) {
+	"clickPager" : function(start, pageSize) {
 		Dictionary.initDictionaryList(start, pageSize);
 	},
 
-	"toUpdate": function(id) {
+	"toUpdate" : function(id) {
 		window.self.location.href = contextPath + "/dictionary/toUpdate?id=" + id;
 	},
 
-	"deleteDictionary": function(id) {
+	"deleteDictionary" : function(id) {
 		$.ajax({
-			type: "post",
-			url: contextPath + "/dictionary/batchDelete",
-			data: {
-				"id": id
+			type : "post",
+			url : contextPath + "/dictionary/batchDelete",
+			data : {
+				"id" : id
 			},
-			async: true,
-			dataType: "json",
-			success: function(data) {
-				if(data.code == 200) {
+			async : true,
+			dataType : "json",
+			success : function(data) {
+				if (data.code == 200) {
 					Dictionary.initDictionaryList(0, Page.size);
 				} else {
 					Dictionary.showInfo(data.msg);
@@ -93,33 +93,33 @@ var Dictionary = {
 		});
 	},
 
-	"checkForm": function() {
+	"checkForm" : function() {
 		var name = $("#name").val();
-		if(!name) {
+		if (!name) {
 			Dictionary.showInfo("名称不能为空");
 			return false;
 		}
 		var value = $("#value").val();
-		if(!value) {
+		if (!value) {
 			Dictionary.showInfo("值不能为空");
 			return false;
 		}
 		return true;
 	},
 
-	"toList": function() {
-		window.self.location.href = contextPath + "/dictionary/list";
+	"toList" : function() {
+		window.self.location.href = contextPath + "/dictionary/list?typeId=" + $("#typeId").val();
 	},
 
-	"showInfo": function(content) {
+	"showInfo" : function(content) {
 		$("#errInfo").html(content);
 		$("#errInfo").fadeIn();
 		setTimeout("Dictionary.hideInfo();", 1500);
 	},
 
-	"hideInfo": function() {
+	"hideInfo" : function() {
 		$("#errInfo").fadeOut();
 	},
 
-	"end": null
+	"end" : null
 };

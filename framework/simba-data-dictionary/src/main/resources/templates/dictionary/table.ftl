@@ -1,7 +1,6 @@
 <#list list as dictionary>
 	<tr>
 		<td><input type="checkbox" name="dictionary" value="${dictionary.id}"></td>
-		<td>${dictionary.typeId}</td>
 		<td>${dictionary.name}</td>
 		<td>${dictionary.value}</td>
 		<td>

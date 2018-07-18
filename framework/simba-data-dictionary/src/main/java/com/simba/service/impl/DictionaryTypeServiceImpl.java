@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.simba.cache.Redis;
 import com.simba.dao.DictionaryDao;
 import com.simba.dao.DictionaryTypeDao;
+import com.simba.exception.BussException;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.Dictionary;
 import com.simba.model.DictionaryType;
@@ -199,6 +200,9 @@ public class DictionaryTypeServiceImpl implements DictionaryTypeService {
 			return list;
 		}
 		DictionaryType type = dictionaryTypeDao.getBy("code", code);
+		if (type == null) {
+			throw new BussException("编码不存在");
+		}
 		list = dictionaryDao.listBy("typeId", type.getId());
 		redisUtil.set(key, list);
 		return list;

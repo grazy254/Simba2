@@ -44,7 +44,6 @@
 										<thead>
 											<tr>
 												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
-												<th>类型id</th>
 												<th>名称</th>
 												<th>值</th>
 												<th>操作</th>

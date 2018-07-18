@@ -24,11 +24,8 @@
 								</div>
 								<form role="form" onsubmit="return Dictionary.checkForm();" id="form" action="${base}/dictionary/update">
 									<input type="hidden" id="id" name="id" value="${dictionary.id}" />
+									<input type="hidden" id="typeId" name="typeId" value="${dictionary.typeId}" />
 									<div class="box-body">
-										<div class="form-group">
-											<label for="typeId">类型id</label>
-											<input type="text" class="form-control" id="typeId" name="typeId" value="${dictionary.typeId}" placeholder="请输入类型id">
-										</div>
 										<div class="form-group">
 											<label for="name">名称</label>
 											<input type="text" class="form-control" id="name" name="name" value="${dictionary.name}" placeholder="请输入名称">

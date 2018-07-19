@@ -719,7 +719,7 @@ public class HttpClientUtil {
 	}
 
 	/**
-	 * 讲参数拼接到url后
+	 * 将参数拼接到url后
 	 * 
 	 * @param url
 	 * @param params

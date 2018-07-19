@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.util.Map;
 
 import com.simba.exception.BussException;
+import com.simba.model.constant.ConstantData;
 
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -203,4 +206,69 @@ public class OkHttpClientUtil {
 		Request request = new Request.Builder().url(url).post(builder.build()).build();
 		return request;
 	}
+
+	/**
+	 * 以http body方式同步提交json数据
+	 * 
+	 * @param url
+	 * @param json
+	 * @return
+	 * @throws IOException
+	 */
+	public String postJson(String url, String json) throws IOException {
+		Request request = buildJsonRequest(url, json);
+		return execute(request);
+	}
+
+	/**
+	 * 以http body方式异步提交json数据
+	 * 
+	 * @param url
+	 * @param json
+	 * @param callback
+	 */
+	public void postJson(String url, String json, Callback callback) {
+		Request request = buildJsonRequest(url, json);
+		asyncExecute(request, callback);
+	}
+
+	private Request buildJsonRequest(String url, String json) {
+		MediaType type = MediaType.parse("application/json;charset=" + ConstantData.DEFAULT_CHARSET);
+		RequestBody body = RequestBody.create(type, json);
+		Request request = new Request.Builder().url(url).post(body).build();
+		return request;
+	}
+
+	private Request buildXmlRequest(String url, String json) {
+		MediaType type = MediaType.parse("application/xml;charset=" + ConstantData.DEFAULT_CHARSET);
+		RequestBody body = RequestBody.create(type, json);
+		Request request = new Request.Builder().url(url).post(body).build();
+		return request;
+	}
+
+	/**
+	 * 以http body方式同步提交xml数据
+	 * 
+	 * @param url
+	 * @param xml
+	 * @return
+	 * @throws IOException
+	 */
+	public String postXml(String url, String xml) throws IOException {
+		Request request = buildXmlRequest(url, xml);
+		return execute(request);
+	}
+
+	/**
+	 * 以http body方式异步提交xml数据
+	 * 
+	 * @param url
+	 * @param xml
+	 * @param callback
+	 */
+	public void postXml(String url, String xml, Callback callback) {
+		Request request = buildXmlRequest(url, xml);
+		asyncExecute(request, callback);
+	}
+
 }

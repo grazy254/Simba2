@@ -70,7 +70,7 @@ public class OkHttpClientUtil {
 	 * @throws IOException
 	 */
 	public String get(String url) throws IOException {
-		Request request = new Request.Builder().url(url).build();
+		Request request = buildGetRequest(url);
 		return execute(request);
 	}
 
@@ -81,8 +81,13 @@ public class OkHttpClientUtil {
 	 * @param callback
 	 */
 	public void get(String url, Callback callback) {
-		Request request = new Request.Builder().url(url).build();
+		Request request = buildGetRequest(url);
 		asyncExecute(request, callback);
+	}
+
+	private Request buildGetRequest(String url) {
+		Request request = new Request.Builder().url(url).build();
+		return request;
 	}
 
 	/**
@@ -144,8 +149,7 @@ public class OkHttpClientUtil {
 	 * @throws IOException
 	 */
 	public String post(String url) throws IOException {
-		FormBody.Builder builder = new FormBody.Builder();
-		Request request = new Request.Builder().url(url).post(builder.build()).build();
+		Request request = buildPostRequest(url);
 		return execute(request);
 	}
 
@@ -156,9 +160,14 @@ public class OkHttpClientUtil {
 	 * @param callback
 	 */
 	public void post(String url, Callback callback) {
+		Request request = buildPostRequest(url);
+		asyncExecute(request, callback);
+	}
+
+	private Request buildPostRequest(String url) {
 		FormBody.Builder builder = new FormBody.Builder();
 		Request request = new Request.Builder().url(url).post(builder.build()).build();
-		asyncExecute(request, callback);
+		return request;
 	}
 
 	/**
@@ -170,11 +179,7 @@ public class OkHttpClientUtil {
 	 * @throws IOException
 	 */
 	public String post(String url, Map<String, String> param) throws IOException {
-		FormBody.Builder builder = new FormBody.Builder();
-		param.forEach((key, value) -> {
-			builder.add(key, value);
-		});
-		Request request = new Request.Builder().url(url).post(builder.build()).build();
+		Request request = buildPostRequest(url, param);
 		return execute(request);
 	}
 
@@ -186,11 +191,16 @@ public class OkHttpClientUtil {
 	 * @param callback
 	 */
 	public void post(String url, Map<String, String> param, Callback callback) {
+		Request request = buildPostRequest(url, param);
+		asyncExecute(request, callback);
+	}
+
+	private Request buildPostRequest(String url, Map<String, String> param) {
 		FormBody.Builder builder = new FormBody.Builder();
 		param.forEach((key, value) -> {
 			builder.add(key, value);
 		});
 		Request request = new Request.Builder().url(url).post(builder.build()).build();
-		asyncExecute(request, callback);
+		return request;
 	}
 }

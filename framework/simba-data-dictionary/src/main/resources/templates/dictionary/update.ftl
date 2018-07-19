@@ -34,6 +34,10 @@
 											<label for="value">值</label>
 											<input type="text" class="form-control" id="value" name="value" value="${dictionary.value}" placeholder="请输入值">
 										</div>
+										<div class="form-group">
+											<label for="orderNo">序号</label>
+											<input type="text" class="form-control" id="orderNo" name="orderNo" placeholder="请输入序号" value="${dictionary.orderNo}">
+										</div>
 									</div>
 									<!-- /.box-body -->
 

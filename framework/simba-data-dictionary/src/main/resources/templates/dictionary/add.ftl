@@ -33,6 +33,10 @@
 											<label for="value">值</label>
 											<input type="text" class="form-control" id="value" name="value" placeholder="请输入值">
 										</div>
+										<div class="form-group">
+											<label for="orderNo">序号</label>
+											<input type="text" class="form-control" id="orderNo" name="orderNo" placeholder="请输入序号" value="0">
+										</div>
 									</div>
 									<!-- /.box-body -->
 

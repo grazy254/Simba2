@@ -38,6 +38,11 @@ public class Dictionary implements Serializable {
 	@DescAnnotation(desc = "值")
 	private String value;
 
+	/**
+	 * 排序
+	 */
+	private int orderNo;
+
 	public long getId() {
 		return id;
 	}
@@ -70,9 +75,29 @@ public class Dictionary implements Serializable {
 		this.value = value;
 	}
 
+	public int getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(int orderNo) {
+		this.orderNo = orderNo;
+	}
+
 	@Override
 	public String toString() {
-		return "Dictionary{" + "id=" + id + ", typeId=" + typeId + ", name='" + name + '\'' + ", value='" + value + '\'' + '}';
+		StringBuilder builder = new StringBuilder();
+		builder.append("Dictionary [id=");
+		builder.append(id);
+		builder.append(", typeId=");
+		builder.append(typeId);
+		builder.append(", name=");
+		builder.append(name);
+		builder.append(", value=");
+		builder.append(value);
+		builder.append(", orderNo=");
+		builder.append(orderNo);
+		builder.append("]");
+		return builder.toString();
 	}
 
 }

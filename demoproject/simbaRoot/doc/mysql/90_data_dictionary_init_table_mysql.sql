@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2018/7/17 星期二 17:17:57                       */
+/* Created on:     2018/7/19 星期四 15:53:18                       */
 /*==============================================================*/
 
 
@@ -17,6 +17,7 @@ create table dictionary
    typeId               bigint not null comment '类型id',
    name                 varchar(128) comment '名称',
    value                varchar(128) comment '值',
+   orderNo              int comment '排序',
    primary key (id),
    key AK_Key_typeId (typeId)
 );

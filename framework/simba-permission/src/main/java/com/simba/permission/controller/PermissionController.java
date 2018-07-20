@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -17,6 +19,7 @@ import com.simba.framework.util.json.JsonResult;
 import com.simba.model.constant.ConstantData;
 import com.simba.permission.model.Permission;
 import com.simba.permission.service.PermissionService;
+import com.simba.util.SessionUtil;
 
 @Controller
 @RequestMapping("/permission")
@@ -24,6 +27,19 @@ public class PermissionController {
 
 	@Autowired
 	private PermissionService permissionService;
+
+	/**
+	 * 判断当前用户是否拥有某个权限
+	 * 
+	 * @param uri
+	 * @param session
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/hasPermission")
+	public JsonResult hasPermission(String uri, HttpSession session) {
+		return new JsonResult(SessionUtil.hasPermission(session, uri));
+	}
 
 	@RequestMapping("/list")
 	public String list(Integer parentID, ModelMap model) {

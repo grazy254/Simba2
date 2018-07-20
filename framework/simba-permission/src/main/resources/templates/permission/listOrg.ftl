@@ -12,6 +12,7 @@
 		<script type="text/javascript" src="${base}/js/common/checkbox.js"></script>
 		<script type="text/javascript" src="${base}/js/util/treeviewutil.js"></script>
 		<script type="text/javascript" src="${base}/js/permission/org.js"></script>
+		<script type="text/javascript" src="${base}/js/permissionUtil.js"></script>
 	</head>
 
 	<body>
@@ -34,7 +35,7 @@
 								<div class="box-body no-padding">
 									<div class="mailbox-controls">
 										<!-- Check all button -->
-										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="Org.toAdd();"><i class="fa fa-plus"></i>
+										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="Org.toAdd();" id="addButton"><i class="fa fa-plus"></i>
                 新增</button>
 										<button type="button" class="btn btn-default btn-sm" onclick="Org.batchDelete();"><i class="fa fa-remove"></i>删除</button>
 										<div class="pull-right">
@@ -84,6 +85,7 @@
 		$(document).ready(function() {
 			Org.initOrgList();
 			Org.initOrgTree($("#parentID").val(), $("#parentName").val());
+			PermissionUtil.hasPermission("/org/add","addButton");
 		});
 	</script>
 

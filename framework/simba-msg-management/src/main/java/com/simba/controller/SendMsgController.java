@@ -1,7 +1,7 @@
 package com.simba.controller;
 
 import com.simba.framework.util.json.JsonResult;
-import com.simba.model.other.MsgPostArgs;
+import com.simba.service.bean.MsgPostArgs;
 import com.simba.service.impl.SendMsgServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

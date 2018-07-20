@@ -6,19 +6,25 @@ import com.simba.framework.util.date.DateUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.DayAmount;
 import com.simba.model.TotalDayAmountBean;
-import com.simba.model.other.RedisKey;
 import com.simba.service.DayAmountService;
+import com.simba.util.DayAmountUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.ScanResult;
 
-import javax.annotation.PostConstruct;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import static com.simba.util.DayAmountUtil.DAY_AMOUNT;
 
 /**
  * Service实现类
@@ -36,14 +42,6 @@ public class DayAmountServiceImpl implements DayAmountService {
 
     @Autowired
     private DayAmountService dayAmountService;
-
-    @PostConstruct
-    private void init() {
-        if (redisUtil.get(RedisKey.DAY_AMOUNT) == null) {
-            redisUtil.set(RedisKey.DAY_AMOUNT, new HashMap<Integer, Integer>());
-        }
-        logger.info("短信用量定时器开启");
-    }
 
     @Autowired
     private DayAmountDao dayAmountDao;
@@ -216,18 +214,28 @@ public class DayAmountServiceImpl implements DayAmountService {
      */
     @Scheduled(cron = "0 0 1 * * ?")
     private void countDayMsg() {
-        boolean isLock = redisUtil.tryLock(RedisKey.TIMERLOCK_REDIS_KEY, 60);
+        boolean isLock = redisUtil.tryLock(DayAmountUtil.TIMERLOCK_REDIS_KEY, 60);
         if (isLock) {
-            Map<Integer, Integer> projectIdToAmount = (Map<Integer, Integer>) redisUtil.get(RedisKey.DAY_AMOUNT);
-            for (Integer projectId : projectIdToAmount.keySet()) {
-                DayAmount newDayAmount = new DayAmount();
-                newDayAmount.setAmount(projectIdToAmount.get(projectId));
-                newDayAmount.setDayDate(getYesterday(DateUtil.getTime()));
-                newDayAmount.setProjectId(projectId);
-                dayAmountService.add(newDayAmount);
+            try (Jedis jedis = redisUtil.getJedis()) {
+                int cursor = -1;
+                long timeout = System.currentTimeMillis() + 1000 * 60;
+                while (cursor != 0) {
+                    if (cursor == -1) cursor = 0;
+                    ScanResult<Map.Entry<String, String>> result = jedis.hscan(DAY_AMOUNT, Integer.toString(cursor));
+                    cursor = Integer.parseInt(result.getStringCursor());
+                    for (Map.Entry<String, String> m : result.getResult()) {
+                        DayAmount newDayAmount = new DayAmount();
+                        newDayAmount.setAmount(Integer.parseInt(m.getValue()));
+                        newDayAmount.setDayDate(getYesterday(DateUtil.getTime()));
+                        newDayAmount.setProjectId(Integer.parseInt(m.getKey()));
+                        dayAmountService.add(newDayAmount);
+                    }
+                    if (System.currentTimeMillis() > timeout) throw new RuntimeException("超时");
+                }
+                // 清0
+                jedis.hdel(DayAmountUtil.DAY_AMOUNT);
             }
-            // 清0
-            redisUtil.set(RedisKey.DAY_AMOUNT, new HashMap<Integer, Integer>());
+
         }
     }
 

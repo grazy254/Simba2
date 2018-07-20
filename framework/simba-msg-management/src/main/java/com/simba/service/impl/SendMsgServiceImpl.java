@@ -1,6 +1,5 @@
 package com.simba.service.impl;
 
-import com.simba.cache.RedisUtil;
 import com.simba.exception.BussException;
 import com.simba.framework.util.code.EncryptUtil;
 import com.simba.framework.util.date.DateUtil;
@@ -11,10 +10,10 @@ import com.simba.model.MsgProject;
 import com.simba.model.MsgTemplate;
 import com.simba.model.ShortMessage;
 import com.simba.model.enums.SendStatus;
-import com.simba.model.other.MsgPostArgs;
-import com.simba.model.other.RedisKey;
-import com.simba.service.DO.EntryPlatform;
+import com.simba.service.bean.MsgPostArgs;
+import com.simba.service.bean.EntryPlatform;
 import com.simba.service.*;
+import com.simba.util.DayAmountUtil;
 import com.simba.util.EmailUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -24,7 +23,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -49,7 +47,7 @@ public class SendMsgServiceImpl implements SendMsgService {
     private MsgBlacklistService blacklistService;
 
     @Autowired
-    private RedisUtil redisUtil;
+    private DayAmountUtil dayAmountUtil;
 
     @Autowired
     private EmailUtil emailUtil;
@@ -166,11 +164,9 @@ public class SendMsgServiceImpl implements SendMsgService {
      * @return
      */
     private boolean checkExcess(int projectId) {
-        // <K, V> --> <ProjectId, SendAmount>
-        Map<Integer, Integer> msgAmountMap = (Map<Integer, Integer>) redisUtil.get(RedisKey.DAY_AMOUNT);
+        Integer sendNum = dayAmountUtil.getAmount(String.valueOf(projectId));
         // 发送量
-        msgAmountMap.putIfAbsent(projectId, 0);
-        Integer sendNum = msgAmountMap.get(projectId);
+        if (sendNum == null) return false;
         MsgProject project = projectService.listBy("id", projectId).get(0);
         int threholdNum = (int) (project.getLimitNum() * project.getThreshold());
         // 短信超量
@@ -214,22 +210,8 @@ public class SendMsgServiceImpl implements SendMsgService {
      * @param projectId
      * @return
      */
-    private int increaseSendNum(int projectId, int increasement) {
-        int sendAmount;
-        Map<Integer, Integer> msgAmountMap = (Map<Integer, Integer>) redisUtil.get(RedisKey.DAY_AMOUNT);
-        if (msgAmountMap == null) {
-            msgAmountMap = new HashMap<>();
-        }
-        if (msgAmountMap.get(projectId) == null) {
-            sendAmount = 1;
-            msgAmountMap.put(projectId, sendAmount);
-        } else {
-            sendAmount = msgAmountMap.get(projectId);
-            sendAmount += increasement;
-            msgAmountMap.put(projectId, sendAmount);
-        }
-        redisUtil.set(RedisKey.DAY_AMOUNT, msgAmountMap);
-        return sendAmount;
+    private void increaseSendNum(int projectId, int increasement) {
+        dayAmountUtil.incrAmount(String.valueOf(projectId), increasement);
     }
 
 

@@ -1,6 +1,8 @@
 package com.simba.okhttp.util;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import com.simba.exception.BussException;
@@ -9,6 +11,8 @@ import com.simba.model.constant.ConstantData;
 import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.MultipartBody.Builder;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -269,6 +273,122 @@ public class OkHttpClientUtil {
 	public void postXml(String url, String xml, Callback callback) {
 		Request request = buildXmlRequest(url, xml);
 		asyncExecute(request, callback);
+	}
+
+	/**
+	 * 上传文件
+	 * 
+	 * @param file
+	 * @param url
+	 * @return
+	 * @throws IOException
+	 */
+	public String fileUpload(File file, String url) throws IOException {
+		Request request = buildFileRequest(file, url);
+		return execute(request);
+	}
+
+	/**
+	 * 上传文件
+	 * 
+	 * @param file
+	 * @param url
+	 * @param callback
+	 */
+	public void fileUpload(File file, String url, Callback callback) {
+		Request request = buildFileRequest(file, url);
+		asyncExecute(request, callback);
+	}
+
+	private Request buildFileRequest(File file, String url) {
+		MediaType type = MediaType.parse("File/*");
+		RequestBody body = RequestBody.create(type, file);
+		Request request = new Request.Builder().url(url).post(body).build();
+		return request;
+	}
+
+	/**
+	 * 上传文件
+	 * 
+	 * @param url
+	 * @param param
+	 * @param fileName
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
+	public String fileUpload(String url, Map<String, String> param, String fileName, File file) throws IOException {
+		Request request = buildFileRequest(url, param, fileName, file);
+		return execute(request);
+	}
+
+	/**
+	 * 批量上传文件
+	 * 
+	 * @param url
+	 * @param param
+	 * @param fileNames
+	 * @param files
+	 * @return
+	 * @throws IOException
+	 */
+	public String fileUpload(String url, Map<String, String> param, List<String> fileNames, List<File> files) throws IOException {
+		Request request = buildFileRequest(url, param, fileNames, files);
+		return execute(request);
+	}
+
+	/**
+	 * 批量上传文件
+	 * 
+	 * @param url
+	 * @param param
+	 * @param fileNames
+	 * @param files
+	 * @return
+	 */
+	public void fileUpload(String url, Map<String, String> param, List<String> fileNames, List<File> files, Callback callback) {
+		Request request = buildFileRequest(url, param, fileNames, files);
+		asyncExecute(request, callback);
+	}
+
+	private Request buildFileRequest(String url, Map<String, String> param, List<String> fileNames, List<File> files) {
+		Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+		param.forEach((key, value) -> {
+			builder.addFormDataPart(key, value);
+		});
+		int length = fileNames.size();
+		for (int i = 0; i < length; i++) {
+			String fileName = fileNames.get(i);
+			File file = files.get(i);
+			builder.addFormDataPart(fileName, file.getName(), RequestBody.create(MediaType.parse("File/*"), file));
+		}
+		MultipartBody body = builder.build();
+		Request request = new Request.Builder().url(url).post(body).build();
+		return request;
+	}
+
+	/**
+	 * 上传文件
+	 * 
+	 * @param url
+	 * @param param
+	 * @param fileName
+	 * @param file
+	 */
+	public void fileUpload(String url, Map<String, String> param, String fileName, File file, Callback callback) {
+		Request request = buildFileRequest(url, param, fileName, file);
+		asyncExecute(request, callback);
+	}
+
+	private Request buildFileRequest(String url, Map<String, String> param, String fileName, File file) {
+		Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+		param.forEach((key, value) -> {
+			builder.addFormDataPart(key, value);
+		});
+		builder.addFormDataPart(fileName, file.getName(), RequestBody.create(MediaType.parse("File/*"), file));
+		MultipartBody body = builder.build();
+		Request request = new Request.Builder().url(url).post(body).build();
+		return request;
 	}
 
 }

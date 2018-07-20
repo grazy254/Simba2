@@ -60,6 +60,21 @@ public class OkHttpClientUtil {
 	}
 
 	/**
+	 * 同步执行http请求返回字节数组
+	 * 
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	public byte[] executeBackBytes(Request request) throws IOException {
+		Response res = client.newCall(request).execute();
+		if (res.isSuccessful()) {
+			return res.body().bytes();
+		}
+		throw new BussException("发送http请求发生异常:" + request.url().toString());
+	}
+
+	/**
 	 * 异步执行http请求
 	 * 
 	 * @param request
@@ -82,6 +97,18 @@ public class OkHttpClientUtil {
 	}
 
 	/**
+	 * 同步发送http请求(一般用于下载文件)
+	 * 
+	 * @param url
+	 * @return
+	 * @throws IOException
+	 */
+	public byte[] getBytes(String url) throws IOException {
+		Request request = buildGetRequestWithHeaders(url, null);
+		return executeBackBytes(request);
+	}
+
+	/**
 	 * 同步发送http请求
 	 * 
 	 * @param url
@@ -92,6 +119,19 @@ public class OkHttpClientUtil {
 	public String getWithHeaders(String url, Map<String, String> headers) throws IOException {
 		Request request = buildGetRequestWithHeaders(url, headers);
 		return execute(request);
+	}
+
+	/**
+	 * 同步发送http请求(一般用于下载文件)
+	 * 
+	 * @param url
+	 * @param headers
+	 * @return
+	 * @throws IOException
+	 */
+	public byte[] getBytesWithHeaders(String url, Map<String, String> headers) throws IOException {
+		Request request = buildGetRequestWithHeaders(url, headers);
+		return executeBackBytes(request);
 	}
 
 	/**
@@ -145,6 +185,19 @@ public class OkHttpClientUtil {
 	}
 
 	/**
+	 * 同步发送http请求(一般用于下载文件)
+	 * 
+	 * @param url
+	 * @param params
+	 * @return
+	 * @throws IOException
+	 */
+	public byte[] getBytes(String url, Map<String, String> params) throws IOException {
+		url = buildUrl(url, params);
+		return getBytes(url);
+	}
+
+	/**
 	 * 同步发送http请求
 	 * 
 	 * @param url
@@ -156,6 +209,20 @@ public class OkHttpClientUtil {
 	public String getWithHeaders(String url, Map<String, String> params, Map<String, String> headers) throws IOException {
 		url = buildUrl(url, params);
 		return getWithHeaders(url, headers);
+	}
+
+	/**
+	 * 同步发送http请求(一般用于下载文件)
+	 * 
+	 * @param url
+	 * @param params
+	 * @param headers
+	 * @return
+	 * @throws IOException
+	 */
+	public byte[] getBytesWithHeaders(String url, Map<String, String> params, Map<String, String> headers) throws IOException {
+		url = buildUrl(url, params);
+		return getBytesWithHeaders(url, headers);
 	}
 
 	/**

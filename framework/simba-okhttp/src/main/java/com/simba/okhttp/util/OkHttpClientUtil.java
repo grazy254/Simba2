@@ -535,7 +535,7 @@ public class OkHttpClientUtil {
 	 * @throws IOException
 	 */
 	public String fileUpload(File file, String url) throws IOException {
-		Request request = buildFileRequestWithHeaders(file, url, null);
+		Request request = buildFileRequestWithHeaders(url, null, null, "file", file);
 		return execute(request);
 	}
 
@@ -549,7 +549,7 @@ public class OkHttpClientUtil {
 	 * @throws IOException
 	 */
 	public String fileUpload(File file, String url, Map<String, String> headers) throws IOException {
-		Request request = buildFileRequestWithHeaders(file, url, headers);
+		Request request = buildFileRequestWithHeaders(url, null, headers, "file", file);
 		return execute(request);
 	}
 
@@ -561,7 +561,7 @@ public class OkHttpClientUtil {
 	 * @param callback
 	 */
 	public void fileUpload(File file, String url, Callback callback) {
-		Request request = buildFileRequestWithHeaders(file, url, null);
+		Request request = buildFileRequestWithHeaders(url, null, null, "file", file);
 		asyncExecute(request, callback);
 	}
 
@@ -574,16 +574,8 @@ public class OkHttpClientUtil {
 	 * @param callback
 	 */
 	public void fileUpload(File file, String url, Map<String, String> headers, Callback callback) {
-		Request request = buildFileRequestWithHeaders(file, url, headers);
+		Request request = buildFileRequestWithHeaders(url, null, null, "file", file);
 		asyncExecute(request, callback);
-	}
-
-	private Request buildFileRequestWithHeaders(File file, String url, Map<String, String> headers) {
-		MediaType type = MediaType.parse("File/*");
-		RequestBody body = RequestBody.create(type, file);
-		okhttp3.Request.Builder requestBuilders = new Request.Builder().url(url);
-		setHeaders(headers, requestBuilders);
-		return requestBuilders.post(body).build();
 	}
 
 	/**

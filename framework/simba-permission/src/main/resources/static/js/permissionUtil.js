@@ -9,7 +9,7 @@ var PermissionUtil = {
 			"data" : {
 				"uri" : uri
 			},
-			"method" : "get",
+			"method" : "post",
 			"async" : true,
 			"dataType" : "json",
 			"success" : function(data) {
@@ -32,7 +32,7 @@ var PermissionUtil = {
 			"data" : {
 				"uri" : uri
 			},
-			"method" : "get",
+			"method" : "post",
 			"async" : true,
 			"dataType" : "json",
 			"success" : function(data) {

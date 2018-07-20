@@ -35,6 +35,7 @@ public class PermissionController {
 	 * @param session
 	 * @return
 	 */
+	@ResponseBody
 	@RequestMapping("/hasPermission")
 	public JsonResult hasPermission(String uri, HttpSession session) {
 		return new JsonResult(SessionUtil.hasPermission(session, uri));

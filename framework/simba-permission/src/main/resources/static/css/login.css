@@ -1,6 +1,6 @@
 body {
 	background: url(../img/4.jpg) no-repeat;
-	background-repeat: repeat-y; 
+	background-repeat: repeat;
 	font-size: 16px;
 }
 
@@ -26,8 +26,7 @@ body {
 	color: #ccc;
 }
 
-input[type="text"],
-input[type="password"] {
+input[type="text"], input[type="password"] {
 	padding-left: 26px;
 }
 

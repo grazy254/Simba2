@@ -77,7 +77,20 @@ public class OkHttpClientUtil {
 	 * @throws IOException
 	 */
 	public String get(String url) throws IOException {
-		Request request = buildGetRequest(url);
+		Request request = buildGetRequestWithHeaders(url, null);
+		return execute(request);
+	}
+
+	/**
+	 * 同步发送http请求
+	 * 
+	 * @param url
+	 * @param headers
+	 * @return
+	 * @throws IOException
+	 */
+	public String getWithHeaders(String url, Map<String, String> headers) throws IOException {
+		Request request = buildGetRequestWithHeaders(url, headers);
 		return execute(request);
 	}
 
@@ -88,13 +101,34 @@ public class OkHttpClientUtil {
 	 * @param callback
 	 */
 	public void get(String url, Callback callback) {
-		Request request = buildGetRequest(url);
+		Request request = buildGetRequestWithHeaders(url, null);
 		asyncExecute(request, callback);
 	}
 
-	private Request buildGetRequest(String url) {
-		Request request = new Request.Builder().url(url).build();
-		return request;
+	/**
+	 * 异步发送http请求
+	 * 
+	 * @param url
+	 * @param headers
+	 * @param callback
+	 */
+	public void getWithHeaders(String url, Map<String, String> headers, Callback callback) {
+		Request request = buildGetRequestWithHeaders(url, headers);
+		asyncExecute(request, callback);
+	}
+
+	private Request buildGetRequestWithHeaders(String url, Map<String, String> headers) {
+		okhttp3.Request.Builder builder = new Request.Builder().url(url);
+		setHeaders(headers, builder);
+		return builder.build();
+	}
+
+	private void setHeaders(Map<String, String> headers, okhttp3.Request.Builder builder) {
+		if (headers != null && headers.size() > 0) {
+			headers.forEach((key, value) -> {
+				builder.addHeader(key, value);
+			});
+		}
 	}
 
 	/**
@@ -111,6 +145,20 @@ public class OkHttpClientUtil {
 	}
 
 	/**
+	 * 同步发送http请求
+	 * 
+	 * @param url
+	 * @param params
+	 * @param headers
+	 * @return
+	 * @throws IOException
+	 */
+	public String getWithHeaders(String url, Map<String, String> params, Map<String, String> headers) throws IOException {
+		url = buildUrl(url, params);
+		return getWithHeaders(url, headers);
+	}
+
+	/**
 	 * 异步发送http请求
 	 * 
 	 * @param url
@@ -123,6 +171,19 @@ public class OkHttpClientUtil {
 	}
 
 	/**
+	 * 异步发送http请求
+	 * 
+	 * @param url
+	 * @param params
+	 * @param headers
+	 * @param callback
+	 */
+	public void getWithHeaders(String url, Map<String, String> params, Map<String, String> headers, Callback callback) {
+		url = buildUrl(url, params);
+		getWithHeaders(url, headers, callback);
+	}
+
+	/**
 	 * 将参数拼接到url后
 	 * 
 	 * @param url
@@ -130,6 +191,13 @@ public class OkHttpClientUtil {
 	 * @return
 	 */
 	private String buildUrl(String url, Map<String, String> params) {
+		if (params == null || params.size() == 0) {
+			return url;
+		}
+		return joinUrl(url, params);
+	}
+
+	private String joinUrl(String url, Map<String, String> params) {
 		StringBuilder queryString = new StringBuilder(url);
 		if (url.indexOf("?") > -1) {
 			queryString.append("&");
@@ -156,7 +224,20 @@ public class OkHttpClientUtil {
 	 * @throws IOException
 	 */
 	public String post(String url) throws IOException {
-		Request request = buildPostRequest(url);
+		Request request = buildPostRequestWithHeaders(url, null);
+		return execute(request);
+	}
+
+	/**
+	 * 同步发送http请求
+	 * 
+	 * @param url
+	 * @param headers
+	 * @return
+	 * @throws IOException
+	 */
+	public String postWithHeaders(String url, Map<String, String> headers) throws IOException {
+		Request request = buildPostRequestWithHeaders(url, headers);
 		return execute(request);
 	}
 
@@ -167,14 +248,27 @@ public class OkHttpClientUtil {
 	 * @param callback
 	 */
 	public void post(String url, Callback callback) {
-		Request request = buildPostRequest(url);
+		Request request = buildPostRequestWithHeaders(url, null);
 		asyncExecute(request, callback);
 	}
 
-	private Request buildPostRequest(String url) {
+	/**
+	 * 异步发送http请求
+	 * 
+	 * @param url
+	 * @param headers
+	 * @param callback
+	 */
+	public void postWithHeaders(String url, Map<String, String> headers, Callback callback) {
+		Request request = buildPostRequestWithHeaders(url, headers);
+		asyncExecute(request, callback);
+	}
+
+	private Request buildPostRequestWithHeaders(String url, Map<String, String> headers) {
 		FormBody.Builder builder = new FormBody.Builder();
-		Request request = new Request.Builder().url(url).post(builder.build()).build();
-		return request;
+		okhttp3.Request.Builder requestBuilder = new Request.Builder().url(url);
+		setHeaders(headers, requestBuilder);
+		return requestBuilder.post(builder.build()).build();
 	}
 
 	/**
@@ -186,7 +280,21 @@ public class OkHttpClientUtil {
 	 * @throws IOException
 	 */
 	public String post(String url, Map<String, String> param) throws IOException {
-		Request request = buildPostRequest(url, param);
+		Request request = buildPostRequestWithHeaders(url, param, null);
+		return execute(request);
+	}
+
+	/**
+	 * 同步发送http请求
+	 * 
+	 * @param url
+	 * @param param
+	 * @param headers
+	 * @return
+	 * @throws IOException
+	 */
+	public String post(String url, Map<String, String> param, Map<String, String> headers) throws IOException {
+		Request request = buildPostRequestWithHeaders(url, param, headers);
 		return execute(request);
 	}
 
@@ -198,17 +306,37 @@ public class OkHttpClientUtil {
 	 * @param callback
 	 */
 	public void post(String url, Map<String, String> param, Callback callback) {
-		Request request = buildPostRequest(url, param);
+		Request request = buildPostRequestWithHeaders(url, param, null);
 		asyncExecute(request, callback);
 	}
 
-	private Request buildPostRequest(String url, Map<String, String> param) {
+	/**
+	 * 异步发送http请求
+	 * 
+	 * @param url
+	 * @param param
+	 * @param headers
+	 * @param callback
+	 */
+	public void post(String url, Map<String, String> param, Map<String, String> headers, Callback callback) {
+		Request request = buildPostRequestWithHeaders(url, param, headers);
+		asyncExecute(request, callback);
+	}
+
+	private Request buildPostRequestWithHeaders(String url, Map<String, String> param, Map<String, String> headers) {
 		FormBody.Builder builder = new FormBody.Builder();
-		param.forEach((key, value) -> {
-			builder.add(key, value);
-		});
-		Request request = new Request.Builder().url(url).post(builder.build()).build();
-		return request;
+		setParam(param, builder);
+		okhttp3.Request.Builder requestBuilder = new Request.Builder().url(url);
+		setHeaders(headers, requestBuilder);
+		return requestBuilder.post(builder.build()).build();
+	}
+
+	private void setParam(Map<String, String> param, FormBody.Builder builder) {
+		if (param != null && param.size() > 0) {
+			param.forEach((key, value) -> {
+				builder.add(key, value);
+			});
+		}
 	}
 
 	/**
@@ -220,7 +348,21 @@ public class OkHttpClientUtil {
 	 * @throws IOException
 	 */
 	public String postJson(String url, String json) throws IOException {
-		Request request = buildJsonRequest(url, json);
+		Request request = buildJsonRequestWithHeaders(url, json, null);
+		return execute(request);
+	}
+
+	/**
+	 * 以http body方式同步提交json数据
+	 * 
+	 * @param url
+	 * @param json
+	 * @param headers
+	 * @return
+	 * @throws IOException
+	 */
+	public String postJsonWithHeaders(String url, String json, Map<String, String> headers) throws IOException {
+		Request request = buildJsonRequestWithHeaders(url, json, headers);
 		return execute(request);
 	}
 
@@ -232,22 +374,37 @@ public class OkHttpClientUtil {
 	 * @param callback
 	 */
 	public void postJson(String url, String json, Callback callback) {
-		Request request = buildJsonRequest(url, json);
+		Request request = buildJsonRequestWithHeaders(url, json, null);
 		asyncExecute(request, callback);
 	}
 
-	private Request buildJsonRequest(String url, String json) {
-		MediaType type = MediaType.parse("application/json;charset=" + ConstantData.DEFAULT_CHARSET);
-		RequestBody body = RequestBody.create(type, json);
-		Request request = new Request.Builder().url(url).post(body).build();
-		return request;
+	/**
+	 * 以http body方式异步提交json数据
+	 * 
+	 * @param url
+	 * @param json
+	 * @param headers
+	 * @param callback
+	 */
+	public void postJson(String url, String json, Map<String, String> headers, Callback callback) {
+		Request request = buildJsonRequestWithHeaders(url, json, headers);
+		asyncExecute(request, callback);
 	}
 
-	private Request buildXmlRequest(String url, String json) {
+	private Request buildJsonRequestWithHeaders(String url, String json, Map<String, String> headers) {
+		MediaType type = MediaType.parse("application/json;charset=" + ConstantData.DEFAULT_CHARSET);
+		RequestBody body = RequestBody.create(type, json);
+		okhttp3.Request.Builder requestBuilder = new Request.Builder().url(url);
+		setHeaders(headers, requestBuilder);
+		return requestBuilder.post(body).build();
+	}
+
+	private Request buildXmlRequestWithHeaders(String url, String json, Map<String, String> headers) {
 		MediaType type = MediaType.parse("application/xml;charset=" + ConstantData.DEFAULT_CHARSET);
 		RequestBody body = RequestBody.create(type, json);
-		Request request = new Request.Builder().url(url).post(body).build();
-		return request;
+		okhttp3.Request.Builder requestBuilder = new Request.Builder().url(url);
+		setHeaders(headers, requestBuilder);
+		return requestBuilder.post(body).build();
 	}
 
 	/**
@@ -259,7 +416,21 @@ public class OkHttpClientUtil {
 	 * @throws IOException
 	 */
 	public String postXml(String url, String xml) throws IOException {
-		Request request = buildXmlRequest(url, xml);
+		Request request = buildXmlRequestWithHeaders(url, xml, null);
+		return execute(request);
+	}
+
+	/**
+	 * 以http body方式同步提交xml数据
+	 * 
+	 * @param url
+	 * @param xml
+	 * @param headers
+	 * @return
+	 * @throws IOException
+	 */
+	public String postXml(String url, String xml, Map<String, String> headers) throws IOException {
+		Request request = buildXmlRequestWithHeaders(url, xml, headers);
 		return execute(request);
 	}
 
@@ -271,7 +442,20 @@ public class OkHttpClientUtil {
 	 * @param callback
 	 */
 	public void postXml(String url, String xml, Callback callback) {
-		Request request = buildXmlRequest(url, xml);
+		Request request = buildXmlRequestWithHeaders(url, xml, null);
+		asyncExecute(request, callback);
+	}
+
+	/**
+	 * 以http body方式异步提交xml数据
+	 * 
+	 * @param url
+	 * @param xml
+	 * @param headers
+	 * @param callback
+	 */
+	public void postXml(String url, String xml, Map<String, String> headers, Callback callback) {
+		Request request = buildXmlRequestWithHeaders(url, xml, headers);
 		asyncExecute(request, callback);
 	}
 
@@ -284,7 +468,21 @@ public class OkHttpClientUtil {
 	 * @throws IOException
 	 */
 	public String fileUpload(File file, String url) throws IOException {
-		Request request = buildFileRequest(file, url);
+		Request request = buildFileRequestWithHeaders(file, url, null);
+		return execute(request);
+	}
+
+	/**
+	 * 上传文件
+	 * 
+	 * @param file
+	 * @param url
+	 * @param headers
+	 * @return
+	 * @throws IOException
+	 */
+	public String fileUpload(File file, String url, Map<String, String> headers) throws IOException {
+		Request request = buildFileRequestWithHeaders(file, url, headers);
 		return execute(request);
 	}
 
@@ -296,15 +494,29 @@ public class OkHttpClientUtil {
 	 * @param callback
 	 */
 	public void fileUpload(File file, String url, Callback callback) {
-		Request request = buildFileRequest(file, url);
+		Request request = buildFileRequestWithHeaders(file, url, null);
 		asyncExecute(request, callback);
 	}
 
-	private Request buildFileRequest(File file, String url) {
+	/**
+	 * 上传文件
+	 * 
+	 * @param file
+	 * @param url
+	 * @param headers
+	 * @param callback
+	 */
+	public void fileUpload(File file, String url, Map<String, String> headers, Callback callback) {
+		Request request = buildFileRequestWithHeaders(file, url, headers);
+		asyncExecute(request, callback);
+	}
+
+	private Request buildFileRequestWithHeaders(File file, String url, Map<String, String> headers) {
 		MediaType type = MediaType.parse("File/*");
 		RequestBody body = RequestBody.create(type, file);
-		Request request = new Request.Builder().url(url).post(body).build();
-		return request;
+		okhttp3.Request.Builder requestBuilders = new Request.Builder().url(url);
+		setHeaders(headers, requestBuilders);
+		return requestBuilders.post(body).build();
 	}
 
 	/**
@@ -318,7 +530,23 @@ public class OkHttpClientUtil {
 	 * @throws IOException
 	 */
 	public String fileUpload(String url, Map<String, String> param, String fileName, File file) throws IOException {
-		Request request = buildFileRequest(url, param, fileName, file);
+		Request request = buildFileRequestWithHeaders(url, param, null, fileName, file);
+		return execute(request);
+	}
+
+	/**
+	 * 上传文件
+	 * 
+	 * @param url
+	 * @param param
+	 * @param headers
+	 * @param fileName
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
+	public String fileUpload(String url, Map<String, String> param, Map<String, String> headers, String fileName, File file) throws IOException {
+		Request request = buildFileRequestWithHeaders(url, param, headers, fileName, file);
 		return execute(request);
 	}
 
@@ -333,7 +561,23 @@ public class OkHttpClientUtil {
 	 * @throws IOException
 	 */
 	public String fileUpload(String url, Map<String, String> param, List<String> fileNames, List<File> files) throws IOException {
-		Request request = buildFileRequest(url, param, fileNames, files);
+		Request request = buildFileRequestWithHeaders(url, param, null, fileNames, files);
+		return execute(request);
+	}
+
+	/**
+	 * 批量上传文件
+	 * 
+	 * @param url
+	 * @param param
+	 * @param headers
+	 * @param fileNames
+	 * @param files
+	 * @return
+	 * @throws IOException
+	 */
+	public String fileUpload(String url, Map<String, String> param, Map<String, String> headers, List<String> fileNames, List<File> files) throws IOException {
+		Request request = buildFileRequestWithHeaders(url, param, headers, fileNames, files);
 		return execute(request);
 	}
 
@@ -347,24 +591,50 @@ public class OkHttpClientUtil {
 	 * @return
 	 */
 	public void fileUpload(String url, Map<String, String> param, List<String> fileNames, List<File> files, Callback callback) {
-		Request request = buildFileRequest(url, param, fileNames, files);
+		Request request = buildFileRequestWithHeaders(url, param, null, fileNames, files);
 		asyncExecute(request, callback);
 	}
 
-	private Request buildFileRequest(String url, Map<String, String> param, List<String> fileNames, List<File> files) {
+	/**
+	 * 批量上传文件
+	 * 
+	 * @param url
+	 * @param param
+	 * @param headers
+	 * @param fileNames
+	 * @param files
+	 * @param callback
+	 */
+	public void fileUpload(String url, Map<String, String> param, Map<String, String> headers, List<String> fileNames, List<File> files, Callback callback) {
+		Request request = buildFileRequestWithHeaders(url, param, headers, fileNames, files);
+		asyncExecute(request, callback);
+	}
+
+	private Request buildFileRequestWithHeaders(String url, Map<String, String> param, Map<String, String> headers, List<String> fileNames, List<File> files) {
 		Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-		param.forEach((key, value) -> {
-			builder.addFormDataPart(key, value);
-		});
+		setParam(param, builder);
+		addFiles(fileNames, files, builder);
+		MultipartBody body = builder.build();
+		okhttp3.Request.Builder requestBuilders = new Request.Builder().url(url);
+		setHeaders(headers, requestBuilders);
+		return requestBuilders.post(body).build();
+	}
+
+	private void addFiles(List<String> fileNames, List<File> files, Builder builder) {
 		int length = fileNames.size();
 		for (int i = 0; i < length; i++) {
 			String fileName = fileNames.get(i);
 			File file = files.get(i);
 			builder.addFormDataPart(fileName, file.getName(), RequestBody.create(MediaType.parse("File/*"), file));
 		}
-		MultipartBody body = builder.build();
-		Request request = new Request.Builder().url(url).post(body).build();
-		return request;
+	}
+
+	private void setParam(Map<String, String> param, Builder builder) {
+		if (param != null && param.size() > 0) {
+			param.forEach((key, value) -> {
+				builder.addFormDataPart(key, value);
+			});
+		}
 	}
 
 	/**
@@ -376,19 +646,33 @@ public class OkHttpClientUtil {
 	 * @param file
 	 */
 	public void fileUpload(String url, Map<String, String> param, String fileName, File file, Callback callback) {
-		Request request = buildFileRequest(url, param, fileName, file);
+		Request request = buildFileRequestWithHeaders(url, param, null, fileName, file);
 		asyncExecute(request, callback);
 	}
 
-	private Request buildFileRequest(String url, Map<String, String> param, String fileName, File file) {
+	/**
+	 * 上传文件
+	 * 
+	 * @param url
+	 * @param param
+	 * @param headers
+	 * @param fileName
+	 * @param file
+	 * @param callback
+	 */
+	public void fileUpload(String url, Map<String, String> param, Map<String, String> headers, String fileName, File file, Callback callback) {
+		Request request = buildFileRequestWithHeaders(url, param, headers, fileName, file);
+		asyncExecute(request, callback);
+	}
+
+	private Request buildFileRequestWithHeaders(String url, Map<String, String> param, Map<String, String> headers, String fileName, File file) {
 		Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-		param.forEach((key, value) -> {
-			builder.addFormDataPart(key, value);
-		});
+		setParam(param, builder);
 		builder.addFormDataPart(fileName, file.getName(), RequestBody.create(MediaType.parse("File/*"), file));
 		MultipartBody body = builder.build();
-		Request request = new Request.Builder().url(url).post(body).build();
-		return request;
+		okhttp3.Request.Builder requestBuilders = new Request.Builder().url(url);
+		setHeaders(headers, requestBuilders);
+		return requestBuilders.post(body).build();
 	}
 
 }

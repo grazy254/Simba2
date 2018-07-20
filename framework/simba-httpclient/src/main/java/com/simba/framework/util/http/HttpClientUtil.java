@@ -726,6 +726,13 @@ public class HttpClientUtil {
 	 * @return
 	 */
 	private static String buildUrl(String url, Map<String, String> params) {
+		if (params == null || params.size() == 0) {
+			return url;
+		}
+		return joinUrl(url, params);
+	}
+
+	private static String joinUrl(String url, Map<String, String> params) {
 		StringBuilder queryString = new StringBuilder(url);
 		if (url.indexOf("?") > -1) {
 			queryString.append("&");

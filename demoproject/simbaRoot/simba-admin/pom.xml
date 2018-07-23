@@ -147,6 +147,10 @@
 			<groupId>com.simba</groupId>
 			<artifactId>simba-data-dictionary</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-alipay-enterprise-bill</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -1,23 +1,37 @@
 <#list list as aliPayEnterpriseBill>
 	<tr>
-		<td><input type="checkbox" name="aliPayEnterpriseBill" value="${aliPayEnterpriseBill.id}"></td>
 		<td>${aliPayEnterpriseBill.outBizNo}</td>
-		<td>${aliPayEnterpriseBill.payType}</td>
-		<td>${aliPayEnterpriseBill.account}</td>
-		<td>${aliPayEnterpriseBill.amount}</td>
-		<td>${aliPayEnterpriseBill.payerName}</td>
-		<td>${aliPayEnterpriseBill.peyeeName}</td>
-		<td>${aliPayEnterpriseBill.remark}</td>
-		<td>${aliPayEnterpriseBill.orderId}</td>
-		<td>${aliPayEnterpriseBill.payDate}</td>
-		<td>${aliPayEnterpriseBill.createTime}</td>
-		<td>${aliPayEnterpriseBill.createUser}</td>
-		<td>${aliPayEnterpriseBill.status}</td>
-		<td>${aliPayEnterpriseBill.reason}</td>
-		<td>${aliPayEnterpriseBill.orderFee}</td>
 		<td>
-			<button type="button" class="btn btn-default btn-sm" onclick="AliPayEnterpriseBill.toUpdate(${aliPayEnterpriseBill.id});"><i class="fa fa-pencil-square-o"></i>修改</button>
-			<button type="button" class="btn btn-default btn-sm" onclick="AliPayEnterpriseBill.deleteAliPayEnterpriseBill(${aliPayEnterpriseBill.id});"><i class="fa fa-remove"></i>删除</button>
+			<#if aliPayEnterpriseBill.payType=='ALIPAY_USERID'>
+				支付宝唯一用户号
+			<#elseif aliPayEnterpriseBill.payType=='ALIPAY_LOGONID'>
+				支付宝登录号
+			</#if>
 		</td>
+		<td>${aliPayEnterpriseBill.account!}</td>
+		<td>${aliPayEnterpriseBill.amount!}</td>
+		<td>${aliPayEnterpriseBill.payerName!}</td>
+		<td>${aliPayEnterpriseBill.peyeeName!}</td>
+		<td>${aliPayEnterpriseBill.remark!}</td>
+		<td>${aliPayEnterpriseBill.orderId!}</td>
+		<td>${aliPayEnterpriseBill.payDate!}</td>
+		<td>${aliPayEnterpriseBill.createTime?string("yyyy-MM-dd HH:mm:ss")}</td>
+		<td>${aliPayEnterpriseBill.createUser!}</td>
+		<td>
+			<#if aliPayEnterpriseBill.status=='SUCCESS'>
+				成功
+			<#elseif aliPayEnterpriseBill.status=='FAIL'>
+				失败
+			<#elseif aliPayEnterpriseBill.status=='INIT'>
+				等待处理
+			<#elseif aliPayEnterpriseBill.status=='DEALING'>
+				处理中
+			<#elseif aliPayEnterpriseBill.status=='REFUND'>
+				退票
+			<#elseif aliPayEnterpriseBill.status=='UNKNOWN'>
+				状态未知
+			</#if>
+		</td>
+		<td>${aliPayEnterpriseBill.reason!}</td>
 	</tr>
 </#list>

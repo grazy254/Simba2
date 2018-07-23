@@ -38,13 +38,24 @@
 									<!-- /.pull-right -->
 									<div class="mailbox-controls">
 										<label for="status">状态:</label>
-										<input type="text" id="status"  name="status" placeholder="请输入状态">
+										<select id="status" name="status">
+											<option value="">所有</option>
+											<option value="SUCCESS">成功</option>
+											<option value="INIT">等待处理</option>
+											<option value="DEALING">处理中</option>
+											<option value="REFUND">退票</option>
+											<option value="UNKNOWN">状态未知</option>
+										</select>
 										&nbsp;&nbsp;
 										<label for="outBizNo">商户订单号:</label>
 										<input type="text" id="outBizNo"  name="outBizNo" placeholder="请输入商户订单号">
 										&nbsp;&nbsp;
 										<label for="payType">账户类型:</label>
-										<input type="text" id="payType"  name="payType" placeholder="请输入账户类型">
+										<select id="payType" name="payType">
+											<option value="">所有</option>
+											<option value="ALIPAY_USERID">支付宝唯一用户号</option>
+											<option value="ALIPAY_LOGONID">支付宝登录号</option>
+										</select>
 										&nbsp;&nbsp;
 										<label for="account">收款方账户:</label>
 										<input type="text" id="account"  name="account" placeholder="请输入收款方账户">
@@ -59,10 +70,10 @@
 										<input type="text" id="createUser"  name="createUser" placeholder="请输入创建者">
 										&nbsp;&nbsp;
 										<label for="startCreateTime">开始时间:</label>
-										<input type="text" id="startCreateTime"  name="startCreateTime" placeholder="请输入开始时间">
+										<input type="text" id="startCreateTime"  name="startCreateTime" placeholder="请输入开始时间" class="datetimepicker">
 										&nbsp;&nbsp;
 										<label for="endCreateTime">结束时间:</label>
-										<input type="text" id="endCreateTime"  name="endCreateTime" placeholder="请输入结束时间">
+										<input type="text" id="endCreateTime"  name="endCreateTime" placeholder="请输入结束时间" class="datetimepicker">
 										&nbsp;&nbsp;
 										<!-- Check all button -->
 										<button type="button" class="btn btn-default btn-sm" onclick="AliPayEnterpriseBill.toSearch();"><i class="fa fa-search"></i>查询</button>
@@ -74,7 +85,6 @@
 									<table class="table table-hover table-striped table-bordered" id="table">
 										<thead>
 											<tr>
-												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
 												<th>商户订单号</th>
 												<th>账户类型</th>
 												<th>收款方账户</th>
@@ -88,8 +98,6 @@
 												<th>创建者</th>
 												<th>状态</th>
 												<th>理由</th>
-												<th>预计收费金额</th>
-												<th>操作</th>
 											</tr>
 										</thead>
 										<tbody>

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -65,7 +66,7 @@ public class AliPayCallbackController {
 		deal(callbackForm);
 		return "success";
 	}
-	
+
 	/**
 	 * 价格单位统一成分
 	 * 
@@ -76,9 +77,16 @@ public class AliPayCallbackController {
 		String refund_fee = callbackForm.getRefund_fee();
 		callbackForm.setTotal_amount(converter(total_amount));
 		callbackForm.setRefund_fee(converter(refund_fee));
+		callbackForm.setBuyer_pay_amount(converter(callbackForm.getBuyer_pay_amount()));
+		callbackForm.setReceipt_amount(converter(callbackForm.getReceipt_amount()));
+		callbackForm.setInvoice_amount(converter(callbackForm.getInvoice_amount()));
+		callbackForm.setPoint_amount(converter(callbackForm.getPoint_amount()));
 	}
 
 	private String converter(String money) {
+		if (StringUtils.isEmpty(money)) {
+			return StringUtils.EMPTY;
+		}
 		double fee = NumberUtils.toDouble(money);
 		double fen = fee * 100;
 		int zfen = Integer.parseInt(new java.text.DecimalFormat("0").format(fen));

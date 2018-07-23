@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -234,11 +235,43 @@ public class AliPayBillServiceImpl implements AliPayBillService {
 			AliPayCallbackForm callbackForm = new AliPayCallbackForm();
 			callbackForm.setOut_trade_no(bill.getOutTradeNo());
 			callbackForm.setTrade_status(TradeStatus.SUCCESS.getName());
-			callbackForm.setTotal_amount(bill.getTotalAmount());
+			callbackForm.setTotal_amount(response.getTotalAmount());
+			callbackForm.setBuyer_id(response.getBuyerUserId());
+			callbackForm.setBuyer_logon_id(response.getBuyerLogonId());
+			callbackForm.setSeller_id(response.getAlipayStoreId());
+			callbackForm.setBuyer_pay_amount(response.getBuyerPayAmount());
+			callbackForm.setInvoice_amount(response.getInvoiceAmount());
+			dealUnit(callbackForm);
 			aliPayService.dealCallback(callbackForm);
 		} else {
 			this.update(bill);
 		}
+	}
+
+	/**
+	 * 价格单位统一成分
+	 * 
+	 * @param callbackForm
+	 */
+	private void dealUnit(AliPayCallbackForm callbackForm) {
+		String total_amount = callbackForm.getTotal_amount();
+		String refund_fee = callbackForm.getRefund_fee();
+		callbackForm.setTotal_amount(converter(total_amount));
+		callbackForm.setRefund_fee(converter(refund_fee));
+		callbackForm.setBuyer_pay_amount(converter(callbackForm.getBuyer_pay_amount()));
+		callbackForm.setReceipt_amount(converter(callbackForm.getReceipt_amount()));
+		callbackForm.setInvoice_amount(converter(callbackForm.getInvoice_amount()));
+		callbackForm.setPoint_amount(converter(callbackForm.getPoint_amount()));
+	}
+
+	private String converter(String money) {
+		if (StringUtils.isEmpty(money)) {
+			return StringUtils.EMPTY;
+		}
+		double fee = NumberUtils.toDouble(money);
+		double fen = fee * 100;
+		int zfen = Integer.parseInt(new java.text.DecimalFormat("0").format(fen));
+		return zfen + "";
 	}
 
 	private void dealRefundOrder(AliPayBill bill) throws AlipayApiException {

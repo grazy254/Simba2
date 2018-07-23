@@ -7,6 +7,8 @@ package com.simba.model;
 
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.simba.annotation.DescAnnotation;
 
 /**
@@ -95,6 +97,116 @@ public class AliPayBill {
 	 */
 	@DescAnnotation(desc = "状态")
 	private String status;
+
+	private String outBizNo = StringUtils.EMPTY;
+
+	private String buyerId = StringUtils.EMPTY;
+
+	private String buyerLogonId = StringUtils.EMPTY;
+
+	private String sellerEmail = StringUtils.EMPTY;
+
+	private String receiptAmount = StringUtils.EMPTY;
+
+	private String invoiceAmount = StringUtils.EMPTY;
+
+	private String buyerPayAmount = StringUtils.EMPTY;
+
+	private String refundFee = StringUtils.EMPTY;
+
+	private String payTime = StringUtils.EMPTY;
+
+	private String refundTime = StringUtils.EMPTY;
+
+	private String closeTime = StringUtils.EMPTY;
+
+	public String getOutBizNo() {
+		return outBizNo;
+	}
+
+	public void setOutBizNo(String outBizNo) {
+		this.outBizNo = outBizNo;
+	}
+
+	public String getBuyerId() {
+		return buyerId;
+	}
+
+	public void setBuyerId(String buyerId) {
+		this.buyerId = buyerId;
+	}
+
+	public String getBuyerLogonId() {
+		return buyerLogonId;
+	}
+
+	public void setBuyerLogonId(String buyerLogonId) {
+		this.buyerLogonId = buyerLogonId;
+	}
+
+	public String getSellerEmail() {
+		return sellerEmail;
+	}
+
+	public void setSellerEmail(String sellerEmail) {
+		this.sellerEmail = sellerEmail;
+	}
+
+	public String getReceiptAmount() {
+		return receiptAmount;
+	}
+
+	public void setReceiptAmount(String receiptAmount) {
+		this.receiptAmount = receiptAmount;
+	}
+
+	public String getInvoiceAmount() {
+		return invoiceAmount;
+	}
+
+	public void setInvoiceAmount(String invoiceAmount) {
+		this.invoiceAmount = invoiceAmount;
+	}
+
+	public String getBuyerPayAmount() {
+		return buyerPayAmount;
+	}
+
+	public void setBuyerPayAmount(String buyerPayAmount) {
+		this.buyerPayAmount = buyerPayAmount;
+	}
+
+	public String getRefundFee() {
+		return refundFee;
+	}
+
+	public void setRefundFee(String refundFee) {
+		this.refundFee = refundFee;
+	}
+
+	public String getPayTime() {
+		return payTime;
+	}
+
+	public void setPayTime(String payTime) {
+		this.payTime = payTime;
+	}
+
+	public String getRefundTime() {
+		return refundTime;
+	}
+
+	public void setRefundTime(String refundTime) {
+		this.refundTime = refundTime;
+	}
+
+	public String getCloseTime() {
+		return closeTime;
+	}
+
+	public void setCloseTime(String closeTime) {
+		this.closeTime = closeTime;
+	}
 
 	public String getStatus() {
 		return status;
@@ -239,6 +351,28 @@ public class AliPayBill {
 		builder.append(createTime);
 		builder.append(", status=");
 		builder.append(status);
+		builder.append(", outBizNo=");
+		builder.append(outBizNo);
+		builder.append(", buyerId=");
+		builder.append(buyerId);
+		builder.append(", buyerLogonId=");
+		builder.append(buyerLogonId);
+		builder.append(", sellerEmail=");
+		builder.append(sellerEmail);
+		builder.append(", receiptAmount=");
+		builder.append(receiptAmount);
+		builder.append(", invoiceAmount=");
+		builder.append(invoiceAmount);
+		builder.append(", buyerPayAmount=");
+		builder.append(buyerPayAmount);
+		builder.append(", refundFee=");
+		builder.append(refundFee);
+		builder.append(", payTime=");
+		builder.append(payTime);
+		builder.append(", refundTime=");
+		builder.append(refundTime);
+		builder.append(", closeTime=");
+		builder.append(closeTime);
 		builder.append("]");
 		return builder.toString();
 	}

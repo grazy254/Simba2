@@ -4,6 +4,10 @@
 		<!-- 
 		<td>${aliPayBill.appid}</td>
 		-->
+		<td>${aliPayBill.buyerLogonId}</td>
+		<td>${aliPayBill.payTime}</td>
+		<td>${aliPayBill.refundTime}</td>
+		<td>${aliPayBill.buyerPayAmount}</td>
 		<td>${aliPayBill.body}</td>
 		<td>${aliPayBill.totalAmount}</td>
 		<td>${aliPayBill.subject}</td>

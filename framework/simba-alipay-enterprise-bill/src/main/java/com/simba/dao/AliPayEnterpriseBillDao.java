@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.AliPayEnterpriseBill;
+import com.simba.model.form.AliPayEnterpriseBillSearchForm;
 /**
  * 支付宝企业支付账单 Dao
  * 
@@ -22,6 +23,7 @@ public interface AliPayEnterpriseBillDao {
 	
 	Long count();
 	
+	Long count(AliPayEnterpriseBillSearchForm aliPayEnterpriseBillSearchForm);
 	Long countBy(String field, Object value);
 	
 	Long countByAnd(String field1, Object value1, String field2, Object value2);
@@ -36,6 +38,7 @@ public interface AliPayEnterpriseBillDao {
 	
 	List<AliPayEnterpriseBill> page(Pager page);
 	
+	List<AliPayEnterpriseBill> page(Pager page, AliPayEnterpriseBillSearchForm aliPayEnterpriseBillSearchForm);
 	AliPayEnterpriseBill get(Long id);
 	
 	AliPayEnterpriseBill getBy(String field, Object value);

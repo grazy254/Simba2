@@ -36,6 +36,39 @@
 										</div>
 									</div>
 									<!-- /.pull-right -->
+									<div class="mailbox-controls">
+										<label for="status">状态:</label>
+										<input type="text" id="status"  name="status" placeholder="请输入状态">
+										&nbsp;&nbsp;
+										<label for="outBizNo">商户订单号:</label>
+										<input type="text" id="outBizNo"  name="outBizNo" placeholder="请输入商户订单号">
+										&nbsp;&nbsp;
+										<label for="payType">账户类型:</label>
+										<input type="text" id="payType"  name="payType" placeholder="请输入账户类型">
+										&nbsp;&nbsp;
+										<label for="account">收款方账户:</label>
+										<input type="text" id="account"  name="account" placeholder="请输入收款方账户">
+										&nbsp;&nbsp;
+										<label for="peyeeName">收款方真实姓名:</label>
+										<input type="text" id="peyeeName"  name="peyeeName" placeholder="请输入收款方真实姓名">
+										&nbsp;&nbsp;
+										<label for="orderId">支付宝转账单据号:</label>
+										<input type="text" id="orderId"  name="orderId" placeholder="请输入支付宝转账单据号">
+										&nbsp;&nbsp;
+										<label for="createUser">创建者:</label>
+										<input type="text" id="createUser"  name="createUser" placeholder="请输入创建者">
+										&nbsp;&nbsp;
+										<label for="startCreateTime">开始时间:</label>
+										<input type="text" id="startCreateTime"  name="startCreateTime" placeholder="请输入开始时间">
+										&nbsp;&nbsp;
+										<label for="endCreateTime">结束时间:</label>
+										<input type="text" id="endCreateTime"  name="endCreateTime" placeholder="请输入结束时间">
+										&nbsp;&nbsp;
+										<!-- Check all button -->
+										<button type="button" class="btn btn-default btn-sm" onclick="AliPayEnterpriseBill.toSearch();"><i class="fa fa-search"></i>查询</button>
+										<div class="pull-right">
+										
+									</div>
 								</div>
 								<div class="table-responsive">
 									<table class="table table-hover table-striped table-bordered" id="table">

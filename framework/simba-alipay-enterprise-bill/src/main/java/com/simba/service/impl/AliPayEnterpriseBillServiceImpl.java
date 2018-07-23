@@ -11,6 +11,7 @@ import com.simba.dao.AliPayEnterpriseBillDao;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.AliPayEnterpriseBill;
 import com.simba.service.AliPayEnterpriseBillService;
+import com.simba.model.form.AliPayEnterpriseBillSearchForm;
 /**
  * 支付宝企业支付账单 Service实现类
  * 
@@ -48,10 +49,20 @@ public class AliPayEnterpriseBillServiceImpl implements AliPayEnterpriseBillServ
 	
 	@Override
 	@Transactional(readOnly = true)
+	public List<AliPayEnterpriseBill> page(Pager page, AliPayEnterpriseBillSearchForm aliPayEnterpriseBillSearchForm) {
+		return aliPayEnterpriseBillDao.page(page, aliPayEnterpriseBillSearchForm);
+	}
+	@Override
+	@Transactional(readOnly = true)
 	public Long count() {
 		return aliPayEnterpriseBillDao.count();
 	}
 	
+	@Override
+	@Transactional(readOnly = true)
+	public Long count(AliPayEnterpriseBillSearchForm aliPayEnterpriseBillSearchForm) {
+		return aliPayEnterpriseBillDao.count(aliPayEnterpriseBillSearchForm);
+	}
 	@Override
 	@Transactional(readOnly = true)
 	public Long countBy(String field, Object value){

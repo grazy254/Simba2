@@ -1,4 +1,7 @@
 var AliPayEnterpriseBill = {
+	"toSearch": function() {
+		AliPayEnterpriseBill.initAliPayEnterpriseBillList(0, Page.size, "doSearch");
+	},
 	
 	"toAdd": function() {
 		window.self.location.href = contextPath + "/aliPayEnterpriseBill/toAdd";
@@ -25,7 +28,7 @@ var AliPayEnterpriseBill = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
-					AliPayEnterpriseBill.initAliPayEnterpriseBillList(0, Page.size);
+					AliPayEnterpriseBill.initAliPayEnterpriseBillList(0, Page.size, "doSearch");
 				} else {
 					parent.showInfo(data.msg);
 				}
@@ -36,6 +39,15 @@ var AliPayEnterpriseBill = {
 		var data = {};
 		var data2 = {};
 		method = method || "getList";
+		data["status"] = $("#status").val();
+		data["outBizNo"] = $("#outBizNo").val();
+		data["payType"] = $("#payType").val();
+		data["account"] = $("#account").val();
+		data["peyeeName"] = $("#peyeeName").val();
+		data["orderId"] = $("#orderId").val();
+		data["createUser"] = $("#createUser").val();
+		data["startCreateTime"] = $("#startCreateTime").val();
+		data["endCreateTime"] = $("#endCreateTime").val();
 		$.extend(data2,data);
 		data["pageStart"] = start;
 		data["pageSize"] = pageSize;
@@ -65,7 +77,7 @@ var AliPayEnterpriseBill = {
 		});
 	},
 	"clickPager": function(start, pageSize) {
-		AliPayEnterpriseBill.initAliPayEnterpriseBillList(start, pageSize);
+		AliPayEnterpriseBill.initAliPayEnterpriseBillList(start, pageSize, "doSearch");
 	},
 
 	"toUpdate": function(id) {
@@ -83,7 +95,7 @@ var AliPayEnterpriseBill = {
 			dataType: "json",
 			success: function(data) {
 				if(data.code == 200) {
-					AliPayEnterpriseBill.initAliPayEnterpriseBillList(0, Page.size);
+					AliPayEnterpriseBill.initAliPayEnterpriseBillList(0, Page.size, "doSearch");
 				} else {
 					parent.showInfo(data.msg);
 				}

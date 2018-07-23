@@ -13,6 +13,7 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.AliPayEnterpriseBill;
 import com.simba.service.AliPayEnterpriseBillService;
+import com.simba.model.form.AliPayEnterpriseBillSearchForm;
 /**
  * 支付宝企业支付账单控制器
  * 
@@ -38,10 +39,17 @@ public class AliPayEnterpriseBillController {
 		return "aliPayEnterpriseBill/table";
 	}
 	
+	@RequestMapping("/doSearch")
+	public String getList(Pager pager, AliPayEnterpriseBillSearchForm aliPayEnterpriseBillSearchForm, ModelMap model){
+		List<AliPayEnterpriseBill> list = aliPayEnterpriseBillService.page(pager, aliPayEnterpriseBillSearchForm);
+		model.put("list", list);
+		return "aliPayEnterpriseBill/table";
+	}
+	
 	@ResponseBody
 	@RequestMapping("/count")
-	public JsonResult count() {
-		Long count = aliPayEnterpriseBillService.count();
+	public JsonResult count(AliPayEnterpriseBillSearchForm aliPayEnterpriseBillSearchForm) {
+		Long count = aliPayEnterpriseBillService.count(aliPayEnterpriseBillSearchForm);
 		return new JsonResult(count, "", 200);
 	}
 	

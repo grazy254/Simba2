@@ -1,5 +1,6 @@
 package com.simba.alipay.util;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayDataDataserviceBillDownloadurlQueryRequest;
+import com.alipay.api.request.AlipayFundTransOrderQueryRequest;
 import com.alipay.api.request.AlipayFundTransToaccountTransferRequest;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradeCancelRequest;
@@ -30,6 +32,7 @@ import com.alipay.api.request.AlipayTradePrecreateRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayDataDataserviceBillDownloadurlQueryResponse;
+import com.alipay.api.response.AlipayFundTransOrderQueryResponse;
 import com.alipay.api.response.AlipayFundTransToaccountTransferResponse;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.alipay.api.response.AlipayTradeCancelResponse;
@@ -344,6 +347,38 @@ public class AliPayUtil {
 		enterprisePay.setAmount(amount);
 		AlipayFundTransToaccountTransferRequest request = new AlipayFundTransToaccountTransferRequest();
 		request.setBizContent(FastJsonUtil.toJson(enterprisePay));
+		return alipayClient.execute(request);
+	}
+
+	/**
+	 * 按支付宝转账单据号查询转账订单接口
+	 * 
+	 * @param orderId
+	 *            支付宝转账单据号
+	 * @return
+	 * @throws AlipayApiException
+	 */
+	public AlipayFundTransOrderQueryResponse searchEnterprisePayByOrderId(String orderId) throws AlipayApiException {
+		Map<String, String> param = new HashMap<>(1);
+		param.put("order_id", orderId);
+		AlipayFundTransOrderQueryRequest request = new AlipayFundTransOrderQueryRequest();
+		request.setBizContent(FastJsonUtil.toJson(param));
+		return alipayClient.execute(request);
+	}
+
+	/**
+	 * 按商户转账唯一订单号查询转账订单接口
+	 * 
+	 * @param outBizNo
+	 *            商户转账唯一订单号
+	 * @return
+	 * @throws AlipayApiException
+	 */
+	public AlipayFundTransOrderQueryResponse searchEnterprisePayByOutBizNo(String outBizNo) throws AlipayApiException {
+		Map<String, String> param = new HashMap<>(1);
+		param.put("out_biz_no", outBizNo);
+		AlipayFundTransOrderQueryRequest request = new AlipayFundTransOrderQueryRequest();
+		request.setBizContent(FastJsonUtil.toJson(param));
 		return alipayClient.execute(request);
 	}
 }

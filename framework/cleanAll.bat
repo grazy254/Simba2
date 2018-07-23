@@ -1,6 +1,9 @@
 cd simba-auto-deploy
 call mvn clean -U 
 cd ../
+cd simba-alipay-enterprise-bill
+call mvn clean -U 
+cd ../
 cd simba-okhttp
 call mvn clean -U 
 cd ../

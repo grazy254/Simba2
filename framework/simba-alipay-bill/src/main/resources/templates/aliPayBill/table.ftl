@@ -4,11 +4,11 @@
 		<!-- 
 		<td>${aliPayBill.appid}</td>
 		-->
-		<td>${aliPayBill.buyerLogonId}</td>
-		<td>${aliPayBill.payTime}</td>
-		<td>${aliPayBill.refundTime}</td>
-		<td>${aliPayBill.buyerPayAmount}</td>
-		<td>${aliPayBill.body}</td>
+		<td>${aliPayBill.buyerLogonId!}</td>
+		<td>${aliPayBill.payTime!}</td>
+		<td>${aliPayBill.refundTime!}</td>
+		<td>${aliPayBill.buyerPayAmount!}</td>
+		<td>${aliPayBill.body!}</td>
 		<td>${aliPayBill.totalAmount}</td>
 		<td>${aliPayBill.subject}</td>
 		<td>
@@ -26,17 +26,17 @@
 				退款成功
 			</#if>
 		</td>
-		<td>${aliPayBill.outTradeNo}</td>
-		<td>${aliPayBill.tradeNo}</td>
-		<td>${aliPayBill.productCode}</td>
+		<td>${aliPayBill.outTradeNo!}</td>
+		<td>${aliPayBill.tradeNo!}</td>
+		<td>${aliPayBill.productCode!}</td>
 		<!--
-		<td>${aliPayBill.goodType}</td>
-		<td>${aliPayBill.storeId}</td>
+		<td>${aliPayBill.goodType!}</td>
+		<td>${aliPayBill.storeId!}</td>
 		-->
 		<!--
-		<td>${aliPayBill.sellId}</td>
+		<td>${aliPayBill.sellId!}</td>
 		-->
-		<td>${aliPayBill.timeoutExpress}</td>
+		<td>${aliPayBill.timeoutExpress!}</td>
 		<td>${aliPayBill.createTime?string("yyyy-MM-dd HH:mm:ss")}</td>
 		<td>
 			<#if aliPayBill.status=='WAIT_BUYER_PAY'>

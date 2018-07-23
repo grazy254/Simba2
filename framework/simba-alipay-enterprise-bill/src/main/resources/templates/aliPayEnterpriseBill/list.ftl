@@ -30,7 +30,6 @@
 										<!-- Check all button -->
 										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="AliPayEnterpriseBill.toAdd();"><i class="fa fa-plus"></i>
                 新增</button>
-										<button type="button" class="btn btn-default btn-sm" onclick="AliPayEnterpriseBill.batchDelete();"><i class="fa fa-remove"></i>删除</button>
 										<div class="pull-right">
 
 										</div>

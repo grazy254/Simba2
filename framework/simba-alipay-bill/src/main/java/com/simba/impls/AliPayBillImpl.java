@@ -69,6 +69,16 @@ public class AliPayBillImpl implements AliPayInterface {
 		bill.setCreateTime(new Date());
 		bill.setStatus(TradeStatus.PAY.getName());
 		bill.setStoreId(StringUtils.EMPTY);
+		bill.setBuyerId(StringUtils.EMPTY);
+		bill.setBuyerLogonId(StringUtils.EMPTY);
+		bill.setPayTime(StringUtils.EMPTY);
+		bill.setCloseTime(StringUtils.EMPTY);
+		bill.setRefundTime(StringUtils.EMPTY);
+		bill.setBuyerPayAmount(StringUtils.EMPTY);
+		bill.setSellerEmail(StringUtils.EMPTY);
+		bill.setReceiptAmount(StringUtils.EMPTY);
+		bill.setInvoiceAmount(StringUtils.EMPTY);
+		bill.setRefundFee(StringUtils.EMPTY);
 		aliPayBillService.add(bill);
 	}
 

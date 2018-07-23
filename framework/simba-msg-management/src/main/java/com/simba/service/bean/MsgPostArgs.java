@@ -1,4 +1,4 @@
-package com.simba.model.other;
+package com.simba.service.bean;
 
 /**
  * Created by linshuo on 2017/12/4.

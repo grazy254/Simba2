@@ -1,4 +1,4 @@
-package com.simba.service.DO;
+package com.simba.service.bean;
 
 import com.simba.mobile.message.model.MsgType;
 

@@ -1,14 +1,8 @@
 package com.simba.service;
 
-import com.simba.framework.util.json.JsonResult;
-import com.simba.mobile.message.model.MsgType;
 import com.simba.model.ShortMessage;
-import com.simba.model.enums.SendStatus;
-import com.simba.model.other.MsgPostArgs;
+import com.simba.service.bean.MsgPostArgs;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**

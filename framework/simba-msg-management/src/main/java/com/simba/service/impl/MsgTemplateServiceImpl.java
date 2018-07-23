@@ -19,7 +19,7 @@ import com.simba.mobile.message.model.MsgType;
 import com.simba.model.MsgTemplate;
 import com.simba.model.enums.AuditStatus;
 import com.simba.service.MsgTemplateService;
-import com.simba.service.DO.EntryPlatform;
+import com.simba.service.bean.EntryPlatform;
 
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;

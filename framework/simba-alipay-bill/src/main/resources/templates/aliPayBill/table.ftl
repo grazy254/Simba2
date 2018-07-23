@@ -33,7 +33,9 @@
 		<td>${aliPayBill.goodType}</td>
 		<td>${aliPayBill.storeId}</td>
 		-->
+		<!--
 		<td>${aliPayBill.sellId}</td>
+		-->
 		<td>${aliPayBill.timeoutExpress}</td>
 		<td>${aliPayBill.createTime?string("yyyy-MM-dd HH:mm:ss")}</td>
 		<td>

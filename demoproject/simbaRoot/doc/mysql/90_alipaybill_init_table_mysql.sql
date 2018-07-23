@@ -1,10 +1,12 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2018/7/23 星期一 9:18:10                        */
+/* Created on:     2018/7/23 星期一 15:34:06                       */
 /*==============================================================*/
 
 
 drop table if exists aliPayBill;
+
+drop table if exists aliPayEnterpriseBill;
 
 /*==============================================================*/
 /* Table: aliPayBill                                            */
@@ -40,4 +42,29 @@ create table aliPayBill
 );
 
 alter table aliPayBill comment '阿里支付账单';
+
+/*==============================================================*/
+/* Table: aliPayEnterpriseBill                                  */
+/*==============================================================*/
+create table aliPayEnterpriseBill
+(
+   id                   bigint not null auto_increment,
+   outBizNo             varchar(32) comment '商户订单号',
+   payType              varchar(32) comment '账户类型',
+   account              varchar(128) comment '收款方账户',
+   amount               varchar(16) comment '转账金额',
+   payerName            varchar(32) comment '付款方姓名',
+   peyeeName            varchar(16) comment '收款方真实姓名',
+   remark               varchar(256) comment '备注',
+   orderId              varchar(64) comment '支付宝转账单据号',
+   payDate              varchar(32) comment '支付时间',
+   createTime           datetime comment '时间',
+   createUser           varchar(32) comment '创建者',
+   status               varchar(32) comment '状态',
+   reason               varchar(256) comment '理由',
+   orderFee             varchar(16) comment '预计收费金额',
+   primary key (id)
+);
+
+alter table aliPayEnterpriseBill comment '支付宝企业支付账单';
 

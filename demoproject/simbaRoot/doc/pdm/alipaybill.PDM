@@ -12,7 +12,7 @@
 <a:Code>PHYSICAL_DATA_MODEL_1</a:Code>
 <a:CreationDate>1527145435</a:CreationDate>
 <a:Creator>caozhejun</a:Creator>
-<a:ModificationDate>1527207100</a:ModificationDate>
+<a:ModificationDate>1532308690</a:ModificationDate>
 <a:Modifier>caozhejun</a:Modifier>
 <a:PackageOptionsText>[FolderOptions]
 
@@ -86,7 +86,7 @@ GenScriptName6=90_realtime_init_table_mysql.sql
 GenScriptName7=90_wx_init_table_mysql.sql
 GenScriptName8=
 GenScriptName9=
-GenPathName=F:\gitcode\simba\simbaRoot\doc\mysql\
+GenPathName=F:\gitcode\simba\demoproject\simbaRoot\doc\mysql\
 GenSingleFile=Yes
 GenODBC=No
 GenCheckModel=Yes

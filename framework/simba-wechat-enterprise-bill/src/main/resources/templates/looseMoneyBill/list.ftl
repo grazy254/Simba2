@@ -28,6 +28,15 @@
 								<!-- /.box-header -->
 								<div class="box-body no-padding">
 									<div class="mailbox-controls">
+										<!-- Check all button -->
+										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="LooseMoneyBill.toAdd();"><i class="fa fa-plus"></i>
+                微信转账到用户零钱</button>
+										<div class="pull-right">
+
+										</div>
+									</div>
+									
+									<div class="mailbox-controls">
 										<label for="partnerTradeNo">商户订单号:</label>
 										<input type="text" id="partnerTradeNo" name="partnerTradeNo" placeholder="请输入商户订单号">
 										<label for="openid">openid:</label>
@@ -50,8 +59,7 @@
                 						查询</button>
 										<!-- Check all button -->
 										<div class="pull-right">
-											<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="LooseMoneyBill.toAdd();"><i class="fa fa-plus"></i>
-                微信转账到用户零钱</button>
+											
 										</div>
 									</div>
 									<!-- /.pull-right -->

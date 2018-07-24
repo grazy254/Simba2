@@ -29,6 +29,15 @@
 								<div class="box-body no-padding">
 									<div class="mailbox-controls">
 										<!-- Check all button -->
+										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="CardMoneyBill.toAdd();"><i class="fa fa-plus"></i>
+                微信转账到银行卡</button>
+										<div class="pull-right">
+
+										</div>
+									</div>
+									
+									<div class="mailbox-controls">
+										<!-- Check all button -->
 										<label for="partnerTradeNo">商户订单号:</label>
 										<input type="text" id="partnerTradeNo" name="partnerTradeNo" placeholder="请输入商户订单号">
 										<label for="bankNo">收款方银行卡号:</label>
@@ -50,8 +59,7 @@
 										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="CardMoneyBill.search();"><i class="fa fa-search"></i>
                 						查询</button>
 										<div class="pull-right">
-											<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="CardMoneyBill.toAdd();"><i class="fa fa-plus"></i>
-                微信转账到银行卡</button>
+											
 										</div>
 									</div>
 									<!-- /.pull-right -->

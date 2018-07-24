@@ -6,11 +6,11 @@
 		<td>${looseMoneyBill.amount}</td>
 		<td>${looseMoneyBill.description!}</td>
 		<td>
-			<#if looseMoneyBill.status == "success">
+			<#if looseMoneyBill.status == "SUCCESS">
 				转账成功
-			<#elseif looseMoneyBill.status == "failed">
+			<#elseif looseMoneyBill.status == "FAILED">
 				转账失败
-			<#elseif looseMoneyBill.status == "processing">
+			<#elseif looseMoneyBill.status == "PROCESSING">
 				处理中
 			</#if>
 		</td>

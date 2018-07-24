@@ -7,12 +7,14 @@
 		<td>${cardMoneyBill.amount}</td>
 		<td>${cardMoneyBill.description!}</td>
 		<td>
-			<#if cardMoneyBill.status == "success">
+			<#if cardMoneyBill.status == "SUCCESS">
 				转账成功
-			<#elseif cardMoneyBill.status == "failed">
+			<#elseif cardMoneyBill.status == "FAILED">
 				转账失败
-			<#elseif cardMoneyBill.status == "processing">
+			<#elseif cardMoneyBill.status == "PROCESSING">
 				处理中
+			<#elseif cardMoneyBill.status == "BANK_FAIL">
+				银行退票
 			</#if>
 		</td>
 		<td>${cardMoneyBill.errMsg!}</td>

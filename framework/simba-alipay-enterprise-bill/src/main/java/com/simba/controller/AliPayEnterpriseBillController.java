@@ -9,11 +9,13 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alipay.api.AlipayApiException;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.AliPayEnterpriseBill;
-import com.simba.service.AliPayEnterpriseBillService;
 import com.simba.model.form.AliPayEnterpriseBillSearchForm;
+import com.simba.service.AliPayEnterpriseBillService;
+
 /**
  * 支付宝企业支付账单控制器
  * 
@@ -31,35 +33,36 @@ public class AliPayEnterpriseBillController {
 	public String list() {
 		return "aliPayEnterpriseBill/list";
 	}
-	
+
 	@RequestMapping("/getList")
-	public String getList(Pager pager,ModelMap model){
+	public String getList(Pager pager, ModelMap model) {
 		List<AliPayEnterpriseBill> list = aliPayEnterpriseBillService.page(pager);
 		model.put("list", list);
 		return "aliPayEnterpriseBill/table";
 	}
-	
+
 	@RequestMapping("/doSearch")
-	public String getList(Pager pager, AliPayEnterpriseBillSearchForm aliPayEnterpriseBillSearchForm, ModelMap model){
+	public String getList(Pager pager, AliPayEnterpriseBillSearchForm aliPayEnterpriseBillSearchForm, ModelMap model) {
 		List<AliPayEnterpriseBill> list = aliPayEnterpriseBillService.page(pager, aliPayEnterpriseBillSearchForm);
 		model.put("list", list);
 		return "aliPayEnterpriseBill/table";
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/count")
 	public JsonResult count(AliPayEnterpriseBillSearchForm aliPayEnterpriseBillSearchForm) {
 		Long count = aliPayEnterpriseBillService.count(aliPayEnterpriseBillSearchForm);
 		return new JsonResult(count, "", 200);
 	}
-	
+
 	@RequestMapping("/toAdd")
 	public String toAdd() {
 		return "aliPayEnterpriseBill/add";
 	}
 
 	@RequestMapping("/add")
-	public String add(AliPayEnterpriseBill aliPayEnterpriseBill) {
+	public String add(AliPayEnterpriseBill aliPayEnterpriseBill, String sessAccount) throws AlipayApiException {
+		aliPayEnterpriseBill.setCreateUser(sessAccount);
 		aliPayEnterpriseBillService.add(aliPayEnterpriseBill);
 		return "redirect:/aliPayEnterpriseBill/list";
 	}
@@ -90,7 +93,5 @@ public class AliPayEnterpriseBillController {
 		aliPayEnterpriseBillService.batchDelete(Arrays.asList(id));
 		return new JsonResult();
 	}
-
-	
 
 }

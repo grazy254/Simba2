@@ -1,46 +1,52 @@
-package  com.simba.service;
+package com.simba.service;
 
 import java.util.List;
 
+import com.alipay.api.AlipayApiException;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.AliPayEnterpriseBill;
 import com.simba.model.form.AliPayEnterpriseBillSearchForm;
+
 /**
- *支付宝企业支付账单 Service
+ * 支付宝企业支付账单 Service
  * 
  * @author caozj
  * 
  */
 public interface AliPayEnterpriseBillService {
 
-	void add(AliPayEnterpriseBill aliPayEnterpriseBill);
+	List<AliPayEnterpriseBill> listAllUnfinish();
+
+	void add(AliPayEnterpriseBill aliPayEnterpriseBill) throws AlipayApiException;
 
 	void update(AliPayEnterpriseBill aliPayEnterpriseBill);
 
 	void delete(Long id);
 
 	List<AliPayEnterpriseBill> listAll();
-		
+
 	Long count();
-	
+
 	Long count(AliPayEnterpriseBillSearchForm aliPayEnterpriseBillSearchForm);
+
 	Long countBy(String field, Object value);
-	
+
 	Long countByAnd(String field1, Object value1, String field2, Object value2);
-	
+
 	Long countByOr(String field1, Object value1, String field2, Object value2);
-	
+
 	void deleteBy(String field, Object value);
-	
+
 	void deleteByAnd(String field1, Object value1, String field2, Object value2);
-	
+
 	void deleteByOr(String field1, Object value1, String field2, Object value2);
-	
+
 	List<AliPayEnterpriseBill> page(Pager page);
-	
+
 	List<AliPayEnterpriseBill> page(Pager page, AliPayEnterpriseBillSearchForm aliPayEnterpriseBillSearchForm);
+
 	AliPayEnterpriseBill get(Long id);
-	
+
 	void batchDelete(List<Long> idList);
 
 	AliPayEnterpriseBill getBy(String field, Object value);
@@ -60,5 +66,7 @@ public interface AliPayEnterpriseBillService {
 	List<AliPayEnterpriseBill> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
 
 	List<AliPayEnterpriseBill> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
+
+	void checkUnfinishOrder();
 
 }

@@ -1,8 +1,10 @@
 package com.simba.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -226,5 +228,18 @@ public class AliPayEnterpriseBillDaoImpl implements AliPayEnterpriseBillDao {
 			param.set(aliPayEnterpriseBillSearchForm.getEndCreateTime());
 		}
 		return sql;
+	}
+
+	@Override
+	public List<AliPayEnterpriseBill> listAllUnfinish() {
+		String sql = "select * from " + table + " where status in (?,?,?) and createTime > ? and createTime < ?";
+		StatementParameter params = new StatementParameter();
+		params.setString("INIT");
+		params.setString("DEALING");
+		params.setString("UNKNOWN");
+		Date now = new Date();
+		params.setDate(DateUtils.addDays(now, -3));
+		params.setDate(now);
+		return jdbc.queryForList(sql, AliPayEnterpriseBill.class, params);
 	}
 }

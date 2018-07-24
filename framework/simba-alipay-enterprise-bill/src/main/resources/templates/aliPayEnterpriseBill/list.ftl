@@ -29,7 +29,7 @@
 									<div class="mailbox-controls">
 										<!-- Check all button -->
 										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="AliPayEnterpriseBill.toAdd();"><i class="fa fa-plus"></i>
-                新增</button>
+                转账用户支付宝</button>
 										<div class="pull-right">
 
 										</div>

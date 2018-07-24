@@ -2,7 +2,7 @@ var AliPayEnterpriseBill = {
 	"toSearch": function() {
 		AliPayEnterpriseBill.initAliPayEnterpriseBillList(0, Page.size, "doSearch");
 	},
-	
+
 	"toAdd": function() {
 		window.self.location.href = contextPath + "/aliPayEnterpriseBill/toAdd";
 	},
@@ -48,7 +48,7 @@ var AliPayEnterpriseBill = {
 		data["createUser"] = $("#createUser").val();
 		data["startCreateTime"] = $("#startCreateTime").val();
 		data["endCreateTime"] = $("#endCreateTime").val();
-		$.extend(data2,data);
+		$.extend(data2, data);
 		data["pageStart"] = start;
 		data["pageSize"] = pageSize;
 		$.ajax({
@@ -104,6 +104,16 @@ var AliPayEnterpriseBill = {
 	},
 
 	"checkForm": function() {
+		var amount = $("#amount").val();
+		if(!amount) {
+			parent.showInfo("转账金额不能为空");
+			return false;
+		}
+		var account = $("#account").val();
+		if(!account) {
+			parent.showInfo("收款方账户不能为空");
+			return false;
+		}
 		return true;
 	},
 

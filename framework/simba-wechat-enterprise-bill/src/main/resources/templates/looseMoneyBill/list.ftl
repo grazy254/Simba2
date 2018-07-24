@@ -59,11 +59,10 @@
 									<table class="table table-hover table-striped table-bordered" id="table">
 										<thead>
 											<tr>
-												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
 												<th>商户订单号</th>
 												<th>用户openid</th>
 												<th>收款用户姓名</th>
-												<th>金额</th>
+												<th>金额(分)</th>
 												<th>企业付款描述信息</th>
 												<th>状态</th>
 												<th>错误信息</th>
@@ -71,7 +70,6 @@
 												<th>微信支付成功时间</th>
 												<th>创建时间</th>
 												<th>付款者</th>
-												<th>操作</th>
 											</tr>
 										</thead>
 										<tbody>

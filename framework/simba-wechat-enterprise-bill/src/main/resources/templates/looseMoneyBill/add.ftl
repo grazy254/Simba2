@@ -49,7 +49,7 @@
 											<input type="text" class="form-control" id="reUserName" name="reUserName" placeholder="请输入收款用户姓名">
 										</div>
 										<div class="form-group">
-											<label for="amount">金额</label>
+											<label for="amount">金额(分)</label>
 											<input type="text" class="form-control" id="amount" name="amount" placeholder="请输入金额">
 										</div>
 										<div class="form-group">

@@ -52,8 +52,8 @@
 										<label for="payType">账户类型:</label>
 										<select id="payType" name="payType">
 											<option value="">所有</option>
-											<option value="ALIPAY_USERID">支付宝唯一用户号</option>
 											<option value="ALIPAY_LOGONID">支付宝登录号</option>
+											<option value="ALIPAY_USERID">支付宝唯一用户号</option>
 										</select>
 										&nbsp;&nbsp;
 										<label for="account">收款方账户:</label>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -49,7 +50,8 @@
 										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="CardMoneyBill.search();"><i class="fa fa-search"></i>
                 						查询</button>
 										<div class="pull-right">
-
+											<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="CardMoneyBill.toAdd();"><i class="fa fa-plus"></i>
+                微信转账到银行卡</button>
 										</div>
 									</div>
 									<!-- /.pull-right -->

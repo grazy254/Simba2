@@ -92,6 +92,10 @@ public class SearchLooseMoneyRes {
 	 */
 	private String desc;
 
+	private String payment_time;
+
+	private String appid;
+
 	public String getReturn_code() {
 		return return_code;
 	}
@@ -204,6 +208,22 @@ public class SearchLooseMoneyRes {
 		this.desc = desc;
 	}
 
+	public String getPayment_time() {
+		return payment_time;
+	}
+
+	public void setPayment_time(String payment_time) {
+		this.payment_time = payment_time;
+	}
+
+	public String getAppid() {
+		return appid;
+	}
+
+	public void setAppid(String appid) {
+		this.appid = appid;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -235,6 +255,10 @@ public class SearchLooseMoneyRes {
 		builder.append(transfer_time);
 		builder.append(", desc=");
 		builder.append(desc);
+		builder.append(", payment_time=");
+		builder.append(payment_time);
+		builder.append(", appid=");
+		builder.append(appid);
 		builder.append("]");
 		return builder.toString();
 	}

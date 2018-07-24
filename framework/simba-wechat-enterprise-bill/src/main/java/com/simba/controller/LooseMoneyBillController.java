@@ -3,8 +3,6 @@ package com.simba.controller;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -31,11 +29,9 @@ public class LooseMoneyBillController {
 	@Autowired
 	private LooseMoneyBillService looseMoneyBillService;
 
-	private  static final Log logger= LogFactory.getLog(LooseMoneyBillController.class);
 	@RequestMapping("/list")
 	public String list(ModelMap model) {
-		model.put("billTypeList",LooseMoneyBillStatus.maps);
-		logger.info("-------billType------"+model);
+		model.put("billTypeList", LooseMoneyBillStatus.maps);
 		return "looseMoneyBill/list";
 	}
 
@@ -63,7 +59,7 @@ public class LooseMoneyBillController {
 		looseMoneyBillService.add(looseMoneyBill);
 		return "redirect:/looseMoneyBill/list";
 	}
- 
+
 	@RequestMapping("/toUpdate")
 	public String toUpdate(Long id, ModelMap model) {
 		LooseMoneyBill looseMoneyBill = looseMoneyBillService.get(id);

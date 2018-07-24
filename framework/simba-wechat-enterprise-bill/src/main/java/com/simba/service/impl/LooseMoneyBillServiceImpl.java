@@ -23,7 +23,9 @@ import com.simba.controller.form.LooseMoneyBillSearchForm;
 import com.simba.dao.LooseMoneyBillDao;
 import com.simba.enterprise.pay.model.searchloosemoney.SearchLooseMoneyRes;
 import com.simba.enterprise.pay.util.send.WxEnterprisePayUtil;
+import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.framework.util.jdbc.Pager;
+import com.simba.interfaces.WechatEnterprisePayInterface;
 import com.simba.model.LooseMoneyBill;
 import com.simba.service.LooseMoneyBillService;
 
@@ -36,20 +38,20 @@ import com.simba.service.LooseMoneyBillService;
 @Service
 @Transactional
 public class LooseMoneyBillServiceImpl implements LooseMoneyBillService {
-	
+
 	private static final Log logger = LogFactory.getLog(LooseMoneyBillServiceImpl.class);
-	
+
 	private WxEnterprisePayUtil wxEnterprisePayUtil;
 
 	@Autowired
 	private LooseMoneyBillDao looseMoneyBillDao;
-	
+
 	@Resource
 	private Redis redisUtil;
-	
+
 	@Resource
 	private TaskExecutor taskExecutor;
-	
+
 	@PostConstruct
 	private void init() {
 		wxEnterprisePayUtil = WxEnterprisePayUtil.getInstance();
@@ -58,6 +60,12 @@ public class LooseMoneyBillServiceImpl implements LooseMoneyBillService {
 	@Override
 	public void add(LooseMoneyBill looseMoneyBill) {
 		looseMoneyBillDao.add(looseMoneyBill);
+		List<WechatEnterprisePayInterface> impls = ApplicationContextUtil.getBeansOfType(WechatEnterprisePayInterface.class);
+		if (impls != null && impls.size() > 0) {
+			impls.forEach((WechatEnterprisePayInterface impl) -> {
+				impl.add(looseMoneyBill);
+			});
+		}
 	}
 
 	@Override
@@ -103,6 +111,12 @@ public class LooseMoneyBillServiceImpl implements LooseMoneyBillService {
 	@Override
 	public void update(LooseMoneyBill looseMoneyBill) {
 		looseMoneyBillDao.update(looseMoneyBill);
+		List<WechatEnterprisePayInterface> impls = ApplicationContextUtil.getBeansOfType(WechatEnterprisePayInterface.class);
+		if (impls != null && impls.size() > 0) {
+			impls.forEach((WechatEnterprisePayInterface impl) -> {
+				impl.update(looseMoneyBill);
+			});
+		}
 	}
 
 	@Override
@@ -201,7 +215,7 @@ public class LooseMoneyBillServiceImpl implements LooseMoneyBillService {
 	@Override
 	public void checkUnfinishOrder() throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		List<LooseMoneyBill> list = this.listAllUnfinish();
-		for(LooseMoneyBill bill : list) {
+		for (LooseMoneyBill bill : list) {
 			if (redisUtil.tryLock("wechatenterprisepayloose_" + bill.getId(), 60)) {
 				dealUnfinishOrder(bill);
 			}

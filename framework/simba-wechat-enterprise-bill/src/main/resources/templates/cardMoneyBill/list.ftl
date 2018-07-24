@@ -58,7 +58,6 @@
 									<table class="table table-hover table-striped table-bordered" id="table">
 										<thead>
 											<tr>
-												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
 												<th>商户企业付款单号</th>
 												<th>收款方银行卡号</th>
 												<th>收款方用户名</th>
@@ -71,7 +70,6 @@
 												<th>手续费金额</th>
 												<th>时间</th>
 												<th>付款者</th>
-												<th>操作</th>
 											</tr>
 										</thead>
 										<tbody>

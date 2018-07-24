@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -34,12 +35,11 @@
 										<label for="reUserName">收款用户姓名:</label>
 										<input type="text" id="reUserName" name="reUserName" placeholder="请输入收款用户姓名">
 										<label for="status">状态:</label>
-										<select id ="status" name="status">
+										<select id="status" name="status">
 											<#list billTypeList?keys as key>
 												<option value="${key}">${billTypeList["${key}"]}</option>
 											</#list>
 										</select>
-										
 										<label for="paymentNo">微信订单号:</label>
 										<input type="text" id="paymentNo" name="paymentNo" placeholder="请输入微信订单号">
 										<label for="startTime">开始时间:</label>
@@ -50,7 +50,8 @@
                 						查询</button>
 										<!-- Check all button -->
 										<div class="pull-right">
-
+											<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="LooseMoneyBill.toAdd();"><i class="fa fa-plus"></i>
+                微信转账到用户零钱</button>
 										</div>
 									</div>
 									<!-- /.pull-right -->

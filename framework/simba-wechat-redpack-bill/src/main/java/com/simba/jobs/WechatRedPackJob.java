@@ -1,4 +1,4 @@
-package com.simba.controller.jobs;
+package com.simba.jobs;
 
 import java.io.IOException;
 
@@ -13,27 +13,23 @@ import org.springframework.stereotype.Component;
 import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 
-import com.simba.service.CardMoneyBillService;
-import com.simba.service.LooseMoneyBillService;
+import com.simba.service.RedPackBillService;
 
 /**
- * 微信企业支付到卡定时任务
+ * 微信企业付款到红包定时任务
  * 
  * @author caozhejun
  *
  */
 @Component
-public class WechatEnterprisePayJob {
+public class WechatRedPackJob {
+
+	@Autowired
+	private RedPackBillService redPackBillService;
 
 	@Value("${appID}")
 	private String appID;
-	
-	@Autowired
-	private CardMoneyBillService cardMoneyBillService;
-	
-	@Autowired
-	private LooseMoneyBillService looseMoneyBillService;
-	
+
 	/**
 	 * 查询未完成的订单，更新其状态
 	 * 
@@ -46,8 +42,7 @@ public class WechatEnterprisePayJob {
 	@Scheduled(cron = "0 0/2 * * * *")
 	public void checkUnfinishOrder() throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		if (StringUtils.isNotEmpty(appID)) {
-			cardMoneyBillService.checkUnfinishOrder();
-			looseMoneyBillService.checkUnfinishOrder();
+			redPackBillService.checkUnfinishOrder();
 		}
 	}
 }

@@ -96,6 +96,22 @@ public class SendMsgServiceImpl implements SendMsgService {
     }
 
     /**
+     * 只单纯的发送, 不做任何记录
+     *
+     * @param mobile
+     * @param selfTemplateId
+     * @param params
+     */
+    @Override
+    public void sendPure(String mobile, String selfTemplateId, Map<String, String> params) {
+        EntryPlatform platform = templateService.getOnePlatformTemplateId(selfTemplateId);
+        if (platform == null) throw new BussException("模板Id有误");
+        String platformTemplateId = platform.getTemplateId();
+        MsgType platformType = platform.getPlatformType();
+        sendMsgUtil.send(mobile, platformTemplateId, params, platformType);
+    }
+
+    /**
      * 校验+发送+记录
      *
      * @param msgPostArgs

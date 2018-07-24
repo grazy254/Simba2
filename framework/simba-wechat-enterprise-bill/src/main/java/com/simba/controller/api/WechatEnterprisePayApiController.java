@@ -91,7 +91,7 @@ public class WechatEnterprisePayApiController {
 		bill.setAmount(looseMoneyTransferForm.getAmount());
 		bill.setDescription(looseMoneyTransferForm.getDesc());
 		bill.setClientIp(looseMoneyReq.getSpbill_create_ip());
-		bill.setErrMsg(res.getErr_code_des());
+		bill.setErrMsg(StringUtils.defaultString(res.getErr_code_des()));
 		bill.setPaymentNo(res.getPayment_no());
 		bill.setPaymentTime(res.getPayment_time());
 		bill.setCreateTime(new Date());
@@ -150,8 +150,8 @@ public class WechatEnterprisePayApiController {
 		} else {
 			bill.setStatus(CardMoneyBillStatus.FAILED.getStatus());
 		}
-		bill.setErrMsg(res.getErr_code_des());
-		bill.setPaymentNo(res.getPayment_no());
+		bill.setErrMsg(StringUtils.defaultString(res.getErr_code_des()));
+		bill.setPaymentNo(StringUtils.defaultString(res.getPayment_no()));
 		bill.setCmmsAmt(res.getCmms_amt());
 		bill.setCreateTime(new Date());
 		bill.setCreateUser(sessAccount);

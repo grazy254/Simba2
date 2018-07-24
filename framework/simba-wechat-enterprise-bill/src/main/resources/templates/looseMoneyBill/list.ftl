@@ -23,7 +23,7 @@
 						<div class="col-md-12">
 							<div class="box box-primary">
 								<div class="box-header with-border">
-									<h3 class="box-title">零钱账单管理</h3>
+									<h3 class="box-title">微信转账到用户零钱账单管理</h3>
 								</div>
 								<!-- /.box-header -->
 								<div class="box-body no-padding">

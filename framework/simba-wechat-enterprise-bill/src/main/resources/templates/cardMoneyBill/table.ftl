@@ -20,11 +20,5 @@
 		<td>${cardMoneyBill.cmmsAmt!}</td>
 		<td>${cardMoneyBill.createTime?string("yyyy-MM-dd HH:mm:ss")}</td>
 		<td>${cardMoneyBill.createUser!}</td>
-		<td>
-			<!--
-			<button type="button" class="btn btn-default btn-sm" onclick="CardMoneyBill.toUpdate(${cardMoneyBill.id});"><i class="fa fa-pencil-square-o"></i>修改</button>
-			<button type="button" class="btn btn-default btn-sm" onclick="CardMoneyBill.deleteCardMoneyBill(${cardMoneyBill.id});"><i class="fa fa-remove"></i>删除</button>
-			-->
-		</td>
 	</tr>
 </#list>

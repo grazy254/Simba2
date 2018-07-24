@@ -37,7 +37,7 @@ import com.simba.service.LooseMoneyBillService;
  *
  */
 @RestController
-@RequestMapping("/wechatEnterprisePayApi")
+@RequestMapping("/api/wechatEnterprisePay")
 public class WechatEnterprisePayApiController {
 
 	private WxEnterprisePayUtil wxEnterprisePayUtil;

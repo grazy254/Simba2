@@ -37,7 +37,7 @@ import com.simba.service.RedPackBillService;
  *
  */
 @RestController
-@RequestMapping("/wechatRedPackApi")
+@RequestMapping("/api/wechatRedPack")
 public class WechatRedPackApiController {
 
 	private WxRedPackUtil wxRedPackUtil;

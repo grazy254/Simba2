@@ -1,11 +1,13 @@
 package com.simba.alipay.util;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +19,8 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayDataDataserviceBillDownloadurlQueryRequest;
+import com.alipay.api.request.AlipayFundTransOrderQueryRequest;
+import com.alipay.api.request.AlipayFundTransToaccountTransferRequest;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradeCancelRequest;
 import com.alipay.api.request.AlipayTradeCloseRequest;
@@ -28,6 +32,8 @@ import com.alipay.api.request.AlipayTradePrecreateRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayDataDataserviceBillDownloadurlQueryResponse;
+import com.alipay.api.response.AlipayFundTransOrderQueryResponse;
+import com.alipay.api.response.AlipayFundTransToaccountTransferResponse;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.alipay.api.response.AlipayTradeCancelResponse;
 import com.alipay.api.response.AlipayTradeCloseResponse;
@@ -40,6 +46,7 @@ import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.simba.alipay.cosntantData.AliPayConstantData;
 import com.simba.alipay.model.CreateOrder;
+import com.simba.alipay.model.EnterprisePay;
 import com.simba.alipay.model.PayOrder;
 import com.simba.alipay.model.Precreate;
 import com.simba.alipay.model.RoyaltyParameter;
@@ -324,5 +331,54 @@ public class AliPayUtil {
 		if (!flag) {
 			throw new BussException("支付宝支付回调url签名错误，可能有人攻击");
 		}
+	}
+
+	/**
+	 * 单笔转账到支付宝账户接口
+	 * 
+	 * @param enterprisePay
+	 * @return
+	 * @throws AlipayApiException
+	 */
+	public AlipayFundTransToaccountTransferResponse enterprisePay(EnterprisePay enterprisePay) throws AlipayApiException {
+		String amount = enterprisePay.getAmount();
+		double money = NumberUtils.toDouble(amount) / 100;
+		amount = new java.text.DecimalFormat("0.00").format(money);
+		enterprisePay.setAmount(amount);
+		AlipayFundTransToaccountTransferRequest request = new AlipayFundTransToaccountTransferRequest();
+		request.setBizContent(FastJsonUtil.toJson(enterprisePay));
+		return alipayClient.execute(request);
+	}
+
+	/**
+	 * 按支付宝转账单据号查询转账订单接口
+	 * 
+	 * @param orderId
+	 *            支付宝转账单据号
+	 * @return
+	 * @throws AlipayApiException
+	 */
+	public AlipayFundTransOrderQueryResponse searchEnterprisePayByOrderId(String orderId) throws AlipayApiException {
+		Map<String, String> param = new HashMap<>(1);
+		param.put("order_id", orderId);
+		AlipayFundTransOrderQueryRequest request = new AlipayFundTransOrderQueryRequest();
+		request.setBizContent(FastJsonUtil.toJson(param));
+		return alipayClient.execute(request);
+	}
+
+	/**
+	 * 按商户转账唯一订单号查询转账订单接口
+	 * 
+	 * @param outBizNo
+	 *            商户转账唯一订单号
+	 * @return
+	 * @throws AlipayApiException
+	 */
+	public AlipayFundTransOrderQueryResponse searchEnterprisePayByOutBizNo(String outBizNo) throws AlipayApiException {
+		Map<String, String> param = new HashMap<>(1);
+		param.put("out_biz_no", outBizNo);
+		AlipayFundTransOrderQueryRequest request = new AlipayFundTransOrderQueryRequest();
+		request.setBizContent(FastJsonUtil.toJson(param));
+		return alipayClient.execute(request);
 	}
 }

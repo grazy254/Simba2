@@ -33,7 +33,7 @@
 										</div>
 										<div class="form-group">
 											<label for="bank_code">收款方开户行</label>
-											<select id="bank_code" name="bank_code">
+											<select id="bank_code" name="bank_code" class="form-control">
 												<#list banks as bank>
 													<option value="${bank.code}">${bank.getName()}</option>
 												</#list>

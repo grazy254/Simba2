@@ -23,9 +23,9 @@
 									<h3 class="box-title">微信转账到用户零钱</h3>
 								</div>
 									<div class="box-body">
-										<div class="form-group" class="form-group">
+										<div class="form-group">
 											<label for="check_name">强制检查实名</label>
-											<select id="check_name" name="check_name">
+											<select id="check_name" name="check_name" class="form-control">
 												<option value="FORCE_CHECK">强校验真实姓名</option>
 												<option value="NO_CHECK">不校验真实姓名</option>
 											</select>

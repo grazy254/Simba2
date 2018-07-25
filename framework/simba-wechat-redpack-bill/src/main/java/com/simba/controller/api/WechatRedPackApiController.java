@@ -18,6 +18,7 @@ import com.simba.controller.enums.RedPackType;
 import com.simba.controller.form.GroupRedPackForm;
 import com.simba.controller.form.NormalRedPackForm;
 import com.simba.controller.form.SearchRedPackForm;
+import com.simba.exception.BussException;
 import com.simba.framework.util.common.ServerUtil;
 import com.simba.framework.util.data.RandomUtil;
 import com.simba.framework.util.json.JsonResult;
@@ -65,8 +66,9 @@ public class WechatRedPackApiController {
 	 * @throws IOException
 	 */
 	@RequestMapping("/sendNormalRedPack")
-	public JsonResult sendNormalRedPack(NormalRedPackForm normalRedPackForm, HttpServletRequest request) throws ParseException, IOException {
-		normalRedPackForm.setMch_billno(RandomUtil.random32Chars());
+	public JsonResult sendNormalRedPack(NormalRedPackForm normalRedPackForm, HttpServletRequest request, String sessAccount) throws ParseException, IOException {
+		normalRedPackForm.setMch_billno(RandomUtil.random32Chars().substring(0, 28));
+		normalRedPackForm.setTotal_num(1);
 		NormalRedPackReq normalRedPackReq = new NormalRedPackReq();
 		normalRedPackReq.setAct_name(normalRedPackForm.getAct_name());
 		normalRedPackReq.setClient_ip(ServerUtil.getProxyIp(request));
@@ -96,12 +98,16 @@ public class WechatRedPackApiController {
 		bill.setRemark(normalRedPackReq.getRemark());
 		bill.setSceneId(normalRedPackReq.getScene_id());
 		bill.setRiskInfo(normalRedPackReq.getRisk_info());
-		bill.setConsumeMchId(normalRedPackReq.getConsume_mch_id());
-		bill.setStatus(RedPackBillStatus.SENDING.getName());
-		bill.setErrMsg(res.getErr_code_des());
-		bill.setSendListId(res.getSend_listid());
+		bill.setConsumeMchId(StringUtils.defaultString(normalRedPackReq.getConsume_mch_id()));
+		bill.setErrMsg(StringUtils.defaultString(res.getErr_code_des()));
+		bill.setSendListId(StringUtils.defaultString(res.getSend_listid()));
 		bill.setCreateTime(new Date());
-		bill.setCreateUser(StringUtils.EMPTY);
+		bill.setCreateUser(sessAccount);
+		if ("SUCCESS".equals(res.getReturn_code()) && "SUCCESS".equals(res.getResult_code())) {
+			bill.setStatus(RedPackBillStatus.SENDING.getStatus());
+		} else {
+			bill.setStatus(RedPackBillStatus.FAILED.getStatus());
+		}
 		redPackBillService.add(bill);
 		return new JsonResult(res);
 	}
@@ -115,8 +121,9 @@ public class WechatRedPackApiController {
 	 * @throws IOException
 	 */
 	@RequestMapping("/sendGroupRedPack")
-	public JsonResult sendGroupRedPack(GroupRedPackForm groupRedPackForm) throws ParseException, IOException {
-		groupRedPackForm.setMch_billno(RandomUtil.random32Chars());
+	public JsonResult sendGroupRedPack(GroupRedPackForm groupRedPackForm, String sessAccount) throws ParseException, IOException {
+		check(groupRedPackForm);
+		groupRedPackForm.setMch_billno(RandomUtil.random32Chars().substring(0, 28));
 		GroupRedPackReq groupRedPackReq = new GroupRedPackReq();
 		groupRedPackReq.setAct_name(groupRedPackForm.getAct_name());
 		groupRedPackReq.setAmt_type(groupRedPackForm.getAmt_type());
@@ -147,13 +154,29 @@ public class WechatRedPackApiController {
 		bill.setSceneId(groupRedPackForm.getScene_id());
 		bill.setRiskInfo(groupRedPackForm.getRisk_info());
 		bill.setConsumeMchId(groupRedPackForm.getConsume_mch_id());
-		bill.setStatus(RedPackBillStatus.SENDING.getName());
-		bill.setErrMsg(res.getErr_code_des());
-		bill.setSendListId(res.getSend_listid());
+		bill.setErrMsg(StringUtils.defaultString(res.getErr_code_des()));
+		bill.setSendListId(StringUtils.defaultString(res.getSend_listid()));
 		bill.setCreateTime(new Date());
-		bill.setCreateUser(StringUtils.EMPTY);
+		bill.setCreateUser(sessAccount);
+		if ("SUCCESS".equals(res.getReturn_code()) && "SUCCESS".equals(res.getResult_code())) {
+			bill.setStatus(RedPackBillStatus.SENDING.getStatus());
+		} else {
+			bill.setStatus(RedPackBillStatus.FAILED.getStatus());
+		}
+
 		redPackBillService.add(bill);
 		return new JsonResult(res);
+	}
+
+	private void check(GroupRedPackForm groupRedPackForm) {
+		int num = groupRedPackForm.getTotal_num();
+		if (num > 20 || num < 3) {
+			throw new BussException("裂变红包发放总人数必须介于(包括)3到20之间");
+		}
+		int amount = groupRedPackForm.getTotal_amount();
+		if (num * 100 > amount || amount > num * 49900) {
+			throw new BussException("每个红包的平均金额必须在1.00元到499.00元之间");
+		}
 	}
 
 	/**

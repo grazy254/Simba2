@@ -1,5 +1,7 @@
 package com.simba.controller.form;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * 发放裂变红包请求对象
  */
@@ -95,7 +97,7 @@ public class GroupRedPackForm {
 	 * urlencode(posttime=xx& mobile =xx&deviceid=xx)
 	 * 
 	 */
-	private String risk_info;
+	private String risk_info= StringUtils.EMPTY;
 
 	/**
 	 * 资金授权商户号 -- 资金授权商户号
@@ -105,7 +107,7 @@ public class GroupRedPackForm {
 	 * 
 	 * 
 	 */
-	private String consume_mch_id;
+	private String consume_mch_id = StringUtils.EMPTY;
 
 	public String getMch_billno() {
 		return mch_billno;

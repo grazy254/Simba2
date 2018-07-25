@@ -21,7 +21,9 @@ import org.xml.sax.SAXException;
 import com.simba.cache.Redis;
 import com.simba.controller.form.RedPackBillSearchForm;
 import com.simba.dao.RedPackBillDao;
+import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.framework.util.jdbc.Pager;
+import com.simba.interfaces.WechatRedPackInterface;
 import com.simba.model.RedPackBill;
 import com.simba.redpack.model.search.SearchReq;
 import com.simba.redpack.model.search.SearchRes;
@@ -59,6 +61,12 @@ public class RedPackBillServiceImpl implements RedPackBillService {
 	@Override
 	public void add(RedPackBill redPackBill) {
 		redPackBillDao.add(redPackBill);
+		List<WechatRedPackInterface> impls = ApplicationContextUtil.getBeansOfType(WechatRedPackInterface.class);
+		if (impls != null && impls.size() > 0) {
+			impls.forEach((WechatRedPackInterface impl) -> {
+				impl.add(redPackBill);
+			});
+		}
 	}
 
 	@Override
@@ -104,6 +112,12 @@ public class RedPackBillServiceImpl implements RedPackBillService {
 	@Override
 	public void update(RedPackBill redPackBill) {
 		redPackBillDao.update(redPackBill);
+		List<WechatRedPackInterface> impls = ApplicationContextUtil.getBeansOfType(WechatRedPackInterface.class);
+		if (impls != null && impls.size() > 0) {
+			impls.forEach((WechatRedPackInterface impl) -> {
+				impl.update(redPackBill);
+			});
+		}
 	}
 
 	@Override

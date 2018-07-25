@@ -1,5 +1,6 @@
 package com.simba.enterprise.pay.util.send;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -23,8 +24,10 @@ import com.simba.enterprise.pay.util.common.WxEnterprisePayConstantData;
 import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.framework.util.code.RSAUtil;
 import com.simba.framework.util.common.BeanUtils;
+import com.simba.framework.util.common.SystemUtil;
 import com.simba.framework.util.common.XmlUtil;
 import com.simba.framework.util.data.RandomUtil;
+import com.simba.model.constant.ConstantData;
 import com.simba.util.common.SignUtil;
 import com.simba.util.send.CertRequestUrl;
 
@@ -182,7 +185,17 @@ public class WxEnterprisePayUtil {
 		logger.info("获取商户的RSA密钥返回结果:" + resp);
 		PublicKeyRes result = XmlUtil.toOject(resp, PublicKeyRes.class);
 		checkResult(result);
-		return result.getPub_key();
+		String pkcs1 = result.getPub_key();
+		File pkcs1File = new File(SystemUtil.getUserDir() + "/" + "wechatenterprisepayrsa.pem");
+		org.apache.commons.io.FileUtils.write(pkcs1File, pkcs1, ConstantData.DEFAULT_CHARSET);
+		if (SystemUtil.isWindowsOs()) {
+
+		} else {
+			// linux系统执行命令行转换 PKCS#1 转 PKCS#8
+			String command = "openssl rsa -RSAPublicKey_in -in " + pkcs1File.getAbsolutePath() + " -pubout";
+
+		}
+		return pkcs1;
 	}
 
 	/**

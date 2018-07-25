@@ -87,6 +87,16 @@ public class GroupRedPackRes {
 	 */
 	private String send_listid;
 
+	private String total_num;
+
+	public String getTotal_num() {
+		return total_num;
+	}
+
+	public void setTotal_num(String total_num) {
+		this.total_num = total_num;
+	}
+
 	public String getReturn_code() {
 		return return_code;
 	}
@@ -210,6 +220,8 @@ public class GroupRedPackRes {
 		builder.append(total_amount);
 		builder.append(", send_listid=");
 		builder.append(send_listid);
+		builder.append(", total_num=");
+		builder.append(total_num);
 		builder.append("]");
 		return builder.toString();
 	}

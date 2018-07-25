@@ -40,7 +40,7 @@
 											</select>
 										</div>
 										<div class="form-group">
-											<label for="amount">付款金额</label>
+											<label for="amount">付款金额(分)</label>
 											<input type="text" class="form-control" id="amount" name="amount" placeholder="请输入付款金额">
 										</div>
 										<div class="form-group">

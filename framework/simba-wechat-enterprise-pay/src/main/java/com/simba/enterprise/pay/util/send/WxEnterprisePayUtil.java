@@ -1,9 +1,10 @@
 package com.simba.enterprise.pay.util.send;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,10 +25,8 @@ import com.simba.enterprise.pay.util.common.WxEnterprisePayConstantData;
 import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.framework.util.code.RSAUtil;
 import com.simba.framework.util.common.BeanUtils;
-import com.simba.framework.util.common.SystemUtil;
 import com.simba.framework.util.common.XmlUtil;
 import com.simba.framework.util.data.RandomUtil;
-import com.simba.model.constant.ConstantData;
 import com.simba.util.common.SignUtil;
 import com.simba.util.send.CertRequestUrl;
 
@@ -44,6 +43,7 @@ public class WxEnterprisePayUtil {
 	private String appid = null;
 	private String mchId = null;
 	private String rsaKey = null;
+	private String rsaKeyFile = null;
 
 	private WxEnterprisePayUtil() {
 		try {
@@ -58,6 +58,7 @@ public class WxEnterprisePayUtil {
 		key = environmentUtil.get("wx.pay.key");
 		appid = environmentUtil.get("appID");
 		mchId = environmentUtil.get("wx.pay.mchid");
+		rsaKeyFile = environmentUtil.get("wx.enterprise.pay.rsa.key");
 		if (StringUtils.isEmpty(key) || StringUtils.isEmpty(appid) || StringUtils.isEmpty(mchId)) {
 			logger.warn("没有配置微信企业支付相关信息，不能使用微信企业支付");
 			return;
@@ -186,14 +187,14 @@ public class WxEnterprisePayUtil {
 		PublicKeyRes result = XmlUtil.toOject(resp, PublicKeyRes.class);
 		checkResult(result);
 		String pkcs1 = result.getPub_key();
-		File pkcs1File = new File(SystemUtil.getUserDir() + "/" + "wechatenterprisepayrsa.pem");
-		org.apache.commons.io.FileUtils.write(pkcs1File, pkcs1, ConstantData.DEFAULT_CHARSET);
-		if (SystemUtil.isWindowsOs()) {
-
-		} else {
-			// linux系统执行命令行转换 PKCS#1 转 PKCS#8
-			String command = "openssl rsa -RSAPublicKey_in -in " + pkcs1File.getAbsolutePath() + " -pubout";
-
+		logger.info("rsa key(pkcs#1):" + pkcs1);
+		if (StringUtils.isNotEmpty(rsaKeyFile)) {
+			logger.info("==============================配置了rsa密钥文件，所以读取其中到rsa密钥pkcs#8==========================");
+			ClassLoader classLoader = this.getClass().getClassLoader();
+			InputStream in = classLoader.getResourceAsStream(rsaKeyFile);
+			String pkcs8 = IOUtils.toString(in);
+			logger.info("===================================读取到pkcs#8密钥为:" + pkcs8);
+			pkcs1 = pkcs8;
 		}
 		return pkcs1;
 	}

@@ -31,7 +31,7 @@ public class MessageReceiver {
 
     @RabbitHandler
     public void process(String recMsg) {
-        logger.info("收到消息对msgCenterS的消息:" + recMsg);
+        logger.info("收到消息队列msgCenterS的消息:" + recMsg);
         if (StringUtils.isEmpty(recMsg)) return;
         PushArg pushArg = FastJsonUtil.toObject(recMsg, PushArg.class);
         ISender sender = (ISender) ApplicationContextUtil.getBean(pushArg.getPushType());

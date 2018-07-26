@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.simba</groupId>
+	<packaging>jar</packaging>
+	<artifactId>simba-msg-api</artifactId>
+	<version>2.1.0-SNAPSHOT</version>
+	<name>simba-msg-api</name>
+	<url>http://maven.apache.org</url>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.3.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<simba.version>2.1.0-SNAPSHOT</simba.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-web</artifactId>
+			<version>${simba.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-msg-management</artifactId>
+			<version>${simba.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>msgapi</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>

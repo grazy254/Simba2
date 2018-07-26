@@ -319,4 +319,7 @@ cd ../
 cd simba-alipay-enterprise-bill
 call mvn clean -U install
 cd ../
+cd simba-msg-sdk
+call mvn clean -U install
+cd ../
 echo " deplay all finish "

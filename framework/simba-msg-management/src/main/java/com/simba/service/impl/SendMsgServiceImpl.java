@@ -55,10 +55,10 @@ public class SendMsgServiceImpl implements SendMsgService {
     @Autowired
     private SendMsgUtil sendMsgUtil;
 
-    @Value(value = "${project.alarm.email}")
+    @Value(value = "${project.alarm.email:false}")
     private boolean emailAlarmEnable;
 
-    @Value(value = "${project.alarm.shortmsg}")
+    @Value(value = "${project.alarm.shortmsg:false}")
     private boolean shortmsgAlarmEnable;
 
 
@@ -227,7 +227,13 @@ public class SendMsgServiceImpl implements SendMsgService {
      * @return
      */
     private void increaseSendNum(int projectId, int increasement) {
-        dayAmountUtil.incrAmount(String.valueOf(projectId), increasement);
+        try {
+            dayAmountUtil.incrAmount(String.valueOf(projectId), increasement);
+        } catch (Exception e) {
+            dayAmountUtil.clean(String.valueOf(projectId));
+            dayAmountUtil.setAmount(String.valueOf(projectId), 1);
+            logger.warn(e);
+        }
     }
 
 

@@ -1,13 +1,19 @@
 package com.simba.framework.util.code;
 
+import java.io.ByteArrayOutputStream;
 import java.security.KeyFactory;
-import java.security.interfaces.RSAPublicKey;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.Cipher;
 
-import org.apache.xmlbeans.impl.util.Base64;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
+import com.simba.exception.BussException;
 import com.simba.model.constant.ConstantData;
 
 /**
@@ -18,47 +24,110 @@ import com.simba.model.constant.ConstantData;
  */
 public class RSAUtil {
 
-	/**
-	 * rsa加密
-	 * 
-	 * @param source
-	 * @param key
-	 * @return
-	 * @throws Exception
-	 */
-	public static String encode(String source, String key) throws Exception {
-		RSAPublicKey publicKey = loadPublicKeyByStr(key);
-		byte[] data = source.getBytes(ConstantData.DEFAULT_CHARSET);
-		byte[] encData = encrypt(publicKey, data);
-		return new String(Base64.encode(encData), ConstantData.DEFAULT_CHARSET);
-	}
+	private static final Log logger = LogFactory.getLog(RSAUtil.class);
+
+	private static String RSA = "RSA";
+
+	private static final int KEYLENGTH = 2048;
+	private static final int RESERVESIZE = 11;
 
 	/**
-	 * 生成公钥
-	 * 
-	 * @param publicKeyStr
-	 * @return
-	 * @throws Exception
+	 * 指定填充模式
 	 */
-	public static RSAPublicKey loadPublicKeyByStr(String publicKeyStr) throws Exception {
-		byte[] buffer = Base64.decode(publicKeyStr.getBytes(ConstantData.DEFAULT_CHARSET));
-		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(buffer);
-		return (RSAPublicKey) keyFactory.generatePublic(keySpec);
-	}
+	private static final String CIPHERALGORITHM = "RSA/ECB/OAEPWITHSHA-1ANDMGF1PADDING";
 
 	/**
-	 * 加密
-	 * 
+	 * 用公钥加密 <br>
+	 * 每次加密的字节数，不能超过密钥的长度值减去11
+	 *
+	 * @param plainBytes
+	 *            需加密数据的byte数据
 	 * @param publicKey
-	 * @param plainTextData
-	 * @return
-	 * @throws Exception
+	 *            公钥
+	 * @return 加密后的byte型数据
 	 */
-	public static byte[] encrypt(RSAPublicKey publicKey, byte[] plainTextData) throws Exception {
-		Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWITHSHA-1ANDMGF1PADDING");
-		cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-		return cipher.doFinal(plainTextData);
+	public static String encrypt(byte[] plainBytes, PublicKey publicKey) throws Exception {
+		int keyByteSize = KEYLENGTH / 8;
+		int encryptBlockSize = keyByteSize - RESERVESIZE;
+		int nBlock = plainBytes.length / encryptBlockSize;
+		if ((plainBytes.length % encryptBlockSize) != 0) {
+			nBlock += 1;
+		}
+		ByteArrayOutputStream outbuf = null;
+		try {
+			Cipher cipher = Cipher.getInstance(CIPHERALGORITHM);
+			cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+
+			outbuf = new ByteArrayOutputStream(nBlock * keyByteSize);
+			for (int offset = 0; offset < plainBytes.length; offset += encryptBlockSize) {
+				int inputLen = plainBytes.length - offset;
+				if (inputLen > encryptBlockSize) {
+					inputLen = encryptBlockSize;
+				}
+				byte[] encryptedBlock = cipher.doFinal(plainBytes, offset, inputLen);
+				outbuf.write(encryptedBlock);
+			}
+			outbuf.flush();
+			byte[] encryptedData = outbuf.toByteArray();
+			return Base64.encodeBase64String(encryptedData);
+		} catch (Exception e) {
+			logger.error("ENCRYPT ERROR:", e);
+			throw new BussException("ENCRYPT ERROR:");
+		} finally {
+			try {
+				if (outbuf != null) {
+					outbuf.close();
+				}
+			} catch (Exception e) {
+				logger.error("CLOSE ByteArrayOutputStream ERROR:", e);
+				throw new BussException("CLOSE ByteArrayOutputStream ERROR:");
+			}
+		}
 	}
 
+	/**
+	 * 从字符串中加载公钥
+	 *
+	 * @param publicKeyStr
+	 *            公钥数据字符串
+	 * @throws Exception
+	 *             加载公钥时产生的异常
+	 */
+	public static PublicKey loadPublicKey(String publicKeyStr) throws Exception {
+		try {
+			byte[] buffer = decodeBase64(publicKeyStr);
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(buffer);
+			return keyFactory.generatePublic(keySpec);
+		} catch (NoSuchAlgorithmException e) {
+			logger.error("无此算法", e);
+			throw new BussException("无此算法");
+		} catch (InvalidKeySpecException e) {
+			logger.error("公钥非法", e);
+			throw new BussException("公钥非法");
+		} catch (NullPointerException e) {
+			logger.error("公钥数据为空", e);
+			throw new BussException("公钥数据为空");
+		}
+	}
+
+	/***
+	 * decode by Base64
+	 */
+	public static byte[] decodeBase64(String input) throws Exception {
+		return Base64.decodeBase64(input);
+
+	}
+
+	/**
+	 * encodeBase64
+	 */
+	public static String encodeBase64(byte[] input) throws Exception {
+		return Base64.encodeBase64String(input);
+	}
+
+	public static String encryptData(String data, String publicRSAKey) throws Exception {
+		PublicKey publicKey = loadPublicKey(publicRSAKey);
+		return encrypt(data.getBytes(ConstantData.DEFAULT_CHARSET), publicKey);
+	}
 }

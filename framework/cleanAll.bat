@@ -1,6 +1,15 @@
 cd simba-auto-deploy
 call mvn clean -U 
 cd ../
+cd simba-user-sdk
+call mvn clean -U 
+cd ../
+cd simba-realtime-sdk
+call mvn clean -U 
+cd ../
+cd simba-msg-sdk
+call mvn clean -U 
+cd ../
 cd simba-alipay-enterprise-bill
 call mvn clean -U 
 cd ../

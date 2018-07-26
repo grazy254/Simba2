@@ -5,9 +5,9 @@
 
 	<groupId>com.simba</groupId>
 	<packaging>jar</packaging>
-	<artifactId>simba-auto-deploy</artifactId>
+	<artifactId>simba-user-server</artifactId>
 	<version>2.1.0-SNAPSHOT</version>
-	<name>simba-auto-deploy</name>
+	<name>simba-user-server</name>
 	<url>http://maven.apache.org</url>
 
 	<parent>
@@ -30,21 +30,6 @@
 		<dependency>
 			<groupId>com.simba</groupId>
 			<artifactId>simba-web</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-create</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-publish-server</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-publish-client</artifactId>
 			<version>${simba.version}</version>
 		</dependency>
 		<dependency>
@@ -87,10 +72,25 @@
 			<artifactId>simba-log</artifactId>
 			<version>${simba.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-user-management</artifactId>
+			<version>${simba.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-boot-admin-client</artifactId>
+			<version>${simba.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-eureka-client</artifactId>
+			<version>${simba.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
-		<finalName>autodeploy</finalName>
+		<finalName>userserver</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

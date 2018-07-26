@@ -319,4 +319,13 @@ cd ../
 cd simba-alipay-enterprise-bill
 call mvn clean -U deploy
 cd ../
+cd simba-msg-sdk
+call mvn clean -U deploy
+cd ../
+cd simba-user-sdk
+call mvn clean -U deploy
+cd ../
+cd simba-realtime-sdk
+call mvn clean -U deploy
+cd ../
 echo " deplay all finish "

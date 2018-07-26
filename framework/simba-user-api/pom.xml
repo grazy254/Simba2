@@ -5,9 +5,9 @@
 
 	<groupId>com.simba</groupId>
 	<packaging>jar</packaging>
-	<artifactId>simba-auto-deploy</artifactId>
+	<artifactId>simba-user-api</artifactId>
 	<version>2.1.0-SNAPSHOT</version>
-	<name>simba-auto-deploy</name>
+	<name>simba-user-api</name>
 	<url>http://maven.apache.org</url>
 
 	<parent>
@@ -16,8 +16,6 @@
 		<version>1.5.3.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-
-
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -34,63 +32,23 @@
 		</dependency>
 		<dependency>
 			<groupId>com.simba</groupId>
-			<artifactId>simba-create</artifactId>
+			<artifactId>simba-user-management</artifactId>
 			<version>${simba.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.simba</groupId>
-			<artifactId>simba-publish-server</artifactId>
+			<artifactId>simba-boot-admin-client</artifactId>
 			<version>${simba.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.simba</groupId>
-			<artifactId>simba-publish-client</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-permission</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-menu</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-registry</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-job</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-buss</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-ip</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-exception-management</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-log</artifactId>
+			<artifactId>simba-eureka-client</artifactId>
 			<version>${simba.version}</version>
 		</dependency>
 	</dependencies>
 
 	<build>
-		<finalName>autodeploy</finalName>
+		<finalName>userapi</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

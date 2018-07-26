@@ -18,6 +18,10 @@ public class DayAmountUtil {
     public static final String TIMERLOCK_REDIS_KEY = "shortMessageTimerLock";
 
 
+    public void clean(String projectId) {
+        redisUtil.remove(projectId);
+    }
+
     public void setAmount(String projectId, int value) {
         redisUtil.hset(DAY_AMOUNT, projectId, value);
     }

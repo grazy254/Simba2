@@ -230,6 +230,7 @@ public class SendMsgServiceImpl implements SendMsgService {
         try {
             dayAmountUtil.incrAmount(String.valueOf(projectId), increasement);
         } catch (Exception e) {
+            dayAmountUtil.clean(String.valueOf(projectId));
             dayAmountUtil.setAmount(String.valueOf(projectId), 1);
             logger.warn(e);
         }

@@ -118,5 +118,40 @@ var LooseMoneyBill = {
 		window.self.location.href = contextPath + "/looseMoneyBill/list";
 	},
 
+	"add": function() {
+		var openid = $("#openid").val();
+		if(!openid) {
+			parent.showInfo("用户openid不能为空");
+			return false;
+		}
+		var amount = $("#amount").val();
+		if(!amount) {
+			parent.showInfo("金额不能为空");
+			return false;
+		}
+		parent.showSuccessInfo("请求正在处理中");
+		$.ajax({
+			type: "post",
+			url: contextPath + "/api/wechatEnterprisePay/transfersLooseMoney",
+			async: true,
+			dataType: "json",
+			data: {
+				openid: openid,
+				amount: amount,
+				check_name: $("#check_name").val(),
+				re_user_name: $("#re_user_name").val(),
+				desc: $("#desc").val()
+			},
+			success: function(data) {
+				if(data.code == 200) {
+					parent.showSuccessInfo("请求处理完成");
+					LooseMoneyBill.toList();
+				} else {
+					parent.showInfo(data.msg);
+				}
+			}
+		});
+	},
+
 	"end": null
 };

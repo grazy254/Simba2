@@ -20,78 +20,39 @@
 						<div class="col-md-12">
 							<div class="box box-primary">
 								<div class="box-header with-border">
-									<h3 class="box-title">新增零钱账单</h3>
+									<h3 class="box-title">微信转账到用户零钱</h3>
 								</div>
-								<form role="form" onsubmit="return LooseMoneyBill.checkForm();" id="form" action="${base}/looseMoneyBill/add">
 									<div class="box-body">
 										<div class="form-group">
-											<label for="appid">商户账号appid</label>
-											<input type="text" class="form-control" id="appid" name="appid" placeholder="请输入商户账号appid">
-										</div>
-										<div class="form-group">
-											<label for="mchid">商户号</label>
-											<input type="text" class="form-control" id="mchid" name="mchid" placeholder="请输入商户号">
-										</div>
-										<div class="form-group">
-											<label for="deviceInfo">设备号</label>
-											<input type="text" class="form-control" id="deviceInfo" name="deviceInfo" placeholder="请输入设备号">
-										</div>
-										<div class="form-group">
-											<label for="partnerTradeNo">商户订单号</label>
-											<input type="text" class="form-control" id="partnerTradeNo" name="partnerTradeNo" placeholder="请输入商户订单号">
+											<label for="check_name">强制检查实名</label>
+											<select id="check_name" name="check_name" class="form-control">
+												<option value="FORCE_CHECK">强校验真实姓名</option>
+												<option value="NO_CHECK">不校验真实姓名</option>
+											</select>
 										</div>
 										<div class="form-group">
 											<label for="openid">用户openid</label>
 											<input type="text" class="form-control" id="openid" name="openid" placeholder="请输入用户openid">
 										</div>
 										<div class="form-group">
-											<label for="reUserName">收款用户姓名</label>
-											<input type="text" class="form-control" id="reUserName" name="reUserName" placeholder="请输入收款用户姓名">
+											<label for="re_user_name">收款用户姓名</label>
+											<input type="text" class="form-control" id="re_user_name" name="re_user_name" placeholder="请输入收款用户姓名">
 										</div>
 										<div class="form-group">
-											<label for="amount">金额</label>
+											<label for="amount">金额(分)</label>
 											<input type="text" class="form-control" id="amount" name="amount" placeholder="请输入金额">
 										</div>
 										<div class="form-group">
-											<label for="description">企业付款描述信息</label>
-											<input type="text" class="form-control" id="description" name="description" placeholder="请输入企业付款描述信息">
-										</div>
-										<div class="form-group">
-											<label for="clientIp">Ip地址</label>
-											<input type="text" class="form-control" id="clientIp" name="clientIp" placeholder="请输入Ip地址">
-										</div>
-										<div class="form-group">
-											<label for="status">状态</label>
-											<input type="text" class="form-control" id="status" name="status" placeholder="请输入状态">
-										</div>
-										<div class="form-group">
-											<label for="errMsg">错误信息</label>
-											<input type="text" class="form-control" id="errMsg" name="errMsg" placeholder="请输入错误信息">
-										</div>
-										<div class="form-group">
-											<label for="paymentNo">微信订单号</label>
-											<input type="text" class="form-control" id="paymentNo" name="paymentNo" placeholder="请输入微信订单号">
-										</div>
-										<div class="form-group">
-											<label for="paymentTime">微信支付成功时间</label>
-											<input type="text" class="form-control" id="paymentTime" name="paymentTime" placeholder="请输入微信支付成功时间">
-										</div>
-										<div class="form-group">
-											<label for="createTime">创建时间</label>
-											<input type="text" class="form-control" id="createTime" name="createTime" placeholder="请输入创建时间">
-										</div>
-										<div class="form-group">
-											<label for="createUser">付款者</label>
-											<input type="text" class="form-control" id="createUser" name="createUser" placeholder="请输入付款者">
+											<label for="desc">企业付款描述信息</label>
+											<input type="text" class="form-control" id="desc" name="desc" placeholder="请输入企业付款描述信息">
 										</div>
 									</div>
 									<!-- /.box-body -->
 
 									<div class="box-footer">
-										<button type="submit" class="btn btn-success">提交</button>
+										<button type="button" class="btn btn-success" onclick="LooseMoneyBill.add();">提交</button>
 										<button type="button" class="btn" onclick="LooseMoneyBill.toList();">取消</button>
 									</div>
-								</form>
 
 							</div>
 						</div>

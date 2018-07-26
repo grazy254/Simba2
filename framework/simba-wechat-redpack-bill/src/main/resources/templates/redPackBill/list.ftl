@@ -22,14 +22,29 @@
 						<div class="col-md-12">
 							<div class="box box-primary">
 								<div class="box-header with-border">
-									<h3 class="box-title">红包账单管理</h3>
+									<h3 class="box-title">微信发红包账单管理</h3>
 								</div>
 								<!-- /.box-header -->
 								<div class="box-body no-padding">
 									<div class="mailbox-controls">
 										<!-- Check all button -->
+										<button type="button" class="btn btn-default btn-sm checkbox-toggle" onclick="RedPackBill.toAdd();"><i class="fa fa-plus"></i>
+                微信发红包</button>
+										<div class="pull-right">
+
+										</div>
+									</div>
+									
+									
+									<div class="mailbox-controls">
+										<!-- Check all button -->
 										<label for="type">红包类型:</label>
-										<input type="text" id="type" name="type" placeholder="请输入红包类型">
+										<select id="type" name="type" >
+											<option value="">所有</option>
+											<#list types as type>
+												<option value="${type.getName()}">${type.description}</option>
+											</#list>
+										</select>
 										<label for="billNo">商户订单号:</label>
 										<input type="text" id="billNo" name="billNo" placeholder="请输入商户订单号">
 										<label for="openid">用户openid:</label>
@@ -37,7 +52,12 @@
 										<label for="actName">活动名称:</label>
 										<input type="text" id="actName" name="actName" placeholder="请输入活动名称">
 										<label for="sceneId">场景id:</label>
-										<input type="text" id="sceneId" name="sceneId" placeholder="请输入场景id">
+										<select id="sceneId" name="sceneId">
+											<option value="">所有</option>
+											<#list scenes as scene>
+												<option value="${scene.getName()}">${scene.description}</option>
+											</#list>
+										</select>
 										<label for="status">状态:</label>
 										<select id ="status" name="status">
 											<#list redPackBill?keys as key>
@@ -65,25 +85,21 @@
 									<table class="table table-hover table-striped table-bordered" id="table">
 										<thead>
 											<tr>
-												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
 												<th>红包类型</th>
 												<th>商户订单号</th>
 												<th>商户名称</th>
 												<th>用户openid</th>
-												<th>付款金额</th>
+												<th>付款金额(分)</th>
 												<th>红包发放总人数</th>
 												<th>红包祝福语</th>
 												<th>活动名称</th>
 												<th>备注</th>
 												<th>场景id</th>
-												<th>活动信息</th>
-												<th>资金授权商户号</th>
 												<th>状态</th>
-												<th>错误信息</th>
-												<th>微信单号</th>
 												<th>时间</th>
 												<th>付款者</th>
-												<th>操作</th>
+												<th>错误信息</th>
+												<th>微信单号</th>
 											</tr>
 										</thead>
 										<tbody>

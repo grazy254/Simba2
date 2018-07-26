@@ -1,5 +1,7 @@
 package com.simba.controller.form;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * 发放普通红包请求对象
  */
@@ -27,7 +29,7 @@ public class NormalRedPackForm {
 	 * 红包发放总人数 total_num=1
 	 * 
 	 */
-	private int total_num;
+	private int total_num = 1;
 
 	/**
 	 * 付款金额
@@ -90,7 +92,7 @@ public class NormalRedPackForm {
 	 * urlencode(posttime=xx& mobile =xx&deviceid=xx)
 	 * 
 	 */
-	private String risk_info;
+	private String risk_info = StringUtils.EMPTY;
 
 	/**
 	 * 资金授权商户号 -- 资金授权商户号
@@ -100,7 +102,7 @@ public class NormalRedPackForm {
 	 * 
 	 * 
 	 */
-	private String consume_mch_id;
+	private String consume_mch_id = StringUtils.EMPTY;
 
 	public String getMch_billno() {
 		return mch_billno;

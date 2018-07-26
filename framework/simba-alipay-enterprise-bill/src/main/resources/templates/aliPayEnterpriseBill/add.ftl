@@ -27,7 +27,7 @@
 									<div class="box-body">
 										<div class="form-group">
 											<label for="payType">账户类型</label>
-											<select id="payType" name="payType">
+											<select id="payType" name="payType" class="form-control">
 												<option value="ALIPAY_LOGONID">支付宝登录号</option>
 												<option value="ALIPAY_USERID">支付宝唯一用户号</option>
 											</select>

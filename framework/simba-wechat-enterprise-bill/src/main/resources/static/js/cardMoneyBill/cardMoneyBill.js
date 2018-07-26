@@ -118,5 +118,50 @@ var CardMoneyBill = {
 		window.self.location.href = contextPath + "/cardMoneyBill/list";
 	},
 
+	"add": function() {
+		var enc_bank_no = $("#enc_bank_no").val();
+		if(!enc_bank_no) {
+			parent.showInfo("收款方银行卡号不能为空");
+			return false;
+		}
+		var trueName = $("#trueName").val();
+		if(!trueName) {
+			parent.showInfo("收款方用户名不能为空");
+			return false;
+		}
+		var bank_code = $("#bank_code").val();
+		if(!bank_code) {
+			parent.showInfo("收款方开户行不能为空");
+			return false;
+		}
+		var amount = $("#amount").val();
+		if(!amount) {
+			parent.showInfo("付款金额不能为空");
+			return false;
+		}
+		parent.showSuccessInfo("请求正在处理中");
+		$.ajax({
+			type: "post",
+			url: contextPath + "/api/wechatEnterprisePay/transfersCard",
+			async: true,
+			dataType: "json",
+			data: {
+				enc_bank_no: enc_bank_no,
+				amount: amount,
+				trueName: trueName,
+				bank_code: bank_code,
+				desc: $("#desc").val()
+			},
+			success: function(data) {
+				if(data.code == 200) {
+					parent.showSuccessInfo("请求处理完成");
+					CardMoneyBill.toList();
+				} else {
+					parent.showInfo(data.msg);
+				}
+			}
+		});
+	},
+
 	"end": null
 };

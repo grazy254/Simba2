@@ -5,7 +5,7 @@ import java.util.Map;
 
 public enum CardMoneyBillStatus {
 
-	All("", "所有"), SUCCESS("success", "转账成功"), FAILED("failed", "转账失败"), PROCESSING("processing", "处理中"), BANK_FAIL("bankfail", "银行退票");
+	All("", "所有"), SUCCESS("SUCCESS", "转账成功"), FAILED("FAILED", "转账失败"), PROCESSING("PROCESSING", "处理中"), BANK_FAIL("BANK_FAIL", "银行退票");
 
 	private String status;
 

@@ -19,8 +19,10 @@ import com.simba.alipay.model.EnterprisePay;
 import com.simba.alipay.util.AliPayUtil;
 import com.simba.cache.Redis;
 import com.simba.dao.AliPayEnterpriseBillDao;
+import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.framework.util.data.RandomUtil;
 import com.simba.framework.util.jdbc.Pager;
+import com.simba.interfaces.AliEnterprisePayInteface;
 import com.simba.model.AliPayEnterpriseBill;
 import com.simba.model.form.AliPayEnterpriseBillSearchForm;
 import com.simba.service.AliPayEnterpriseBillService;
@@ -59,6 +61,12 @@ public class AliPayEnterpriseBillServiceImpl implements AliPayEnterpriseBillServ
 		aliPayEnterpriseBill.setReason(StringUtils.EMPTY);
 		aliPayEnterpriseBill.setOrderFee(StringUtils.EMPTY);
 		aliPayEnterpriseBillDao.add(aliPayEnterpriseBill);
+		List<AliEnterprisePayInteface> impls = ApplicationContextUtil.getBeansOfType(AliEnterprisePayInteface.class);
+		if (impls != null && impls.size() > 0) {
+			impls.forEach((AliEnterprisePayInteface impl) -> {
+				impl.add(aliPayEnterpriseBill);
+			});
+		}
 		EnterprisePay enterprisePay = new EnterprisePay();
 		enterprisePay.setOut_biz_no(aliPayEnterpriseBill.getOutBizNo());
 		enterprisePay.setPayee_type(aliPayEnterpriseBill.getPayType());
@@ -124,6 +132,12 @@ public class AliPayEnterpriseBillServiceImpl implements AliPayEnterpriseBillServ
 
 	@Override
 	public void update(AliPayEnterpriseBill aliPayEnterpriseBill) {
+		List<AliEnterprisePayInteface> impls = ApplicationContextUtil.getBeansOfType(AliEnterprisePayInteface.class);
+		if (impls != null && impls.size() > 0) {
+			impls.forEach((AliEnterprisePayInteface impl) -> {
+				impl.update(aliPayEnterpriseBill);
+			});
+		}
 		aliPayEnterpriseBillDao.update(aliPayEnterpriseBill);
 	}
 

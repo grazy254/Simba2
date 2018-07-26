@@ -12,7 +12,7 @@
 <a:Code>PHYSICAL_DATA_MODEL_1</a:Code>
 <a:CreationDate>1520820492</a:CreationDate>
 <a:Creator>caozhejun</a:Creator>
-<a:ModificationDate>1520822981</a:ModificationDate>
+<a:ModificationDate>1532507740</a:ModificationDate>
 <a:Modifier>caozhejun</a:Modifier>
 <a:PackageOptionsText>[FolderOptions]
 
@@ -86,7 +86,7 @@ GenScriptName6=90_devicemonitor_init_table_mysql.sql
 GenScriptName7=90_version_init_table_mysql.sql
 GenScriptName8=
 GenScriptName9=
-GenPathName=E:\Simba\trunk\simbaRoot\doc\mysql\
+GenPathName=F:\gitcode\simba\demoproject\simbaRoot\doc\mysql\
 GenSingleFile=Yes
 GenODBC=No
 GenCheckModel=Yes
@@ -2948,11 +2948,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>errMsg</a:Code>
 <a:CreationDate>1520823452</a:CreationDate>
 <a:Creator>caozhejun</a:Creator>
-<a:ModificationDate>1520823452</a:ModificationDate>
+<a:ModificationDate>1532507544</a:ModificationDate>
 <a:Modifier>caozhejun</a:Modifier>
 <a:Comment>错误信息</a:Comment>
-<a:DataType>varchar(64)</a:DataType>
-<a:Length>64</a:Length>
+<a:DataType>varchar(128)</a:DataType>
+<a:Length>128</a:Length>
 </o:Column>
 <o:Column Id="o26">
 <a:ObjectID>70F3E212-FC5F-4A31-A2F5-76AF58F5B713</a:ObjectID>
@@ -3096,11 +3096,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>trueName</a:Code>
 <a:CreationDate>1520833410</a:CreationDate>
 <a:Creator>caozhejun</a:Creator>
-<a:ModificationDate>1520833410</a:ModificationDate>
+<a:ModificationDate>1532507525</a:ModificationDate>
 <a:Modifier>caozhejun</a:Modifier>
 <a:Comment>收款方用户名</a:Comment>
-<a:DataType>varchar(16)</a:DataType>
-<a:Length>16</a:Length>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 </o:Column>
 <o:Column Id="o37">
 <a:ObjectID>A05B72F1-3D8A-48A3-87B0-637AC549885D</a:ObjectID>
@@ -3155,11 +3155,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>errMsg</a:Code>
 <a:CreationDate>1520833471</a:CreationDate>
 <a:Creator>caozhejun</a:Creator>
-<a:ModificationDate>1520833471</a:ModificationDate>
+<a:ModificationDate>1532507525</a:ModificationDate>
 <a:Modifier>caozhejun</a:Modifier>
 <a:Comment>错误信息</a:Comment>
-<a:DataType>varchar(32)</a:DataType>
-<a:Length>32</a:Length>
+<a:DataType>varchar(128)</a:DataType>
+<a:Length>128</a:Length>
 </o:Column>
 <o:Column Id="o42">
 <a:ObjectID>6E30E1BD-3EDC-40E3-B10B-D23204AB39CF</a:ObjectID>
@@ -3408,11 +3408,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>sceneId</a:Code>
 <a:CreationDate>1520834146</a:CreationDate>
 <a:Creator>caozhejun</a:Creator>
-<a:ModificationDate>1520834146</a:ModificationDate>
+<a:ModificationDate>1532507566</a:ModificationDate>
 <a:Modifier>caozhejun</a:Modifier>
 <a:Comment>场景id</a:Comment>
-<a:DataType>varchar(32)</a:DataType>
-<a:Length>32</a:Length>
+<a:DataType>varchar(128)</a:DataType>
+<a:Length>128</a:Length>
 </o:Column>
 <o:Column Id="o62">
 <a:ObjectID>06956216-8D84-4B41-8693-6798C4899083</a:ObjectID>
@@ -3468,11 +3468,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>sendListId</a:Code>
 <a:CreationDate>1520834287</a:CreationDate>
 <a:Creator>caozhejun</a:Creator>
-<a:ModificationDate>1520834287</a:ModificationDate>
+<a:ModificationDate>1532507566</a:ModificationDate>
 <a:Modifier>caozhejun</a:Modifier>
 <a:Comment>微信单号</a:Comment>
-<a:DataType>varchar(32)</a:DataType>
-<a:Length>32</a:Length>
+<a:DataType>varchar(128)</a:DataType>
+<a:Length>128</a:Length>
 </o:Column>
 <o:Column Id="o67">
 <a:ObjectID>23AC3560-A555-42A7-BF58-CE5F7A9AD05D</a:ObjectID>
@@ -3771,11 +3771,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>errMsg</a:Code>
 <a:CreationDate>1520834837</a:CreationDate>
 <a:Creator>caozhejun</a:Creator>
-<a:ModificationDate>1520834837</a:ModificationDate>
+<a:ModificationDate>1532507598</a:ModificationDate>
 <a:Modifier>caozhejun</a:Modifier>
 <a:Comment>错误信息</a:Comment>
-<a:DataType>varchar(32)</a:DataType>
-<a:Length>32</a:Length>
+<a:DataType>varchar(128)</a:DataType>
+<a:Length>128</a:Length>
 </o:Column>
 <o:Column Id="o91">
 <a:ObjectID>B3453CAE-8343-4F46-B01B-B6AAE7474CA8</a:ObjectID>

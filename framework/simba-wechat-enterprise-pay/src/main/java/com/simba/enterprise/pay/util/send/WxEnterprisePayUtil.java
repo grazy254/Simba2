@@ -1,8 +1,10 @@
 package com.simba.enterprise.pay.util.send;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -41,6 +43,7 @@ public class WxEnterprisePayUtil {
 	private String appid = null;
 	private String mchId = null;
 	private String rsaKey = null;
+	private String rsaKeyFile = null;
 
 	private WxEnterprisePayUtil() {
 		try {
@@ -55,6 +58,7 @@ public class WxEnterprisePayUtil {
 		key = environmentUtil.get("wx.pay.key");
 		appid = environmentUtil.get("appID");
 		mchId = environmentUtil.get("wx.pay.mchid");
+		rsaKeyFile = environmentUtil.get("wx.enterprise.pay.rsa.key");
 		if (StringUtils.isEmpty(key) || StringUtils.isEmpty(appid) || StringUtils.isEmpty(mchId)) {
 			logger.warn("没有配置微信企业支付相关信息，不能使用微信企业支付");
 			return;
@@ -182,7 +186,17 @@ public class WxEnterprisePayUtil {
 		logger.info("获取商户的RSA密钥返回结果:" + resp);
 		PublicKeyRes result = XmlUtil.toOject(resp, PublicKeyRes.class);
 		checkResult(result);
-		return result.getPub_key();
+		String pkcs1 = result.getPub_key();
+		logger.info("rsa key(pkcs#1):" + pkcs1);
+		if (StringUtils.isNotEmpty(rsaKeyFile)) {
+			logger.info("==============================配置了rsa密钥文件，所以读取其中到rsa密钥pkcs#8==========================");
+			ClassLoader classLoader = this.getClass().getClassLoader();
+			InputStream in = classLoader.getResourceAsStream(rsaKeyFile);
+			String pkcs8 = IOUtils.toString(in);
+			logger.info("===================================读取到pkcs#8密钥为:" + pkcs8);
+			pkcs1 = pkcs8;
+		}
+		return pkcs1;
 	}
 
 	/**

@@ -11,9 +11,9 @@ import java.util.Map;
  */
 public enum RedPackType {
 
-	NORMAL("normal", "普通红包"),
+	NORMAL("NORMAL", "普通红包"),
 
-	GROUP("group", "裂变红包");
+	GROUP("GROUP", "裂变红包");
 
 	private String name;
 

@@ -9,6 +9,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.simba.controller.enums.Bank;
 import com.simba.controller.enums.CardMoneyBillStatus;
 import com.simba.controller.form.CardMoneyBillSearchForm;
 import com.simba.framework.util.jdbc.Pager;
@@ -32,12 +33,17 @@ public class CardMoneyBillController {
 	@RequestMapping("/list")
 	public String list(ModelMap model) {
 		model.put("billType", CardMoneyBillStatus.maps);
+		model.put("banks", Bank.values());
 		return "cardMoneyBill/list";
 	}
 
 	@RequestMapping("/getList")
 	public String getList(CardMoneyBillSearchForm searchForm, Pager pager, ModelMap model) {
 		List<CardMoneyBill> list = cardMoneyBillService.page(searchForm, pager);
+		list.forEach((CardMoneyBill bill) -> {
+			String bank = bill.getBankCode();
+			bill.setBankCode(Bank.get(bank).getName());
+		});
 		model.put("list", list);
 		return "cardMoneyBill/table";
 	}
@@ -50,7 +56,8 @@ public class CardMoneyBillController {
 	}
 
 	@RequestMapping("/toAdd")
-	public String toAdd() {
+	public String toAdd(ModelMap model) {
+		model.put("banks", Bank.values());
 		return "cardMoneyBill/add";
 	}
 

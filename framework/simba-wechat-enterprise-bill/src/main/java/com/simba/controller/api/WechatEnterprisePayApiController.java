@@ -37,7 +37,7 @@ import com.simba.service.LooseMoneyBillService;
  *
  */
 @RestController
-@RequestMapping("/wechatEnterprisePayApi")
+@RequestMapping("/api/wechatEnterprisePay")
 public class WechatEnterprisePayApiController {
 
 	private WxEnterprisePayUtil wxEnterprisePayUtil;
@@ -63,12 +63,13 @@ public class WechatEnterprisePayApiController {
 	 * 企业给用户转账到零钱
 	 * 
 	 * @param looseMoneyTransferForm
+	 * @param sessAccount
 	 * @return
 	 * @throws ParseException
 	 * @throws IOException
 	 */
 	@RequestMapping("/transfersLooseMoney")
-	public JsonResult transfersLooseMoney(LooseMoneyTransferForm looseMoneyTransferForm, HttpServletRequest request) throws ParseException, IOException {
+	public JsonResult transfersLooseMoney(LooseMoneyTransferForm looseMoneyTransferForm, HttpServletRequest request, String sessAccount) throws ParseException, IOException {
 		looseMoneyTransferForm.setPartner_trade_no(RandomUtil.random32Chars());
 		LooseMoneyReq looseMoneyReq = new LooseMoneyReq();
 		looseMoneyReq.setAmount(looseMoneyTransferForm.getAmount());
@@ -90,11 +91,11 @@ public class WechatEnterprisePayApiController {
 		bill.setAmount(looseMoneyTransferForm.getAmount());
 		bill.setDescription(looseMoneyTransferForm.getDesc());
 		bill.setClientIp(looseMoneyReq.getSpbill_create_ip());
-		bill.setErrMsg(res.getErr_code_des());
+		bill.setErrMsg(StringUtils.defaultString(res.getErr_code_des()));
 		bill.setPaymentNo(res.getPayment_no());
 		bill.setPaymentTime(res.getPayment_time());
 		bill.setCreateTime(new Date());
-		bill.setCreateUser(StringUtils.EMPTY);
+		bill.setCreateUser(sessAccount);
 		if (StringUtils.isNotEmpty(bill.getPaymentNo())) {
 			bill.setStatus(LooseMoneyBillStatus.PROCESSING.getStatus());
 		} else {
@@ -121,11 +122,12 @@ public class WechatEnterprisePayApiController {
 	 * 企业给用户转账到银行卡
 	 * 
 	 * @param cardTransferForm
+	 * @param sessAccount
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping("/transfersCard")
-	public JsonResult transfersCard(CardTransferForm cardTransferForm) throws Exception {
+	public JsonResult transfersCard(CardTransferForm cardTransferForm, String sessAccount) throws Exception {
 		cardTransferForm.setPartner_trade_no(RandomUtil.random32Chars());
 		CardReq cardReq = new CardReq();
 		cardReq.setPartner_trade_no(cardTransferForm.getPartner_trade_no());
@@ -148,11 +150,11 @@ public class WechatEnterprisePayApiController {
 		} else {
 			bill.setStatus(CardMoneyBillStatus.FAILED.getStatus());
 		}
-		bill.setErrMsg(res.getErr_code_des());
-		bill.setPaymentNo(res.getPayment_no());
+		bill.setErrMsg(StringUtils.defaultString(res.getErr_code_des()));
+		bill.setPaymentNo(StringUtils.defaultString(res.getPayment_no()));
 		bill.setCmmsAmt(res.getCmms_amt());
 		bill.setCreateTime(new Date());
-		bill.setCreateUser(StringUtils.EMPTY);
+		bill.setCreateUser(sessAccount);
 		cardMoneyBillService.add(bill);
 		return new JsonResult(res);
 	}

@@ -5,7 +5,7 @@ import java.util.Map;
 
 public enum LooseMoneyBillStatus {
 
-	All("", "所有"), SUCCESS("success", "转账成功"), FAILED("failed", "转账失败"), PROCESSING("processing", "处理中");
+	All("", "所有"), SUCCESS("SUCCESS", "转账成功"), FAILED("FAILED", "转账失败"), PROCESSING("PROCESSING", "处理中");
 
 	private String status;
 

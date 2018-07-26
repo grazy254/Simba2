@@ -23,7 +23,9 @@ import com.simba.controller.form.CardMoneyBillSearchForm;
 import com.simba.dao.CardMoneyBillDao;
 import com.simba.enterprise.pay.model.searchCard.SearchCardRes;
 import com.simba.enterprise.pay.util.send.WxEnterprisePayUtil;
+import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.framework.util.jdbc.Pager;
+import com.simba.interfaces.WechatEnterprisePayInterface;
 import com.simba.model.CardMoneyBill;
 import com.simba.service.CardMoneyBillService;
 
@@ -36,20 +38,20 @@ import com.simba.service.CardMoneyBillService;
 @Service
 @Transactional
 public class CardMoneyBillServiceImpl implements CardMoneyBillService {
-	
+
 	private static final Log logger = LogFactory.getLog(CardMoneyBillServiceImpl.class);
-	
+
 	private WxEnterprisePayUtil wxEnterprisePayUtil;
 
 	@Autowired
 	private CardMoneyBillDao cardMoneyBillDao;
-	
+
 	@Resource
 	private Redis redisUtil;
-	
+
 	@Resource
 	private TaskExecutor taskExecutor;
-	
+
 	@PostConstruct
 	private void init() {
 		wxEnterprisePayUtil = WxEnterprisePayUtil.getInstance();
@@ -58,6 +60,12 @@ public class CardMoneyBillServiceImpl implements CardMoneyBillService {
 	@Override
 	public void add(CardMoneyBill cardMoneyBill) {
 		cardMoneyBillDao.add(cardMoneyBill);
+		List<WechatEnterprisePayInterface> impls = ApplicationContextUtil.getBeansOfType(WechatEnterprisePayInterface.class);
+		if (impls != null && impls.size() > 0) {
+			impls.forEach((WechatEnterprisePayInterface impl) -> {
+				impl.add(cardMoneyBill);
+			});
+		}
 	}
 
 	@Override
@@ -103,6 +111,12 @@ public class CardMoneyBillServiceImpl implements CardMoneyBillService {
 	@Override
 	public void update(CardMoneyBill cardMoneyBill) {
 		cardMoneyBillDao.update(cardMoneyBill);
+		List<WechatEnterprisePayInterface> impls = ApplicationContextUtil.getBeansOfType(WechatEnterprisePayInterface.class);
+		if (impls != null && impls.size() > 0) {
+			impls.forEach((WechatEnterprisePayInterface impl) -> {
+				impl.update(cardMoneyBill);
+			});
+		}
 	}
 
 	@Override
@@ -201,7 +215,7 @@ public class CardMoneyBillServiceImpl implements CardMoneyBillService {
 	@Override
 	public void checkUnfinishOrder() throws DOMException, XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 		List<CardMoneyBill> list = this.listAllUnfinish();
-		for(CardMoneyBill bill : list) {
+		for (CardMoneyBill bill : list) {
 			if (redisUtil.tryLock("wechatenterprisepaycard_" + bill.getId(), 60)) {
 				dealUnfinishOrder(bill);
 			}

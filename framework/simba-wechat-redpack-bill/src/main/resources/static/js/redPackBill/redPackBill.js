@@ -122,5 +122,85 @@ var RedPackBill = {
 		window.self.location.href = contextPath + "/redPackBill/list";
 	},
 
+	"add": function() {
+		var url = contextPath + "/api/wechatRedPack/";
+		var type = $("#type").val();
+		if(type == "NORMAL") {
+			url += "sendNormalRedPack";
+		} else {
+			url += "sendGroupRedPack";
+		}
+		var num = $("#num").val();
+		var sendName = $("#sendName").val();
+		var openid = $("#openid").val();
+		var amount = $("#amount").val();
+		var wishing = $("#wishing").val();
+		var actName = $("#actName").val();
+		var remark = $("#remark").val();
+		var sceneId = $("#sceneId").val();
+		if(!sendName) {
+			parent.showInfo("商户名称不能为空");
+			return false;
+		}
+		if(!openid) {
+			parent.showInfo("用户openid不能为空");
+			return false;
+		}
+		if(!amount) {
+			parent.showInfo("付款金额不能为空");
+			return false;
+		}
+		if(type == "GROUP" && !num) {
+			parent.showInfo("红包发放总人数不能为空");
+			return false;
+		}
+		if(!wishing) {
+			parent.showInfo("红包祝福语不能为空");
+			return false;
+		}
+		if(!actName) {
+			parent.showInfo("活动名称不能为空");
+			return false;
+		}
+		if(!sceneId) {
+			parent.showInfo("场景id不能为空");
+			return false;
+		}
+		parent.showSuccessInfo("请求正在处理中");
+		$.ajax({
+			type: "post",
+			url: url,
+			async: true,
+			dataType: "json",
+			data: {
+				total_amount: amount,
+				total_num: num,
+				wishing: wishing,
+				act_name: actName,
+				scene_id: sceneId,
+				re_openid: openid,
+				send_name: sendName,
+				remark: remark
+			},
+			success: function(data) {
+				if(data.code == 200) {
+					parent.showSuccessInfo("请求处理完成");
+					RedPackBill.toList();
+				} else {
+					parent.showInfo(data.msg);
+				}
+			}
+		});
+	},
+
+	"changeType": function() {
+		var type = $("#type").val();
+		if(type == "NORMAL") {
+			$("#numDiv").hide();
+		} else {
+			$("#numDiv").show();
+		}
+	},
+
 	"end": null
 };

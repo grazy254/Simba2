@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2018/3/13 星期二 8:57:03                        */
+/* Created on:     2018/7/25 星期三 16:35:42                       */
 /*==============================================================*/
 
 
@@ -21,12 +21,12 @@ create table cardMoneyBill
    mchId                varchar(32) comment '商户号',
    partnerTradeNo       varchar(32) comment '商户企业付款单号',
    bankNo               varchar(64) comment '收款方银行卡号',
-   trueName             varchar(16) comment '收款方用户名',
+   trueName             varchar(32) comment '收款方用户名',
    bankCode             varchar(64) comment '收款方开户行',
    amount               int comment '付款金额',
    description          varchar(128) comment '付款说明',
    status               varchar(32) comment '状态',
-   errMsg               varchar(32) comment '错误信息',
+   errMsg               varchar(128) comment '错误信息',
    paymentNo            varchar(64) comment '微信企业付款单号',
    cmmsAmt              int comment '手续费金额',
    createTime           datetime comment '时间',
@@ -53,7 +53,7 @@ create table looseMoneyBill
    description          varchar(128) comment '企业付款描述信息',
    clientIp             varchar(64) comment 'Ip地址',
    status               varchar(64) comment '状态',
-   errMsg               varchar(64) comment '错误信息',
+   errMsg               varchar(128) comment '错误信息',
    paymentNo            varchar(64) comment '微信订单号',
    paymentTime          varchar(64) comment '微信支付成功时间',
    createTime           datetime comment '创建时间',
@@ -87,7 +87,7 @@ create table payBill
    productId            varchar(32) comment '商品ID',
    openid               varchar(128) comment '用户标识',
    status               varchar(32) comment '状态',
-   errMsg               varchar(32) comment '错误信息',
+   errMsg               varchar(128) comment '错误信息',
    prepayId             varchar(64) comment '预支付交易会话标识',
    codeUrl              varchar(64) comment '二维码链接',
    mwebUrl              varchar(128) comment 'H5支付链接',
@@ -116,12 +116,12 @@ create table redPackBill
    clientIp             varchar(16) comment 'Ip地址',
    actName              varchar(32) comment '活动名称',
    remark               varchar(256) comment '备注',
-   sceneId              varchar(32) comment '场景id',
+   sceneId              varchar(128) comment '场景id',
    riskInfo             varchar(128) comment '活动信息',
    consumeMchId         varchar(32) comment '资金授权商户号',
    status               varchar(32) comment '状态',
    errMsg               varchar(32) comment '错误信息',
-   sendListId           varchar(32) comment '微信单号',
+   sendListId           varchar(128) comment '微信单号',
    createTime           datetime comment '时间',
    createUser           varchar(32) comment '付款者',
    primary key (id),

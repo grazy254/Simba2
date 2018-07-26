@@ -2704,8 +2704,8 @@ Shadow=0</a:DisplayPreferences>
 <c:Symbols>
 <o:TableSymbol Id="o6">
 <a:CreationDate>1520822901</a:CreationDate>
-<a:ModificationDate>1520822907</a:ModificationDate>
-<a:Rect>((-28744,1403), (-15510,16375))</a:Rect>
+<a:ModificationDate>1522737366</a:ModificationDate>
+<a:Rect>((-22369,3353), (-9135,18325))</a:Rect>
 <a:LineColor>12615680</a:LineColor>
 <a:FillColor>16570034</a:FillColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -2727,8 +2727,8 @@ TableComment 0 新宋体,8,N</a:FontList>
 </o:TableSymbol>
 <o:TableSymbol Id="o8">
 <a:CreationDate>1520822902</a:CreationDate>
-<a:ModificationDate>1520833591</a:ModificationDate>
-<a:Rect>((-13144,1928), (90,15250))</a:Rect>
+<a:ModificationDate>1522737366</a:ModificationDate>
+<a:Rect>((-6769,3878), (6465,17200))</a:Rect>
 <a:LineColor>12615680</a:LineColor>
 <a:FillColor>16570034</a:FillColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -2750,8 +2750,8 @@ TableComment 0 新宋体,8,N</a:FontList>
 </o:TableSymbol>
 <o:TableSymbol Id="o10">
 <a:CreationDate>1520822903</a:CreationDate>
-<a:ModificationDate>1520834310</a:ModificationDate>
-<a:Rect>((1377,-735), (14225,18363))</a:Rect>
+<a:ModificationDate>1522737370</a:ModificationDate>
+<a:Rect>((-21348,-19860), (-8500,-762))</a:Rect>
 <a:LineColor>12615680</a:LineColor>
 <a:FillColor>16570034</a:FillColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -2773,8 +2773,8 @@ TableComment 0 新宋体,8,N</a:FontList>
 </o:TableSymbol>
 <o:TableSymbol Id="o12">
 <a:CreationDate>1520822905</a:CreationDate>
-<a:ModificationDate>1520834918</a:ModificationDate>
-<a:Rect>((15821,-1635), (28283,19113))</a:Rect>
+<a:ModificationDate>1522737370</a:ModificationDate>
+<a:Rect>((-6904,-20760), (5558,-12))</a:Rect>
 <a:LineColor>12615680</a:LineColor>
 <a:FillColor>16570034</a:FillColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -2948,11 +2948,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>errMsg</a:Code>
 <a:CreationDate>1520823452</a:CreationDate>
 <a:Creator>caozhejun</a:Creator>
-<a:ModificationDate>1520823452</a:ModificationDate>
+<a:ModificationDate>1532507544</a:ModificationDate>
 <a:Modifier>caozhejun</a:Modifier>
 <a:Comment>错误信息</a:Comment>
-<a:DataType>varchar(64)</a:DataType>
-<a:Length>64</a:Length>
+<a:DataType>varchar(128)</a:DataType>
+<a:Length>128</a:Length>
 </o:Column>
 <o:Column Id="o26">
 <a:ObjectID>70F3E212-FC5F-4A31-A2F5-76AF58F5B713</a:ObjectID>
@@ -3096,11 +3096,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>trueName</a:Code>
 <a:CreationDate>1520833410</a:CreationDate>
 <a:Creator>caozhejun</a:Creator>
-<a:ModificationDate>1520833410</a:ModificationDate>
+<a:ModificationDate>1532507525</a:ModificationDate>
 <a:Modifier>caozhejun</a:Modifier>
 <a:Comment>收款方用户名</a:Comment>
-<a:DataType>varchar(16)</a:DataType>
-<a:Length>16</a:Length>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 </o:Column>
 <o:Column Id="o37">
 <a:ObjectID>A05B72F1-3D8A-48A3-87B0-637AC549885D</a:ObjectID>
@@ -3155,11 +3155,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>errMsg</a:Code>
 <a:CreationDate>1520833471</a:CreationDate>
 <a:Creator>caozhejun</a:Creator>
-<a:ModificationDate>1520833471</a:ModificationDate>
+<a:ModificationDate>1532507525</a:ModificationDate>
 <a:Modifier>caozhejun</a:Modifier>
 <a:Comment>错误信息</a:Comment>
-<a:DataType>varchar(32)</a:DataType>
-<a:Length>32</a:Length>
+<a:DataType>varchar(128)</a:DataType>
+<a:Length>128</a:Length>
 </o:Column>
 <o:Column Id="o42">
 <a:ObjectID>6E30E1BD-3EDC-40E3-B10B-D23204AB39CF</a:ObjectID>
@@ -3408,11 +3408,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>sceneId</a:Code>
 <a:CreationDate>1520834146</a:CreationDate>
 <a:Creator>caozhejun</a:Creator>
-<a:ModificationDate>1520834146</a:ModificationDate>
+<a:ModificationDate>1532507566</a:ModificationDate>
 <a:Modifier>caozhejun</a:Modifier>
 <a:Comment>场景id</a:Comment>
-<a:DataType>varchar(32)</a:DataType>
-<a:Length>32</a:Length>
+<a:DataType>varchar(128)</a:DataType>
+<a:Length>128</a:Length>
 </o:Column>
 <o:Column Id="o62">
 <a:ObjectID>06956216-8D84-4B41-8693-6798C4899083</a:ObjectID>
@@ -3468,11 +3468,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>sendListId</a:Code>
 <a:CreationDate>1520834287</a:CreationDate>
 <a:Creator>caozhejun</a:Creator>
-<a:ModificationDate>1520834287</a:ModificationDate>
+<a:ModificationDate>1532507566</a:ModificationDate>
 <a:Modifier>caozhejun</a:Modifier>
 <a:Comment>微信单号</a:Comment>
-<a:DataType>varchar(32)</a:DataType>
-<a:Length>32</a:Length>
+<a:DataType>varchar(128)</a:DataType>
+<a:Length>128</a:Length>
 </o:Column>
 <o:Column Id="o67">
 <a:ObjectID>23AC3560-A555-42A7-BF58-CE5F7A9AD05D</a:ObjectID>
@@ -3771,11 +3771,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>errMsg</a:Code>
 <a:CreationDate>1520834837</a:CreationDate>
 <a:Creator>caozhejun</a:Creator>
-<a:ModificationDate>1520834837</a:ModificationDate>
+<a:ModificationDate>1532507598</a:ModificationDate>
 <a:Modifier>caozhejun</a:Modifier>
 <a:Comment>错误信息</a:Comment>
-<a:DataType>varchar(32)</a:DataType>
-<a:Length>32</a:Length>
+<a:DataType>varchar(128)</a:DataType>
+<a:Length>128</a:Length>
 </o:Column>
 <o:Column Id="o91">
 <a:ObjectID>B3453CAE-8343-4F46-B01B-B6AAE7474CA8</a:ObjectID>

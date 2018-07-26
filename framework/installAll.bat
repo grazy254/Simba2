@@ -325,4 +325,7 @@ cd ../
 cd simba-user-sdk
 call mvn clean -U install
 cd ../
+cd simba-realtime-sdk
+call mvn clean -U install
+cd ../
 echo " deplay all finish "

@@ -15,7 +15,6 @@
 		<module>simba-service</module>
 		<module>simba-admin</module>
 		<module>simba-user</module>
-        <module>pushCenter-sdk</module>
 	</modules>
 
 	<name>simbaRoot</name>

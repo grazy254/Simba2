@@ -1,4 +1,4 @@
-package com.simba.util.websocket;
+package com.simba.service.websocket;
 
 import com.simba.cache.RedisUtil;
 import com.simba.framework.util.applicationcontext.ApplicationContextUtil;

@@ -1,8 +1,8 @@
-package com.simba.util.sendmsg.impl;
+package com.simba.service.sender.impl;
 
-import com.simba.util.sendmsg.ISender;
+import com.simba.service.sender.ISender;
 import com.simba.consts.PushType;
-import com.simba.util.websocket.WsConnectionPool;
+import com.simba.service.websocket.WsConnectionPool;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;

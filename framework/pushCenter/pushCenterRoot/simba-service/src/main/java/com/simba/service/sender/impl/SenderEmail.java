@@ -1,11 +1,11 @@
-package com.simba.util.sendmsg.impl;
+package com.simba.service.sender.impl;
 
 import com.simba.arg.EmailArg;
 import com.simba.framework.util.json.FastJsonUtil;
 import com.simba.model.SmartUser;
 import com.simba.service.SmartUserService;
 import com.simba.util.EmailUtil;
-import com.simba.util.sendmsg.ISender;
+import com.simba.service.sender.ISender;
 import com.simba.consts.PushType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

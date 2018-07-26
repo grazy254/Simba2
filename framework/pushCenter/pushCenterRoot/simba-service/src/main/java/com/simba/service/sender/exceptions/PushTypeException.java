@@ -1,4 +1,4 @@
-package com.simba.util.sendmsg.exceptions;
+package com.simba.service.sender.exceptions;
 
 /**
  * Created by shuoGG on 2018/7/24

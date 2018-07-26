@@ -1,4 +1,4 @@
-package com.simba.util.websocket;
+package com.simba.service.websocket;
 
 import java.util.HashMap;
 import java.util.Map;

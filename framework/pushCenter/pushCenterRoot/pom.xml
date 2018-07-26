@@ -10,11 +10,9 @@
 
 	<modules>
 		<module>simba-model</module>
-		<module>simba-util</module>
 		<module>simba-dao</module>
 		<module>simba-service</module>
 		<module>simba-admin</module>
-		<module>simba-user</module>
 	</modules>
 
 	<name>simbaRoot</name>

@@ -1,4 +1,4 @@
-package com.simba.util.sendmsg;
+package com.simba.service.sender;
 
 /**
  * Created by shuoGG on 2018/7/24

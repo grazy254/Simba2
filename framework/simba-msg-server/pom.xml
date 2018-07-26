@@ -77,6 +77,16 @@
 			<artifactId>simba-msg-management</artifactId>
 			<version>${simba.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-boot-admin-client</artifactId>
+			<version>${simba.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-eureka-client</artifactId>
+			<version>${simba.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

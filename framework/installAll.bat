@@ -331,4 +331,7 @@ cd ../
 cd simba-switch-sdk
 call mvn clean -U install
 cd ../
+cd simba-version-sdk
+call mvn clean -U install
+cd ../
 echo " deplay all finish "

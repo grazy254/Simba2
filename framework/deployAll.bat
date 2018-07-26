@@ -331,4 +331,7 @@ cd ../
 cd simba-switch-sdk
 call mvn clean -U deploy
 cd ../
+cd simba-version-sdk
+call mvn clean -U deploy
+cd ../
 echo " deplay all finish "

@@ -4,6 +4,9 @@ cd ../
 cd simba-user-sdk
 call mvn clean -U 
 cd ../
+cd simba-version-sdk
+call mvn clean -U 
+cd ../
 cd simba-realtime-sdk
 call mvn clean -U 
 cd ../

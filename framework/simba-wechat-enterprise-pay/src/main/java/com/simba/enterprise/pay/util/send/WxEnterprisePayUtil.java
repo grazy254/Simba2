@@ -218,14 +218,14 @@ public class WxEnterprisePayUtil {
 		String nonce_str = RandomUtil.random32Chars();
 		request.setMch_id(mchId);
 		request.setNonce_str(nonce_str);
+		// 对卡号和用户名进行rsa加密
+		String bankNo = RSAUtil.encryptData(request.getEnc_bank_no(), rsaKey);
+		String name = RSAUtil.encryptData(request.getEnc_true_name(), rsaKey);
+		request.setEnc_bank_no(bankNo);
+		request.setEnc_true_name(name);
 		Map<String, String> params = BeanUtils.xmlBean2Map(request);
 		String sign = SignUtil.getInstance().createSign(params, key);
 		request.setSign(sign);
-		// 对卡号和用户名进行rsa加密
-		String bankNo = RSAUtil.encode(request.getEnc_bank_no(), rsaKey);
-		String name = RSAUtil.encode(request.getEnc_true_name(), rsaKey);
-		request.setEnc_bank_no(bankNo);
-		request.setEnc_true_name(name);
 		String xml = request.toXML();
 		logger.info("企业付款到银行卡:" + WxEnterprisePayConstantData.transfersCardUrl + ",内容:" + xml);
 		String resp = CertRequestUrl.getInstance().executeWithKey(WxEnterprisePayConstantData.transfersCardUrl, xml);

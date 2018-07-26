@@ -5,9 +5,9 @@
 
 	<groupId>com.simba</groupId>
 	<packaging>jar</packaging>
-	<artifactId>simba-switch-server</artifactId>
+	<artifactId>simba-version-api</artifactId>
 	<version>2.1.0-SNAPSHOT</version>
-	<name>simba-switch-server</name>
+	<name>simba-version-api</name>
 	<url>http://maven.apache.org</url>
 
 	<parent>
@@ -16,8 +16,6 @@
 		<version>1.5.3.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-
-
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -34,47 +32,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.simba</groupId>
-			<artifactId>simba-permission</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-menu</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-registry</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-job</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-buss</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-ip</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-exception-management</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-log</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-switch-management</artifactId>
+			<artifactId>simba-version-management</artifactId>
 			<version>${simba.version}</version>
 		</dependency>
 		<dependency>
@@ -90,7 +48,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>realtimeserver</finalName>
+		<finalName>versionapi</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

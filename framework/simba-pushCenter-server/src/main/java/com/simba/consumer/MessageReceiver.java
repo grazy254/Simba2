@@ -7,7 +7,7 @@ import com.simba.framework.util.json.FastJsonUtil;
 import com.simba.model.PushMessage;
 import com.simba.service.PushMessageService;
 import com.simba.service.sender.ISender;
-import com.simba.service.sender.exceptions.PushTypeException;
+import com.simba.exceptions.PushTypeException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,7 +31,7 @@ public class MessageReceiver {
 
     @RabbitHandler
     public void process(String recMsg) {
-        logger.info("收到消息对msgCenterS的消息:" + recMsg);
+        logger.info("收到消息队列msgCenterS的消息:" + recMsg);
         if (StringUtils.isEmpty(recMsg)) return;
         PushArg pushArg = FastJsonUtil.toObject(recMsg, PushArg.class);
         ISender sender = (ISender) ApplicationContextUtil.getBean(pushArg.getPushType());

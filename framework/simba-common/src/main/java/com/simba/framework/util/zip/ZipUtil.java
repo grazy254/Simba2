@@ -1,8 +1,13 @@
 package com.simba.framework.util.zip;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipInputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import net.lingala.zip4j.core.ZipFile;
@@ -92,6 +97,28 @@ public class ZipUtil {
 	 */
 	public static void unzip(String zipFile, String dest, String charset) throws ZipException {
 		unzip(new File(zipFile), dest, charset);
+	}
+
+	/**
+	 * 解压zip字节数组
+	 *
+	 * @param zipBytes zip的字节数组
+	 * @return Map<文件名, 解压后的文件字节>
+	 * @throws Exception
+	 */
+	public static Map<String, byte[]> unzip(byte[] zipBytes) throws Exception {
+		ZipInputStream zIn = new ZipInputStream(new ByteArrayInputStream(zipBytes));
+		java.util.zip.ZipEntry zipEntry;
+		Map<String, byte[]> map = new HashMap<>();
+		while ((zipEntry = zIn.getNextEntry()) != null) {
+			//如果是文件夹路径方式，本方法内暂时不提供操作
+			String fileName = zipEntry.getName();
+			byte[] data = IOUtils.toByteArray(zIn);
+			zIn.closeEntry();
+			map.put(fileName, data);
+		}
+		zIn.close();
+		return map;
 	}
 
 	/**

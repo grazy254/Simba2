@@ -1,0 +1,1 @@
+mvn deploy:deploy-file -Dfile=kaptcha-2.3.jar -DgroupId=com.google.code.kaptcha -DartifactId=kaptcha -Dversion=2.3 -Dpackaging=jar -Durl=http://192.168.75.25:8081/repository/maven-releases/ -DrepositoryId=nexus-releases

@@ -385,6 +385,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 		p = EncryptUtil.md5(p);
 		user.setPassword(p);
 		smartUserDao.update(user);
+		
 		return new JsonResult("信息完善成功",200);
 	}
 

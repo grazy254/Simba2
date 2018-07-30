@@ -1,10 +1,5 @@
 package com.simba.api;
 
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
@@ -12,19 +7,13 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.simba.cache.RedisUtil;
 import com.simba.exception.BussException;
-import com.simba.framework.util.code.DesUtil;
-import com.simba.framework.util.code.EncryptUtil;
 import com.simba.framework.util.json.JsonResult;
-import com.simba.model.SmartUser;
 import com.simba.service.SmartUserService;
-import com.simba.service.UserProjectService;
-import com.simba.util.EmailUtil;
 
 /**
  * 用户登录
@@ -34,8 +23,9 @@ import com.simba.util.EmailUtil;
  */
 @Controller
 @RequestMapping("/api/userLogin")
-public class UserLoginController {
-	private static final Log logger = LogFactory.getLog(UserLoginController.class);
+public class UserLoginApi {
+	
+	private static final Log logger = LogFactory.getLog(UserLoginApi.class);
 
 	@Value("${appID}")
 	private String appid;

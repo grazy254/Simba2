@@ -11,12 +11,11 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.simba.common.EnvironmentUtil;
+import com.simba.exception.BussException;
 import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.framework.util.common.PathUtil;
 import com.simba.framework.util.data.ThreadDataUtil;
@@ -76,8 +75,8 @@ public class ThreadDataInterceptor implements HandlerInterceptor {
 			ThreadDataUtil.set("account", smartUserService.get(Long.parseLong(userId.toString())));
 			SmartUser smartUser= smartUserService.get(Long.parseLong(userId.toString()));
 			if(smartUser == null){
-				logger.info("用户数据已经删除，请换其他账号登录");
 				session.removeAttribute("userId");
+				throw new BussException("用户数据已经删除，请换其他账号登录");
 			}
 			//处于安全考虑，将密码设为空
 			smartUser.setPassword("");

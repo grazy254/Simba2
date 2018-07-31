@@ -10,11 +10,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.simba.common.EnvironmentUtil;
 import com.simba.exception.ForbidException;
-import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.framework.util.common.PathUtil;
 import com.simba.framework.util.common.ServerUtil;
+import com.simba.registry.util.RegistryUtil;
 
 /**
  * 权限拦截器
@@ -33,13 +32,11 @@ public class IpInterceptor implements HandlerInterceptor {
 
 	public IpInterceptor() {
 		super();
-		init();
 	}
 
 	private void init() {
-		EnvironmentUtil environmentUtil = ApplicationContextUtil.getBean(EnvironmentUtil.class);
-		excludeUrl = environmentUtil.get("ip.interceptor.exclude.url");
-		excludeIp = environmentUtil.get("ip.interceptor.exclude.ip");
+		excludeUrl = RegistryUtil.get("ip.interceptor.exclude.url");
+		excludeIp = RegistryUtil.get("ip.interceptor.exclude.ip");
 		String[] urls = excludeUrl.split(",");
 		for (String url : urls) {
 			if (StringUtils.isNotEmpty(url)) {
@@ -55,8 +52,8 @@ public class IpInterceptor implements HandlerInterceptor {
 	}
 
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-			throws Exception {
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+		init();
 		String requestUri = getRequestUri(request);
 		for (String excludeUrl : excludeUrls) {
 			if (PathUtil.match(requestUri, excludeUrl)) {
@@ -73,13 +70,11 @@ public class IpInterceptor implements HandlerInterceptor {
 	}
 
 	@Override
-	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-			ModelAndView modelAndView) throws Exception {
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
 	}
 
 	@Override
-	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-			throws Exception {
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
 	}
 
 	/**

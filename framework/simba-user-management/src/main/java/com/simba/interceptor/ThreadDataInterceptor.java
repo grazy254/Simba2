@@ -72,15 +72,15 @@ public class ThreadDataInterceptor implements HandlerInterceptor {
 		HttpSession session = request.getSession();
 		Object userId = session.getAttribute("userId");
 		String token=request.getHeader("session_token");
+		logger.info("token:"+token);
 		if (userId == null || "".equals(userId)){
 			//通过token获取userId
 			if("".equals(token) || redisUtil.get(token)==null){
 				
 				throw new BussException("您还未登录系统，无法set登录session进去" + request.getRequestURI());
 			}else{
-				SmartUser user=(SmartUser)redisUtil.get(token);
-				userId=user.getId();
-				logger.info("userId:" +user.getId());
+				userId=redisUtil.get(token);
+				logger.info("userId:" +userId.toString());
 				ThreadDataUtil.set("account", smartUserService.get(Long.parseLong(userId.toString())));
 				SmartUser smartUser= smartUserService.get(Long.parseLong(userId.toString()));
 				if(smartUser == null){

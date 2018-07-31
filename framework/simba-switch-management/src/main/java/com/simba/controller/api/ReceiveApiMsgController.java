@@ -1,4 +1,4 @@
-package com.simba.controller.user;
+package com.simba.controller.api;
 
 import java.io.InputStream;
 
@@ -18,19 +18,32 @@ import com.simba.model.constant.ConstantData;
 import com.simba.service.ReceiveMsgService;
 
 /**
- * 接收设备消息的controller
+ * 接收设备消息的Controller
  * 
  * @author caozhejun
  *
  */
 @RestController
-@RequestMapping("/user/receiveMessage")
-public class ReceiveUserMsgController {
+@RequestMapping
+public class ReceiveApiMsgController {
 
-	private static final Log logger = LogFactory.getLog(ReceiveUserMsgController.class);
+	private static final Log logger = LogFactory.getLog(ReceiveApiMsgController.class);
 
 	@Autowired
 	private ReceiveMsgService service;
+
+	/**
+	 * 接收设备消息(为了兼容旧接口而存在)
+	 * 
+	 * @param msg
+	 * @param request
+	 * @return
+	 */
+	@Deprecated
+	@RequestMapping("/receiveMessage/receive")
+	public JsonResult oldReceive(ReceiveMsg msg, HttpServletRequest request) {
+		return receive(msg, request);
+	}
 
 	/**
 	 * 接收设备消息
@@ -38,7 +51,7 @@ public class ReceiveUserMsgController {
 	 * @param msg
 	 * @return
 	 */
-	@RequestMapping("/receive")
+	@RequestMapping("/api/message/receive")
 	public JsonResult receive(ReceiveMsg msg, HttpServletRequest request) {
 		if (StringUtils.isEmpty(msg.getMessage())) {
 			InputStream in = null;

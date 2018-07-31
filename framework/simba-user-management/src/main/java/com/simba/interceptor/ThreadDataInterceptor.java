@@ -75,6 +75,10 @@ public class ThreadDataInterceptor implements HandlerInterceptor {
 			logger.info("userId:" +userId.toString());
 			ThreadDataUtil.set("account", smartUserService.get(Long.parseLong(userId.toString())));
 			SmartUser smartUser= smartUserService.get(Long.parseLong(userId.toString()));
+			if(smartUser == null){
+				logger.info("用户数据已经删除，请换其他账号登录");
+				session.removeAttribute("userId");
+			}
 			//处于安全考虑，将密码设为空
 			smartUser.setPassword("");
 			logger.info("已写入线程变量 --key=account value="+smartUser);

@@ -34,7 +34,7 @@ public class MsgTemplate {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     /**
-     * 审核状态
+     * 审核状态: 0未通过 1通过 2审核中 3无
      */
     @DescAnnotation(desc = "阿里审核状态")
     private int statusAli;

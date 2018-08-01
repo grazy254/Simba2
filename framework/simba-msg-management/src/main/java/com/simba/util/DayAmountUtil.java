@@ -23,7 +23,8 @@ public class DayAmountUtil {
     }
 
     public void setAmount(String projectId, int value) {
-        redisUtil.hset(DAY_AMOUNT, projectId, value);
+        clean();
+        incrAmount(projectId, value);
     }
 
     public Integer getAmount(String projectId) {

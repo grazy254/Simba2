@@ -52,7 +52,7 @@ public class SendRealTimeMessageController {
 	 * @return
 	 */
 	@RequestMapping("/send")
-	public JsonResult sendByUserId(String userId, String content, String appid) {
+	public JsonResult send(String userId, String content, String appid) {
 		logger.info("接收到需要推送给用户[appid:" + appid + "][userId:" + userId + "]的内容:" + content);
 		WebSocketSession session = UserIdConnectionPool.getInstance().get(userId, appid);
 		if (session != null && session.isOpen()) {

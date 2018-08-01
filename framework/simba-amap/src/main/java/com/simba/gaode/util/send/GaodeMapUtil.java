@@ -567,28 +567,5 @@ public class GaodeMapUtil {
 		CorrectResult result = FastJsonUtil.toObject(res, CorrectResult.class);
 		return result;
 	}
-	
-	public static void main(String[] args) throws UnsupportedEncodingException{
-		String encoding = "GBK";  
-		File file = new File("E:/1.txt");  
-        Long filelength = file.length();  
-        
-        byte[] filecontent = new byte[filelength.intValue()];  
-        try {  
-            FileInputStream in = new FileInputStream(file);  
-            in.read(filecontent);  
-            in.close();  
-        } catch (FileNotFoundException e) {  
-            e.printStackTrace();  
-        } catch (IOException e) {  
-            e.printStackTrace();  
-        }
-        String ss =new String(filecontent, encoding);
-        System.out.println(ss);
-        
-        BusResult result = FastJsonUtil.toObject(ss, BusResult.class);
-        System.out.print(result.toString());
-       
-	}
 
 }

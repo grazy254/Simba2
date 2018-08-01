@@ -146,4 +146,9 @@ public class RealTimeMessageServiceImpl implements RealTimeMessageService {
 		return realTimeMessageDao.pageByOr(field1, value1, field2, value2, page);
 	}
 
+	@Override
+	public Long count(RealTimeMessageSearchForm searchForm) {
+		return realTimeMessageDao.count(searchForm);
+	}
+
 }

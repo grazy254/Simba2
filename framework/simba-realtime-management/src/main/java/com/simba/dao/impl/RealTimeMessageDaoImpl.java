@@ -29,14 +29,14 @@ public class RealTimeMessageDaoImpl implements RealTimeMessageDao {
 
 	@Override
 	public void add(RealTimeMessage realTimeMessage) {
-		String sql = "insert into " + table + "( userId, message, createTime) values(?,?,?)";
-		jdbc.updateForBoolean(sql, realTimeMessage.getUserId(), realTimeMessage.getMessage(), realTimeMessage.getCreateTime());
+		String sql = "insert into " + table + "( userId, message, createTime,appid) values(?,?,?,?)";
+		jdbc.updateForBoolean(sql, realTimeMessage.getUserId(), realTimeMessage.getMessage(), realTimeMessage.getCreateTime(), realTimeMessage.getAppid());
 	}
 
 	@Override
 	public void update(RealTimeMessage realTimeMessage) {
-		String sql = "update " + table + " set  userId = ? , message = ? , createTime = ?  where id = ?  ";
-		jdbc.updateForBoolean(sql, realTimeMessage.getUserId(), realTimeMessage.getMessage(), realTimeMessage.getCreateTime(), realTimeMessage.getId());
+		String sql = "update " + table + " set  userId = ? , message = ? , createTime = ? ,appid = ? where id = ?  ";
+		jdbc.updateForBoolean(sql, realTimeMessage.getUserId(), realTimeMessage.getMessage(), realTimeMessage.getCreateTime(), realTimeMessage.getAppid(), realTimeMessage.getId());
 	}
 
 	@Override
@@ -47,7 +47,6 @@ public class RealTimeMessageDaoImpl implements RealTimeMessageDao {
 
 	@Override
 	public List<RealTimeMessage> page(Pager page) {
-		
 		String sql = "select * from " + table;
 		return jdbc.queryForPage(sql, RealTimeMessage.class, page);
 	}
@@ -160,6 +159,10 @@ public class RealTimeMessageDaoImpl implements RealTimeMessageDao {
 			sql += " and userId = ? ";
 			param.setInt(searchForm.getUserId());
 		}
+		if (StringUtils.isNotEmpty(searchForm.getAppid())) {
+			sql += " and appid = ? ";
+			param.setString(searchForm.getAppid());
+		}
 		if (StringUtils.isNotEmpty(searchForm.getMessage())) {
 			sql += " and message like '%" + searchForm.getMessage() + "%'";
 		}
@@ -173,6 +176,13 @@ public class RealTimeMessageDaoImpl implements RealTimeMessageDao {
 		}
 		return sql;
 	}
-	// new add end !!!
+
+	@Override
+	public Long count(RealTimeMessageSearchForm searchForm) {
+		String sql = "select count(*) from " + table;
+		StatementParameter param = new StatementParameter();
+		sql = buildCondition(sql, searchForm, param);
+		return jdbc.queryForLong(sql, param);
+	}
 
 }

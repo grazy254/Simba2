@@ -28,9 +28,11 @@
 								<div class="box-body no-padding">
 									<div class="mailbox-controls">
 										<!-- Check all button -->
-										<label for="title">接收方userID:</label>
+										<label for="appid">接收方appid:</label>
+										<input type="text" id="appid" name="appid" placeholder="接收方appid">
+										<label for="userId">接收方userID:</label>
 										<input type="text" id="userId" name="userId" placeholder="接收方userID">
-										<label for="text">发送内容:</label>
+										<label for="message">发送内容:</label>
 										<input type="text" id="message" name="message" placeholder="请输入内容">
 										<label for="startTime">开始时间:</label>
 										<input type="text" class="datetimepicker" id="startTime" name="startTime" placeholder="请输入开始时间">
@@ -49,6 +51,7 @@
 										<thead>
 											<tr>
 												<th><input type="checkbox" name="checkAll" id="checkAll">全选</th>
+												<th>appid</th>
 												<th>接收方ID</th>
 												<th>消息</th>
 												<th>时间</th>

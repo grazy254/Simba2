@@ -46,6 +46,9 @@ public class DayAmountServiceImpl implements DayAmountService {
     @Autowired
     private DayAmountDao dayAmountDao;
 
+    @Autowired
+    private DayAmountUtil dayAmountUtil;
+
     @Override
     public void add(DayAmount dayAmount) {
         dayAmountDao.add(dayAmount);
@@ -213,7 +216,7 @@ public class DayAmountServiceImpl implements DayAmountService {
      * @return
      */
     @Scheduled(cron = "0 0 1 * * ?")
-    private void countDayMsg() {
+    public void countDayMsg() {
         boolean isLock = redisUtil.tryLock(DayAmountUtil.TIMERLOCK_REDIS_KEY, 60);
         if (isLock) {
             try (Jedis jedis = redisUtil.getJedis()) {
@@ -233,7 +236,7 @@ public class DayAmountServiceImpl implements DayAmountService {
                     if (System.currentTimeMillis() > timeout) throw new RuntimeException("超时");
                 }
                 // 清0
-                jedis.hdel(DayAmountUtil.DAY_AMOUNT);
+                dayAmountUtil.clean();
             }
 
         }

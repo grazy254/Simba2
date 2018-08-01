@@ -122,7 +122,7 @@ public class GaodeMapUtil {
 		logger.info("提交高德地图[公交路径规划]url:" + url);
 		String resOld = HttpClientUtil.get(url);
 		//解决walking:[]解析错误的问题
-		String res = resOld.replaceAll("\"walking\":[]", "\"walking\":{}");
+		String res = resOld.replaceAll("\"walking\":\\[\\]", "\"walking\":{}");
 		logger.info("提交高德地图[公交路径规划]url:" + url + ",返回结果:" + res);
 		BusResult result = FastJsonUtil.toObject(res, BusResult.class);
 		return result;

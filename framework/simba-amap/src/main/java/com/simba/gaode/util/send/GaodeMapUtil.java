@@ -1,5 +1,9 @@
 package com.simba.gaode.util.send;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -116,7 +120,9 @@ public class GaodeMapUtil {
 	public BusResult bus(BusLineParam param) throws UnsupportedEncodingException {
 		String url = GaodeConstantData.BUSLINEURL + "&key=" + key + param.buildParamUrl();
 		logger.info("提交高德地图[公交路径规划]url:" + url);
-		String res = HttpClientUtil.get(url);
+		String resOld = HttpClientUtil.get(url);
+		//解决walking:[]解析错误的问题
+		String res = resOld.replaceAll("\"walking\":[]", "\"walking\":{}");
 		logger.info("提交高德地图[公交路径规划]url:" + url + ",返回结果:" + res);
 		BusResult result = FastJsonUtil.toObject(res, BusResult.class);
 		return result;
@@ -560,6 +566,29 @@ public class GaodeMapUtil {
 		logger.info("提交高德地图[轨迹纠偏]url:" + url + ",json:" + json + ",返回结果:" + res);
 		CorrectResult result = FastJsonUtil.toObject(res, CorrectResult.class);
 		return result;
+	}
+	
+	public static void main(String[] args) throws UnsupportedEncodingException{
+		String encoding = "GBK";  
+		File file = new File("E:/1.txt");  
+        Long filelength = file.length();  
+        
+        byte[] filecontent = new byte[filelength.intValue()];  
+        try {  
+            FileInputStream in = new FileInputStream(file);  
+            in.read(filecontent);  
+            in.close();  
+        } catch (FileNotFoundException e) {  
+            e.printStackTrace();  
+        } catch (IOException e) {  
+            e.printStackTrace();  
+        }
+        String ss =new String(filecontent, encoding);
+        System.out.println(ss);
+        
+        BusResult result = FastJsonUtil.toObject(ss, BusResult.class);
+        System.out.print(result.toString());
+       
 	}
 
 }

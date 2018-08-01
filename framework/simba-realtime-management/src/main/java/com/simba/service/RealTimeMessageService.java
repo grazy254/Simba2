@@ -1,4 +1,4 @@
-package  com.simba.service;
+package com.simba.service;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import com.simba.model.RealTimeMessage;
 import com.simba.model.form.RealTimeMessageSearchForm;
 
 /**
- *设备功能表 Service
+ * 设备功能表 Service
  * 
  * @author caozj
  * 
@@ -23,17 +23,17 @@ public interface RealTimeMessageService {
 	List<RealTimeMessage> listAll();
 
 	Long count();
-	
+
 	Long countBy(String field, Object value);
-	
+
 	void deleteBy(String field, Object value);
-	
+
 	List<RealTimeMessage> page(Pager page);
-	
-	List<RealTimeMessage> page(Pager page,RealTimeMessageSearchForm searchForm);
+
+	List<RealTimeMessage> page(Pager page, RealTimeMessageSearchForm searchForm);
 
 	RealTimeMessage get(Long id);
-	
+
 	void batchDelete(List<Long> idList);
 
 	RealTimeMessage getBy(String field, Object value);
@@ -53,5 +53,7 @@ public interface RealTimeMessageService {
 	List<RealTimeMessage> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
 
 	List<RealTimeMessage> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
+
+	Long count(RealTimeMessageSearchForm searchForm);
 
 }

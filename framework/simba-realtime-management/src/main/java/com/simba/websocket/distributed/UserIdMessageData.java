@@ -22,6 +22,16 @@ public class UserIdMessageData implements Serializable {
 	 */
 	private String content;
 
+	private String appid;
+
+	public String getAppid() {
+		return appid;
+	}
+
+	public void setAppid(String appid) {
+		this.appid = appid;
+	}
+
 	public String getUserId() {
 		return userId;
 	}
@@ -45,6 +55,8 @@ public class UserIdMessageData implements Serializable {
 		builder.append(userId);
 		builder.append(", content=");
 		builder.append(content);
+		builder.append(", appid=");
+		builder.append(appid);
 		builder.append("]");
 		return builder.toString();
 	}

@@ -1,4 +1,4 @@
-package com.simba.controller.user;
+package com.simba.controller.api;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -22,7 +22,7 @@ import com.simba.model.FileVersion;
 import com.simba.service.FileVersionService;
 
 @Controller
-@RequestMapping("/user/app")
+@RequestMapping("/api/app")
 public class AppController {
 
 	private static final Log logger = LogFactory.getLog(AppController.class);
@@ -33,7 +33,8 @@ public class AppController {
 	/**
 	 * 获取最新版本信息
 	 * 
-	 * @param typeId 1: android 2: ios
+	 * @param typeId
+	 *            1: android 2: ios
 	 * @param model
 	 * @return
 	 */

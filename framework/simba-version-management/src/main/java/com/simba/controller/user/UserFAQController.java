@@ -20,7 +20,7 @@ import com.simba.service.FAQService;
  * 
  */
 @Controller
-@RequestMapping("/user/fAQ")
+@RequestMapping("/api/fAQ")
 public class UserFAQController {
 
 	@Autowired

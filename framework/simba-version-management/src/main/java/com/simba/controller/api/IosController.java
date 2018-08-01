@@ -1,4 +1,4 @@
-package com.simba.controller.user;
+package com.simba.controller.api;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,7 @@ import com.simba.service.IOSVersionService;
  *
  */
 @Controller
-@RequestMapping("/user/ios")
+@RequestMapping("/api/ios")
 public class IosController {
 
 	@Value("${ios.plist.url}")

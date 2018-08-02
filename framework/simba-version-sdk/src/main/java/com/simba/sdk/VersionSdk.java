@@ -27,6 +27,10 @@ public class VersionSdk {
 
 	private static final String saveBugFeedbackUrl = "/VERSIONUSER/api/bugFeedback/save";
 
+	private static final String getIosVersionUrl = "/VERSIONUSER/api/ios/getVersionInfo";
+
+	private static final String saveOpinionFeedbackUrl = "/VERSIONUSER/api/opinionFeedback/save";
+
 	@Autowired
 	private EurekaClientUtil client;
 
@@ -42,6 +46,21 @@ public class VersionSdk {
 		String res = client.get(getUrl);
 		JsonResult result = FastJsonUtil.toObject(res, JsonResult.class);
 		result.check("获取版本信息发生异常");
+		return result;
+	}
+
+	/**
+	 * 获取IOS版本信息
+	 * 
+	 * @param typeId
+	 *            类型id
+	 * @return
+	 */
+	public JsonResult getIOSVersionInfo(int typeId) {
+		String getUrl = getIosVersionUrl + "?typeId=" + typeId;
+		String res = client.get(getUrl);
+		JsonResult result = FastJsonUtil.toObject(res, JsonResult.class);
+		result.check("获取IOS版本信息发生异常");
 		return result;
 	}
 
@@ -67,6 +86,25 @@ public class VersionSdk {
 		String res = client.post(saveBugFeedbackUrl, param);
 		JsonResult result = FastJsonUtil.toObject(res, JsonResult.class);
 		result.check("保存bug反馈发生异常");
+		return result;
+	}
+
+	/**
+	 * 保存反馈意见
+	 * 
+	 * @param userId
+	 * @param title
+	 * @param text
+	 * @return
+	 */
+	public JsonResult saveOpinionFeedback(Integer userId, String title, String text) {
+		Map<String, String> param = new HashMap<>();
+		param.put("userId", userId + "");
+		param.put("title", title);
+		param.put("text", text);
+		String res = client.post(saveOpinionFeedbackUrl, param);
+		JsonResult result = FastJsonUtil.toObject(res, JsonResult.class);
+		result.check("保存反馈意见发生异常");
 		return result;
 	}
 }

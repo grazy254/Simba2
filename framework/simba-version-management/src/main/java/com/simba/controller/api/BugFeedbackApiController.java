@@ -29,7 +29,7 @@ public class BugFeedbackApiController {
 	 */
 	@RequestMapping("/save")
 	public JsonResult save(BugFeedback bugFeedback) {
-		bugFeedbackService.insertBugFeedback(bugFeedback);
+		bugFeedbackService.add(bugFeedback);
 		return new JsonResult();
 	}
 

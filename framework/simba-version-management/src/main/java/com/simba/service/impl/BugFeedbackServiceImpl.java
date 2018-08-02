@@ -26,24 +26,15 @@ public class BugFeedbackServiceImpl implements BugFeedbackService {
 	@Autowired
 	private BugFeedbackDao bugFeedbackDao;
 
-	
-	//new add 
-	@Override
-	public void insertBugFeedback(BugFeedback bugFeedback) {
-		bugFeedback.setCreateTime(new Date());
-		bugFeedbackDao.add(bugFeedback);
-	}
-	
 	@Override
 	@Transactional(readOnly = true)
-	public List<BugFeedback> page(Pager page,BugFeedbackSearchForm searchForm) {
-		return bugFeedbackDao.page(page,searchForm);
+	public List<BugFeedback> page(Pager page, BugFeedbackSearchForm searchForm) {
+		return bugFeedbackDao.page(page, searchForm);
 	}
-	
-	//new add!!!
-	
+
 	@Override
 	public void add(BugFeedback bugFeedback) {
+		bugFeedback.setCreateTime(new Date());
 		bugFeedbackDao.add(bugFeedback);
 	}
 
@@ -69,16 +60,16 @@ public class BugFeedbackServiceImpl implements BugFeedbackService {
 	public Integer count() {
 		return bugFeedbackDao.count();
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Integer countBy(String field, Object value){
-		return bugFeedbackDao.countBy(field,value);
+	public Integer countBy(String field, Object value) {
+		return bugFeedbackDao.countBy(field, value);
 	}
-	
+
 	@Override
-	public void deleteBy(String field, Object value){
-		bugFeedbackDao.deleteBy(field,value);
+	public void deleteBy(String field, Object value) {
+		bugFeedbackDao.deleteBy(field, value);
 	}
 
 	@Override
@@ -91,14 +82,14 @@ public class BugFeedbackServiceImpl implements BugFeedbackService {
 	public void update(BugFeedback bugFeedback) {
 		bugFeedbackDao.update(bugFeedback);
 	}
-	
+
 	@Override
 	public void batchDelete(List<Integer> idList) {
 		for (Integer id : idList) {
 			this.delete(id);
 		}
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public BugFeedback getBy(String field, Object value) {
@@ -152,5 +143,10 @@ public class BugFeedbackServiceImpl implements BugFeedbackService {
 	public List<BugFeedback> pageByOr(String field1, Object value1, String field2, Object value2, Pager page) {
 		return bugFeedbackDao.pageByOr(field1, value1, field2, value2, page);
 	}
-	
+
+	@Override
+	public Integer count(BugFeedbackSearchForm searchForm) {
+		return bugFeedbackDao.count(searchForm);
+	}
+
 }

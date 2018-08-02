@@ -1,4 +1,4 @@
-package  com.simba.service;
+package com.simba.service;
 
 import java.util.List;
 
@@ -7,16 +7,12 @@ import com.simba.model.BugFeedback;
 import com.simba.model.form.BugFeedbackSearchForm;
 
 /**
- *bug反馈管理 Service
+ * bug反馈管理 Service
  * 
  * @author caozj
  * 
  */
 public interface BugFeedbackService {
-	
-	//new add
-	void insertBugFeedback(BugFeedback bugFeedback);
-	//new add end!!!
 
 	void add(BugFeedback bugFeedback);
 
@@ -27,19 +23,19 @@ public interface BugFeedbackService {
 	List<BugFeedback> listAll();
 
 	Integer count();
-	
+
 	Integer countBy(String field, Object value);
-	
+
 	void deleteBy(String field, Object value);
-	
+
 	List<BugFeedback> page(Pager page);
-	
-	//new add
-	List<BugFeedback> page(Pager page,BugFeedbackSearchForm searchForm);
-	//new add end!!!
+
+	// new add
+	List<BugFeedback> page(Pager page, BugFeedbackSearchForm searchForm);
+	// new add end!!!
 
 	BugFeedback get(Integer id);
-	
+
 	void batchDelete(List<Integer> idList);
 
 	BugFeedback getBy(String field, Object value);
@@ -59,5 +55,7 @@ public interface BugFeedbackService {
 	List<BugFeedback> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
 
 	List<BugFeedback> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
+
+	Integer count(BugFeedbackSearchForm searchForm);
 
 }

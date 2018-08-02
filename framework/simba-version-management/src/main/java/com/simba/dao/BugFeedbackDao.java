@@ -23,19 +23,17 @@ public interface BugFeedbackDao {
 	List<BugFeedback> listAll();
 
 	Integer count();
-	
+
 	Integer countBy(String field, Object value);
-	
+
 	void deleteBy(String field, Object value);
-	
+
 	List<BugFeedback> page(Pager page);
-	
-	//new add
-	List<BugFeedback> page(Pager page,BugFeedbackSearchForm searchForm);
-	//new add !!
+
+	List<BugFeedback> page(Pager page, BugFeedbackSearchForm searchForm);
 
 	BugFeedback get(Integer id);
-	
+
 	BugFeedback getBy(String field, Object value);
 
 	BugFeedback getByAnd(String field1, Object value1, String field2, Object value2);
@@ -53,5 +51,7 @@ public interface BugFeedbackDao {
 	List<BugFeedback> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
 
 	List<BugFeedback> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
+
+	Integer count(BugFeedbackSearchForm searchForm);
 
 }

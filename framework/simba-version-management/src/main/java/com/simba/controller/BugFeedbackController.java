@@ -31,45 +31,34 @@ public class BugFeedbackController {
 	@Autowired
 	private BugFeedbackService bugFeedbackService;
 
-	//new add interface
-	@ResponseBody
-	@RequestMapping("/insertBugFeedback")
-	public JsonResult insertBugFeedback(BugFeedback bugFeedback) {
-		bugFeedback.setUserId(1);
-		bugFeedbackService.insertBugFeedback(bugFeedback);
-		
-		return new JsonResult("", "", 200);
-	}
-	//new add interface end!!!
 	@RequestMapping("/list")
 	public String list() {
 		return "bugFeedback/list";
 	}
-	
+
 	@RequestMapping("/getList")
-	public String getList(Pager pager, BugFeedbackSearchForm searchForm,ModelMap model){
-		List<BugFeedback> list = bugFeedbackService.page(pager,searchForm);
-		List <Map<String,Object>> lists=new ArrayList<Map<String,Object>>();
-		
-		for(int i=0;i<list.size();i++){
-			Map<String,Object> map=new HashMap<>();
-			map.put("id",String.valueOf(list.get(i).getId()));
-			map.put("userId",list.get(i).getUserId());
-			map.put("title",list.get(i).getTitle());
-			map.put("text",list.get(i).getText());
-			map.put("createTime",String.valueOf(list.get(i).getCreateTime()));
-			map.put("img",list.get(i).getImg().split(","));
+	public String getList(Pager pager, BugFeedbackSearchForm searchForm, ModelMap model) {
+		List<BugFeedback> list = bugFeedbackService.page(pager, searchForm);
+		List<Map<String, Object>> lists = new ArrayList<Map<String, Object>>();
+		for (int i = 0; i < list.size(); i++) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("id", String.valueOf(list.get(i).getId()));
+			map.put("userId", list.get(i).getUserId());
+			map.put("title", list.get(i).getTitle());
+			map.put("text", list.get(i).getText());
+			map.put("createTime", String.valueOf(list.get(i).getCreateTime()));
+			map.put("img", list.get(i).getImg().split(","));
 			lists.add(map);
 		}
 		model.put("list", lists);
 		return "bugFeedback/table";
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/count")
-	public JsonResult count() {
-		Integer count = bugFeedbackService.count();
-		return new JsonResult(count, "", 200);
+	public JsonResult count(BugFeedbackSearchForm searchForm) {
+		Integer count = bugFeedbackService.count(searchForm);
+		return new JsonResult(count);
 	}
 
 	@RequestMapping("/toAdd")
@@ -109,7 +98,5 @@ public class BugFeedbackController {
 		bugFeedbackService.batchDelete(Arrays.asList(id));
 		return new JsonResult();
 	}
-
-	
 
 }

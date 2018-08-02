@@ -51,7 +51,6 @@ public class BugFeedbackDaoImpl implements BugFeedbackDao {
 		return jdbc.queryForPage(sql, BugFeedback.class, page);
 	}
 
-	// new add
 	@Override
 	public List<BugFeedback> page(Pager page, BugFeedbackSearchForm searchForm) {
 		String sql = "select * from " + table;
@@ -61,7 +60,6 @@ public class BugFeedbackDaoImpl implements BugFeedbackDao {
 		return jdbc.queryForPage(sql, BugFeedback.class, page, param);
 	}
 
-	// new add end!!!
 	@Override
 	public List<BugFeedback> listAll() {
 		String sql = "select * from " + table;
@@ -154,7 +152,6 @@ public class BugFeedbackDaoImpl implements BugFeedbackDao {
 		jdbc.updateForBoolean(sql, value);
 	}
 
-	// new add
 	private String buildCondition(String sql, BugFeedbackSearchForm searchForm, StatementParameter param) {
 		sql += " where 1=1 ";
 		if (searchForm.getUserId() != null && searchForm.getUserId() > 0) {
@@ -177,6 +174,13 @@ public class BugFeedbackDaoImpl implements BugFeedbackDao {
 		}
 		return sql;
 	}
-	// new add end !!!
+
+	@Override
+	public Integer count(BugFeedbackSearchForm searchForm) {
+		String sql = "select count(*) from " + table;
+		StatementParameter param = new StatementParameter();
+		sql = buildCondition(sql, searchForm, param);
+		return jdbc.queryForInt(sql, param);
+	}
 
 }

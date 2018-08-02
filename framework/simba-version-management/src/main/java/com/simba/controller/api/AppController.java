@@ -34,7 +34,6 @@ public class AppController {
 	 * 获取最新版本信息
 	 * 
 	 * @param typeId
-	 *            1: android 2: ios
 	 * @param model
 	 * @return
 	 */

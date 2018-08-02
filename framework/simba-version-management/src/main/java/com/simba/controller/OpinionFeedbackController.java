@@ -42,9 +42,9 @@ public class OpinionFeedbackController {
 
 	@ResponseBody
 	@RequestMapping("/count")
-	public JsonResult count() {
-		Integer count = opinionFeedbackService.count();
-		return new JsonResult(count, "", 200);
+	public JsonResult count( OpinionFeedbackSearchForm searchForm) {
+		Integer count = opinionFeedbackService.count(searchForm);
+		return new JsonResult(count);
 	}
 
 	@RequestMapping("/toAdd")

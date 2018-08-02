@@ -26,15 +26,9 @@ public class FAQServiceImpl implements FAQService {
 	@Autowired
 	private FAQDao fAQDao;
 
-	//new add 
-	@Override
-	public void insertFAQ(FAQ fAQ) {
-		fAQ.setCreateTime(new Date());
-		fAQDao.add(fAQ);
-	}
-	//new add!!!
 	@Override
 	public void add(FAQ fAQ) {
+		fAQ.setCreateTime(new Date());
 		fAQDao.add(fAQ);
 	}
 
@@ -54,31 +48,28 @@ public class FAQServiceImpl implements FAQService {
 	public List<FAQ> page(Pager page) {
 		return fAQDao.page(page);
 	}
-	
-	//new add 
+
 	@Override
 	@Transactional(readOnly = true)
-	public List<FAQ> page(Pager page,FAQSearchForm searchForm) {
-		return fAQDao.page(page,searchForm);
+	public List<FAQ> page(Pager page, FAQSearchForm searchForm) {
+		return fAQDao.page(page, searchForm);
 	}
-	
-	//new add !!!
 
 	@Override
 	@Transactional(readOnly = true)
 	public Integer count() {
 		return fAQDao.count();
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Integer countBy(String field, Object value){
-		return fAQDao.countBy(field,value);
+	public Integer countBy(String field, Object value) {
+		return fAQDao.countBy(field, value);
 	}
-	
+
 	@Override
-	public void deleteBy(String field, Object value){
-		fAQDao.deleteBy(field,value);
+	public void deleteBy(String field, Object value) {
+		fAQDao.deleteBy(field, value);
 	}
 
 	@Override
@@ -89,16 +80,17 @@ public class FAQServiceImpl implements FAQService {
 
 	@Override
 	public void update(FAQ fAQ) {
+		fAQ.setCreateTime(new Date());
 		fAQDao.update(fAQ);
 	}
-	
+
 	@Override
 	public void batchDelete(List<Integer> idList) {
 		for (Integer id : idList) {
 			this.delete(id);
 		}
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public FAQ getBy(String field, Object value) {
@@ -152,5 +144,10 @@ public class FAQServiceImpl implements FAQService {
 	public List<FAQ> pageByOr(String field1, Object value1, String field2, Object value2, Pager page) {
 		return fAQDao.pageByOr(field1, value1, field2, value2, page);
 	}
-	
+
+	@Override
+	public Integer count(FAQSearchForm searchForm) {
+		return fAQDao.count(searchForm);
+	}
+
 }

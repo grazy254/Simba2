@@ -23,7 +23,7 @@ public class OpinionFeedbackApiController {
 
 	@RequestMapping("/save")
 	public JsonResult save(OpinionFeedback opinionFeedback) {
-		opinionFeedbackService.insertOpinionFeedback(opinionFeedback);
+		opinionFeedbackService.add(opinionFeedback);
 		return new JsonResult();
 	}
 

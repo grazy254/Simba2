@@ -36,55 +36,25 @@ public class FAQController {
 	@Autowired
 	private FAQTypeService fAQTypeService;
 
-	@RequestMapping("/insertFAQ")
-	public String insertFAQ(FAQ fAQ,ModelMap model) {
-		List<FAQType> typeList=this.getType();
-		model.put("typeList", typeList);
-		fAQService.insertFAQ(fAQ);
-		return "fAQ/list";
-	}
-	
-	@ResponseBody
-	@RequestMapping("/getType")
-	public List<FAQType> getType() {
-		List<FAQType> typeList=new ArrayList<FAQType>();
-		List<FAQType> typeList1=new ArrayList<FAQType>();
-	
-		FAQType fAQType=new FAQType();
-		fAQType.setId(0);
-		fAQType.setType("请选择类型");
-		typeList.add(fAQType);
-		
-		typeList1= fAQTypeService.listAll();
-		for(int i=0;i<typeList1.size();i++){
-			FAQType f=new FAQType();
-			f.setId(typeList1.get(i).getId());
-			f.setType(typeList1.get(i).getType());
-			typeList.add(f);
-		}
-		return typeList;
-	}
-	
-	// new add end !!
 	@RequestMapping("/list")
 	public String list(ModelMap model) {
-		List<FAQType> typeList=this.getType();
+		List<FAQType> typeList = fAQTypeService.listAll();
 		model.put("typeList", typeList);
 		return "fAQ/list";
 	}
 
 	@RequestMapping("/getList")
-	public String getList(Pager pager, FAQSearchForm searchForm,ModelMap model) {
-		List<FAQ> list = fAQService.page(pager,searchForm);
-		List <Map<String,Object>> lists=new ArrayList<Map<String,Object>>();
-		for(int i=0;i<list.size();i++){
-			String type=fAQTypeService.get(list.get(i).getType()).getType();
-			Map<String,Object> map=new HashMap<>();
-			map.put("id",String.valueOf(list.get(i).getId()));
-			map.put("title",list.get(i).getTitle());
-			map.put("text",list.get(i).getText());
-			map.put("createTime",String.valueOf(list.get(i).getCreateTime()));
-			map.put("type",type);
+	public String getList(Pager pager, FAQSearchForm searchForm, ModelMap model) {
+		List<FAQ> list = fAQService.page(pager, searchForm);
+		List<Map<String, Object>> lists = new ArrayList<Map<String, Object>>();
+		for (int i = 0; i < list.size(); i++) {
+			String type = fAQTypeService.get(list.get(i).getType()).getType();
+			Map<String, Object> map = new HashMap<>();
+			map.put("id", String.valueOf(list.get(i).getId()));
+			map.put("title", list.get(i).getTitle());
+			map.put("text", list.get(i).getText());
+			map.put("createTime", String.valueOf(list.get(i).getCreateTime()));
+			map.put("type", type);
 			lists.add(map);
 		}
 		List<FAQType> typeList = fAQTypeService.listAll();
@@ -95,9 +65,9 @@ public class FAQController {
 
 	@ResponseBody
 	@RequestMapping("/count")
-	public JsonResult count() {
-		Integer count = fAQService.count();
-		return new JsonResult(count, "", 200);
+	public JsonResult count(FAQSearchForm searchForm) {
+		Integer count = fAQService.count(searchForm);
+		return new JsonResult(count);
 	}
 
 	@RequestMapping("/toAdd")
@@ -108,8 +78,8 @@ public class FAQController {
 	}
 
 	@RequestMapping("/add")
-	public String add(FAQ fAQ,ModelMap model) {
-		List<FAQType> typeList=this.getType();
+	public String add(FAQ fAQ, ModelMap model) {
+		List<FAQType> typeList = fAQTypeService.listAll();
 		model.put("typeList", typeList);
 		fAQService.add(fAQ);
 		return "redirect:/fAQ/list";
@@ -119,16 +89,15 @@ public class FAQController {
 	public String toUpdate(Integer id, ModelMap model) {
 		FAQ fAQ = fAQService.get(id);
 		model.put("fAQ", fAQ);
-		List<FAQType> typeList=this.getType();
+		List<FAQType> typeList = fAQTypeService.listAll();
 		model.put("typeList", typeList);
 		return "fAQ/update";
 	}
 
 	@RequestMapping("/update")
-	public String update(FAQ fAQ,ModelMap model) {
-		List<FAQType> typeList=this.getType();
+	public String update(FAQ fAQ, ModelMap model) {
+		List<FAQType> typeList = fAQTypeService.listAll();
 		model.put("typeList", typeList);
-		
 		fAQService.update(fAQ);
 		return "redirect:/fAQ/list";
 	}

@@ -1,4 +1,4 @@
-package  com.simba.service;
+package com.simba.service;
 
 import java.util.List;
 
@@ -7,16 +7,12 @@ import com.simba.model.FAQ;
 import com.simba.model.form.FAQSearchForm;
 
 /**
- *常见问题管理 Service
+ * 常见问题管理 Service
  * 
  * @author caozj
  * 
  */
 public interface FAQService {
-	
-	//new add 
-	void insertFAQ(FAQ fAQ);
-	//new add end 
 
 	void add(FAQ fAQ);
 
@@ -27,19 +23,19 @@ public interface FAQService {
 	List<FAQ> listAll();
 
 	Integer count();
-	
+
 	Integer countBy(String field, Object value);
-	
+
 	void deleteBy(String field, Object value);
-	
+
 	List<FAQ> page(Pager page);
-	
-	//new add 
-	List<FAQ> page(Pager page,FAQSearchForm searchForm);
-	//new add !!!
+
+	// new add
+	List<FAQ> page(Pager page, FAQSearchForm searchForm);
+	// new add !!!
 
 	FAQ get(Integer id);
-	
+
 	void batchDelete(List<Integer> idList);
 
 	FAQ getBy(String field, Object value);
@@ -59,5 +55,7 @@ public interface FAQService {
 	List<FAQ> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
 
 	List<FAQ> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
+
+	Integer count(FAQSearchForm searchForm);
 
 }

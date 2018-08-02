@@ -23,19 +23,19 @@ public interface OpinionFeedbackDao {
 	List<OpinionFeedback> listAll();
 
 	Integer count();
-	
+
 	Integer countBy(String field, Object value);
-	
+
 	void deleteBy(String field, Object value);
-	
+
 	List<OpinionFeedback> page(Pager page);
-	
-	//new add 
-	List<OpinionFeedback> page(Pager page,OpinionFeedbackSearchForm searchForm);
-	//new add end!!!
+
+	// new add
+	List<OpinionFeedback> page(Pager page, OpinionFeedbackSearchForm searchForm);
+	// new add end!!!
 
 	OpinionFeedback get(Integer id);
-	
+
 	OpinionFeedback getBy(String field, Object value);
 
 	OpinionFeedback getByAnd(String field1, Object value1, String field2, Object value2);
@@ -53,5 +53,7 @@ public interface OpinionFeedbackDao {
 	List<OpinionFeedback> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
 
 	List<OpinionFeedback> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
+
+	Integer count(OpinionFeedbackSearchForm searchForm);
 
 }

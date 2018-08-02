@@ -1,48 +1,34 @@
 var FAQ = {
-	
-	"search": function() {
+
+	"search" : function() {
 		FAQ.initFAQList(0, Page.size);
 	},
-	
-	"getType": function() {
-		$.ajax({
-			type: "post",
-			url: contextPath + "/fAQ/getType",
-			data: {
-			},
-			async: true,
-			dataType: "json",
-			success: function(data) {
-				
-			}
-		});
-	
-	},
-	"toAdd": function() {
+
+	"toAdd" : function() {
 		window.self.location.href = contextPath + "/fAQ/toAdd";
 	},
 
-	"batchDelete": function() {
+	"batchDelete" : function() {
 		var ids = new Array();
 		$("input[name='fAQ']").each(function() {
-			if(true == $(this).is(':checked')) {
+			if (true == $(this).is(':checked')) {
 				ids.push($(this).val());
 			}
 		});
-		if(ids.length == 0) {
+		if (ids.length == 0) {
 			parent.showInfo("请选择要删除的记录");
 			return false;
 		}
 		$.ajax({
-			type: "post",
-			url: contextPath + "/fAQ/batchDelete",
-			data: {
-				"id": ids.join(",")
+			type : "post",
+			url : contextPath + "/fAQ/batchDelete",
+			data : {
+				"id" : ids.join(",")
 			},
-			async: true,
-			dataType: "json",
-			success: function(data) {
-				if(data.code == 200) {
+			async : true,
+			dataType : "json",
+			success : function(data) {
+				if (data.code == 200) {
 					FAQ.initFAQList(0, Page.size);
 				} else {
 					parent.showInfo(data.msg);
@@ -51,41 +37,41 @@ var FAQ = {
 		});
 	},
 
-	"initFAQList": function(start, pageSize) {
+	"initFAQList" : function(start, pageSize) {
 		$.ajax({
-			type: "get",
-			url: contextPath + "/fAQ/getList",
-			data: {
-				"pageStart": start,
-				"pageSize": pageSize,
-				"type": $("#type").val(),
-				"title": $("#title").val(),
-				"text": $("#text").val(),
-				"startTime": $("#startTime").val(),
-				"endTime": $("#endTime").val()
+			type : "get",
+			url : contextPath + "/fAQ/getList",
+			data : {
+				"pageStart" : start,
+				"pageSize" : pageSize,
+				"type" : $("#type").val(),
+				"title" : $("#title").val(),
+				"text" : $("#text").val(),
+				"startTime" : $("#startTime").val(),
+				"endTime" : $("#endTime").val()
 			},
-			async: true,
-			dataType: "html",
-			success: function(html) {
+			async : true,
+			dataType : "html",
+			success : function(html) {
 				$("#table").find("tbody").html(html);
 				CheckBox.init();
 				setTimeout("CheckBox.bindCheckAll();", 1000);
 			}
 		});
 		$.ajax({
-			type: "get",
-			url: contextPath + "/fAQ/count",
-			async: true,
-			data: {
-				"type": $("#type").val(),
-				"title": $("#title").val(),
-				"text": $("#text").val(),
-				"startTime": $("#startTime").val(),
-				"endTime": $("#endTime").val()
+			type : "get",
+			url : contextPath + "/fAQ/count",
+			async : true,
+			data : {
+				"type" : $("#type").val(),
+				"title" : $("#title").val(),
+				"text" : $("#text").val(),
+				"startTime" : $("#startTime").val(),
+				"endTime" : $("#endTime").val()
 			},
-			async: true,
-			dataType: "json",
-			success: function(data) {
+			async : true,
+			dataType : "json",
+			success : function(data) {
 				var total = data.data;
 				var pageHtml = Page.init(total, start, pageSize, "FAQ.clickPager");
 				$("#page").html(pageHtml);
@@ -93,25 +79,25 @@ var FAQ = {
 		});
 	},
 
-	"clickPager": function(start, pageSize) {
+	"clickPager" : function(start, pageSize) {
 		FAQ.initFAQList(start, pageSize);
 	},
 
-	"toUpdate": function(id) {
+	"toUpdate" : function(id) {
 		window.self.location.href = contextPath + "/fAQ/toUpdate?id=" + id;
 	},
 
-	"deleteFAQ": function(id) {
+	"deleteFAQ" : function(id) {
 		$.ajax({
-			type: "post",
-			url: contextPath + "/fAQ/batchDelete",
-			data: {
-				"id": id
+			type : "post",
+			url : contextPath + "/fAQ/batchDelete",
+			data : {
+				"id" : id
 			},
-			async: true,
-			dataType: "json",
-			success: function(data) {
-				if(data.code == 200) {
+			async : true,
+			dataType : "json",
+			success : function(data) {
+				if (data.code == 200) {
 					FAQ.initFAQList(0, Page.size);
 				} else {
 					parent.showInfo(data.msg);
@@ -120,13 +106,13 @@ var FAQ = {
 		});
 	},
 
-	"checkForm": function() {
+	"checkForm" : function() {
 		return true;
 	},
 
-	"toList": function() {
+	"toList" : function() {
 		window.self.location.href = contextPath + "/fAQ/list";
 	},
 
-	"end": null
+	"end" : null
 };

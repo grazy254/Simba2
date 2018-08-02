@@ -80,6 +80,7 @@ public class BugFeedbackServiceImpl implements BugFeedbackService {
 
 	@Override
 	public void update(BugFeedback bugFeedback) {
+		bugFeedback.setCreateTime(new Date());
 		bugFeedbackDao.update(bugFeedback);
 	}
 

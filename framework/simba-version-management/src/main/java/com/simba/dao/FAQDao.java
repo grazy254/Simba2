@@ -23,19 +23,17 @@ public interface FAQDao {
 	List<FAQ> listAll();
 
 	Integer count();
-	
+
 	Integer countBy(String field, Object value);
-	
+
 	void deleteBy(String field, Object value);
-	
+
 	List<FAQ> page(Pager page);
-	
-	//new add
-	List<FAQ> page(Pager page,FAQSearchForm searchForm);
-	//new add end!!!
+
+	List<FAQ> page(Pager page, FAQSearchForm searchForm);
 
 	FAQ get(Integer id);
-	
+
 	FAQ getBy(String field, Object value);
 
 	FAQ getByAnd(String field1, Object value1, String field2, Object value2);
@@ -53,5 +51,7 @@ public interface FAQDao {
 	List<FAQ> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
 
 	List<FAQ> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
+
+	Integer count(FAQSearchForm searchForm);
 
 }

@@ -26,22 +26,15 @@ public class OpinionFeedbackServiceImpl implements OpinionFeedbackService {
 	@Autowired
 	private OpinionFeedbackDao opinionFeedbackDao;
 
-	
-	//new add
-	@Override
-	public void insertOpinionFeedback(OpinionFeedback opinionFeedback) {
-		opinionFeedback.setCreateTime(new Date());
-		opinionFeedbackDao.add(opinionFeedback);
-	}
-	
 	@Override
 	@Transactional(readOnly = true)
 	public List<OpinionFeedback> page(Pager page, OpinionFeedbackSearchForm searchForm) {
-		return opinionFeedbackDao.page(page,searchForm);
+		return opinionFeedbackDao.page(page, searchForm);
 	}
-	//new add end!!!
+
 	@Override
 	public void add(OpinionFeedback opinionFeedback) {
+		opinionFeedback.setCreateTime(new Date());
 		opinionFeedbackDao.add(opinionFeedback);
 	}
 
@@ -67,16 +60,16 @@ public class OpinionFeedbackServiceImpl implements OpinionFeedbackService {
 	public Integer count() {
 		return opinionFeedbackDao.count();
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Integer countBy(String field, Object value){
-		return opinionFeedbackDao.countBy(field,value);
+	public Integer countBy(String field, Object value) {
+		return opinionFeedbackDao.countBy(field, value);
 	}
-	
+
 	@Override
-	public void deleteBy(String field, Object value){
-		opinionFeedbackDao.deleteBy(field,value);
+	public void deleteBy(String field, Object value) {
+		opinionFeedbackDao.deleteBy(field, value);
 	}
 
 	@Override
@@ -87,16 +80,17 @@ public class OpinionFeedbackServiceImpl implements OpinionFeedbackService {
 
 	@Override
 	public void update(OpinionFeedback opinionFeedback) {
+		opinionFeedback.setCreateTime(new Date());
 		opinionFeedbackDao.update(opinionFeedback);
 	}
-	
+
 	@Override
 	public void batchDelete(List<Integer> idList) {
 		for (Integer id : idList) {
 			this.delete(id);
 		}
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public OpinionFeedback getBy(String field, Object value) {
@@ -150,5 +144,10 @@ public class OpinionFeedbackServiceImpl implements OpinionFeedbackService {
 	public List<OpinionFeedback> pageByOr(String field1, Object value1, String field2, Object value2, Pager page) {
 		return opinionFeedbackDao.pageByOr(field1, value1, field2, value2, page);
 	}
-	
+
+	@Override
+	public Integer count(OpinionFeedbackSearchForm searchForm) {
+		return opinionFeedbackDao.count(searchForm);
+	}
+
 }

@@ -20,9 +20,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 
 /**
@@ -55,11 +57,21 @@ public class SendMsgServiceImpl implements SendMsgService {
     @Autowired
     private SendMsgUtil sendMsgUtil;
 
+    private ThreadPoolTaskExecutor threadPool;
+
     @Value(value = "${project.alarm.email:false}")
     private boolean emailAlarmEnable;
 
     @Value(value = "${project.alarm.shortmsg:false}")
     private boolean shortmsgAlarmEnable;
+
+    @PostConstruct
+    private void initThreadPool() {
+        threadPool = new ThreadPoolTaskExecutor();
+        threadPool.setCorePoolSize(4);
+        threadPool.setMaxPoolSize(20);
+        threadPool.setQueueCapacity(200);
+    }
 
 
     /**
@@ -73,26 +85,29 @@ public class SendMsgServiceImpl implements SendMsgService {
      */
     @Override
     public void sendSimply(String mobile, String selfTemplateId, Map<String, String> params, String projectId) {
-        EntryPlatform platform = templateService.getOnePlatformTemplateId(selfTemplateId);
-        if (platform == null) throw new BussException("模板Id有误");
-        String platformTemplateId = platform.getTemplateId();
-        MsgType platformType = platform.getPlatformType();
-        String messageId = sendOneMessage(mobile, platformTemplateId, params, platformType, Integer.valueOf(projectId));
-        if (!StringUtils.isEmpty(messageId)) {
-            SendStatus sendStatus = SendStatus.SUCCESS;
-            ShortMessage shortMessage = new ShortMessage();
-            shortMessage.setValue(FastJsonUtil.toJson(params, false));
-            shortMessage.setPlatform(platformType.getType());
-            shortMessage.setSendDate(DateUtil.getTime());
-            shortMessage.setStatus(sendStatus.getId());
-            shortMessage.setProjectId(Integer.parseInt(projectId));
-            shortMessage.setTemplateId(platformTemplateId);
-            shortMessage.setMessageId(messageId);
-            shortMessage.setMobile(mobile);
-            shortMessageService.add(shortMessage);
-        } else {
-            throw new BussException("第三方短信接口无返回短信Id");
-        }
+        threadPool.execute(() -> {
+            EntryPlatform platform = templateService.getOnePlatformTemplateId(selfTemplateId);
+            if (platform == null) throw new BussException("模板Id有误");
+            String platformTemplateId = platform.getTemplateId();
+            MsgType platformType = platform.getPlatformType();
+            String messageId = sendOneMessage(mobile, platformTemplateId, params, platformType, Integer.valueOf(projectId));
+            if (!StringUtils.isEmpty(messageId)) {
+                SendStatus sendStatus = SendStatus.SUCCESS;
+                ShortMessage shortMessage = new ShortMessage();
+                shortMessage.setValue(FastJsonUtil.toJson(params, false));
+                shortMessage.setPlatform(platformType.getType());
+                shortMessage.setSendDate(DateUtil.getTime());
+                shortMessage.setStatus(sendStatus.getId());
+                shortMessage.setProjectId(Integer.parseInt(projectId));
+                shortMessage.setTemplateId(platformTemplateId);
+                shortMessage.setMessageId(messageId);
+                shortMessage.setMobile(mobile);
+                shortMessageService.add(shortMessage);
+            } else {
+                throw new BussException("第三方短信接口无返回短信Id");
+            }
+        });
+
     }
 
     /**
@@ -104,11 +119,13 @@ public class SendMsgServiceImpl implements SendMsgService {
      */
     @Override
     public void sendPure(String mobile, String selfTemplateId, Map<String, String> params) {
-        EntryPlatform platform = templateService.getOnePlatformTemplateId(selfTemplateId);
-        if (platform == null) throw new BussException("模板Id有误");
-        String platformTemplateId = platform.getTemplateId();
-        MsgType platformType = platform.getPlatformType();
-        sendMsgUtil.send(mobile, platformTemplateId, params, platformType);
+        threadPool.execute(() -> {
+            EntryPlatform platform = templateService.getOnePlatformTemplateId(selfTemplateId);
+            if (platform == null) throw new BussException("模板Id有误");
+            String platformTemplateId = platform.getTemplateId();
+            MsgType platformType = platform.getPlatformType();
+            sendMsgUtil.send(mobile, platformTemplateId, params, platformType);
+        });
     }
 
     /**

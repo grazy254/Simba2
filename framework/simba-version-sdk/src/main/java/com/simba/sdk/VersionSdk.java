@@ -3,8 +3,6 @@ package com.simba.sdk;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +18,6 @@ import com.simba.framework.util.json.JsonResult;
  */
 @Service
 public class VersionSdk {
-
-	private static final Log logger = LogFactory.getLog(VersionSdk.class);
 
 	private static final String getVersionUrl = "/VERSIONUSER/api/app/getVersionInfo";
 

@@ -22,7 +22,7 @@ public class BugFeedback {
 	 * userId
 	 */
 	@DescAnnotation(desc = "反馈bug的用户id")
-	private int userId;
+	private Integer userId;
 	
 	/**
 	 * bug名称

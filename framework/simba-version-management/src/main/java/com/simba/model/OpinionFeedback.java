@@ -17,26 +17,24 @@ public class OpinionFeedback {
 	 * 意见id
 	 */
 	private int id;
-	
+
 	/**
 	 * userId
 	 */
 	@DescAnnotation(desc = "反馈意见的用户id")
-	private int userId;
-	
+	private Integer userId;
+
 	/**
 	 * 意见名称
 	 */
 	@DescAnnotation(desc = "意见名称")
 	private String title;
 
-
 	/**
 	 * 意见内容
 	 */
 	@DescAnnotation(desc = "意见内容")
 	private String text;
-	
 
 	/**
 	 * 时间
@@ -44,59 +42,48 @@ public class OpinionFeedback {
 	@DescAnnotation(desc = "时间")
 	private Date createTime;
 
-
 	public int getId() {
 		return id;
 	}
-
 
 	public void setId(int id) {
 		this.id = id;
 	}
 
-
-	public int getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
-
-	public void setUserId(int userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-
 
 	public String getTitle() {
 		return title;
 	}
 
-
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
 
 	public String getText() {
 		return text;
 	}
 
-
 	public void setText(String text) {
 		this.text = text;
 	}
-
 
 	public Date getCreateTime() {
 		return createTime;
 	}
 
-
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-
 
 	@Override
 	public String toString() {
 		return "OpinionFeedback [id=" + id + ", userId=" + userId + ", title=" + title + ", text=" + text + ", createTime=" + createTime + "]";
 	}
-}	
+}

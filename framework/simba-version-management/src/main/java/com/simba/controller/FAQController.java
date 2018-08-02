@@ -36,7 +36,6 @@ public class FAQController {
 	@Autowired
 	private FAQTypeService fAQTypeService;
 
-	// new add
 	@RequestMapping("/insertFAQ")
 	public String insertFAQ(FAQ fAQ,ModelMap model) {
 		List<FAQType> typeList=this.getType();

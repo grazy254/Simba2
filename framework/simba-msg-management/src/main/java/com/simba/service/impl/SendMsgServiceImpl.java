@@ -1,6 +1,7 @@
 package com.simba.service.impl;
 
 import com.simba.exception.BussException;
+import com.simba.exception.SimbaException;
 import com.simba.framework.util.code.EncryptUtil;
 import com.simba.framework.util.date.DateUtil;
 import com.simba.framework.util.json.FastJsonUtil;
@@ -13,6 +14,7 @@ import com.simba.model.enums.SendStatus;
 import com.simba.service.bean.MsgPostArgs;
 import com.simba.service.bean.EntryPlatform;
 import com.simba.service.*;
+import com.simba.service.exceptions.RetryException;
 import com.simba.util.DayAmountUtil;
 import com.simba.util.EmailUtil;
 import org.apache.commons.lang.StringUtils;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
+import java.util.concurrent.*;
 
 /**
  * Created by linshuo on 2017/12/6.
@@ -75,7 +78,7 @@ public class SendMsgServiceImpl implements SendMsgService {
 
 
     /**
-     * 发送+记录
+     * 发送+记录 (异步)
      *
      * @param mobile
      * @param selfTemplateId
@@ -90,22 +93,37 @@ public class SendMsgServiceImpl implements SendMsgService {
             if (platform == null) throw new BussException("模板Id有误");
             String platformTemplateId = platform.getTemplateId();
             MsgType platformType = platform.getPlatformType();
-            String messageId = sendOneMessage(mobile, platformTemplateId, params, platformType, Integer.valueOf(projectId));
-            if (!StringUtils.isEmpty(messageId)) {
-                SendStatus sendStatus = SendStatus.SUCCESS;
-                ShortMessage shortMessage = new ShortMessage();
-                shortMessage.setValue(FastJsonUtil.toJson(params, false));
-                shortMessage.setPlatform(platformType.getType());
-                shortMessage.setSendDate(DateUtil.getTime());
-                shortMessage.setStatus(sendStatus.getId());
-                shortMessage.setProjectId(Integer.parseInt(projectId));
-                shortMessage.setTemplateId(platformTemplateId);
-                shortMessage.setMessageId(messageId);
-                shortMessage.setMobile(mobile);
-                shortMessageService.add(shortMessage);
-            } else {
-                throw new BussException("第三方短信接口无返回短信Id");
+            String messageId = null;
+            /* 重试3次, 5秒超时 */
+            int tryTime = 3;
+            while (0 < tryTime--) {
+                Future<String> f = threadPool.submit(() -> sendOneMessage(mobile, platformTemplateId, params, platformType, Integer.valueOf(projectId)));
+                try {
+                    messageId = f.get(5, TimeUnit.SECONDS);
+                    break;
+                } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                    logger.error("极光短信发送失败, 正在重试...", e);
+                }
             }
+            /* 记录 */
+            ShortMessage shortMessage = new ShortMessage();
+            shortMessage.setValue(FastJsonUtil.toJson(params, false));
+            shortMessage.setPlatform(platformType.getType());
+            shortMessage.setSendDate(DateUtil.getTime());
+            shortMessage.setProjectId(Integer.parseInt(projectId));
+            shortMessage.setTemplateId(platformTemplateId);
+            shortMessage.setMobile(mobile);
+            if (StringUtils.isNotEmpty(messageId)) {
+                SendStatus sendStatus = SendStatus.SUCCESS;
+                shortMessage.setStatus(sendStatus.getId());
+                shortMessage.setMessageId(messageId);
+            } else {
+                SendStatus sendStatus = SendStatus.FAIL;
+                shortMessage.setStatus(sendStatus.getId());
+                shortMessage.setMessageId("-1");
+
+            }
+            shortMessageService.add(shortMessage);
         });
 
     }
@@ -124,8 +142,50 @@ public class SendMsgServiceImpl implements SendMsgService {
             if (platform == null) throw new BussException("模板Id有误");
             String platformTemplateId = platform.getTemplateId();
             MsgType platformType = platform.getPlatformType();
-            sendMsgUtil.send(mobile, platformTemplateId, params, platformType);
+            int tryTime = 3;
+            while (0 < tryTime--) {
+                Future<String> f = threadPool.submit(() -> sendMsgUtil.send(mobile, platformTemplateId, params, platformType));
+                try {
+                    f.get(5, TimeUnit.SECONDS);
+                    break;
+                } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                    logger.error("极光短信发送失败, 正在重试...", e);
+                }
+            }
         });
+    }
+
+    public void sendPure0(String mobile, String selfTemplateId, Map<String, String> params) {
+        threadPool.execute(() -> {
+            EntryPlatform platform = templateService.getOnePlatformTemplateId(selfTemplateId);
+            if (platform == null) throw new BussException("模板Id有误");
+            String platformTemplateId = platform.getTemplateId();
+            MsgType platformType = platform.getPlatformType();
+            tryN(() -> sendMsgUtil.send(mobile, platformTemplateId, params, platformType), 3, 5);
+        });
+    }
+
+    /**
+     * 任务超时+重试封装
+     *
+     * @param task       异步任务
+     * @param retry      重试次数
+     * @param perTimeout 每次的
+     * @return
+     * @throws RetryException 重试失败
+     */
+    public Object tryN(Callable<Object> task, int retry, int perTimeout) throws RetryException {
+        while (0 < retry--) {
+            Future f = threadPool.submit(task);
+            try {
+                return f.get(perTimeout, TimeUnit.SECONDS);
+            } catch (InterruptedException | ExecutionException e) {
+                logger.error("其他异常, 正在重试", e);
+            } catch (TimeoutException e) {
+                logger.error("超时, 正在重试", e);
+            }
+        }
+        throw new RetryException("经过" + retry + "次重试依旧失败, 放弃");
     }
 
     /**

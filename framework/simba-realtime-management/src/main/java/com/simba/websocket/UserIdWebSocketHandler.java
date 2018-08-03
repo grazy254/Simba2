@@ -23,9 +23,10 @@ public class UserIdWebSocketHandler implements WebSocketHandler {
 
 	private static final Log logger = LogFactory.getLog(UserIdWebSocketHandler.class);
 
-	private void setUserId(String userId, WebSocketSession session) {
+	private void set(String userId, String appid, WebSocketSession session) {
 		session.getAttributes().put("userId", userId);
-		logger.info("设置连接用户[sid:" + session.getId() + "][userId:" + userId + "]");
+		session.getAttributes().put("appid", appid);
+		logger.info("设置连接用户[sid:" + session.getId() + "][userId:" + userId + "][appid:" + appid + "]");
 	}
 
 	private String getUserId(WebSocketSession session) {
@@ -41,13 +42,27 @@ public class UserIdWebSocketHandler implements WebSocketHandler {
 		return userId;
 	}
 
+	private String getAppid(WebSocketSession session) {
+		Map<String, Object> attributes = session.getAttributes();
+		String appid = null;
+		if (attributes == null) {
+			logger.error("getAppid:没有session的attribute");
+		} else {
+			appid = (String) attributes.get("appid");
+			logger.info("从session中获取appid[" + appid + "]");
+		}
+		logger.info("获取连接应用[" + session.getId() + "][" + appid + "]");
+		return appid;
+	}
+
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		RedisUtil redisUtil = ApplicationContextUtil.getBean(RedisUtil.class);
 		String userId = getUserId(session);
-		if (StringUtils.isNotEmpty(userId)) {
-			UserIdConnectionPool.getInstance().add(userId, session);
-			logger.info("用户连接Session保存成功[" + userId + "]");
+		String appid = getAppid(session);
+		if (StringUtils.isNotEmpty(userId) && StringUtils.isNotEmpty(appid)) {
+			UserIdConnectionPool.getInstance().add(userId, appid, session);
+			logger.info("用户连接Session保存成功[userId:" + userId + "][appid:" + appid + "]");
 		}
 		logger.info("用户websocket连接成功sid:" + session.getId());
 		// 连接断开后，统计当前在线用户+1
@@ -55,6 +70,9 @@ public class UserIdWebSocketHandler implements WebSocketHandler {
 		logger.info("此服务器上连接的用户有******" + UserIdConnectionPool.getInstance().all().toString() + "******");
 	}
 
+	/**
+	 * userId:1,appid:smarthome or userId:1
+	 */
 	@Override
 	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
 		Object payload = message.getPayload();
@@ -63,12 +81,23 @@ public class UserIdWebSocketHandler implements WebSocketHandler {
 			return;
 		}
 		String content = payload.toString();
+		if (StringUtils.isEmpty(content)) {
+			logger.error("收到用户websocket消息，但是内容为空");
+			return;
+		}
 		logger.info("收到用户websocket消息:[" + content + "]");
 		if (content.startsWith("userId:")) {
-			String userId = content.split(":")[1];
-			UserIdConnectionPool.getInstance().add(userId, session);
-			logger.info("用户连接Session保存成功[" + userId + "]");
-			setUserId(userId, session);
+			String[] data = content.split(",");
+			String userId = data[0].split(":")[1];
+			String appid = null;
+			if (data.length > 1) {
+				appid = data[1].split(":")[1];
+			} else {
+				appid = "default";
+			}
+			UserIdConnectionPool.getInstance().add(userId, appid, session);
+			logger.info("用户连接Session保存成功[userId:" + userId + "][appid:" + appid + "]");
+			set(userId, appid, session);
 		} else {
 			logger.error("收到用户websocket消息，但是内容格式错误:[" + content + "]");
 		}
@@ -76,25 +105,24 @@ public class UserIdWebSocketHandler implements WebSocketHandler {
 
 	@Override
 	public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-		RedisUtil redisUtil = ApplicationContextUtil.getBean(RedisUtil.class);
 		String userId = getUserId(session);
-		logger.error("用户websocket连接发生异常:" + userId, exception);
-		if (StringUtils.isNotEmpty(userId)) {
-			UserIdConnectionPool.getInstance().remove(userId);
-			logger.info("清空websocket连接[userId:" + userId + "]");
+		String appid = getAppid(session);
+		logger.error("用户websocket连接发生异常:[userId:" + userId + "][appid:" + appid + "]", exception);
+		if (StringUtils.isNotEmpty(userId) && StringUtils.isNotEmpty(appid)) {
+			UserIdConnectionPool.getInstance().remove(userId, appid);
+			logger.info("清空websocket连接[userId:" + userId + "][appid:" + appid + "]");
 		}
-		// 连接断开后，统计当前离线用户+1
-		redisUtil.getAutoId("offlineCount");
 	}
 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
 		RedisUtil redisUtil = ApplicationContextUtil.getBean(RedisUtil.class);
 		String userId = getUserId(session);
-		logger.info("用户websocket连接关闭:" + userId + "," + closeStatus);
-		if (StringUtils.isNotEmpty(userId)) {
-			UserIdConnectionPool.getInstance().remove(userId);
-			logger.info("清空websocket连接[userId:" + userId + "]");
+		String appid = getAppid(session);
+		logger.info("用户websocket连接关闭:[userId:" + userId + "][appid:" + appid + "]," + closeStatus);
+		if (StringUtils.isNotEmpty(userId) && StringUtils.isNotEmpty(appid)) {
+			UserIdConnectionPool.getInstance().remove(userId, appid);
+			logger.info("清空websocket连接[userId:" + userId + "][appid:" + appid + "]");
 		}
 		// 连接断开后，统计当前离线用户+1
 		redisUtil.getAutoId("offlineCount");

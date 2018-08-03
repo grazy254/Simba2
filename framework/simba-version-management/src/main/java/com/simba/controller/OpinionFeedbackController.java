@@ -28,18 +28,6 @@ public class OpinionFeedbackController {
 	@Autowired
 	private OpinionFeedbackService opinionFeedbackService;
 
-	// new add interface
-	@ResponseBody
-	@RequestMapping("/insertOpinionFeedback")
-	public JsonResult insertOpinionFeedback(OpinionFeedback opinionFeedback) {
-
-		opinionFeedback.setUserId(1);
-		opinionFeedbackService.insertOpinionFeedback(opinionFeedback);
-
-		return new JsonResult("", "", 200);
-	}
-	// new add interface end!!!
-
 	@RequestMapping("/list")
 	public String list() {
 		return "opinionFeedback/list";
@@ -54,9 +42,9 @@ public class OpinionFeedbackController {
 
 	@ResponseBody
 	@RequestMapping("/count")
-	public JsonResult count() {
-		Integer count = opinionFeedbackService.count();
-		return new JsonResult(count, "", 200);
+	public JsonResult count( OpinionFeedbackSearchForm searchForm) {
+		Integer count = opinionFeedbackService.count(searchForm);
+		return new JsonResult(count);
 	}
 
 	@RequestMapping("/toAdd")

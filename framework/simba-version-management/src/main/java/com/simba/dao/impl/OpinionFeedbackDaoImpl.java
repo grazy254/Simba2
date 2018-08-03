@@ -51,7 +51,6 @@ public class OpinionFeedbackDaoImpl implements OpinionFeedbackDao {
 		return jdbc.queryForPage(sql, OpinionFeedback.class, page);
 	}
 
-	// new add
 	@Override
 	public List<OpinionFeedback> page(Pager page, OpinionFeedbackSearchForm searchForm) {
 		String sql = "select * from " + table;
@@ -60,7 +59,6 @@ public class OpinionFeedbackDaoImpl implements OpinionFeedbackDao {
 		sql += " order by createTime desc";
 		return jdbc.queryForPage(sql, OpinionFeedback.class, page, param);
 	}
-	// new add!!
 
 	@Override
 	public List<OpinionFeedback> listAll() {
@@ -154,7 +152,6 @@ public class OpinionFeedbackDaoImpl implements OpinionFeedbackDao {
 		jdbc.updateForBoolean(sql, value);
 	}
 
-	// new add
 	private String buildCondition(String sql, OpinionFeedbackSearchForm searchForm, StatementParameter param) {
 		sql += " where 1=1 ";
 		if (searchForm.getUserId() != null && searchForm.getUserId() > 0) {
@@ -177,6 +174,13 @@ public class OpinionFeedbackDaoImpl implements OpinionFeedbackDao {
 		}
 		return sql;
 	}
-	// new add end !!!
+
+	@Override
+	public Integer count(OpinionFeedbackSearchForm searchForm) {
+		String sql = "select count(*) from " + table;
+		StatementParameter param = new StatementParameter();
+		sql = buildCondition(sql, searchForm, param);
+		return jdbc.queryForInt(sql, param);
+	}
 
 }

@@ -23,17 +23,17 @@ public interface RealTimeMessageDao {
 	List<RealTimeMessage> listAll();
 
 	Long count();
-	
+
 	Long countBy(String field, Object value);
-	
+
 	void deleteBy(String field, Object value);
-	
+
 	List<RealTimeMessage> page(Pager page);
-	
-	List<RealTimeMessage> page(Pager page,RealTimeMessageSearchForm searchForm);
+
+	List<RealTimeMessage> page(Pager page, RealTimeMessageSearchForm searchForm);
 
 	RealTimeMessage get(Long id);
-	
+
 	RealTimeMessage getBy(String field, Object value);
 
 	RealTimeMessage getByAnd(String field1, Object value1, String field2, Object value2);
@@ -51,5 +51,7 @@ public interface RealTimeMessageDao {
 	List<RealTimeMessage> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
 
 	List<RealTimeMessage> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
+
+	Long count(RealTimeMessageSearchForm searchForm);
 
 }

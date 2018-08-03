@@ -32,16 +32,24 @@ public class UserIdConnectionPool {
 		return UserIdConnectionPoolHolder.instance;
 	}
 
-	public void add(String userId, WebSocketSession session) {
-		sessionMap.put(userId, session);
+	public void add(String userId, String appid, WebSocketSession session) {
+		String key = buildKey(userId, appid);
+		sessionMap.put(key, session);
 	}
 
-	public void remove(String userId) {
-		sessionMap.remove(userId);
+	private String buildKey(String userId, String appid) {
+		String key = appid + "_" + userId;
+		return key;
 	}
 
-	public WebSocketSession get(String userId) {
-		return sessionMap.get(userId);
+	public void remove(String userId, String appid) {
+		String key = buildKey(userId, appid);
+		sessionMap.remove(key);
+	}
+
+	public WebSocketSession get(String userId, String appid) {
+		String key = buildKey(userId, appid);
+		return sessionMap.get(key);
 	}
 
 	public Set<String> all() {

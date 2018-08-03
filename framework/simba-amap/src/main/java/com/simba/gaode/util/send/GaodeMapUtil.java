@@ -1,5 +1,9 @@
 package com.simba.gaode.util.send;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -116,7 +120,9 @@ public class GaodeMapUtil {
 	public BusResult bus(BusLineParam param) throws UnsupportedEncodingException {
 		String url = GaodeConstantData.BUSLINEURL + "&key=" + key + param.buildParamUrl();
 		logger.info("提交高德地图[公交路径规划]url:" + url);
-		String res = HttpClientUtil.get(url);
+		String resOld = HttpClientUtil.get(url);
+		//解决walking:[]解析错误的问题
+		String res = resOld.replaceAll("\"walking\":\\[\\]", "\"walking\":{}");
 		logger.info("提交高德地图[公交路径规划]url:" + url + ",返回结果:" + res);
 		BusResult result = FastJsonUtil.toObject(res, BusResult.class);
 		return result;

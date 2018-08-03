@@ -1,4 +1,4 @@
-package com.simba.controller;
+package com.simba.controller.server.api;
 
 import javax.annotation.Resource;
 
@@ -28,7 +28,7 @@ import com.simba.websocket.distributed.UserIdMessageData;
  *
  */
 @RestController
-@RequestMapping("/sendRealTimeMessage")
+@RequestMapping("/server/api/realTimeMessage")
 public class SendRealTimeMessageController {
 
 	private static final Log logger = LogFactory.getLog(SendRealTimeMessageController.class);
@@ -47,39 +47,44 @@ public class SendRealTimeMessageController {
 	 * 
 	 * @param userId
 	 * @param content
+	 * @param appid
+	 * 
 	 * @return
 	 */
-	@RequestMapping("/sendByUserId")
-	public JsonResult sendByUserId(String userId, String content) {
-		logger.info("接收到需要推送给用户[" + userId + "]的内容:" + content);
-		WebSocketSession session = UserIdConnectionPool.getInstance().get(userId);
+	@RequestMapping("/send")
+	public JsonResult send(String userId, String content, String appid) {
+		logger.info("接收到需要推送给用户[appid:" + appid + "][userId:" + userId + "]的内容:" + content);
+		WebSocketSession session = UserIdConnectionPool.getInstance().get(userId, appid);
 		if (session != null && session.isOpen()) {
 			try {
 				TextMessage text = new TextMessage(content);
 				session.sendMessage(text);
-				logger.info("发送websocket消息给用户[" + userId + "][" + content + "]成功");
+				logger.info("接收到需要推送给用户[appid:" + appid + "][userId:" + userId + "]的内容:" + content + "[成功]");
 				// 写入记录表中
 				RealTimeMessage realTimeMessage = new RealTimeMessage();
 				realTimeMessage.setUserId(Integer.valueOf(userId));
 				realTimeMessage.setMessage(content);
+				realTimeMessage.setAppid(appid);
 				realTimeMessageService.add(realTimeMessage);
 			} catch (Exception e) {
-				logger.error("发送websocket消息给用户[" + userId + "][" + content + "]发送异常", e);
+				logger.error("接收到需要推送给用户[appid:" + appid + "][userId:" + userId + "]的内容:" + content + "[异常]", e);
 				logger.info("=================================重新推送一次消息给用户=======================");
 				taskExecutor.execute(() -> {
 					ThreadUtil.sleep(500);
-					UserIdMessageData data = new UserIdMessageData();
-					data.setContent(content);
-					data.setUserId(userId);
-					distributedUtil.executeInCluster(new ClusterMessage(UserIdMessageClusterExecute.class.getCanonicalName(), data));
+					sendInCluster(userId, content, appid);
 				});
 			}
 		} else {
-			UserIdMessageData data = new UserIdMessageData();
-			data.setContent(content);
-			data.setUserId(userId);
-			distributedUtil.executeInCluster(new ClusterMessage(UserIdMessageClusterExecute.class.getCanonicalName(), data));
+			sendInCluster(userId, content, appid);
 		}
 		return new JsonResult();
+	}
+
+	private void sendInCluster(String userId, String content, String appid) {
+		UserIdMessageData data = new UserIdMessageData();
+		data.setContent(content);
+		data.setUserId(userId);
+		data.setAppid(appid);
+		distributedUtil.executeInCluster(new ClusterMessage(UserIdMessageClusterExecute.class.getCanonicalName(), data));
 	}
 }

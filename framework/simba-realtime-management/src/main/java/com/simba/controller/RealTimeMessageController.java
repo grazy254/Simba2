@@ -61,8 +61,8 @@ public class RealTimeMessageController {
 
 	@ResponseBody
 	@RequestMapping("/count")
-	public JsonResult count() {
-		Long count = realTimeMessageService.count();
+	public JsonResult count(RealTimeMessageSearchForm searchForm) {
+		Long count = realTimeMessageService.count(searchForm);
 		return new JsonResult(count, "", 200);
 	}
 

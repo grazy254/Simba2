@@ -31,19 +31,19 @@ public class FAQTypeController {
 	public String list() {
 		return "fAQType/list";
 	}
-	
+
 	@RequestMapping("/getList")
-	public String getList(Pager pager,ModelMap model){
+	public String getList(Pager pager, ModelMap model) {
 		List<FAQType> list = fAQTypeService.page(pager);
 		model.put("list", list);
 		return "fAQType/table";
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/count")
 	public JsonResult count() {
 		Integer count = fAQTypeService.count();
-		return new JsonResult(count, "", 200);
+		return new JsonResult(count);
 	}
 
 	@RequestMapping("/toAdd")
@@ -83,7 +83,5 @@ public class FAQTypeController {
 		fAQTypeService.batchDelete(Arrays.asList(id));
 		return new JsonResult();
 	}
-
-	
 
 }

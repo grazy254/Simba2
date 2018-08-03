@@ -5,10 +5,20 @@ public class RealTimeMessageSearchForm {
 	private Integer userId;
 
 	private String message;
-	
+
 	private String startTime;
 
 	private String endTime;
+
+	private String appid;
+
+	public String getAppid() {
+		return appid;
+	}
+
+	public void setAppid(String appid) {
+		this.appid = appid;
+	}
 
 	public Integer getUserId() {
 		return userId;
@@ -41,7 +51,5 @@ public class RealTimeMessageSearchForm {
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
-	
-	
 
 }

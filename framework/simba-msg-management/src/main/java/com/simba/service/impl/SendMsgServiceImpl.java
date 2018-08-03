@@ -95,15 +95,10 @@ public class SendMsgServiceImpl implements SendMsgService {
             MsgType platformType = platform.getPlatformType();
             String messageId = null;
             /* 重试3次, 5秒超时 */
-            int tryTime = 3;
-            while (0 < tryTime--) {
-                Future<String> f = threadPool.submit(() -> sendOneMessage(mobile, platformTemplateId, params, platformType, Integer.valueOf(projectId)));
-                try {
-                    messageId = f.get(5, TimeUnit.SECONDS);
-                    break;
-                } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                    logger.error("极光短信发送失败, 正在重试...", e);
-                }
+            try {
+                messageId = (String) tryN(() -> sendOneMessage(mobile, platformTemplateId, params, platformType, Integer.valueOf(projectId)), 3, 5);
+            } catch (RetryException e) {
+                logger.error("短信发送失败", e);
             }
             /* 记录 */
             ShortMessage shortMessage = new ShortMessage();
@@ -121,7 +116,6 @@ public class SendMsgServiceImpl implements SendMsgService {
                 SendStatus sendStatus = SendStatus.FAIL;
                 shortMessage.setStatus(sendStatus.getId());
                 shortMessage.setMessageId("-1");
-
             }
             shortMessageService.add(shortMessage);
         });
@@ -142,26 +136,11 @@ public class SendMsgServiceImpl implements SendMsgService {
             if (platform == null) throw new BussException("模板Id有误");
             String platformTemplateId = platform.getTemplateId();
             MsgType platformType = platform.getPlatformType();
-            int tryTime = 3;
-            while (0 < tryTime--) {
-                Future<String> f = threadPool.submit(() -> sendMsgUtil.send(mobile, platformTemplateId, params, platformType));
-                try {
-                    f.get(5, TimeUnit.SECONDS);
-                    break;
-                } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                    logger.error("极光短信发送失败, 正在重试...", e);
-                }
+            try {
+                tryN(() -> sendMsgUtil.send(mobile, platformTemplateId, params, platformType), 3, 5);
+            } catch (RetryException e) {
+                logger.error("短信发送失败", e);
             }
-        });
-    }
-
-    public void sendPure0(String mobile, String selfTemplateId, Map<String, String> params) {
-        threadPool.execute(() -> {
-            EntryPlatform platform = templateService.getOnePlatformTemplateId(selfTemplateId);
-            if (platform == null) throw new BussException("模板Id有误");
-            String platformTemplateId = platform.getTemplateId();
-            MsgType platformType = platform.getPlatformType();
-            tryN(() -> sendMsgUtil.send(mobile, platformTemplateId, params, platformType), 3, 5);
         });
     }
 
@@ -175,7 +154,8 @@ public class SendMsgServiceImpl implements SendMsgService {
      * @throws RetryException 重试失败
      */
     public Object tryN(Callable<Object> task, int retry, int perTimeout) throws RetryException {
-        while (0 < retry--) {
+        int time = retry;
+        while (0 < time--) {
             Future f = threadPool.submit(task);
             try {
                 return f.get(perTimeout, TimeUnit.SECONDS);

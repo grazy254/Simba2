@@ -21,12 +21,15 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.Map;
 import java.util.concurrent.*;
 
@@ -60,6 +63,8 @@ public class SendMsgServiceImpl implements SendMsgService {
     @Autowired
     private SendMsgUtil sendMsgUtil;
 
+    @Autowired
+    @Qualifier("msgThreadPool")
     private ThreadPoolTaskExecutor threadPool;
 
     @Value(value = "${project.alarm.email:false}")
@@ -68,14 +73,14 @@ public class SendMsgServiceImpl implements SendMsgService {
     @Value(value = "${project.alarm.shortmsg:false}")
     private boolean shortmsgAlarmEnable;
 
-    @PostConstruct
-    private void initThreadPool() {
-        threadPool = new ThreadPoolTaskExecutor();
+    @Bean("msgThreadPool")
+    private ThreadPoolTaskExecutor getThreadPool() {
+        ThreadPoolTaskExecutor threadPool = new ThreadPoolTaskExecutor();
         threadPool.setCorePoolSize(4);
         threadPool.setMaxPoolSize(20);
         threadPool.setQueueCapacity(200);
+        return threadPool;
     }
-
 
     /**
      * 发送+记录 (异步)

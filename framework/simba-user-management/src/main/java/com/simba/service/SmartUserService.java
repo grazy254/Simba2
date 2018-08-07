@@ -68,7 +68,9 @@ public interface SmartUserService {
 
 	List<SmartUser> page(Pager pager, SmartUserSearchForm searchForm);
 
-	Long addRegister(SmartUser smartUser);
+    Long addAndGet(SmartUser smartUser);
+
+    Long addRegister(SmartUser smartUser);
 
 	/**
 	 * 增加一个微信用户

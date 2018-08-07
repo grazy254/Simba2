@@ -70,6 +70,11 @@ public class SmartUserServiceImpl implements SmartUserService {
 	}
 
 	@Override
+	public Long addAndGet(SmartUser smartUser) {
+		return smartUserDao.add(smartUser);
+	}
+
+	@Override
 	public Long addRegister(SmartUser smartUser) {
 		smartUser.setCreateTime(new Date());
 		smartUser.setStatus(UserStatus.ENABLED.getId());

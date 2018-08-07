@@ -76,8 +76,7 @@ public class ThreadDataInterceptor implements HandlerInterceptor {
 		if (userId == null || "".equals(userId)){
 			//通过token获取userId
 			if(token==null || redisUtil.get(token)==null){
-				
-				throw new BussException("您还未登录系统，无法set登录session进去" + request.getRequestURI());
+				throw new BussException("您还未登录系统，无法set登录session进去" + request.toString());
 			}else{
 				userId=redisUtil.get(token);
 				logger.info("userId:" +userId.toString());

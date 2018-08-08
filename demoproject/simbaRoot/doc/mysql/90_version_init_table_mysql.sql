@@ -1,12 +1,8 @@
-/*==============================================================*/
-/* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2018/5/7 星期一 11:47:56                        */
-/*==============================================================*/
-
-
 drop table if exists FAQ;
 
 drop table if exists FAQType;
+
+drop table if exists apkVersion;
 
 drop table if exists bugFeedback;
 
@@ -42,6 +38,26 @@ create table FAQType
    type                 varchar(32) not null,
    primary key (id)
 );
+
+/*==============================================================*/
+/* Table: apkVersion                                            */
+/*==============================================================*/
+create table apkVersion
+(
+   id                   int not null auto_increment,
+   version              varchar(64) not null comment '版本号',
+   versionName          varchar(64) comment '版本名',
+   typeId               int not null comment '类型id',
+   fileUrl              varchar(128) not null comment '文件地址',
+   fileSize             double not null comment '文件大小',
+   description          varchar(512) comment '描述',
+   createTime           datetime not null comment '时间',
+   primary key (id),
+   key AK_Key_Time (createTime),
+   key AK_Key_Type (typeId)
+);
+
+alter table apkVersion comment 'apk版本';
 
 /*==============================================================*/
 /* Table: bugFeedback                                           */
@@ -143,4 +159,3 @@ create table opinionFeedback
    createTime           datetime not null,
    primary key (id)
 );
-

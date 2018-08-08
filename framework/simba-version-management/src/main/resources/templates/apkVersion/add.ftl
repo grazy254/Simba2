@@ -23,6 +23,7 @@
 									<h3 class="box-title">新增apk管理</h3>
 								</div>
 								<form role="form" onsubmit="return ApkVersion.checkForm();" id="form" action="${base}/apkVersion/add" method="post" enctype="multipart/form-data">
+									<input id="token" name="token" value="${post_token}" type="hidden"/>
 									<div class="box-body">
 										<div class="form-group">
 											<label for="versionName">版本名</label>

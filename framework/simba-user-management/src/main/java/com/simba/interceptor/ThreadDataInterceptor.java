@@ -36,16 +36,17 @@ public class ThreadDataInterceptor implements HandlerInterceptor {
 	private String excludeUrls;
 
 	private List<String> excludeUrlList;
-	
-	private SmartUserService smartUserService=ApplicationContextUtil.getBean(SmartUserService.class);
-	
+
+	private SmartUserService smartUserService = ApplicationContextUtil.getBean(SmartUserService.class);
+
 	public ThreadDataInterceptor() {
 		super();
 		init();
 	}
+
 	@PostConstruct
 	private void init() {
-		
+
 		EnvironmentUtil environmentUtil = ApplicationContextUtil.getBean(EnvironmentUtil.class);
 		excludeUrls = environmentUtil.get("user.threadData.interceptor.exclude.url");
 		String[] urls = excludeUrls.split(",");
@@ -71,37 +72,39 @@ public class ThreadDataInterceptor implements HandlerInterceptor {
 		RedisUtil redisUtil = ApplicationContextUtil.getBean(RedisUtil.class);
 		HttpSession session = request.getSession();
 		Object userId = session.getAttribute("userId");
-		String token=request.getHeader("session_token");
-		logger.info("token:"+token);
-		if (userId == null || "".equals(userId)){
-			//通过token获取userId
-			if(token==null || redisUtil.get(token)==null){
-				throw new BussException("您还未登录系统，无法set登录session进去" + request.toString());
-			}else{
-				userId=redisUtil.get(token);
-				logger.info("userId:" +userId.toString());
+		String token = request.getHeader("session_token");
+		String url = "http://" + request.getServerName()+ ":" + request.getServerPort()+ request.getRequestURI();
+		logger.info("userId:" + userId);
+		logger.info("token:" + token);
+		if (userId == null || "".equals(userId)) {
+			// 通过token获取userId
+			if (token == null || redisUtil.get(token) == null) {
+				throw new BussException("您还未登录系统，无法set登录session进去" + url);
+			} else {
+				userId = redisUtil.get(token);
+				logger.info("userId:" + userId.toString());
 				ThreadDataUtil.set("account", smartUserService.get(Long.parseLong(userId.toString())));
-				SmartUser smartUser= smartUserService.get(Long.parseLong(userId.toString()));
-				if(smartUser == null){
+				SmartUser smartUser = smartUserService.get(Long.parseLong(userId.toString()));
+				if (smartUser == null) {
 					session.removeAttribute("userId");
 					throw new BussException("用户数据已经删除，请换其他账号登录");
 				}
-				//处于安全考虑，将密码设为空
+				// 处于安全考虑，将密码设为空
 				smartUser.setPassword("");
-				logger.info("已写入线程变量 --key=account value="+smartUser);
+				logger.info("已写入线程变量 --key=account value=" + smartUser);
 			}
-			
-		}else{
-			logger.info("userId:" +userId.toString());
+
+		} else {
+			logger.info("userId:" + userId.toString());
 			ThreadDataUtil.set("account", smartUserService.get(Long.parseLong(userId.toString())));
-			SmartUser smartUser= smartUserService.get(Long.parseLong(userId.toString()));
-			if(smartUser == null){
+			SmartUser smartUser = smartUserService.get(Long.parseLong(userId.toString()));
+			if (smartUser == null) {
 				session.removeAttribute("userId");
 				throw new BussException("用户数据已经删除，请换其他账号登录");
 			}
-			//处于安全考虑，将密码设为空
+			// 处于安全考虑，将密码设为空
 			smartUser.setPassword("");
-			logger.info("已写入线程变量 --key=account value="+smartUser);
+			logger.info("已写入线程变量 --key=account value=" + smartUser);
 		}
 	}
 

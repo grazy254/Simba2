@@ -29,7 +29,7 @@ public class RouteController {
 	private UrlDataService urlDataService;
 
 	@Autowired
-	private ProjectService projecService;
+	private ProjectService projectService;
 
 	@RequestMapping("/{projectName}/{level1}")
 	public String level1(HttpServletRequest request) {
@@ -83,7 +83,7 @@ public class RouteController {
 		}
 		logger.info("项目:" + project + ",url:" + url);
 		// 根据项目编号和url从数据库获取配置的对应的数据返回
-		MockProject projectObj = projecService.getBy("code", project);
+		MockProject projectObj = projectService.getBy("code", project);
 		int projectId = projectObj.getId();
 		UrlData urlObj = urlDataService.getByAnd("url", url, "projectId", projectId);
 		logger.info("返回数据:" + urlObj.getData());

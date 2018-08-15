@@ -13,7 +13,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -26,7 +25,7 @@ public class ShortMessageSdk {
 
     private static final Log logger = LogFactory.getLog(ShortMessageSdk.class);
 
-    private static final String url = "/SHORTMSGUSER/sendMsg/send";
+    private static final String url = "/SHORTMSGUSER/server/api/sendMsg/send";
 
     @Autowired
     private RestTemplate restTemplate;

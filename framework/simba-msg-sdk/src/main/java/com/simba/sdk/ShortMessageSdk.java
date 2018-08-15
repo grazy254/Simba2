@@ -19,9 +19,9 @@ import com.simba.framework.util.json.JsonResult;
  *
  */
 @Component
-public class RealTimeSdk {
+public class ShortMessageSdk {
 
-	private static final Log logger = LogFactory.getLog(RealTimeSdk.class);
+	private static final Log logger = LogFactory.getLog(ShortMessageSdk.class);
 
 	private static final String url = "/REALTIMEUSER/server/api/realTimeMessage/send";
 

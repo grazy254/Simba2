@@ -1,53 +1,56 @@
 package com.simba.sdk;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.simba.framework.util.code.EncryptUtil;
+import com.simba.framework.util.date.DateUtil;
+import com.simba.framework.util.json.FastJsonUtil;
+import com.simba.framework.util.json.JsonResult;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
-import com.simba.eureka.client.EurekaClientUtil;
-import com.simba.framework.util.json.FastJsonUtil;
-import com.simba.framework.util.json.JsonResult;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * 实时推送系统sdk
- * 
- * @author caozhejun
+ * 短信系统sdk
  *
+ * @author linshuo
  */
 @Component
 public class ShortMessageSdk {
 
-	private static final Log logger = LogFactory.getLog(ShortMessageSdk.class);
+    private static final Log logger = LogFactory.getLog(ShortMessageSdk.class);
 
-	private static final String url = "/REALTIMEUSER/server/api/realTimeMessage/send";
+    private static final String url = "/SHORTMSGUSER/sendMsg/send";
 
-	@Autowired
-	private EurekaClientUtil client;
+    @Autowired
+    private RestTemplate restTemplate;
 
-	/**
-	 * 通过websocket推送消息给用户
-	 * 
-	 * @param userId
-	 *            用户id
-	 * @param content
-	 *            推送的内容
-	 * @param appid
-	 *            应用的id
-	 * @return
-	 */
-	public void send(String userId, String content, String appid) {
-		logger.info("通过websocket推送消息给用户:userId=" + userId + ",appid=" + appid + ",content=" + content);
-		Map<String, String> param = new HashMap<>();
-		param.put("userId", userId);
-		param.put("appid", appid);
-		param.put("content", content);
-		String result = client.post(url, param);
-		JsonResult jsonResult = FastJsonUtil.toObject(result, JsonResult.class);
-		jsonResult.check("通过websocket推送消息给用户发生异常:userId=" + userId + ",appid=" + appid + ",content=" + content);
-	}
+
+    /**
+     * 发送手机短信
+     *
+     * @param mobile 手机号
+     * @param code   模板Id
+     * @param params 插入模板的值
+     */
+    public JsonResult send(String mobile, String code, Map<String, String> params, String projectId, String projectKey) {
+        long timestamp = DateUtil.getTimestamp(DateUtil.getTime());
+        MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
+        param.add("templateSelfId", code);
+        param.add("projectId", projectId);
+        param.add("cipherText", EncryptUtil.md5(projectKey + timestamp));
+        param.add("values", params);
+        param.add("mobileList", Arrays.asList(mobile));
+        param.add("timeStamp", timestamp);
+        String result = restTemplate.postForObject(url.toString(), param, String.class);
+        logger.info("发送请求到短信服务器返回结果:" + result);
+        return FastJsonUtil.toObject(result, JsonResult.class);
+    }
 
 }

@@ -45,11 +45,11 @@ public class Jdbc extends JdbcDaoSupport {
 	private String dbType;
 
 	@Resource
-	private DataSource dataSource;
+	private DataSource druidDataSource;
 
 	@PostConstruct
 	public void initDataSource() {
-		super.setDataSource(dataSource);
+		super.setDataSource(druidDataSource);
 	}
 
 	@PreDestroy

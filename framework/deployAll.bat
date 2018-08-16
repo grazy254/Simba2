@@ -106,6 +106,9 @@ cd ../
 cd simba-rabbitmq
 call mvn clean -U deploy
 cd ../
+cd simba-async-distributed
+call mvn clean -U deplay
+cd ../
 cd simba-elasticsearch
 call mvn clean -U deploy
 cd ../

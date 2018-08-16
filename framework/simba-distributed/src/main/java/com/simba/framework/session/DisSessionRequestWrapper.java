@@ -145,4 +145,9 @@ public class DisSessionRequestWrapper extends HttpServletRequestWrapper {
 	public HttpSession getSession() {
 		return this.getSession(true);
 	}
+
+	@Override
+	public String getRequestedSessionId() {
+		return this.sid;
+	}
 }

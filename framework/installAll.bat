@@ -106,6 +106,9 @@ cd ../
 cd simba-rabbitmq
 call mvn clean -U install
 cd ../
+cd simba-async-distributed
+call mvn clean -U install
+cd ../
 cd simba-elasticsearch
 call mvn clean -U install
 cd ../

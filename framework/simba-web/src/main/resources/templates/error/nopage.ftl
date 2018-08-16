@@ -4,7 +4,7 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>无标题文档</title>
+		<title>系统错误，找不到您访问的页面</title>
 		<link href="${base}/css/404.css" rel="stylesheet">
 	</head>
 

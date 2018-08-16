@@ -7,6 +7,7 @@
 	<packaging>jar</packaging>
 
 	<name>simba-address</name>
+	
 	<url>http://maven.apache.org</url>
 
 	<properties>

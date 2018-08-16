@@ -28,21 +28,21 @@ public class SmartUserDaoImpl implements SmartUserDao {
     @Override
     public long add(SmartUser smartUser) {
         String sql = "insert into " + table
-                + "( account, name, email, telNo, password, createTime, status,sex,groupId,headPic) values(?,?,?,?,?,?,?,?,?,?)";
+                + "( account, name, email, telNo, password, createTime, status,sex,groupId,headPic,isRedPacket) values(?,?,?,?,?,?,?,?,?,?,?)";
         Number id = jdbc.updateForGeneratedKey(sql, smartUser.getAccount(), smartUser.getName(),
                 smartUser.getEmail(), smartUser.getTelNo(), smartUser.getPassword(),
-                smartUser.getCreateTime(), smartUser.getStatus(),smartUser.getSex(),smartUser.getGroupId(),smartUser.getHeadPic());
+                smartUser.getCreateTime(), smartUser.getStatus(),smartUser.getSex(),smartUser.getGroupId(),smartUser.getHeadPic(),smartUser.getIsRedPacket());
         return id.longValue();
     }
 
     @Override
     public void update(SmartUser smartUser) {
         String sql = "update " + table
-                + " set  account = ? , name = ? , email = ? , telNo = ? , password = ? , createTime = ? , status = ? , sex = ? , groupId = ?, headPic = ?  where id = ?  ";
+                + " set  account = ? , name = ? , email = ? , telNo = ? , password = ? , createTime = ? , status = ? , sex = ? , groupId = ?, headPic = ? ,isRedPacket = ? where id = ?  ";
         jdbc.updateForBoolean(sql, smartUser.getAccount(), smartUser.getName(),
                 smartUser.getEmail(), smartUser.getTelNo(), smartUser.getPassword(),
                 smartUser.getCreateTime(), smartUser.getStatus(), smartUser.getSex(),
-                smartUser.getGroupId(), smartUser.getHeadPic(),smartUser.getId());
+                smartUser.getGroupId(), smartUser.getHeadPic(),smartUser.getIsRedPacket(),smartUser.getId());
     }
 
     @Override

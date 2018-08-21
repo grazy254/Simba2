@@ -6,6 +6,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import cn.jpush.api.push.model.Message;
+import cn.jpush.api.push.model.Options;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,6 +39,9 @@ public class JpushAppUtil {
 
     @Value("${jpush.secret}")
     private String secret;
+
+    @Value("${jpush.isAppProduct:true}")
+    private boolean isAppProduct;
 
     private JPushClient client;
 
@@ -77,7 +81,7 @@ public class JpushAppUtil {
      */
     public PushResult sendNotification(List<String> users, String content) throws APIConnectionException, APIRequestException {
         PushPayload payload = PushPayload.newBuilder().setPlatform(Platform.all()).setAudience(Audience.newBuilder().addAudienceTarget(AudienceTarget.alias(users)).build())
-                .setNotification(Notification.alert(content)).build();
+                .setNotification(Notification.alert(content)).setOptions(Options.newBuilder().setApnsProduction(isAppProduct).build()).build();
         PushResult result = sendPush(payload);
         return result;
     }
@@ -89,7 +93,8 @@ public class JpushAppUtil {
      * @param content
      */
     public PushResult sendNotification(String user, String content) throws APIConnectionException, APIRequestException {
-        PushPayload payload = PushPayload.newBuilder().setPlatform(Platform.all()).setAudience(Audience.alias(user)).setNotification(Notification.alert(content)).build();
+        PushPayload payload = PushPayload.newBuilder().setPlatform(Platform.all()).setAudience(Audience.alias(user)).setNotification(Notification.alert(content))
+                .setOptions(Options.newBuilder().setApnsProduction(isAppProduct).build()).build();
         PushResult result = sendPush(payload);
         return result;
     }
@@ -100,7 +105,8 @@ public class JpushAppUtil {
      * @param content
      */
     public PushResult sendNotificationAll(String content) throws APIConnectionException, APIRequestException {
-        PushPayload payload = PushPayload.newBuilder().setPlatform(Platform.all()).setAudience(Audience.all()).setNotification(Notification.alert(content)).build();
+        PushPayload payload = PushPayload.newBuilder().setPlatform(Platform.all()).setAudience(Audience.all()).setNotification(Notification.alert(content))
+                .setOptions(Options.newBuilder().setApnsProduction(isAppProduct).build()).build();
         PushResult result = sendPush(payload);
         return result;
     }

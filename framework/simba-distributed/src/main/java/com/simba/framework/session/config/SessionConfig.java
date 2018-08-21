@@ -36,7 +36,7 @@ public class SessionConfig {
 	}
 
 	@Bean
-	public FilterRegistrationBean filterRegistrationBean() {
+	public FilterRegistrationBean disSessionFilter() {
 		log.info("=====================init session filter Configuration==============================");
 		FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
 		filterRegistrationBean.setName("sessionFilter");

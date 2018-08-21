@@ -29,7 +29,7 @@ public class KaptchaConfiguration {
 	private EnvironmentUtil environmentUtil;
 
 	@Bean
-	public ServletRegistrationBean druidServlet() {
+	public ServletRegistrationBean kaptchaServlet() {
 		logger.info("=====================init google kaptcha Servlet Configuration =========================================");
 		String height = StringUtils.defaultString(environmentUtil.get("kaptcha.height"), "50");
 		String width = StringUtils.defaultString(environmentUtil.get("kaptcha.width"), "150");

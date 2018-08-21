@@ -1,6 +1,9 @@
 cd simba-auto-deploy
 call mvn clean -U 
 cd ../
+cd simba-async-distributed
+call mvn clean -U 
+cd ../
 cd simba-user-sdk
 call mvn clean -U 
 cd ../

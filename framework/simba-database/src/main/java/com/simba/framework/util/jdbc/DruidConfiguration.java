@@ -34,7 +34,7 @@ public class DruidConfiguration {
 
 	@Bean
 	public ServletRegistrationBean druidServlet() {
-		logger.info("=====================init Druid Servlet Configuration ");
+		logger.info("=====================init Druid Servlet Configuration ==============================");
 		ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean();
 		servletRegistrationBean.setServlet(new StatViewServlet());
 		servletRegistrationBean.addUrlMappings("/druid/*");
@@ -47,8 +47,8 @@ public class DruidConfiguration {
 	}
 
 	@Bean
-	public FilterRegistrationBean filterRegistrationBean() {
-		logger.info("=====================init Druid filter Configuration ");
+	public FilterRegistrationBean druidFilter() {
+		logger.info("=====================init Druid filter Configuration ==============================");
 		FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
 		filterRegistrationBean.setFilter(new WebStatFilter());
 		filterRegistrationBean.addUrlPatterns("/*");
@@ -58,7 +58,7 @@ public class DruidConfiguration {
 
 	@Bean
 	@ConfigurationProperties(prefix = "spring.datasource")
-	public DataSource dataSource() {
+	public DataSource druidDataSource() {
 		return new DruidDataSource();
 	}
 }

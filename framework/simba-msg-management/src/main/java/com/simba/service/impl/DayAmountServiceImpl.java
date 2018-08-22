@@ -238,7 +238,7 @@ public class DayAmountServiceImpl implements DayAmountService {
                 // 清0
                 dayAmountUtil.clean();
             }
-            redisUtil.releaseLock(DayAmountUtil.TIMERLOCK_REDIS_KEY);
+
         }
     }
 

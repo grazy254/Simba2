@@ -22,7 +22,7 @@ import com.simba.framework.util.json.JsonResult;
  *
  */
 @RestController
-@RequestMapping("/aliPay")
+@RequestMapping("/api/aliPay")
 public class AliPayController {
 
 	private static final Log logger = LogFactory.getLog(AliPayController.class);

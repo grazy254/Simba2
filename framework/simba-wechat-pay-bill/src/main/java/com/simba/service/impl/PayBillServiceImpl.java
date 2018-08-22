@@ -263,6 +263,14 @@ public class PayBillServiceImpl implements PayBillService {
 			PayResult payResult = new PayResult();
 			payResult.setOut_trade_no(bill.getOutTradeNo());
 			payResult.setTotal_fee(bill.getFee());
+			payResult.setResult_code("SUCCESS");
+			payResult.setReturn_code("SUCCESS");
+			payResult.setReturn_msg("OK");
+			payResult.setAppid(bill.getAppid());
+			payResult.setMch_id(bill.getMchId());
+			payResult.setOpenid(res.getOpenid());
+			payResult.setCash_fee(bill.getFee());
+			payResult.setSettlement_total_fee(bill.getFee());
 			payService.dealResult(payResult);
 		} else {
 			this.update(bill);

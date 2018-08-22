@@ -78,13 +78,6 @@ public class SmartUser {
 	@DescAnnotation(desc = "头像")
 	private String headPic;
 	
-	/**
-	 * 是否领取红包 0没领1领取
-	 */
-	@DescAnnotation(desc = "是否领取红包")
-	private int isRedPacket;
-	
-	
 	//扩张属性----第三方系统用户ID和第三方系统名称
 	
 	@DescAnnotation(desc = "第三方系统名称")
@@ -184,14 +177,6 @@ public class SmartUser {
 		this.headPic = headPic;
 	}
 
-	public int getIsRedPacket() {
-		return isRedPacket;
-	}
-
-	public void setIsRedPacket(int isRedPacket) {
-		this.isRedPacket = isRedPacket;
-	}
-
 	public String getThirdSystem() {
 		return thirdSystem;
 	}
@@ -219,8 +204,7 @@ public class SmartUser {
 	@Override
 	public String toString() {
 		return "SmartUser [id=" + id + ", account=" + account + ", name=" + name + ", email=" + email + ", telNo=" + telNo + ", password=" + password + ", createTime=" + createTime + ", status="
-				+ status + ", groupId=" + groupId + ", sex=" + sex + ", headPic=" + headPic + ", isRedPacket=" + isRedPacket + ", thirdSystem=" + thirdSystem + ", group=" + group + ", uuid=" + uuid
-				+ "]";
+				+ status + ", groupId=" + groupId + ", sex=" + sex + ", headPic=" + headPic + ", thirdSystem=" + thirdSystem + ", group=" + group + ", uuid=" + uuid + "]";
 	}
 
 	

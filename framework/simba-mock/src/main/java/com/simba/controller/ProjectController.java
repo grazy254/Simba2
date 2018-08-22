@@ -37,7 +37,7 @@ public class ProjectController {
 
 	@RequestMapping("/list")
 	public String list() {
-		return "mockProject/list";
+		return "project/list";
 	}
 
 	@RequestMapping("/getList")
@@ -48,7 +48,7 @@ public class ProjectController {
 			projectList.add(projectService.get(projectUser.getProjectId()));
 		}
 		model.put("list", projectList);
-		return "mockProject/table";
+		return "project/table";
 	}
 
 	@ResponseBody
@@ -73,7 +73,7 @@ public class ProjectController {
 	public String toUpdate(int id, ModelMap model) {
 		MockProject project = projectService.get(id);
 		model.put("project", project);
-		return "mockProject/update";
+		return "project/update";
 	}
 
 	@RequestMapping("/update")

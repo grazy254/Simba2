@@ -66,7 +66,6 @@ public class SmartUserServiceImpl implements SmartUserService {
 		smartUser.setCreateTime(new Date());
 		smartUser.setPassword(defaultPwd);
 		smartUser.setStatus(UserStatus.ENABLED.getId());
-		smartUser.setIsRedPacket(0);
 		smartUserDao.add(smartUser);
 	}
 
@@ -79,7 +78,6 @@ public class SmartUserServiceImpl implements SmartUserService {
 	public Long addRegister(SmartUser smartUser) {
 		smartUser.setCreateTime(new Date());
 		smartUser.setStatus(UserStatus.ENABLED.getId());
-		smartUser.setIsRedPacket(0);
 		return smartUserDao.add(smartUser);
 	}
 
@@ -245,7 +243,6 @@ public class SmartUserServiceImpl implements SmartUserService {
 		smartUser.setPassword(StringUtils.EMPTY);
 		smartUser.setStatus(UserStatus.ENABLED.getId());
 		smartUser.setTelNo(StringUtils.EMPTY);
-		smartUser.setIsRedPacket(0);
 		long userId = smartUserDao.add(smartUser);
 		ThirdSystemUser thirdSystemUser = new ThirdSystemUser();
 		thirdSystemUser.setUserId(userId);
@@ -359,7 +356,6 @@ public class SmartUserServiceImpl implements SmartUserService {
 			user.setThirdSystem("");
 			user.setCreateTime(new Date());
 			user.setStatus(0);
-			user.setIsRedPacket(0);
 			smartUserDao.add(user);
 			//返回用户ID
 			return new JsonResult("-1",mobile+"不存在,", 400);
@@ -429,7 +425,6 @@ public class SmartUserServiceImpl implements SmartUserService {
 		user.setSex(-1);
 		user.setGroupId(0);
 		user.setHeadPic("");
-		user.setIsRedPacket(0);
 		// 给密码解密之后再md5。
 		String p = "";
 		p = DesUtil.decrypt(password, sk);

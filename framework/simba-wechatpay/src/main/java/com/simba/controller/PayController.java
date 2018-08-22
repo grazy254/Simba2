@@ -42,7 +42,7 @@ import com.simba.util.send.WxPayUtil;
  *
  */
 @RestController
-@RequestMapping("/pay")
+@RequestMapping("/api/pay")
 public class PayController {
 
 	private static final Log logger = LogFactory.getLog(PayController.class);

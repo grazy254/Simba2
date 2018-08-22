@@ -119,7 +119,7 @@ var Buss = {
 
 	"executeTestScript": function() {
 		$.ajax({
-			url: contextPath + "/buss/execute?json&scriptName=" + $("#name").val(),
+			url: contextPath + "/api/buss/execute?json&scriptName=" + $("#name").val(),
 			type: "post",
 			dataType: "json",
 			async: true,

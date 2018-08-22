@@ -4,11 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -33,14 +29,6 @@ public class BussController {
 
 	@Autowired
 	private BussService bussService;
-
-	@ResponseBody
-	@RequestMapping("/execute")
-	public JsonResult execute(HttpServletRequest request, String scriptName) {
-		Map<String, String[]> params = request.getParameterMap();
-		Object object = bussService.execute(params, scriptName);
-		return new JsonResult(object != null ? object.toString() : StringUtils.EMPTY);
-	}
 
 	@RequestMapping("/list")
 	public String list() {

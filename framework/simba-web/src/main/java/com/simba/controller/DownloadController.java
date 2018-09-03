@@ -9,10 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.csource.common.FastdfsException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import com.simba.framework.util.upload.UploadUtil;
 
@@ -68,4 +70,30 @@ public class DownloadController {
 		}
 	}
 
+	/**
+	 * 异步下载文件
+	 * 
+	 * @param fileName
+	 *            下载的文件地址
+	 * @throws IOException
+	 */
+	@ApiOperation(value = "通用组件下载文件", notes = "异步下载文件")
+	@ApiImplicitParam(value = "文件地址", name = "fileName", dataType = "string", paramType = "query")
+	@RequestMapping(value = "/asyncDownload", method = RequestMethod.GET)
+	public StreamingResponseBody asyncDownload(String fileName) {
+		return new StreamingResponseBody() {
+			@Override
+			public void writeTo(OutputStream outputStream) throws IOException {
+				InputStream in = null;
+				try {
+					in = UploadUtil.getInstance().getUpload().download(fileName);
+					IOUtils.copy(in, outputStream);
+				} catch (FastdfsException e) {
+					logger.error("下载文件发生异常", e);
+				} finally {
+					IOUtils.closeQuietly(in);
+				}
+			}
+		};
+	}
 }

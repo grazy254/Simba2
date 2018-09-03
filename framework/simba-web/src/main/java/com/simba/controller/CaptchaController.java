@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import com.simba.CaptchaUtil;
 
@@ -51,6 +53,42 @@ public class CaptchaController {
 	@ApiOperation(value = "获取验证码图片", notes = "获取验证码图片")
 	@GetMapping("/get")
 	public void get(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		BufferedImage buffImg = buildCaptcha(request);
+		setResponse(response);
+		// 将图像输出到Servlet输出流中。
+		ServletOutputStream sos = response.getOutputStream();
+		ImageIO.write(buffImg, "jpeg", sos);
+		sos.close();
+	}
+
+	private void setResponse(HttpServletResponse response) {
+		// 禁止图像缓存。
+		response.setHeader("Pragma", "no-cache");
+		response.setHeader("Cache-Control", "no-cache");
+		response.setDateHeader("Expires", 0);
+		response.setContentType("image/jpeg");
+	}
+
+	/**
+	 * 异步获取验证码图片
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@ApiOperation(value = "异步获取验证码图片", notes = "异步获取验证码图片")
+	@GetMapping("/asyncGet")
+	public StreamingResponseBody asyncGet(HttpServletRequest request) {
+		return new StreamingResponseBody() {
+			@Override
+			public void writeTo(OutputStream outputStream) throws IOException {
+				BufferedImage buffImg = buildCaptcha(request);
+				ImageIO.write(buffImg, "jpeg", outputStream);
+			}
+
+		};
+	}
+
+	private BufferedImage buildCaptcha(HttpServletRequest request) {
 		// 定义图像buffer
 		BufferedImage buffImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = buffImg.createGraphics();
@@ -93,15 +131,7 @@ public class CaptchaController {
 			randomCode.append(strRand);
 		}
 		CaptchaUtil.setCaptcha(request.getSession(), randomCode.toString());
-		// 禁止图像缓存。
-		response.setHeader("Pragma", "no-cache");
-		response.setHeader("Cache-Control", "no-cache");
-		response.setDateHeader("Expires", 0);
-		response.setContentType("image/jpeg");
-		// 将图像输出到Servlet输出流中。
-		ServletOutputStream sos = response.getOutputStream();
-		ImageIO.write(buffImg, "jpeg", sos);
-		sos.close();
+		return buffImg;
 	}
 
 }

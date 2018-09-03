@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,9 +14,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
-import com.simba.model.SmartUser;
 import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.model.TradeUser;
 import com.simba.wallet.model.form.TradeAccountSearchForm;
@@ -22,11 +24,8 @@ import com.simba.wallet.model.vo.TradeAccountVO;
 import com.simba.wallet.service.TradeAccountService;
 import com.simba.wallet.service.TradeUserService;
 import com.simba.wallet.util.CommonUtil;
-import com.simba.wallet.util.Constants;
 import com.simba.wallet.util.Constants.AccountType;
 import com.simba.wallet.util.Constants.TradeUserType;
-import com.simba.wallet.util.ErrConfig;
-import com.simba.wallet.util.SessionUtil;
 
 /**
  * 支付账号控制器
@@ -43,9 +42,6 @@ public class TradeAccountController {
 
     @Autowired
     private TradeUserService tradeUserService;
-
-    @Autowired
-    private SessionUtil sessionUtil;
 
     @RequestMapping("/doSearch")
     public String getSmartUserAccount(TradeAccountSearchForm tradeAccountSearchForm,
@@ -135,34 +131,6 @@ public class TradeAccountController {
     public JsonResult count(String accountType) {
         Long count = tradeAccountService.countByAnd("accountType", accountType, "isActive", 1);
         return new JsonResult(count, "", 200);
-    }
-
-
-
-    /**
-     * 展示余额
-     * 
-     * @param sessSmartUserAccount @param session @return @throws
-     * @throws Exception
-     */
-    @ResponseBody
-    @RequestMapping("/showBalance")
-    public JsonResult showBalance(HttpSession session) throws Exception {
-        SmartUser smartUser = sessionUtil.getSmartUser(session);
-
-        TradeUser tradeUser = tradeUserService.get(smartUser.getAccount(), TradeUserType.PERSION);
-        if (tradeUser == null) {
-            tradeAccountService.openAccount(smartUser.getAccount(), smartUser.getName(),
-                    smartUser.getPassword(), smartUser.getTelNo(), smartUser.getEmail(),
-                    TradeUserType.PERSION, 1, 1, Constants.AccountActiveStatus.ACTIVE.getValue());
-        }
-        TradeAccount smartUserTradeAccount =
-                tradeAccountService.get(smartUser.getAccount(), TradeUserType.PERSION);
-        if (smartUserTradeAccount == null) {
-            throw ErrConfig.INVALID_WALLET_USER;
-        }
-        return new JsonResult(CommonUtil.transToCNYType(smartUserTradeAccount.getAccountBalance()));
-
     }
 
     /**

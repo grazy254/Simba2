@@ -15,7 +15,7 @@ import com.simba.model.form.RealTimeMessageSearchForm;
 import com.simba.service.RealTimeMessageService;
 
 /**
- * 设备功能表 Service实现类
+ * 实时信息推送 Service实现类
  * 
  * @author caozj
  * 

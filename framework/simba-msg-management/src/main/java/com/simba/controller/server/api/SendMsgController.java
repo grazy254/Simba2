@@ -1,4 +1,4 @@
-package com.simba.controller;
+package com.simba.controller.server.api;
 
 import com.simba.framework.util.json.JsonResult;
 import com.simba.service.bean.MsgPostArgs;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
  * Created by linshuo on 2017/12/5.
  */
 @Controller
-@RequestMapping("/sendMsg")
+@RequestMapping("/server/api/sendMsg")
 public class SendMsgController {
 
     @Autowired

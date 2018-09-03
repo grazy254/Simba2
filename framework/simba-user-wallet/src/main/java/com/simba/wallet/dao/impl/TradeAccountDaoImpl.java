@@ -36,13 +36,13 @@ public class TradeAccountDaoImpl implements TradeAccountDao {
     @Override
     public long add(TradeAccount tradeAccount) {
         String sql = "insert into " + table
-                + "( tradeUserID, accountID, accountType, feeType, isAllowRecharge, isAllowPay, isActive, isFrozen, accountBalance, availableBalance, frozenBalance, createTime, lastUpdateTime) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "( tradeUserID, accountID, accountType, feeType, isAllowRecharge, isAllowPay, isActive, isFrozen, accountBalance, availableBalance, virtualBalance, frozenBalance, createTime, lastUpdateTime) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         Number id = jdbc.updateForGeneratedKey(sql, tradeAccount.getTradeUserID(),
                 tradeAccount.getAccountID(), tradeAccount.getAccountType(),
                 tradeAccount.getFeeType(), tradeAccount.getIsAllowRecharge(),
                 tradeAccount.getIsAllowPay(), tradeAccount.getIsActive(),
                 tradeAccount.getIsFrozen(), tradeAccount.getAccountBalance(),
-                tradeAccount.getAvailableBalance(), tradeAccount.getFrozenBalance(),
+                tradeAccount.getAvailableBalance(), tradeAccount.getVirtualBalance(), tradeAccount.getFrozenBalance(),
                 tradeAccount.getCreateTime(), tradeAccount.getLastUpdateTime());
         return id.longValue();
     }
@@ -50,13 +50,13 @@ public class TradeAccountDaoImpl implements TradeAccountDao {
     @Override
     public void update(TradeAccount tradeAccount) {
         String sql = "update " + table
-                + " set  tradeUserID = ? , accountID = ? , accountType = ? , feeType = ? , isAllowRecharge = ? , isAllowPay = ? , isActive = ? , isFrozen = ? , accountBalance = ? , availableBalance = ? , frozenBalance = ?  where id = ?  ";
+                + " set  tradeUserID = ? , accountID = ? , accountType = ? , feeType = ? , isAllowRecharge = ? , isAllowPay = ? , isActive = ? , isFrozen = ? , accountBalance = ? , availableBalance = ? , virtualBalance = ? , frozenBalance = ?  where id = ?  ";
         jdbc.updateForBoolean(sql, tradeAccount.getTradeUserID(), tradeAccount.getAccountID(),
                 tradeAccount.getAccountType(), tradeAccount.getFeeType(),
                 tradeAccount.getIsAllowRecharge(), tradeAccount.getIsAllowPay(),
                 tradeAccount.getIsActive(), tradeAccount.getIsFrozen(),
                 tradeAccount.getAccountBalance(), tradeAccount.getAvailableBalance(),
-                tradeAccount.getFrozenBalance(), tradeAccount.getId());
+                tradeAccount.getVirtualBalance(), tradeAccount.getFrozenBalance(), tradeAccount.getId());
     }
 
     @Override
@@ -232,7 +232,7 @@ public class TradeAccountDaoImpl implements TradeAccountDao {
     @Override
     public Map<String, Object> getBalance(AccountType accountType) {
         String sql =
-                "select sum(accountBalance) as accountBalance, sum(availableBalance) as availableBalance, sum(frozenBalance) as frozenBalance from "
+                "select sum(accountBalance) as accountBalance, sum(availableBalance) as availableBalance,sum(virtualBalance) as virtualBalance, sum(frozenBalance) as frozenBalance from "
                         + table + " where isActive  != -1 and accountType = ?";
         return jdbc.queryForMap(sql, accountType.getValue());
     }
@@ -240,7 +240,7 @@ public class TradeAccountDaoImpl implements TradeAccountDao {
     @Override
     public Map<String, Object> getBalance(Long tradeUserID, AccountType accountType) {
         String sql =
-                "select sum(accountBalance) as accountBalance, sum(availableBalance) as availableBalance, sum(frozenBalance) as frozenBalance from "
+                "select accountBalance, availableBalance, virtualBalance, frozenBalance from "
                         + table + " where isActive  != -1 and accountType = ? and tradeUserID = ?";
         return jdbc.queryForMap(sql, accountType.getValue(), tradeUserID);
     }

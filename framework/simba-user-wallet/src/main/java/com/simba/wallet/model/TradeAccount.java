@@ -65,6 +65,12 @@ public class TradeAccount {
      * 账户当前冻结余额
      */
     private long frozenBalance = 0;
+    
+    /**
+     * 奖励的虚拟金额
+     */
+    private long virtualBalance = 0;
+    
     /**
      * 创建时间
      */
@@ -78,7 +84,16 @@ public class TradeAccount {
     private Date lastUpdateTime;
 
 
-    public long getId() {
+    
+    public long getVirtualBalance() {
+		return virtualBalance;
+	}
+
+	public void setVirtualBalance(long virtualBalance) {
+		this.virtualBalance = virtualBalance;
+	}
+
+	public long getId() {
         return id;
     }
 
@@ -191,16 +206,14 @@ public class TradeAccount {
         this.frozenBalance = frozenBalance;
     }
 
-    @Override
-    public String toString() {
-        return "TradeAccount [id=" + id + ", tradeUserID=" + tradeUserID + ", accountID="
-                + accountID + ", accountType=" + accountType + ", feeType=" + feeType
-                + ", isAllowRecharge=" + isAllowRecharge + ", isAllowPay=" + isAllowPay
-                + ", isActive=" + isActive + ", isFrozen=" + isFrozen + ", accountBalance="
-                + accountBalance + ", availableBalance=" + availableBalance + ", frozenBalance="
-                + frozenBalance + ", createTime=" + createTime + ", lastUpdateTime="
-                + lastUpdateTime + "]";
-    }
+	@Override
+	public String toString() {
+		return "TradeAccount [id=" + id + ", tradeUserID=" + tradeUserID + ", accountID=" + accountID + ", accountType=" + accountType + ", feeType=" + feeType + ", isAllowRecharge=" + isAllowRecharge
+				+ ", isAllowPay=" + isAllowPay + ", isActive=" + isActive + ", isFrozen=" + isFrozen + ", accountBalance=" + accountBalance + ", availableBalance=" + availableBalance
+				+ ", frozenBalance=" + frozenBalance + ", virtualBalance=" + virtualBalance + ", createTime=" + createTime + ", lastUpdateTime=" + lastUpdateTime + "]";
+	}
+
+
 
 
 

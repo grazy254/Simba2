@@ -5,12 +5,12 @@ import java.util.Date;
 import com.simba.annotation.DescAnnotation;
 
 /**
- * 设备功能表
+ * 实时信息推送表
  * 
  * @author lilei
  *
  */
-@DescAnnotation(desc = "设备功能表")
+@DescAnnotation(desc = "实时信息推送表")
 public class RealTimeMessage {
 
 	/**

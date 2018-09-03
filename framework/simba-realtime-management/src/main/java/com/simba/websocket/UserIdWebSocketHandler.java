@@ -1,6 +1,10 @@
 package com.simba.websocket;
 
+import java.net.UnknownHostException;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -10,8 +14,8 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 
-import com.simba.cache.RedisUtil;
 import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
+import com.simba.util.OnlineUserUtil;
 
 /**
  * 用户websocket连接处理类
@@ -22,6 +26,25 @@ import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 public class UserIdWebSocketHandler implements WebSocketHandler {
 
 	private static final Log logger = LogFactory.getLog(UserIdWebSocketHandler.class);
+
+	private static final Set<String> onlineSet = Collections.synchronizedSet(new HashSet<>());
+
+	private void addOnlineUser(String appid, String userId) throws UnknownHostException {
+		String key = appid + "_" + userId;
+		if (onlineSet.add(key)) {
+			OnlineUserUtil onlineUserUtil = ApplicationContextUtil.getBean(OnlineUserUtil.class);
+			onlineUserUtil.incrOnlineUser(appid);
+		}
+	}
+
+	private void addOfflineUser(String appid, String userId) throws UnknownHostException {
+		String key = appid + "_" + userId;
+		if (onlineSet.contains(key)) {
+			OnlineUserUtil onlineUserUtil = ApplicationContextUtil.getBean(OnlineUserUtil.class);
+			onlineUserUtil.incrOfflineUser(appid);
+			onlineSet.remove(key);
+		}
+	}
 
 	private void set(String userId, String appid, WebSocketSession session) {
 		session.getAttributes().put("userId", userId);
@@ -57,16 +80,14 @@ public class UserIdWebSocketHandler implements WebSocketHandler {
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-		RedisUtil redisUtil = ApplicationContextUtil.getBean(RedisUtil.class);
 		String userId = getUserId(session);
 		String appid = getAppid(session);
 		if (StringUtils.isNotEmpty(userId) && StringUtils.isNotEmpty(appid)) {
 			UserIdConnectionPool.getInstance().add(userId, appid, session);
 			logger.info("用户连接Session保存成功[userId:" + userId + "][appid:" + appid + "]");
+			addOnlineUser(appid, userId);
 		}
 		logger.info("用户websocket连接成功sid:" + session.getId());
-		// 连接断开后，统计当前在线用户+1
-		redisUtil.getAutoId("onlineCount");
 		logger.info("此服务器上连接的用户有******" + UserIdConnectionPool.getInstance().all().toString() + "******");
 	}
 
@@ -98,6 +119,7 @@ public class UserIdWebSocketHandler implements WebSocketHandler {
 			UserIdConnectionPool.getInstance().add(userId, appid, session);
 			logger.info("用户连接Session保存成功[userId:" + userId + "][appid:" + appid + "]");
 			set(userId, appid, session);
+			addOnlineUser(appid, userId);
 		} else {
 			logger.error("收到用户websocket消息，但是内容格式错误:[" + content + "]");
 		}
@@ -111,21 +133,20 @@ public class UserIdWebSocketHandler implements WebSocketHandler {
 		if (StringUtils.isNotEmpty(userId) && StringUtils.isNotEmpty(appid)) {
 			UserIdConnectionPool.getInstance().remove(userId, appid);
 			logger.info("清空websocket连接[userId:" + userId + "][appid:" + appid + "]");
+			addOfflineUser(appid, userId);
 		}
 	}
 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
-		RedisUtil redisUtil = ApplicationContextUtil.getBean(RedisUtil.class);
 		String userId = getUserId(session);
 		String appid = getAppid(session);
 		logger.info("用户websocket连接关闭:[userId:" + userId + "][appid:" + appid + "]," + closeStatus);
 		if (StringUtils.isNotEmpty(userId) && StringUtils.isNotEmpty(appid)) {
 			UserIdConnectionPool.getInstance().remove(userId, appid);
 			logger.info("清空websocket连接[userId:" + userId + "][appid:" + appid + "]");
+			addOfflineUser(appid, userId);
 		}
-		// 连接断开后，统计当前离线用户+1
-		redisUtil.getAutoId("offlineCount");
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package com.simba.sdk;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,7 +76,7 @@ public class VersionSdk {
 	 */
 	public JsonResult saveBugFeedback(Integer userId, String title, String text, String img) {
 		Map<String, String> param = new HashMap<>();
-		param.put("userId", userId + "");
+		param.put("userId", userId + StringUtils.EMPTY);
 		param.put("title", title);
 		param.put("text", text);
 		param.put("img", img);
@@ -95,7 +96,7 @@ public class VersionSdk {
 	 */
 	public JsonResult saveOpinionFeedback(Integer userId, String title, String text) {
 		Map<String, String> param = new HashMap<>();
-		param.put("userId", userId + "");
+		param.put("userId", userId + StringUtils.EMPTY);
 		param.put("title", title);
 		param.put("text", text);
 		String res = client.post(saveOpinionFeedbackUrl, param);

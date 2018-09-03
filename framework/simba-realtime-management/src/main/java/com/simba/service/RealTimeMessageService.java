@@ -7,7 +7,7 @@ import com.simba.model.RealTimeMessage;
 import com.simba.model.form.RealTimeMessageSearchForm;
 
 /**
- * 设备功能表 Service
+ * 实时信息推送Service
  * 
  * @author caozj
  * 

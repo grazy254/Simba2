@@ -35,12 +35,12 @@ public class RewardTrade extends BaseInnerTrade {
         smartUserTradeAccount
                 .setAccountBalance(smartUserTradeAccount.getAccountBalance() + paymentAmount);
         smartUserTradeAccount
-                .setAvailableBalance(smartUserTradeAccount.getAvailableBalance() + paymentAmount);
+                .setVirtualBalance(smartUserTradeAccount.getVirtualBalance() + paymentAmount);
 
         departmentTradeAccount
                 .setAccountBalance(departmentTradeAccount.getAccountBalance() + paymentAmount);
         departmentTradeAccount
-                .setAvailableBalance(departmentTradeAccount.getAvailableBalance() + paymentAmount);
+                .setVirtualBalance(departmentTradeAccount.getVirtualBalance() + paymentAmount);
 
 
     }

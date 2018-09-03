@@ -1,13 +1,15 @@
 package com.simba.wallet.pay.callbacktrade.impl;
 
 import java.util.Date;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.simba.framework.util.json.JsonResult;
 import com.simba.registry.util.RegistryUtil;
 import com.simba.wallet.model.TradeAccount;
 import com.simba.wallet.pay.callbacktrade.BaseCallbackTrade;
-import com.simba.wallet.util.CommonUtil;
+import com.simba.wallet.util.Constants.ChannelType;
 import com.simba.wallet.util.Constants.TradeStatus;
 import com.simba.wallet.util.Constants.TradeType;
 
@@ -49,7 +51,7 @@ public class WXRefundTrade extends BaseCallbackTrade {
             String channelErrorCode, long paymentAmount, TradeStatus tradeStatus) {
 
         return finishTrade(userID,
-                CommonUtil.getChannelType(RegistryUtil.get("trade.channel.wxpay")), orderNO,
+        		ChannelType.getChannelType(RegistryUtil.get("trade.channel.wxpay")), orderNO,
                 channelOrderNO, openID, channelStartTime, channelPaymentTime, channelErrorMsg,
                 channelErrorCode, paymentAmount, tradeStatus,
                 RegistryUtil.get("trade.department.refund"), TradeType.REFUND);
@@ -62,7 +64,7 @@ public class WXRefundTrade extends BaseCallbackTrade {
         return startTrade(userID, ip, location, orderNO, orderName, orderDesc, orderAddress,
                 originalAmount, paymentAmount, new Date(), channelStartTime,
                 RegistryUtil.get("trade.department.refund"),
-                CommonUtil.getChannelType(RegistryUtil.get("trade.channel.wxpay")),
+                ChannelType.getChannelType(RegistryUtil.get("trade.channel.wxpay")),
                 TradeType.REFUND);
     }
 

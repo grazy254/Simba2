@@ -30,6 +30,16 @@ public class CommonUtil {
 		return fmt.format(amount * 1.0 / 100) + "元";
 	}
 
+	public static String transToCNYType(Long amount, boolean addMinus) {
+
+		DecimalFormat fmt = new DecimalFormat("0.00");
+		if (addMinus) {
+			amount = amount * -1;
+		}
+		return fmt.format(amount * 1.0 / 100);
+
+	}
+
 	public static Long CNYToLong(String amount) throws ParseException {
 		DecimalFormat fmt = new DecimalFormat("0.00");
 		return (long) (fmt.parse(amount).doubleValue() * 100);
@@ -38,6 +48,8 @@ public class CommonUtil {
 	public static void main(String[] args) {
 		try {
 			System.out.println(CNYToLong("1.2332"));
+			System.out.println(transToCNYType(12332L, true));
+
 			System.out.println(Date.from(LocalDate.of(1979, 1, 1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
 			System.out.println(DateUtil.str2Date("1979-01-01", DateUtil.DAY_FORMAT, new Date()));
 		} catch (ParseException e) {
@@ -46,55 +58,6 @@ public class CommonUtil {
 		}
 	}
 
-	public static String getTradeTypeValue(String tradeType) {
-		if (TradeType.CONSUME.getName().equals(tradeType)) {
-			return TradeType.CONSUME.getValue();
-		} else if (TradeType.RECHARGE.getName().equals(tradeType)) {
-			return TradeType.RECHARGE.getValue();
-		} else if (TradeType.REWARD.getName().equals(tradeType)) {
-			return TradeType.REWARD.getValue();
-		} else if (TradeType.REFUND.getName().equals(tradeType)) {
-			return TradeType.REFUND.getValue();
-		} else {
-			throw ErrConfig.INVALID_TRADE_TYPE;
-		}
-	}
-
-	public static ChannelType getChannelType(String channelType) {
-		if (ChannelType.ALIPAY.getName().equals(channelType)) {
-			return ChannelType.ALIPAY;
-		} else if (ChannelType.WXPAY.getName().equals(channelType)) {
-			return ChannelType.WXPAY;
-		} else {
-			throw ErrConfig.INVALID_CHANNEL_TYPE;
-		}
-	}
-
-	public static TradeUserType getTradeUserType(String tradeUserType) {
-		if (TradeUserType.CHANNEL.getName().equals(tradeUserType)) {
-			return TradeUserType.CHANNEL;
-		} else if (TradeUserType.DEPARTMENT.getName().equals(tradeUserType)) {
-			return TradeUserType.DEPARTMENT;
-		} else if (TradeUserType.PERSION.getName().equals(tradeUserType)) {
-			return TradeUserType.PERSION;
-		} else {
-			throw ErrConfig.INVALID_TRADEUSER_TYPE;
-		}
-	}
-
-	public static String getTradeStatusValue(String tradeStatus) {
-		if (TradeStatus.FAILED.getName().equals(tradeStatus)) {
-			return TradeStatus.FAILED.getValue();
-		} else if (TradeStatus.SUCCESS.getName().equals(tradeStatus)) {
-			return TradeStatus.SUCCESS.getValue();
-		} else if (TradeStatus.OVERTIME.getName().equals(tradeStatus)) {
-			return TradeStatus.OVERTIME.getValue();
-		} else if (TradeStatus.INPROCESS.getName().equals(tradeStatus)) {
-			return TradeStatus.INPROCESS.getValue();
-		} else {
-			throw ErrConfig.INVALID_TRADE_STATUS;
-		}
-	}
 
 	public static AccountActiveStatus checkAccountActive(TradeAccount tradeAccount) {
 		if (tradeAccount.getIsActive() == AccountActiveStatus.ACTIVE.getValue()) {
@@ -205,6 +168,9 @@ public class CommonUtil {
 		}
 		if (balanceMap.get("availableBalance") != null) {
 			map.put("availableBalance", CommonUtil.transToCNYType(Long.parseLong(balanceMap.get("availableBalance").toString())));
+		}
+		if (balanceMap.get("virtualBalance") != null) {
+			map.put("virtualBalance", CommonUtil.transToCNYType(Long.parseLong(balanceMap.get("virtualBalance").toString())));
 		}
 		if (balanceMap.get("frozenBalance") != null) {
 			map.put("frozenBalance", CommonUtil.transToCNYType(Long.parseLong(balanceMap.get("frozenBalance").toString())));

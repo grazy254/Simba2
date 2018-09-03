@@ -7,18 +7,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.simba.cache.RedisUtil;
-import com.simba.controller.UserLoginController;
 import com.simba.dao.SmartUserDao;
 import com.simba.dao.ThirdSystemUserDao;
-import com.simba.dao.UserProjectDao;
 import com.simba.exception.BussException;
 import com.simba.framework.util.code.DesUtil;
 import com.simba.framework.util.code.EncryptUtil;
@@ -46,6 +42,9 @@ public class SmartUserServiceImpl implements SmartUserService {
 
 	@Value("${default.pwd}")
 	private String defaultPwd;
+	// 设置默认值为ut123456
+	@Value("${project.sk:ut123456}")
+	private String projectSk;
 
 	@Autowired
 	private SmartUserDao smartUserDao;
@@ -55,11 +54,6 @@ public class SmartUserServiceImpl implements SmartUserService {
 
 	@Autowired
 	private RedisUtil redisUtil;
-
-	@Autowired
-	private UserProjectDao userProjectDao;
-	
-	private static final Log logger = LogFactory.getLog(SmartUserServiceImpl.class);
 
 	@Override
 	public void add(SmartUser smartUser) {
@@ -243,6 +237,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 		smartUser.setPassword(StringUtils.EMPTY);
 		smartUser.setStatus(UserStatus.ENABLED.getId());
 		smartUser.setTelNo(StringUtils.EMPTY);
+		smartUser.setHeadPic(StringUtils.EMPTY);
 		long userId = smartUserDao.add(smartUser);
 		ThirdSystemUser thirdSystemUser = new ThirdSystemUser();
 		thirdSystemUser.setUserId(userId);
@@ -281,15 +276,10 @@ public class SmartUserServiceImpl implements SmartUserService {
 	@Override
 	public JsonResult toLogin(String code, String account, String password) throws Exception {
 
-		if(password==null || password.length()==0){
+		if (password == null || password.length() == 0) {
 			throw new BussException("登录密码不能为空");
 		}
-		String sk = "";
-		if (userProjectDao.listBy("code", code).size() > 0) {
-			sk = userProjectDao.listBy("code", code).get(0).getProjectKey();
-		} else {
-			throw new BussException("没有配置系统加密密钥，请联系管理员配置[" + code + "]");
-		}
+		String sk = projectSk;
 		List<SmartUser> ulist = smartUserDao.listBy("account", account);
 		if (ulist.size() == 0) {
 			throw new BussException("账户不存在[" + account + "]");
@@ -304,7 +294,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 		}
 		return new JsonResult(ulist.get(0).getId(), "登录成功", 200);
 	}
-	
+
 	/**
 	 * 短信验证码登录
 	 */
@@ -318,20 +308,20 @@ public class SmartUserServiceImpl implements SmartUserService {
 		if (!isMatch) {
 			throw new BussException("手机号不正确，请更换账号");
 		}
-		
+
 		List<SmartUser> ulist = smartUserDao.listBy("account", mobile);
 		if (ulist.size() == 0) {
-			return new JsonResult(-1, "账号"+mobile+"不存在", 400);
+			return new JsonResult(-1, "账号" + mobile + "不存在", 400);
 		} else {
 			return new JsonResult(ulist.get(0).getId(), "登录成功", 200);
 		}
 	}
-	
+
 	/**
 	 * 短信验证码登录,没有登录则注册
 	 */
 	@Override
-	public JsonResult toLoginVerifAndRegister(String mobile){
+	public JsonResult toLoginVerifAndRegister(String mobile) {
 
 		String regex = "^1[34578][0-9]\\d{4,8}$";
 		Pattern pat = Pattern.compile(regex);
@@ -340,10 +330,10 @@ public class SmartUserServiceImpl implements SmartUserService {
 		if (!isMatch) {
 			throw new BussException("手机号不正确，请更换账号");
 		}
-		
+
 		List<SmartUser> ulist = smartUserDao.listBy("account", mobile);
 		if (ulist.size() < 1) {
-			//把手机号写入数据表中
+			// 把手机号写入数据表中
 			SmartUser user = new SmartUser();
 			user.setAccount(mobile);
 			user.setEmail("");
@@ -352,46 +342,43 @@ public class SmartUserServiceImpl implements SmartUserService {
 			user.setTelNo(mobile);
 			user.setSex(-1);
 			user.setGroupId(0);
-			user.setHeadPic("");;
+			user.setHeadPic("");
+			;
 			user.setThirdSystem("");
 			user.setCreateTime(new Date());
 			user.setStatus(0);
 			smartUserDao.add(user);
-			//返回用户ID
-			return new JsonResult("-1",mobile+"不存在,", 400);
+			// 返回用户ID
+			return new JsonResult("-1", mobile + "不存在,", 400);
 		} else {
-			if(ulist.get(0).getPassword()==null ||ulist.get(0).getPassword().length()==0){
-				return new JsonResult("-2","用户还未完善信息", 400);
-			}else{
+			if (ulist.get(0).getPassword() == null || ulist.get(0).getPassword().length() == 0) {
+				return new JsonResult("-2", "用户还未完善信息", 400);
+			} else {
 				return new JsonResult(ulist.get(0).getId(), "登录成功", 200);
 			}
 		}
 	}
-	
+
 	/**
 	 * 完善信息
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
 	@Override
-	public JsonResult finishInfo(long id,String name ,String password,String code) throws Exception{
-		if(name==null||name.length()==0||password==null||password.length()==0){
+	public JsonResult finishInfo(long id, String name, String password, String code) throws Exception {
+		if (name == null || name.length() == 0 || password == null || password.length() == 0) {
 			throw new BussException("密码或者昵称不能为空");
 		}
-		String sk = "";
-		if (userProjectDao.listBy("code", code).size() > 0) {
-			sk = userProjectDao.listBy("code", code).get(0).getProjectKey();
-		} else {
-			throw new BussException("没有配置系统加密密钥，请联系管理员配置");
-		}
-		SmartUser user=smartUserDao.get(id);
+		String sk = projectSk;
+		SmartUser user = smartUserDao.get(id);
 		user.setName(name);
 		String p = "";
 		p = DesUtil.decrypt(password, sk);
 		p = EncryptUtil.md5(p);
 		user.setPassword(p);
 		smartUserDao.update(user);
-		
-		return new JsonResult("信息完善成功",200);
+
+		return new JsonResult("信息完善成功", 200);
 	}
 
 	/**
@@ -399,14 +386,8 @@ public class SmartUserServiceImpl implements SmartUserService {
 	 */
 	@Override
 	public JsonResult toRegisterApp(String code, String account, String password) throws Exception {
-		String sk = "";
-		if (userProjectDao.listBy("code", code).size() > 0) {
-			sk = userProjectDao.listBy("code", code).get(0).getProjectKey();
-		} else {
-			throw new BussException("没有配置系统加密密钥，请联系管理员配置");
-		}
+		String sk = projectSk;
 		SmartUser user = new SmartUser();
-
 		// 判断此账号是否已经注册过
 		if (smartUserDao.listBy("account", account).size() > 0) {
 			throw new BussException("此账号已经注册，请更换账号");
@@ -447,13 +428,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 		if (!isMatch) {
 			throw new BussException("手机号不正确，请更换账号");
 		}
-		// 验证密码是否正确
-		String sk = "";
-		if (userProjectDao.listBy("code", code).size() > 0) {
-			sk = userProjectDao.listBy("code", code).get(0).getProjectKey();
-		} else {
-			throw new BussException("没有配置系统加密密钥，请联系管理员配置");
-		}
+		String sk = projectSk;
 		List<SmartUser> ulist = smartUserDao.listBy("account", account);
 		// 给密码解密之后再md5。
 		String op = "";
@@ -470,7 +445,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 			throw new BussException("密码错误");
 		}
 
-		return new JsonResult("重置成功",200);
+		return new JsonResult("重置成功", 200);
 	}
 
 	/**
@@ -483,12 +458,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 		// 验证密码是否正确
 		SmartUser smartUser = new SmartUser();
 		smartUser = smartUserDao.get(userId);
-		String sk = "";
-		if (userProjectDao.listBy("code", code).size() > 0) {
-			sk = userProjectDao.listBy("code", code).get(0).getProjectKey();
-		} else {
-			throw new BussException("没有配置系统加密密钥，请联系管理员配置");
-		}
+		String sk = projectSk;
 		// 给密码解密之后再md5。
 		String op = "";
 		String np = "";
@@ -504,9 +474,9 @@ public class SmartUserServiceImpl implements SmartUserService {
 			throw new BussException("密码错误");
 		}
 
-		return new JsonResult("重置成功",200);
+		return new JsonResult("重置成功", 200);
 	}
-	
+
 	/**
 	 * 使用短信验证码找回密码
 	 */
@@ -520,22 +490,16 @@ public class SmartUserServiceImpl implements SmartUserService {
 		if (!isMatch) {
 			throw new BussException("手机号不正确，请更换账号");
 		}
-		// 给密码解密之后再md5。
-		String sk = "";
-		if (userProjectDao.listBy("code", code).size() > 0) {
-			sk = userProjectDao.listBy("code", code).get(0).getProjectKey();
-		} else {
-			throw new BussException("没有配置系统加密密钥，请联系管理员配置");
-		}
+		String sk = projectSk;
 		String p = "";
 		p = DesUtil.decrypt(newPassword, sk);
 		p = EncryptUtil.md5(p);
 		if (!smartUserDao.updatePassword(account, p)) {
 			throw new BussException("修改失败");
 		}
-		return new JsonResult("找回成功",200);
+		return new JsonResult("找回成功", 200);
 	}
-	
+
 	/**
 	 * 通过手机号获取userId
 	 */
@@ -551,53 +515,56 @@ public class SmartUserServiceImpl implements SmartUserService {
 		}
 		return new JsonResult(mobile, "获取手机号成功", 200);
 	}
-	
+
 	/**
 	 * 判断手机号是否已经注册
 	 */
 	@Override
-	public JsonResult isRegByMobile(String mobile){
-		List<SmartUser> list =smartUserDao.listBy("account", mobile);
-		if(list.size()>0){
-			if(list.get(0).getPassword()==null ||list.get(0).getPassword().equals("")){
-				return new JsonResult("已经注册,没有完善信息",400);
-			}else{
-				return new JsonResult("已经注册",200);
+	public JsonResult isRegByMobile(String mobile) {
+		List<SmartUser> list = smartUserDao.listBy("account", mobile);
+		if (list.size() > 0) {
+			if (list.get(0).getPassword() == null || list.get(0).getPassword().equals("")) {
+				return new JsonResult("已经注册,没有完善信息", 400);
+			} else {
+				return new JsonResult("已经注册", 200);
 			}
-			
-		}else{
-			return new JsonResult("没有注册",400);
+
+		} else {
+			return new JsonResult("没有注册", 400);
 		}
 	}
-	
+
 	/**
 	 * 根据UserId更新昵称
+	 * 
 	 * @param name
 	 * @param userId
 	 * @return
 	 */
 	@Override
-	public JsonResult updateName(String name,long userId){
-		SmartUser smartUser=new SmartUser();
-		smartUser=smartUserDao.get(userId);
+	public JsonResult updateName(String name, long userId) {
+		SmartUser smartUser = new SmartUser();
+		smartUser = smartUserDao.get(userId);
 		smartUser.setName(name);
 		smartUserDao.update(smartUser);
-		return new JsonResult("更新成功",200);
+		return new JsonResult("更新成功", 200);
 	}
-	
+
 	/**
 	 * 根据UserId更新头像
+	 * 
 	 * @param name
 	 * @param userId
 	 * @return
 	 */
 	@Override
-	public JsonResult updateHeadPic(String headPic,long userId){
-		SmartUser smartUser=new SmartUser();
-		smartUser=smartUserDao.get(userId);
-		smartUser.setHeadPic(headPic);;
+	public JsonResult updateHeadPic(String headPic, long userId) {
+		SmartUser smartUser = new SmartUser();
+		smartUser = smartUserDao.get(userId);
+		smartUser.setHeadPic(headPic);
+		;
 		smartUserDao.update(smartUser);
-		return new JsonResult("更新成功",200);
+		return new JsonResult("更新成功", 200);
 	}
 
 }

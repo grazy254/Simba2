@@ -6,3 +6,5 @@
 <script src="${base}/js/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <script src="${base}/js/plugins/fastclick/fastclick.js"></script>
 <script src="${base}/js/app.min.js"></script>
+<script type="text/javascript" src="${base}/js/plugins/layer/layer.js"></script>
+<script src="${base}/js/ut.js"></script>

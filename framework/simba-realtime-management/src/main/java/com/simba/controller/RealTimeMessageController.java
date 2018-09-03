@@ -3,20 +3,18 @@ package com.simba.controller;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.simba.cache.RedisUtil;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.RealTimeMessage;
 import com.simba.model.form.RealTimeMessageSearchForm;
 import com.simba.service.RealTimeMessageService;
+import com.simba.util.OnlineUserUtil;
 
 /**
  * 设备功能表控制器
@@ -28,13 +26,11 @@ import com.simba.service.RealTimeMessageService;
 @RequestMapping("/realTimeMessage")
 public class RealTimeMessageController {
 
-	private static final Log logger = LogFactory.getLog(RealTimeMessageController.class);
-
 	@Autowired
 	private RealTimeMessageService realTimeMessageService;
 
 	@Autowired
-	private RedisUtil redisUtil;
+	private OnlineUserUtil onlineUserUtil;
 
 	@RequestMapping("/list")
 	public String list() {
@@ -50,12 +46,8 @@ public class RealTimeMessageController {
 
 	@RequestMapping("/monitoring")
 	public String monitoring(ModelMap model) {
-		Long onlineCountRedis = (Long) redisUtil.getAutoId("onlineCount");
-		Long offlineCountRedis = (Long) redisUtil.getAutoId("offlineCount");
-		Long onlineCount = onlineCountRedis - offlineCountRedis;
-		logger.info("在线数:" + onlineCountRedis);
-		logger.info("离线数:" + offlineCountRedis);
-		model.put("onlineCount", onlineCount);
+		model.put("onlineCount", onlineUserUtil.countOnlineUser());
+		model.put("appOnlineCount", onlineUserUtil.countOnlineUserByApp().toString());
 		return "realTimeMessage/monitoring";
 	}
 

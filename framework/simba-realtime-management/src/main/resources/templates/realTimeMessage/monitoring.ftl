@@ -20,8 +20,10 @@
 						<div class="col-md-12">
 							<div class="box box-primary">
 								<div class="box-header with-border">
-									<h3 class="box-title">当前在线人数：</h3>
+									<h3 class="box-title">当前总在线人数：</h3>
 									<h2>${onlineCount}</h2>
+									<h3 class="box-title">各应用在线人数：</h3>
+									<h2>${appOnlineCount}</h2>
 								</div>
 							</div>
 						</div>

@@ -6,6 +6,7 @@
 		<td>${tradeAccountVO.accountStatus}</td>
 		<td>${tradeAccountVO.accountBalance}</td>
 		<td>${tradeAccountVO.availableBalance}</td>
+		<td>${tradeAccountVO.virtualBalance}</td>
 		<td>${tradeAccountVO.frozenBalance}</td>
 		<td>${tradeAccountVO.createTime}</td>
 		<td>${tradeAccountVO.lastUpdateTime} </td>
@@ -22,6 +23,7 @@
 	
 	<td>总余额：${accountBalance!}</td> 
 	<td>总可用余额：${availableBalance!} </td>
+	<td>总虚拟余额：${virtualBalance!} </td>
 	<td>总冻结余额：${frozenBalance!}</td>
 </tr>
 </#if>

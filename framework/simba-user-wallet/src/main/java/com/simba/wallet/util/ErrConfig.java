@@ -23,7 +23,7 @@ public class ErrConfig {
 
     public final static BussException INVALID_CHANNEL = new BussException("渠道信息不正确");
     public final static BussException INVALID_ORDER = new BussException("订单异常");
-    public final static BussException INVALID_PAYMENT_ACCOUNT = new BussException("非法金额");
+    public final static BussException INVALID_PAYMENT_AMOUNT = new BussException("非法金额");
 
     public final static BussException INVALID_ACCOUNT_ACTIVE_TYPE = new BussException("账户激活状态码错误");
     public final static BussException INVALID_ACCOUNT_FROZEN_TYPE = new BussException("账户冻结状态码错误");
@@ -39,7 +39,8 @@ public class ErrConfig {
     public final static BussException INVALID_TRADE_STATUS = new BussException("不支持的交易状态");
     public final static BussException INVALID_ACCOUNT_TYPE = new BussException("错误的账户类型");
     public final static BussException INVALID_TRADEUSER_TYPE = new BussException("错误的用户类型");
-
+    public final static BussException INVALID_TRADBALANCE_TYPE = new BussException("错误的交易余额类型");
+    
     public final static BussException INVALID_PARAMETER = new BussException("参数错误");
 
     public final static BussException EXISTING_INVALID_PAYMENT = new BussException("有一笔异常支付");

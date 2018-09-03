@@ -15,9 +15,9 @@ public class ScheduleConfig {
 	@Bean
 	public TaskExecutor taskExecutor() {
 		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-		taskExecutor.setCorePoolSize(5);
-		taskExecutor.setMaxPoolSize(50);
-		taskExecutor.setQueueCapacity(200);
+		taskExecutor.setCorePoolSize(20);
+		taskExecutor.setMaxPoolSize(500);
+		taskExecutor.setQueueCapacity(1000);
 		return taskExecutor;
 	}
 }

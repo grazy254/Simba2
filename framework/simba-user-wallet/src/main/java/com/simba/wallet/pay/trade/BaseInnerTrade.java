@@ -1,8 +1,12 @@
 package com.simba.wallet.pay.trade;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+
 import com.simba.dao.SmartUserDao;
 import com.simba.exception.BussException;
 import com.simba.framework.util.date.DateUtil;
@@ -75,6 +79,16 @@ public abstract class BaseInnerTrade implements InnerTradeInterface {
             long paymentAmount) {
 
     }
+    
+    /**
+     * 增加交易余额详情
+     * @param smartUserAccount
+     * @param tradeNo 交易流水号
+     * @param paymentAmount
+     */
+    protected void addTradeBalanceDetail(TradeAccount smartUserAccount, long tradeNo, long paymentAmount) {
+    	
+    }
 
     /**
      * 交易
@@ -98,7 +112,7 @@ public abstract class BaseInnerTrade implements InnerTradeInterface {
             long paymentAmount, Date tradeCreateTime, String tradeDeptNO, TradeType tradeType) {
 
         if (paymentAmount <= 0 || originalAmount <= 0) {
-            throw ErrConfig.INVALID_PAYMENT_ACCOUNT;
+            throw ErrConfig.INVALID_PAYMENT_AMOUNT;
         }
 
         SmartUser smartUser = smartUserDao.getBy("account", userID);
@@ -178,12 +192,19 @@ public abstract class BaseInnerTrade implements InnerTradeInterface {
             throw new BussException("创建支付订单失败");
         }
 
-        updateBalance(smartUserTradeAccount, departmentTradeAccount, paymentAmount);
+        addTradeBalanceDetail(smartUserTradeAccount, tradeDetail.getTradeNO(), paymentAmount);
 
+        updateBalance(smartUserTradeAccount, departmentTradeAccount, paymentAmount);
+        
+        
         tradeAccountDao.update(smartUserTradeAccount);
         tradeAccountDao.update(departmentTradeAccount);
+        
+        Map<String, Object> data = new HashMap<>();
+        data.put("tradeNo", tradeDetail.getTradeNO());
 
-        return new JsonResult("订单创建成功");
+        
+        return new JsonResult(data, "订单创建成功");
     }
 
 }

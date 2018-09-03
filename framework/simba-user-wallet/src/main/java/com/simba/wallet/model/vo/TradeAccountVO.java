@@ -12,6 +12,7 @@ public class TradeAccountVO {
     private String accountStatus;
     private String accountBalance;
     private String availableBalance;
+    private String virtualBalance;
     private String frozenBalance;
     private String createTime;
     private String lastUpdateTime;
@@ -22,12 +23,27 @@ public class TradeAccountVO {
         this.setLastUpdateTime(DateUtil.date2String(tradeAccount.getLastUpdateTime()));
         this.setAccountBalance(CommonUtil.transToCNYType(tradeAccount.getAccountBalance()));
         this.setAvailableBalance(CommonUtil.transToCNYType(tradeAccount.getAvailableBalance()));
+        this.setVirtualBalance(CommonUtil.transToCNYType(tradeAccount.getVirtualBalance()));
         this.setFrozenBalance(CommonUtil.transToCNYType(tradeAccount.getFrozenBalance()));
         this.setAccountStatus(CommonUtil.getAccountStatus(tradeAccount));
         this.setUserID(tradeUser.getUserID());
     }
+    
+    
 
-    public String getUserID() {
+    public String getVirtualBalance() {
+		return virtualBalance;
+	}
+
+
+
+	public void setVirtualBalance(String virtualBalance) {
+		this.virtualBalance = virtualBalance;
+	}
+
+
+
+	public String getUserID() {
         return userID;
     }
 

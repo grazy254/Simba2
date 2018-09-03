@@ -1,5 +1,8 @@
 package com.simba.wallet.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Constants {
     public static enum AccountActiveStatus {
 
@@ -115,6 +118,14 @@ public class Constants {
         private String name;
         private String value;
 
+        private static Map<String,ChannelType> mapping = new HashMap<>();
+        static {
+        	for(ChannelType type : ChannelType.values()) {
+        		mapping.put(type.name, type);
+        	}
+        }
+
+        
         private ChannelType(String name, String value) {
             this.value = value;
             this.name = name;
@@ -127,6 +138,15 @@ public class Constants {
         public String getValue() {
             return value;
         }
+        
+    	public static ChannelType getChannelType(String name) {
+    		ChannelType type = ChannelType.valueOf(name);
+    		if(type ==null) {
+    			throw ErrConfig.INVALID_CHANNEL_TYPE;
+    		}
+    		return type;
+    	}
+
     }
 
     public static enum FeeType {
@@ -147,6 +167,12 @@ public class Constants {
 
         private String name;
         private String value;
+        private static Map<String,String> mapping = new HashMap<>();
+        static {
+        	for(TradeStatus status : TradeStatus.values()) {
+        		mapping.put(status.name, status.value);
+        	}
+        }
 
         private TradeStatus(String name, String value) {
             this.name = name;
@@ -160,17 +186,31 @@ public class Constants {
         public String getValue() {
             return value;
         }
+        
+        public static String getValue(String name) {
+        	return mapping.get(name);
+        }
+        
 
     }
 
     public static enum TradeType {
 
         RECHARGE("RECHARGE", "充值"), CONSUME("CONSUME", "消费"), REFUND("REFUND",
-                "退款"), REWARD("REWARD", "奖励");
-
+                "退款"), REWARD("REWARD", "奖励"), NEWREGISTERREWARD("NEWREGISTERREWARD","注册红包赠送");
+    	
         private String name;
         private String value;
 
+        private static Map<String, String> valMapping = new HashMap<>();
+        private static Map<String, TradeType> objMapping = new HashMap<>();
+        
+        static {
+        	for(TradeType t :TradeType.values()) {
+        		valMapping.put(t.name, t.value);
+        		objMapping.put(t.name, t);
+        	}
+        }
         private TradeType(String name, String value) {
             this.name = name;
             this.value = value;
@@ -183,9 +223,22 @@ public class Constants {
         public String getValue() {
             return value;
         }
-
+      
+        public static String getValue(String key) {
+        	String v = valMapping.get(key);
+        	if(v==null) {
+    			throw ErrConfig.INVALID_TRADE_TYPE;
+        	}
+        	return v;
+        }
+        public static TradeType getTradeType(String key) {
+        	TradeType v = objMapping.get(key);
+        	if(v==null) {
+    			throw ErrConfig.INVALID_TRADE_TYPE;
+        	}
+        	return v;
+        }
     }
-
 
     public static enum TradeUserType {
 
@@ -196,7 +249,12 @@ public class Constants {
         private String shortName;
         private String value;
 
-
+        private static Map<String,TradeUserType> mapping = new HashMap<>();
+        static {
+        	for(TradeUserType type : TradeUserType.values()) {
+        		mapping.put(type.name, type);
+        	}
+        }
         private TradeUserType(String name, String shortName, String value) {
             this.name = name;
             this.shortName = shortName;
@@ -214,6 +272,46 @@ public class Constants {
         public String getValue() {
             return value;
         }
+        
+
+    	public static TradeUserType getTradeUserType(String tradeUserType) {
+    		TradeUserType type = mapping.get(tradeUserType);
+    		if(type==null) {
+    			throw ErrConfig.INVALID_TRADEUSER_TYPE;
+    		}
+    		return type;
+    	}
     }
+    
+    public static enum BalanceType {
+
+    	REALBALANCE(1), VIRTUALBALANCE(2);
+
+        private int value;
+
+        private static Map<String,BalanceType> mapping = new HashMap<>();
+        static {
+        	for(BalanceType type : BalanceType.values()) {
+        		mapping.put(type.value+"", type);
+        	}
+        }
+        private BalanceType( int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+        
+
+    	public static BalanceType getBalanceType(String tradeUserType) {
+    		BalanceType type = mapping.get(tradeUserType);
+    		if(type==null) {
+    			throw ErrConfig.INVALID_TRADBALANCE_TYPE;
+    		}
+    		return type;
+    	}
+    }
+
 
 }

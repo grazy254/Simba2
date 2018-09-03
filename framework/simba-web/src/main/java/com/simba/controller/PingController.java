@@ -1,5 +1,9 @@
 package com.simba.controller;
 
+import java.util.concurrent.Callable;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,9 +22,23 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/ping")
 public class PingController {
 
+	private static final Log logger = LogFactory.getLog(PingController.class);
+
 	@ApiOperation(value = "ping", notes = "成功返回ok")
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String ping() {
 		return "ok";
+	}
+
+	@ApiOperation(value = "ping", notes = "成功返回ok")
+	@RequestMapping(value = "/async", method = RequestMethod.GET)
+	public Callable<String> asyncPing() {
+		logger.info("begin ping");
+		Callable<String> callable = () -> {
+			logger.info("ping...");
+			return "ok";
+		};
+		logger.info("end ping");
+		return callable;
 	}
 }

@@ -1,16 +1,17 @@
 package com.simba.wallet.dao.impl;
 
 import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import com.simba.framework.util.jdbc.Jdbc;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.jdbc.StatementParameter;
 import com.simba.wallet.dao.TradeDetailDao;
 import com.simba.wallet.model.TradeDetail;
 import com.simba.wallet.model.form.TradeDetailSearchForm;
-import com.simba.wallet.util.CommonUtil;
 import com.simba.wallet.util.Constants.TradeUserType;
 
 /**
@@ -215,7 +216,7 @@ public class TradeDetailDaoImpl implements TradeDetailDao {
         if (tradeDetailSearchForm.getTradeUserID() != null
                 && StringUtils.isNotEmpty(tradeDetailSearchForm.getTradeUserID() + "")) {
             TradeUserType tradeUserType =
-                    CommonUtil.getTradeUserType(tradeDetailSearchForm.getTradeUserType());
+                    TradeUserType.getTradeUserType(tradeDetailSearchForm.getTradeUserType());
             switch (tradeUserType) {
                 case CHANNEL:
                     sql += " and channelTradeUserID  = ?";

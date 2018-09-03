@@ -2,10 +2,9 @@ package com.simba.api;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,18 +23,12 @@ import com.simba.service.SmartUserService;
 @Controller
 @RequestMapping("/api/userLogin")
 public class UserLoginApi {
-	
-	private static final Log logger = LogFactory.getLog(UserLoginApi.class);
-
-	@Value("${appID}")
-	private String appid;
 
 	@Autowired
 	private SmartUserService smartUserService;
 
 	@Autowired
 	private RedisUtil redisUtil;
-	
 
 	@RequestMapping("/verif")
 	public boolean verif(String telNo, String verif) {
@@ -51,49 +44,48 @@ public class UserLoginApi {
 	@ResponseBody
 	@RequestMapping("/toLogin")
 	public JsonResult toLogin(String code, String account, String password, HttpSession session) throws Exception {
-		JsonResult json=smartUserService.toLogin(code, account, password);
-		if(json.getCode()==200){
-			session.setAttribute("userId",json.getData());
-			return new JsonResult("登录成功",200);
-		}else{
-			return new JsonResult("登录失败",400);
+		JsonResult json = smartUserService.toLogin(code, account, password);
+		if (json.getCode() == 200) {
+			session.setAttribute("userId", json.getData());
+			return new JsonResult("登录成功", 200);
+		} else {
+			return new JsonResult("登录失败", 400);
 		}
-		
+
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/toLoginVerif")
 	public JsonResult toLoginVerif(String mobile, String verif, HttpSession session) throws Exception {
-		//验证短信验证码
-		if(!verif(mobile,verif)){
+		// 验证短信验证码
+		if (!verif(mobile, verif)) {
 			throw new BussException("短信验证码错误");
 		}
-		JsonResult json=smartUserService.toLoginVerif(mobile);
-		if(json.getCode()==200){
-			session.setAttribute("userId",json.getData());
-			return new JsonResult("登录成功",200);
-		}else{
-			return new JsonResult("登录失败",400);
+		JsonResult json = smartUserService.toLoginVerif(mobile);
+		if (json.getCode() == 200) {
+			session.setAttribute("userId", json.getData());
+			return new JsonResult("登录成功", 200);
+		} else {
+			return new JsonResult("登录失败", 400);
 		}
 	}
 
 	@ResponseBody
 	@RequestMapping("/toRegisterApp")
 	public JsonResult toRegisterApp(String code, String account, String password, HttpSession session) throws Exception {
-		JsonResult json =new JsonResult();
+		JsonResult json = new JsonResult();
 		json = smartUserService.toRegisterApp(code, account, password);
-		if(json.getCode()==200){
-			int re =Integer.parseInt(json.getData().toString());
+		if (json.getCode() == 200) {
+			long re = NumberUtils.toLong(json.getData() + StringUtils.EMPTY);
 			if (re > 0) {
 				// 注册成功后userId写入session
 				session.setAttribute("userId", re);
 			}
-			return new JsonResult("注册成功",200);
-		}else{
+			return new JsonResult("注册成功", 200);
+		} else {
 			return json;
 		}
-		
-		
+
 	}
 
 	@ResponseBody
@@ -117,6 +109,6 @@ public class UserLoginApi {
 	@ResponseBody
 	@RequestMapping("/getMobileByUserId")
 	public JsonResult getMobileByUserId(long userId) {
-		 return smartUserService.getMobileByUserId(userId);
+		return smartUserService.getMobileByUserId(userId);
 	}
 }

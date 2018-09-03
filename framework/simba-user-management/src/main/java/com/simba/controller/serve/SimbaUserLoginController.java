@@ -1,4 +1,4 @@
-package com.simba.controller;
+package com.simba.controller.serve;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -33,9 +33,9 @@ import com.simba.util.EmailUtil;
  * 
  */
 @Controller
-@RequestMapping("/userLogin")
-public class UserLoginController {
-	private static final Log logger = LogFactory.getLog(UserLoginController.class);
+@RequestMapping("/serve/userLogin")
+public class SimbaUserLoginController {
+	private static final Log logger = LogFactory.getLog(SimbaUserLoginController.class);
 
 	@Value("${appID}")
 	private String appid;

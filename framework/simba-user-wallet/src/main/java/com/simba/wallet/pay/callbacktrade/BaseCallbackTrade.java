@@ -152,7 +152,7 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
 				tradeType.getName()).toString());
 
 		if (paymentAmount <= 0 || originalAmount <= 0) {
-			throw ErrConfig.INVALID_PAYMENT_ACCOUNT;
+			throw ErrConfig.INVALID_PAYMENT_AMOUNT;
 		}
 
 		checkUserAccount(userID);

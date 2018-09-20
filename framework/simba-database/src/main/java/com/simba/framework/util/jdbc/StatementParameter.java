@@ -239,7 +239,9 @@ public class StatementParameter {
 			return Types.FLOAT;
 		} else if (value instanceof Byte) {
 			return Types.TINYINT;
-		} else {
+		} else if(value == null){
+			return Types.NULL;
+		}else {
 			throw new RuntimeException("未知参数类型[" + value + "].");
 		}
 	}

@@ -24,25 +24,25 @@ public class UserSdk {
 
 	private static final Log logger = LogFactory.getLog(UserSdk.class);
 
-	private static final String loginUrl = "/USER/api/simbaUser/toLogin";
+	private static final String loginUrl = "http://USER/api/simbaUser/toLogin";
 
-	private static final String loginVerifUrl = "/USER/api/simbaUser/toLoginVerif";
+	private static final String loginVerifUrl = "http://USER/api/simbaUser/toLoginVerif";
 
-	private static final String registerUrl = "/USER/api/simbaUser/toRegisterApp";
+	private static final String registerUrl = "http://USER/api/simbaUser/toRegisterApp";
 
-	private static final String resetPassswordUrl = "/USER/api/simbaUser/toResetPasswordApp";
+	private static final String resetPassswordUrl = "http://USER/api/simbaUser/toResetPasswordApp";
 
-	private static final String findPasswordUrl = "/USER/api/simbaUser/toFindPasswordApp";
+	private static final String findPasswordUrl = "http://USER/api/simbaUser/toFindPasswordApp";
 
-	private static final String getMobileByUserIdUrl = "/USER/api/simbaUser/getMobileByUserId";
+	private static final String getMobileByUserIdUrl = "http://USER/api/simbaUser/getMobileByUserId";
 
-	private static final String isRepeatAccountUrl = "/USER/api/simbaUser/isRepeatAccount";
+	private static final String isRepeatAccountUrl = "http://USER/api/simbaUser/isRepeatAccount";
 
-	private static final String updateNameUrl = "/USER/api/simbaUser/updateName";
+	private static final String updateNameUrl = "http://USER/api/simbaUser/updateName";
 
-	private static final String updateHeadPicUrl = "/USER/api/simbaUser/updateHeadPic";
+	private static final String updateHeadPicUrl = "http://USER/api/simbaUser/updateHeadPic";
 
-	private static final String verifUrl = "/USER/api/simbaUser/verif";
+	private static final String verifUrl = "http://USER/api/simbaUser/verif";
 
 	private static final String userIdSessionKey = "userId";
 

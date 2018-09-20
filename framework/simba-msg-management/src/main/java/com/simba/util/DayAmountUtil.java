@@ -28,7 +28,12 @@ public class DayAmountUtil {
     }
 
     public Integer getAmount(String projectId) {
-        return (Integer) redisUtil.hget(DAY_AMOUNT, projectId);
+        try (Jedis jedis = redisUtil.getJedis()) {
+            return Integer.valueOf(jedis.hget(DAY_AMOUNT, projectId));
+        } catch (Exception e) {
+            clean();
+        }
+        return 0;
     }
 
     /**
@@ -40,6 +45,8 @@ public class DayAmountUtil {
     public void incrAmount(String projectId, int value) {
         try (Jedis jedis = redisUtil.getJedis()) {
             jedis.hincrBy(DAY_AMOUNT, projectId, value);
+        } catch (Exception e) {
+            clean();
         }
     }
 

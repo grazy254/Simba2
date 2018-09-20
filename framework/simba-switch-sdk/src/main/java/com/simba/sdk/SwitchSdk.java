@@ -23,7 +23,7 @@ public class SwitchSdk {
 
 	private static final Log logger = LogFactory.getLog(SwitchSdk.class);
 
-	private static final String url = "/SWITCHUSER/server/api/switch/receive";
+	private static final String url = "http://SWITCHUSER/server/api/switch/receive";
 
 	@Autowired
 	private EurekaClientUtil client;

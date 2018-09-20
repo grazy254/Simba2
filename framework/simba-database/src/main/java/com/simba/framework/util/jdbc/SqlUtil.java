@@ -38,6 +38,8 @@ public class SqlUtil {
 				value = Long.toString(param.getLong(i));
 			} else if (type == Types.TINYINT) {
 				value = Long.toString(param.getByte(i));
+			} else if (type == Types.NULL) {
+				value = null;
 			} else {
 				throw new RuntimeException("未知数据类型[" + type + "]");
 			}

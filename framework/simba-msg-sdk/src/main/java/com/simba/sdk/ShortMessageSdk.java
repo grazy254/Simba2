@@ -25,7 +25,7 @@ public class ShortMessageSdk {
 
     private static final Log logger = LogFactory.getLog(ShortMessageSdk.class);
 
-    private static final String url = "/SHORTMSGUSER/server/api/sendMsg/send";
+    private static final String url = "http://SHORTMSGUSER/server/api/sendMsg/send";
 
     @Autowired
     private RestTemplate restTemplate;
@@ -45,7 +45,7 @@ public class ShortMessageSdk {
         param.add("projectId", projectId);
         param.add("cipherText", EncryptUtil.md5(projectKey + timestamp));
         param.add("values", params);
-        param.add("mobileList", Arrays.asList(mobile));
+        param.add("mobile", mobile);
         param.add("timeStamp", timestamp);
         String result = restTemplate.postForObject(url.toString(), param, String.class);
         logger.info("发送请求到短信服务器返回结果:" + result);

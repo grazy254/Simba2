@@ -15,62 +15,61 @@ import com.simba.wallet.util.Constants.TradeUserType;
  */
 public interface TradeUserService {
 
-    long add(TradeUser tradeUser);
+	long add(TradeUser tradeUser);
 
-    void update(TradeUser tradeUser);
+	void update(TradeUser tradeUser);
 
-    void delete(Long id);
+	void delete(Long id);
 
-    List<TradeUser> listAll();
+	List<TradeUser> listAll();
 
-    Long count();
+	Long count();
 
-    Long countBy(String field, Object value);
+	Long countBy(String field, Object value);
 
-    Long countByAnd(String field1, Object value1, String field2, Object value2);
+	Long countByAnd(String field1, Object value1, String field2, Object value2);
 
-    Long countByOr(String field1, Object value1, String field2, Object value2);
+	Long countByAnd(String field1, Object value1, String field2, Object value2, String field3, Object value3);
 
-    void deleteBy(String field, Object value);
+	Long countByOr(String field1, Object value1, String field2, Object value2);
 
-    void deleteByAnd(String field1, Object value1, String field2, Object value2);
+	void deleteBy(String field, Object value);
 
-    void deleteByOr(String field1, Object value1, String field2, Object value2);
+	void deleteByAnd(String field1, Object value1, String field2, Object value2);
 
-    List<TradeUser> page(Pager page);
+	void deleteByOr(String field1, Object value1, String field2, Object value2);
 
-    TradeUser get(Long id);
+	List<TradeUser> page(Pager page);
 
-    TradeUser get(String userID, TradeUserType userType);
+	TradeUser get(Long id);
 
-    void batchDelete(List<Long> idList);
+	TradeUser get(String userID, TradeUserType userType);
 
-    TradeUser getBy(String field, Object value);
+	void batchDelete(List<Long> idList);
 
-    TradeUser getByAnd(String field1, Object value1, String field2, Object value2);
+	TradeUser getBy(String field, Object value);
 
-    TradeUser getByOr(String field1, Object value1, String field2, Object value2);
+	TradeUser getByAnd(String field1, Object value1, String field2, Object value2);
 
-    List<TradeUser> listBy(String field, Object value);
+	TradeUser getByOr(String field1, Object value1, String field2, Object value2);
 
-    List<TradeUser> listByAnd(String field1, Object value1, String field2, Object value2);
+	List<TradeUser> listBy(String field, Object value);
 
-    List<TradeUser> listByOr(String field1, Object value1, String field2, Object value2);
+	List<TradeUser> listByAnd(String field1, Object value1, String field2, Object value2);
 
-    List<TradeUser> pageBy(String field, Object value, Pager page);
+	List<TradeUser> listByOr(String field1, Object value1, String field2, Object value2);
 
-    List<TradeUser> pageByAnd(String field1, Object value1, String field2, Object value2,
-            Pager page);
+	List<TradeUser> pageBy(String field, Object value, Pager page);
 
-    List<TradeUser> pageByOr(String field1, Object value1, String field2, Object value2,
-            Pager page);
+	List<TradeUser> pageByAnd(String field1, Object value1, String field2, Object value2, Pager page);
 
-    TradeUser getByAnd(String field1, Object value1, String field2, Object value2, String field3,
-            Object value3);
+	List<TradeUser> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
 
-    JsonResult activatePayment(String userID, TradeUserType userType);
+	TradeUser getByAnd(String field1, Object value1, String field2, Object value2, String field3, Object value3);
 
-    JsonResult frozePayment(String userID, TradeUserType userType);
+	JsonResult activatePayment(String userID, TradeUserType userType);
 
-    TradeUser getByOrderNO(String orderNO, TradeType tradeType);
+	JsonResult frozePayment(String userID, TradeUserType userType);
+
+	TradeUser getByOrderNO(String orderNO, TradeType tradeType);
 }

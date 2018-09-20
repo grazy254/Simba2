@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,8 @@ import com.simba.service.ReceiveMsgService;
 @Transactional
 public class ReceiveMsgServiceImpl implements ReceiveMsgService {
 
+	private static final Log logger = LogFactory.getLog(ReceiveMsgServiceImpl.class);
+
 	@Autowired
 	private ReceiveDealTypeDao deceiveDealTypeDao;
 
@@ -41,8 +45,10 @@ public class ReceiveMsgServiceImpl implements ReceiveMsgService {
 
 	@Override
 	public Object add(ReceiveMsg receiveMsg) {
+		logger.info("================接收到需要转发的消息=========================================" + receiveMsg.toString());
 		Object result = null;
 		ReceiveDealType receiveDealType = deceiveDealTypeDao.getBy("name", receiveMsg.getType());
+		logger.info("================接收到需要转发的消息类型=========================================" + receiveDealType.toString());
 		String beanID = receiveDealType.getBeanId();
 		ReceiveDealInterface rdi = (ReceiveDealInterface) ApplicationContextUtil.getBean(beanID);
 		if (receiveDealType.getSync() == 1) {

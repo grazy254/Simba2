@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.simba.exception.BussException;
 import com.simba.exception.ErrorCodeException;
 import com.simba.exception.ForbidException;
 import com.simba.exception.LoginException;
@@ -79,7 +80,10 @@ class GlobalExceptionHandler {
 			model.setViewName(loginPage);
 		} else if (e instanceof ForbidException) {
 			model.setViewName(forbidPage);
-		} else {
+		} else if (e instanceof BussException) {
+			model.setViewName("error/business");
+			model.addObject("message", e.getMessage());
+		}else {
 			model.setViewName(errorPage);
 			model.addObject("message", ExceptionUtil.getStackTrace(e));
 		}

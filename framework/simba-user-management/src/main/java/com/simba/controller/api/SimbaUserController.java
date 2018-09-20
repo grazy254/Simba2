@@ -102,9 +102,9 @@ public class SimbaUserController {
 		JsonResult json=smartUserService.toLogin(code, account, password);
 		if(json.getCode()==200){
 			session.setAttribute("userId",json.getData());
-			return new JsonResult("登录成功",200);
+			return new JsonResult(json.getData(),"登录成功",200);
 		}else{
-			return new JsonResult("登录失败",400);
+			return new JsonResult(json.getData(),"登录失败",400);
 		}
 	}
 	
@@ -118,9 +118,9 @@ public class SimbaUserController {
 		JsonResult json=smartUserService.toLoginVerif(mobile);
 		if(json.getCode()==200){
 			session.setAttribute("userId",json.getData());
-			return new JsonResult("登录成功",200);
+			return new JsonResult(json.getData(),"登录成功",200);
 		}else{
-			return new JsonResult("登录失败",400);
+			return new JsonResult(json.getData(),"登录失败",400);
 		}
 	}
 
@@ -135,7 +135,7 @@ public class SimbaUserController {
 				// 注册成功后userId写入session
 				session.setAttribute("userId", re);
 			}
-			return new JsonResult("注册成功",200);
+			return new JsonResult(json.getData(),"注册成功",200);
 		}else{
 			return json;
 		}

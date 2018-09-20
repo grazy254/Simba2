@@ -23,7 +23,7 @@ public class RealTimeSdk {
 
 	private static final Log logger = LogFactory.getLog(RealTimeSdk.class);
 
-	private static final String url = "/REALTIMEUSER/server/api/realTimeMessage/send";
+	private static final String url = "http://REALTIMEUSER/server/api/realTimeMessage/send";
 
 	@Autowired
 	private EurekaClientUtil client;

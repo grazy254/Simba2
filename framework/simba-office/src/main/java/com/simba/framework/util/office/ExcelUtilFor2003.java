@@ -225,18 +225,23 @@ public class ExcelUtilFor2003 {
 		try {
 			wb = new HSSFWorkbook(ts);
 			HSSFSheet sh = wb.getSheetAt(sheetIndex);
-			for (int i = 0; true; i++) {
+			int cellCount=0;
+			for (int i = 0; i<=sh.getLastRowNum(); i++) {
 				HSSFRow ro = sh.getRow(i);
 				if (ro == null) {
-					break;
+					continue;
+				}
+				if(i==0) {//以第一行为准
+					cellCount=ro.getLastCellNum();
 				}
 				List<String> row = new ArrayList<String>();
-				for (int j = 0; true; j++) {
+				for (int j = 0; j<cellCount; j++) {
 					HSSFCell cell = ro.getCell(j);
-					if (cell == null) {
-						break;
+					if(cell!=null) {
+						row.add(cell.toString());
+					}else {
+						row.add("");
 					}
-					row.add(cell.toString());
 				}
 				rows.add(row);
 			}
@@ -246,6 +251,7 @@ public class ExcelUtilFor2003 {
 			if (wb != null) {
 				wb.close();
 			}
+			IOUtils.closeQuietly(in);
 		}
 		return rows;
 	}

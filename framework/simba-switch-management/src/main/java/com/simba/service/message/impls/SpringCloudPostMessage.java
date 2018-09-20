@@ -3,6 +3,8 @@ package com.simba.service.message.impls;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +24,14 @@ import com.simba.model.ReceiveMsg;
 @Service
 public class SpringCloudPostMessage implements ReceiveDealInterface {
 
+	private static final Log logger = LogFactory.getLog(SpringCloudPostMessage.class);
+
 	@Autowired
 	private EurekaClientUtil client;
 
 	@Override
 	public Object deal(ReceiveMsg msg, ReceiveDealType type) {
+		logger.info("***************处理转发消息*********************************" + msg.toString() + type.toString());
 		String message = msg.getMessage();
 		String url = type.getExt();
 		int index = url.indexOf("?");

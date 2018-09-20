@@ -392,7 +392,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 		if (smartUserDao.listBy("account", account).size() > 0) {
 			throw new BussException("此账号已经注册，请更换账号");
 		}
-		String regex = "^1[3|4|5|7|8][0-9]\\d{4,8}$";
+		String regex = "^1[3|4|5|6|7|8|9][0-9]\\d{4,8}$";
 		Pattern pat = Pattern.compile(regex);
 		Matcher m = pat.matcher(account);
 		boolean isMatch = m.matches();
@@ -562,9 +562,22 @@ public class SmartUserServiceImpl implements SmartUserService {
 		SmartUser smartUser = new SmartUser();
 		smartUser = smartUserDao.get(userId);
 		smartUser.setHeadPic(headPic);
-		;
 		smartUserDao.update(smartUser);
 		return new JsonResult("更新成功", 200);
+	}
+
+	@Override
+	public JsonResult changeStatus(Long id, Integer changeStatus) {
+		SmartUser smartUser = new SmartUser();
+		smartUser = smartUserDao.get(id);
+		smartUser.setStatus(changeStatus);
+		smartUserDao.update(smartUser);
+		return new JsonResult("更新成功", 200);
+	}
+
+	@Override
+	public void updateBaseInfo(SmartUser smartUser) {
+		smartUserDao.updateBaseInfo(smartUser);
 	}
 
 }

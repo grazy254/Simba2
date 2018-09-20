@@ -1,5 +1,11 @@
 package com.simba.controller.api;
 
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,9 +26,18 @@ public class OpinionFeedbackApiController {
 
 	@Autowired
 	private OpinionFeedbackService opinionFeedbackService;
+	
+	private final static Log logger =LogFactory.getLog(OpinionFeedbackApiController.class);
 
 	@RequestMapping("/save")
-	public JsonResult save(OpinionFeedback opinionFeedback) {
+	public JsonResult save(OpinionFeedback opinionFeedback,HttpServletRequest request) {
+		logger.info("opinionFeedback:"+opinionFeedback.toString());
+		if(opinionFeedback.getUserId() == null){
+			opinionFeedback.setUserId(Integer.parseInt(request.getSession().getAttribute("userId").toString()));
+		}
+		opinionFeedback.setCreateTime(new Date());
+		opinionFeedback.setId(0);
+		logger.info("opinionFeedback:"+opinionFeedback.toString());
 		opinionFeedbackService.add(opinionFeedback);
 		return new JsonResult();
 	}

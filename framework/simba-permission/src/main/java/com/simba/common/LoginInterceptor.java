@@ -65,6 +65,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+		logger.debug("================登录拦截器执行afterCompletion==============================" + request.getRequestURI());
 	}
 
 }

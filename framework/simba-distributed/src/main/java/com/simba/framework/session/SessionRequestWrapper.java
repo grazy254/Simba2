@@ -1,5 +1,8 @@
 package com.simba.framework.session;
 
+import java.util.Map;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
@@ -64,6 +67,20 @@ public class SessionRequestWrapper extends HttpServletRequestWrapper {
 	@Override
 	public Object getAttribute(String name) {
 		return super.getAttribute(name);
+	}
+
+	@Override
+	public Map<String, String[]> getParameterMap() {
+		Map<String, String[]> result = super.getParameterMap();
+		Set<String> keys = result.keySet();
+		for (String key : keys) {
+			if (PageParameterUtil.isSpecialName(key)) {
+				String value = PageParameterUtil.getParameterValues(request, response, key);
+				String[] values = new String[] { value };
+				result.put(key, values);
+			}
+		}
+		return result;
 	}
 
 }

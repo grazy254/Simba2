@@ -11,7 +11,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<json.version>20090211</json.version>
+		<json.version>20180813</json.version>
 		<net.sf.json-lib.version>2.4</net.sf.json-lib.version>
 	</properties>
 
@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>1.2.0</version>
+			<version>1.2.49</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.json-lib</groupId>

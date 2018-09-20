@@ -256,6 +256,7 @@ public class TradeDetailDaoImpl implements TradeDetailDao {
             sql += " and tradeStatus  = ?";
             param.set(tradeDetailSearchForm.getTradeStatus());
         }
+        sql+=" order by tradePaymentTime desc";
         return sql;
     }
 }

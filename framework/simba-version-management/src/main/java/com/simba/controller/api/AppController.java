@@ -42,6 +42,9 @@ public class AppController {
 	public Map<String, Object> getVersionInfo(int typeId, ModelMap model) {
 		FileVersion version = fileVersionService.getNewest(typeId);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
+		if(version == null){
+			return resultMap;
+		}
 		resultMap.put("version", version.getVersion());
 		resultMap.put("fileSize", version.getFileSize());
 		resultMap.put("fileUrl", version.getFileUrl());

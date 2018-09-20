@@ -23,7 +23,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.simba</groupId>
-			<artifactId>simba-user-management</artifactId>
+			<artifactId>simba-web</artifactId>
 			<version>${simba.version}</version>
 		</dependency>
 	</dependencies>

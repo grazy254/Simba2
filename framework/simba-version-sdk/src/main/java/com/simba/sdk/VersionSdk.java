@@ -20,13 +20,13 @@ import com.simba.framework.util.json.JsonResult;
 @Service
 public class VersionSdk {
 
-	private static final String getVersionUrl = "/VERSIONUSER/api/app/getVersionInfo";
+	private static final String getVersionUrl = "http://VERSIONUSER/api/app/getVersionInfo";
 
-	private static final String saveBugFeedbackUrl = "/VERSIONUSER/api/bugFeedback/save";
+	private static final String saveBugFeedbackUrl = "http://VERSIONUSER/api/bugFeedback/save";
 
-	private static final String getIosVersionUrl = "/VERSIONUSER/api/ios/getVersionInfo";
+	private static final String getIosVersionUrl = "http://VERSIONUSER/api/ios/getVersionInfo";
 
-	private static final String saveOpinionFeedbackUrl = "/VERSIONUSER/api/opinionFeedback/save";
+	private static final String saveOpinionFeedbackUrl = "http://VERSIONUSER/api/opinionFeedback/save";
 
 	@Autowired
 	private EurekaClientUtil client;

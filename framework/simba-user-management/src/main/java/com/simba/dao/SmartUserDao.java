@@ -62,4 +62,5 @@ public interface SmartUserDao {
 
 	List<SmartUser> page(Pager pager, SmartUserSearchForm searchForm);
 
+	void updateBaseInfo(SmartUser smartUser);
 }

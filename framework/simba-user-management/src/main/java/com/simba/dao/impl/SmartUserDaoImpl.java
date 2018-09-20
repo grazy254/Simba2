@@ -221,4 +221,11 @@ public class SmartUserDaoImpl implements SmartUserDao {
         return sql;
     }
 
+	@Override
+	public void updateBaseInfo(SmartUser smartUser) {
+		String sql = "update " + table + " set  name = ? , email = ? , telNo = ?, status = ?  where id = ?  ";
+        jdbc.updateForBoolean(sql,  smartUser.getName(),smartUser.getEmail(), 
+        		smartUser.getTelNo(), smartUser.getStatus(),smartUser.getId());
+	}
+
 }

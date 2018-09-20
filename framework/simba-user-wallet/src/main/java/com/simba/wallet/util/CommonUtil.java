@@ -26,10 +26,12 @@ import com.simba.wallet.util.Constants.TradeUserType;
 public class CommonUtil {
 
 	public static String transToCNYType(Long amount) {
-		DecimalFormat fmt = new DecimalFormat("0.00");
-		return fmt.format(amount * 1.0 / 100) + "元";
+		return transToCNYTypeWithouUnit(amount) + "元";
 	}
-
+	public static String transToCNYTypeWithouUnit(Long amount) {
+		DecimalFormat fmt = new DecimalFormat("0.00");
+		return fmt.format(amount * 1.0 / 100);
+	}
 	public static String transToCNYType(Long amount, boolean addMinus) {
 
 		DecimalFormat fmt = new DecimalFormat("0.00");
@@ -47,8 +49,9 @@ public class CommonUtil {
 
 	public static void main(String[] args) {
 		try {
-			System.out.println(CNYToLong("1.2332"));
+			System.out.println(CNYToLong("1.233212"));
 			System.out.println(transToCNYType(12332L, true));
+			System.out.println(transToCNYTypeWithouUnit(123123L));
 
 			System.out.println(Date.from(LocalDate.of(1979, 1, 1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
 			System.out.println(DateUtil.str2Date("1979-01-01", DateUtil.DAY_FORMAT, new Date()));

@@ -2,8 +2,6 @@ package com.simba.service;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.SmartUser;
@@ -215,4 +213,15 @@ public interface SmartUserService {
 	 * @return
 	 */
 	JsonResult updateHeadPic(String headPic,long userId);
+
+	/**
+	 * 改变用户的状态
+	 * @param id
+	 * @param changeStatus
+	 * @return
+	 */
+	JsonResult changeStatus(Long id, Integer changeStatus);
+	
+	void updateBaseInfo(SmartUser smartUser);
+	
 }

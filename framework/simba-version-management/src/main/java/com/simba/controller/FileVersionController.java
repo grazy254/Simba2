@@ -61,7 +61,6 @@ public class FileVersionController {
 		} else {
 			list = fileVersionService.page(pager);
 		}
-
 		list.forEach((fileversion) -> {
 			fileversion.setType(getType(fileversion.getTypeId()));
 		});

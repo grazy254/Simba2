@@ -3,6 +3,8 @@ package com.simba.dao.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import com.simba.dao.IOSVersionDao;
@@ -26,6 +28,7 @@ public class IOSVersionDaoImpl implements IOSVersionDao {
 	private static final String table = "iOSVersion";
 
 	@Override
+	@CacheEvict(cacheNames = "iosVersion", key = "#iOSVersion.getTypeId()")
 	public void add(IOSVersion iOSVersion) {
 		String sql = "insert into " + table + "( version, fileSize, description, createTime, identifer, title, ipaFileUrl, fullImageFileUrl, logFileUrl,typeId) values(?,?,?,?,?,?,?,?,?,?)";
 		jdbc.updateForBoolean(sql, iOSVersion.getVersion(), iOSVersion.getFileSize(), iOSVersion.getDescription(), iOSVersion.getCreateTime(), iOSVersion.getIdentifer(), iOSVersion.getTitle(),
@@ -33,6 +36,7 @@ public class IOSVersionDaoImpl implements IOSVersionDao {
 	}
 
 	@Override
+	@CacheEvict(cacheNames = "iosVersion", key = "#iOSVersion.getTypeId()")
 	public void update(IOSVersion iOSVersion) {
 		String sql = "update " + table
 				+ " set  version = ? , fileSize = ? , description = ? , createTime = ? , identifer = ? , title = ? , ipaFileUrl = ? , fullImageFileUrl = ? , logFileUrl = ? , typeId = ? where id = ?  ";
@@ -41,6 +45,7 @@ public class IOSVersionDaoImpl implements IOSVersionDao {
 	}
 
 	@Override
+	@CacheEvict(cacheNames = "iosVersion", allEntries = true)
 	public void delete(Integer id) {
 		String sql = "delete from " + table + " where id = ? ";
 		jdbc.updateForBoolean(sql, id);
@@ -139,12 +144,14 @@ public class IOSVersionDaoImpl implements IOSVersionDao {
 	}
 
 	@Override
+	@CacheEvict(cacheNames = "iosVersion", allEntries = true)
 	public void deleteBy(String field, Object value) {
 		String sql = "delete from " + table + " where " + field + " = ? ";
 		jdbc.updateForBoolean(sql, value);
 	}
 
 	@Override
+	@Cacheable(cacheNames = "iosVersion", key = "#typeId")
 	public IOSVersion getNewestVersionByTpeId(int typeId) {
 		String sql = "select * from " + table + " where typeId = ? order by createTime desc limit 1 ";
 		return jdbc.query(sql, IOSVersion.class, typeId);

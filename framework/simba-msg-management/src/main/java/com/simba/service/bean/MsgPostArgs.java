@@ -80,7 +80,7 @@ public class MsgPostArgs {
 
 	@Override
 	public String toString() {
-		return "MsgPostArgs{" + "mobile=" + mobile + ", cipherText='" + cipherText + '\'' + ", projectId='" + projectId + '\'' + ", timeStamp='" + timeStamp + '\'' + ", templateId='"
-				+ templateSelfId + '\'' + ", values=" + values + '}';
+		return "MsgPostArgs{" + "mobile=" + mobile + ", cipherText='" + cipherText + '\'' + ", projectId='" + projectId + '\'' + ", timeStamp='" + timeStamp + '\'' + ", templateId='" + templateSelfId
+				+ '\'' + ", values=" + values + '}';
 	}
 }

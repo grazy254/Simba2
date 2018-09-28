@@ -8,10 +8,12 @@ import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.simba.exception.BussException;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
@@ -241,7 +243,7 @@ public class TradeAccountServiceImpl implements TradeAccountService {
 
 		// 检查数据库是否存在该记录
 		long userCount = tradeUserDao.countByAnd("userID", userID, "type", tradeUserType.getName(), "isActive", 1);
-
+		Date now = new Date();
 		if (userCount == 0) {
 			TradeUser tradeUser = new TradeUser();
 			tradeUser.setUserID(userID);
@@ -260,8 +262,8 @@ public class TradeAccountServiceImpl implements TradeAccountService {
 			}
 			tradeUser.setPayPhone(payPhone);
 			tradeUser.setPayEmail(payEmail);
-			tradeUser.setCreateTime(new Date());
-			tradeUser.setLastUpdateTime(new Date());
+			tradeUser.setCreateTime(now);
+			tradeUser.setLastUpdateTime(now);
 			tradeUser.setPayPassword(password);
 
 			tradeUserID = tradeUserDao.add(tradeUser);
@@ -289,8 +291,8 @@ public class TradeAccountServiceImpl implements TradeAccountService {
 		tradeAccount.setIsAllowRecharge(isAllowRecharge);
 		tradeAccount.setIsFrozen(0);
 		tradeAccount.setTradeUserID(tradeUserID);
-		tradeAccount.setLastUpdateTime(new Date());
-		tradeAccount.setCreateTime(new Date());
+		tradeAccount.setLastUpdateTime(now);
+		tradeAccount.setCreateTime(now);
 		Long tradeAccountID = tradeAccountDao.add(tradeAccount);
 		if (tradeAccountID <= 0) {
 			throw ErrConfig.OPEN_WALLET_ACCOUNT_FAILED;
@@ -303,7 +305,7 @@ public class TradeAccountServiceImpl implements TradeAccountService {
 	 */
 	@Override
 	public JsonResult frozeAccount(String userID, TradeUserType userType) {
-		// TODO: 手机验证码 根据userID获取注册时的手机号
+		// 手机验证码 根据userID获取注册时的手机号
 		TradeAccount tradeAccount = tradeAccountDao.get(userID, userType);
 		tradeAccount.setIsFrozen(AccountFrozenStatus.FROZEN.getValue());
 		tradeAccountDao.update(tradeAccount);
@@ -312,7 +314,6 @@ public class TradeAccountServiceImpl implements TradeAccountService {
 
 	@Override
 	public JsonResult closeAccount(String userID, TradeUserType userType) {
-
 		TradeUser tradeUser = tradeUserDao.get(userID, userType);
 		TradeAccount tradeAccount = tradeAccountDao.get(tradeUser.getId(), userType);
 		tradeUser.setIsActive(AccountActiveStatus.CLOSED.getValue());
@@ -323,7 +324,6 @@ public class TradeAccountServiceImpl implements TradeAccountService {
 		} else {
 			throw new BussException("注销失败：账户余额不为0");
 		}
-
 		return new JsonResult();
 	}
 

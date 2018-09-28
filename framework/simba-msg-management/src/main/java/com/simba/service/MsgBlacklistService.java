@@ -1,10 +1,9 @@
 package com.simba.service;
 
+import java.util.List;
+
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.model.MsgBlacklist;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Service
@@ -23,15 +22,15 @@ public interface MsgBlacklistService {
 	List<MsgBlacklist> listAll();
 
 	Integer count();
-	
+
 	Integer countBy(String field, Object value);
-	
+
 	void deleteBy(String field, Object value);
-	
+
 	List<MsgBlacklist> page(Pager page);
 
 	MsgBlacklist get(Integer id);
-	
+
 	void batchDelete(List<Integer> idList);
 
 	MsgBlacklist getBy(String field, Object value);
@@ -54,8 +53,6 @@ public interface MsgBlacklistService {
 
 	List<String> filterBlacklist(List<String> mobileList);
 
-	@Transactional(readOnly = true)
 	boolean inBlackList(String mobile);
 
-	boolean isDuplicated(String mobile);
 }

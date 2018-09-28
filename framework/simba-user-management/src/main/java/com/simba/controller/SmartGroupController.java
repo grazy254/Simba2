@@ -28,7 +28,7 @@ public class SmartGroupController {
 
 	@Autowired
 	private SmartGroupService smartGroupService;
-	
+
 	@Autowired
 	private SmartUserService smartUserService;
 
@@ -36,14 +36,14 @@ public class SmartGroupController {
 	public String list() {
 		return "smartGroup/list";
 	}
-	
+
 	@RequestMapping("/getList")
-	public String getList(Pager pager,ModelMap model){
+	public String getList(Pager pager, ModelMap model) {
 		List<SmartGroup> list = smartGroupService.page(pager);
 		model.put("list", list);
 		return "smartGroup/table";
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/count")
 	public JsonResult count() {
@@ -55,11 +55,10 @@ public class SmartGroupController {
 	public String toAdd() {
 		return "smartGroup/add";
 	}
-	
+
 	@RequestMapping("/toGroupList")
-	public String toGroupList(long smartUserId,ModelMap model) {
-		
-		SmartUser smartUser=smartUserService.get(smartUserId);
+	public String toGroupList(long smartUserId, ModelMap model) {
+		SmartUser smartUser = smartUserService.get(smartUserId);
 		model.put("smartUser", smartUser);
 		List<SmartGroup> list = smartGroupService.listAll();
 		model.put("list", list);
@@ -67,7 +66,8 @@ public class SmartGroupController {
 	}
 
 	@RequestMapping("/add")
-	public String add(SmartGroup smartGroup) {
+	public String add(SmartGroup smartGroup, String sessAccount) {
+		smartGroup.setCreater(sessAccount);
 		smartGroupService.add(smartGroup);
 		return "redirect:/smartGroup/list";
 	}
@@ -80,8 +80,8 @@ public class SmartGroupController {
 	}
 
 	@RequestMapping("/update")
-	public String update(SmartGroup smartGroup) {
-		
+	public String update(SmartGroup smartGroup, String sessAccount) {
+		smartGroup.setCreater(sessAccount);
 		smartGroupService.update(smartGroup);
 		return "redirect:/smartGroup/list";
 	}
@@ -99,7 +99,5 @@ public class SmartGroupController {
 		smartGroupService.batchDelete(Arrays.asList(id));
 		return new JsonResult();
 	}
-
-	
 
 }

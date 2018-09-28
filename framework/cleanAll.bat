@@ -1,3 +1,12 @@
+cd simba-email-sdk
+call mvn clean -U 
+cd ../
+cd simba-email-management
+call mvn clean -U 
+cd ../
+cd simba-email-model
+call mvn clean -U 
+cd ../
 cd simba-auto-deploy
 call mvn clean -U 
 cd ../

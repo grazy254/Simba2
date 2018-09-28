@@ -5,7 +5,8 @@
 		<td>${apkVersion.versionName}</td>
 		<td>${apkVersion.fileSize}MB</td>
 		<td>${apkVersion.description}</td>
-		<td>${apkVersion.createTime}</td>
+        <td>${apkVersion.typeId}</td>
+        <td>${apkVersion.createTime}</td>
 		<td>
 			<button type="button" class="btn btn-default btn-sm" onclick="ApkVersion.toUpdate(${apkVersion.id});"><i class="fa fa-pencil-square-o"></i>修改</button>
 			<button type="button" class="btn btn-default btn-sm" onclick="ApkVersion.deleteApkVersion(${apkVersion.id});"><i class="fa fa-remove"></i>删除</button>

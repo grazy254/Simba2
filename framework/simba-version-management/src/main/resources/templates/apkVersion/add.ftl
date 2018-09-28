@@ -34,6 +34,10 @@
 											<input type="text" class="form-control" id="description" name="description" placeholder="请输入文件描述">
 										</div>
                                         <div class="form-group">
+                                            <label for="typeId">app类型Id</label>
+                                            <input type="text" class="form-control" id="typeId" name="typeId" placeholder="请输入类型Id">
+                                        </div>
+                                        <div class="form-group">
                                             <label for="file">文件上传</label>
                                             <input type="file" id="file" name="file">
                                         </div>

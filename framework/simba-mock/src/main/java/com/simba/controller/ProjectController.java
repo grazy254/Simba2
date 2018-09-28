@@ -60,7 +60,7 @@ public class ProjectController {
 
 	@RequestMapping("/toAdd")
 	public String toAdd(HttpSession session) {
-		return "project/add";
+		return "mockProject/add";
 	}
 
 	@RequestMapping("/add")

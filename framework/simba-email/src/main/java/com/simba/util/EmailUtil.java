@@ -26,7 +26,7 @@ public class EmailUtil {
 	@Autowired
 	private JavaMailSender mailSender;
 
-	@Value("${spring.mail.from}")
+	@Value("${spring.mail.from:Simba}")
 	private String from;
 
 	/**
@@ -82,8 +82,7 @@ public class EmailUtil {
 	 *            附件列表
 	 * @throws MessagingException
 	 */
-	public void sendWithAttachment(String toEmail, String subject, String text, List<File> attachments)
-			throws MessagingException {
+	public void sendWithAttachment(String toEmail, String subject, String text, List<File> attachments) throws MessagingException {
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 		helper.setFrom(from);
@@ -109,8 +108,7 @@ public class EmailUtil {
 	 *            嵌入式文件(在内容中匹配cid:file.getName())
 	 * @throws MessagingException
 	 */
-	public void sendWithInlineFile(String toEmail, String subject, String text, List<File> files)
-			throws MessagingException {
+	public void sendWithInlineFile(String toEmail, String subject, String text, List<File> files) throws MessagingException {
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 		helper.setFrom(from);
@@ -138,8 +136,7 @@ public class EmailUtil {
 	 *            嵌入式文件(在内容中匹配cid:file.getName())
 	 * @throws MessagingException
 	 */
-	public void sendWithAttachmentAndInlineFile(String toEmail, String subject, String text, List<File> attachments,
-			List<File> files) throws MessagingException {
+	public void sendWithAttachmentAndInlineFile(String toEmail, String subject, String text, List<File> attachments, List<File> files) throws MessagingException {
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 		helper.setFrom(from);

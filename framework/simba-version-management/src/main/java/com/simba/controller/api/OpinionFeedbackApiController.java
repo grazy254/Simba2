@@ -1,7 +1,5 @@
 package com.simba.controller.api;
 
-import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
@@ -26,18 +24,16 @@ public class OpinionFeedbackApiController {
 
 	@Autowired
 	private OpinionFeedbackService opinionFeedbackService;
-	
-	private final static Log logger =LogFactory.getLog(OpinionFeedbackApiController.class);
+
+	private final static Log logger = LogFactory.getLog(OpinionFeedbackApiController.class);
 
 	@RequestMapping("/save")
-	public JsonResult save(OpinionFeedback opinionFeedback,HttpServletRequest request) {
-		logger.info("opinionFeedback:"+opinionFeedback.toString());
-		if(opinionFeedback.getUserId() == null){
+	public JsonResult save(OpinionFeedback opinionFeedback, HttpServletRequest request) {
+		logger.info("opinionFeedback:" + opinionFeedback.toString());
+		if (opinionFeedback.getUserId() == null) {
 			opinionFeedback.setUserId(Integer.parseInt(request.getSession().getAttribute("userId").toString()));
 		}
-		opinionFeedback.setCreateTime(new Date());
-		opinionFeedback.setId(0);
-		logger.info("opinionFeedback:"+opinionFeedback.toString());
+		logger.info("opinionFeedback:" + opinionFeedback.toString());
 		opinionFeedbackService.add(opinionFeedback);
 		return new JsonResult();
 	}

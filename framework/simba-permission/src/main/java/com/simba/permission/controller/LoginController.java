@@ -53,6 +53,9 @@ public class LoginController {
 	private String longTitle;
 
 	private String shortTitle;
+	
+	@Value("${info.version}")
+	private String infoVersion;//版本
 
 	@Autowired
 	private UserService userService;
@@ -75,6 +78,7 @@ public class LoginController {
 		loginPage = StringUtils.defaultIfEmpty(loginPage, "login");
 		longTitle = StringUtils.defaultIfEmpty(environmentUtil.get("page.index.long.title"), "管理系统");
 		shortTitle = StringUtils.defaultIfEmpty(environmentUtil.get("page.index.short.title"), "系统");
+		infoVersion = StringUtils.defaultIfEmpty(infoVersion, "1.0.1");
 	}
 
 	/**
@@ -85,7 +89,7 @@ public class LoginController {
 	@RequestMapping("/toLogin")
 	public String toLogin(HttpServletRequest request, ModelMap model) {
 		if (SessionUtil.isLogin(request.getSession())) {
-			putIndexModel(model);
+			putIndexModel(model,request);
 			return indexPage;
 		}
 		String captchaEnabled = RegistryUtil.get("login.captcha.enabled");
@@ -93,9 +97,16 @@ public class LoginController {
 		return loginPage;
 	}
 
-	private void putIndexModel(ModelMap model) {
+	private void putIndexModel(ModelMap model,HttpServletRequest request) {
+		String scheme = request.getScheme();
+        String serverName = request.getServerName();
+        int port = request.getServerPort();
+        String path = request.getContextPath();
+        String basePath = scheme + "://" + serverName + ":" + port + path;
+        model.put("basePath", basePath);
 		model.put("shortTitle", shortTitle);
 		model.put("longTitle", longTitle);
+		model.put("infoVersion", infoVersion);
 	}
 
 	/**
@@ -110,7 +121,7 @@ public class LoginController {
 	@RequestMapping("/login")
 	public String login(String userName, String password, ModelMap model, HttpServletRequest request) {
 		if (SessionUtil.isLogin(request.getSession())) {
-			putIndexModel(model);
+			putIndexModel(model,request);
 			return indexPage;
 		}
 		String view = null;
@@ -123,7 +134,7 @@ public class LoginController {
 			model.put("errMsg", "用户名和密码不能为空");
 		} else if (checkAccount(userName, password, request.getSession())) {
 			operLogService.add(request, "登录", true);
-			putIndexModel(model);
+			putIndexModel(model,request);
 			view = indexPage;
 		} else {
 			view = loginPage;

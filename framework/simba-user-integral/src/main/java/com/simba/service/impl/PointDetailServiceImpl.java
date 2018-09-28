@@ -37,7 +37,6 @@ public class PointDetailServiceImpl implements PointDetailService {
 	public void add(PointDetail pointDetail) {
 		//积分变动写入数据表
 		pointDetail.setCreateTime(new Date());
-		
 		pointDetailDao.add(pointDetail);
 	}
 

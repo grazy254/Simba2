@@ -23,49 +23,28 @@ import com.simba.wallet.util.Constants.TradeType;
 @Transactional
 public class WXRechargeTrade extends BaseCallbackTrade {
 
-    @Override
-    public void updateBalance(TradeAccount smartUserTradeAccount,
-            TradeAccount departmentTradeAccount, TradeAccount channelTradeAccount,
-            long paymentAmount) {
-        smartUserTradeAccount
-                .setAccountBalance(smartUserTradeAccount.getAccountBalance() + paymentAmount);
-        smartUserTradeAccount
-                .setAvailableBalance(smartUserTradeAccount.getAvailableBalance() + paymentAmount);
+	@Override
+	public void updateBalance(TradeAccount smartUserTradeAccount, TradeAccount departmentTradeAccount, TradeAccount channelTradeAccount, long paymentAmount) {
+		smartUserTradeAccount.setAccountBalance(smartUserTradeAccount.getAccountBalance() + paymentAmount);
+		smartUserTradeAccount.setAvailableBalance(smartUserTradeAccount.getAvailableBalance() + paymentAmount);
+		departmentTradeAccount.setAccountBalance(departmentTradeAccount.getAccountBalance() + paymentAmount);
+		departmentTradeAccount.setAvailableBalance(departmentTradeAccount.getAvailableBalance() + paymentAmount);
+		channelTradeAccount.setAccountBalance(channelTradeAccount.getAccountBalance() + paymentAmount);
+		channelTradeAccount.setAvailableBalance(channelTradeAccount.getAvailableBalance() + paymentAmount);
+	}
 
-        departmentTradeAccount
-                .setAccountBalance(departmentTradeAccount.getAccountBalance() + paymentAmount);
-        departmentTradeAccount
-                .setAvailableBalance(departmentTradeAccount.getAvailableBalance() + paymentAmount);
+	@Override
+	public JsonResult finishTrade(String userID, String orderNO, String channelOrderNO, String openID, Date channelStartTime, Date channelPaymentTime, String channelErrorMsg, String channelErrorCode,
+			long paymentAmount, TradeStatus tradeStatus) {
+		return finishTrade(userID, ChannelType.getChannelType(RegistryUtil.get("trade.channel.wxpay")), orderNO, channelOrderNO, openID, channelStartTime, channelPaymentTime, channelErrorMsg,
+				channelErrorCode, paymentAmount, tradeStatus, RegistryUtil.get("trade.department.recharge"), TradeType.RECHARGE);
+	}
 
-        channelTradeAccount
-                .setAccountBalance(channelTradeAccount.getAccountBalance() + paymentAmount);
-        channelTradeAccount
-                .setAvailableBalance(channelTradeAccount.getAvailableBalance() + paymentAmount);
-    }
-
-    @Override
-    public JsonResult finishTrade(String userID, String orderNO, String channelOrderNO,
-            String openID, Date channelStartTime, Date channelPaymentTime, String channelErrorMsg,
-            String channelErrorCode, long paymentAmount, TradeStatus tradeStatus) {
-
-        return finishTrade(userID,
-        		ChannelType.getChannelType(RegistryUtil.get("trade.channel.wxpay")), orderNO,
-                channelOrderNO, openID, channelStartTime, channelPaymentTime, channelErrorMsg,
-                channelErrorCode, paymentAmount, tradeStatus,
-                RegistryUtil.get("trade.department.recharge"), TradeType.RECHARGE);
-    }
-
-
-    @Override
-    public JsonResult startTrade(String userID, String ip, String location, String orderNO,
-            String orderName, String orderDesc, String orderAddress, long originalAmount,
-            long paymentAmount, Date channelStartTime) {
-        return startTrade(userID, ip, location, orderNO, orderName, orderDesc, orderAddress,
-                originalAmount, paymentAmount, new Date(), channelStartTime,
-                RegistryUtil.get("trade.department.recharge"),
-                ChannelType.getChannelType(RegistryUtil.get("trade.channel.wxpay")),
-                TradeType.RECHARGE);
-    }
-
+	@Override
+	public JsonResult startTrade(String userID, String ip, String location, String orderNO, String orderName, String orderDesc, String orderAddress, long originalAmount, long paymentAmount,
+			Date channelStartTime) {
+		return startTrade(userID, ip, location, orderNO, orderName, orderDesc, orderAddress, originalAmount, paymentAmount, new Date(), channelStartTime, RegistryUtil.get("trade.department.recharge"),
+				ChannelType.getChannelType(RegistryUtil.get("trade.channel.wxpay")), TradeType.RECHARGE);
+	}
 
 }

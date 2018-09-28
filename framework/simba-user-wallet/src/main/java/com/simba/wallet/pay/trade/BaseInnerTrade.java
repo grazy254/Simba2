@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -37,174 +38,181 @@ import com.simba.wallet.util.ErrConfig;
  */
 public abstract class BaseInnerTrade implements InnerTradeInterface {
 
-    @Autowired
-    protected TradeDetailDao tradeDetailDao;
+	@Autowired
+	protected TradeDetailDao tradeDetailDao;
 
-    @Autowired
-    protected TradePartyDetailDao tradePartyDetailDao;
+	@Autowired
+	protected TradePartyDetailDao tradePartyDetailDao;
 
-    @Autowired
-    protected TradeDepartmentDao tradeDepartmentDao;
+	@Autowired
+	protected TradeDepartmentDao tradeDepartmentDao;
 
-    @Autowired
-    protected TradeUserDao tradeUserDao;
+	@Autowired
+	protected TradeUserDao tradeUserDao;
 
-    @Autowired
-    protected SmartUserDao smartUserDao;
+	@Autowired
+	protected SmartUserDao smartUserDao;
 
-    @Autowired
-    protected TradeAccountDao tradeAccountDao;
+	@Autowired
+	protected TradeAccountDao tradeAccountDao;
 
-    @Value("${node.id}")
-    private int nodeId;
+	@Value("${node.id}")
+	private int nodeId;
 
-    /**
-     * 检查用户账户状态
-     * 
-     * @param tradeAccount smart用户account
-     */
-    protected void checkUserAccount(TradeAccount tradeAccount, Long amount) {
+	/**
+	 * 检查用户账户状态
+	 * 
+	 * @param tradeAccount
+	 *            smart用户account
+	 */
+	protected void checkUserAccount(TradeAccount tradeAccount, Long amount) {
 
-    }
+	}
 
+	/**
+	 * 交易后要执行的后续操作
+	 * 
+	 * @param smartUserAccount
+	 *            smart用户账户
+	 * @param departmentAccount
+	 *            部门账户
+	 * @param paymentAmount
+	 *            金额 单位是分
+	 */
+	protected void updateBalance(TradeAccount smartUserAccount, TradeAccount departmentAccount, long paymentAmount) {
 
-    /**
-     * 交易后要执行的后续操作
-     * 
-     * @param smartUserAccount smart用户账户
-     * @param departmentAccount 部门账户
-     * @param paymentAmount 金额 单位是分
-     */
-    protected void updateBalance(TradeAccount smartUserAccount, TradeAccount departmentAccount,
-            long paymentAmount) {
+	}
 
-    }
-    
-    /**
-     * 增加交易余额详情
-     * @param smartUserAccount
-     * @param tradeNo 交易流水号
-     * @param paymentAmount
-     */
-    protected void addTradeBalanceDetail(TradeAccount smartUserAccount, long tradeNo, long paymentAmount) {
-    	
-    }
+	/**
+	 * 增加交易余额详情
+	 * 
+	 * @param smartUserAccount
+	 * @param tradeNo
+	 *            交易流水号
+	 * @param paymentAmount
+	 */
+	protected void addTradeBalanceDetail(TradeAccount smartUserAccount, long tradeNo, long paymentAmount) {
 
-    /**
-     * 交易
-     * 
-     * @param userID smart用户account
-     * @param ip 交易时候的ip信息
-     * @param location 交易时候的地理位置信息
-     * @param orderNO 订单号
-     * @param orderName 订单名称
-     * @param orderDesc 订单描述
-     * @param orderAddress 订单地址
-     * @param originalAmount 原始金额
-     * @param paymentAmount 实际金额
-     * @param tradeCreateTime 交易时间
-     * @param tradeDeptNO 部门编号
-     * @param tradeType 交易类型
-     * @return
-     */
-    protected JsonResult trade(String userID, String ip, String location, String orderNO,
-            String orderName, String orderDesc, String orderAddress, long originalAmount,
-            long paymentAmount, Date tradeCreateTime, String tradeDeptNO, TradeType tradeType) {
+	}
 
-        if (paymentAmount <= 0 || originalAmount <= 0) {
-            throw ErrConfig.INVALID_PAYMENT_AMOUNT;
-        }
+	/**
+	 * 交易
+	 * 
+	 * @param userID
+	 *            smart用户account
+	 * @param ip
+	 *            交易时候的ip信息
+	 * @param location
+	 *            交易时候的地理位置信息
+	 * @param orderNO
+	 *            订单号
+	 * @param orderName
+	 *            订单名称
+	 * @param orderDesc
+	 *            订单描述
+	 * @param orderAddress
+	 *            订单地址
+	 * @param originalAmount
+	 *            原始金额
+	 * @param paymentAmount
+	 *            实际金额
+	 * @param tradeCreateTime
+	 *            交易时间
+	 * @param tradeDeptNO
+	 *            部门编号
+	 * @param tradeType
+	 *            交易类型
+	 * @return
+	 */
+	protected JsonResult trade(String userID, String ip, String location, String orderNO, String orderName, String orderDesc, String orderAddress, long originalAmount, long paymentAmount,
+			Date tradeCreateTime, String tradeDeptNO, TradeType tradeType) {
+		if (paymentAmount <= 0 || originalAmount <= 0) {
+			throw ErrConfig.INVALID_PAYMENT_AMOUNT;
+		}
 
-        SmartUser smartUser = smartUserDao.getBy("account", userID);
-        TradeUser smartTradeUser = tradeUserDao.get(smartUser.getAccount(), TradeUserType.PERSION);
+		SmartUser smartUser = smartUserDao.getBy("account", userID);
+		TradeUser smartTradeUser = tradeUserDao.get(smartUser.getAccount(), TradeUserType.PERSION);
 
-        TradeAccount smartUserTradeAccount =
-                tradeAccountDao.get(smartTradeUser.getId(), TradeUserType.PERSION);
-        CommonUtil.checkWalletAutority(smartTradeUser, smartUserTradeAccount,
-                TradeUserType.PERSION);
+		TradeAccount smartUserTradeAccount = tradeAccountDao.get(smartTradeUser.getId(), TradeUserType.PERSION);
+		CommonUtil.checkWalletAutority(smartTradeUser, smartUserTradeAccount, TradeUserType.PERSION);
 
-        checkUserAccount(smartUserTradeAccount, paymentAmount);
+		checkUserAccount(smartUserTradeAccount, paymentAmount);
 
-        Date now = new Date();
-        TradePartyDetail tradePartyDetail = new TradePartyDetail();
-        tradePartyDetail.setCreateDate(DateUtil.getOnlyDate(now));
-        tradePartyDetail.setPartyName(smartUser.getName());
-        tradePartyDetail.setPartyType(TradeUserType.PERSION.getName());
-        tradePartyDetail.setNoticeMail(smartUser.getEmail());
-        tradePartyDetail.setIp(ip);
-        tradePartyDetail.setLocation(location);
-        tradePartyDetail.setMobileNumber(smartUser.getTelNo());
-        tradePartyDetail.setTradeAccountID(smartUserTradeAccount.getAccountID());
-        tradePartyDetail.setTradeUserID(smartTradeUser.getId());
-        Long tradePartyID = tradePartyDetailDao.add(tradePartyDetail);
-        tradePartyDetail.setId(tradePartyID);
+		Date now = new Date();
+		TradePartyDetail tradePartyDetail = new TradePartyDetail();
+		tradePartyDetail.setCreateDate(DateUtil.getOnlyDate(now));
+		tradePartyDetail.setPartyName(smartUser.getName());
+		tradePartyDetail.setPartyType(TradeUserType.PERSION.getName());
+		tradePartyDetail.setNoticeMail(smartUser.getEmail());
+		tradePartyDetail.setIp(ip);
+		tradePartyDetail.setLocation(location);
+		tradePartyDetail.setMobileNumber(smartUser.getTelNo());
+		tradePartyDetail.setTradeAccountID(smartUserTradeAccount.getAccountID());
+		tradePartyDetail.setTradeUserID(smartTradeUser.getId());
+		Long tradePartyID = tradePartyDetailDao.add(tradePartyDetail);
+		tradePartyDetail.setId(tradePartyID);
 
-        TradeDepartment tradeDepartment = tradeDepartmentDao.get(tradeDeptNO);
+		TradeDepartment tradeDepartment = tradeDepartmentDao.get(tradeDeptNO);
 
-        TradeUser departmentTradeUser =
-                tradeUserDao.get(tradeDepartment.getDeptNO(), TradeUserType.DEPARTMENT);
+		TradeUser departmentTradeUser = tradeUserDao.get(tradeDepartment.getDeptNO(), TradeUserType.DEPARTMENT);
 
-        TradeAccount departmentTradeAccount =
-                tradeAccountDao.get(departmentTradeUser.getId(), TradeUserType.DEPARTMENT);
-        CommonUtil.checkWalletAutority(departmentTradeUser, departmentTradeAccount,
-                TradeUserType.DEPARTMENT);
+		TradeAccount departmentTradeAccount = tradeAccountDao.get(departmentTradeUser.getId(), TradeUserType.DEPARTMENT);
+		CommonUtil.checkWalletAutority(departmentTradeUser, departmentTradeAccount, TradeUserType.DEPARTMENT);
 
-        TradePartyDetail counterPartyDetail = new TradePartyDetail();
-        counterPartyDetail.setCreateDate(DateUtil.getOnlyDate(now));
-        counterPartyDetail.setPartyName(tradeDepartment.getDeptName());
-        counterPartyDetail.setPartyType(TradeUserType.DEPARTMENT.getName());
-        counterPartyDetail.setTradeAccountID(departmentTradeAccount.getAccountID());
-        counterPartyDetail.setTradeUserID(departmentTradeUser.getId());
+		TradePartyDetail counterPartyDetail = new TradePartyDetail();
+		counterPartyDetail.setCreateDate(DateUtil.getOnlyDate(now));
+		counterPartyDetail.setPartyName(tradeDepartment.getDeptName());
+		counterPartyDetail.setPartyType(TradeUserType.DEPARTMENT.getName());
+		counterPartyDetail.setTradeAccountID(departmentTradeAccount.getAccountID());
+		counterPartyDetail.setTradeUserID(departmentTradeUser.getId());
 
-        // 对手实体默认不填
-        counterPartyDetail.setIp("");
-        counterPartyDetail.setLocation("");
-        counterPartyDetail.setMobileNumber("");
-        counterPartyDetail.setNoticeMail("");
+		// 对手实体默认不填
+		counterPartyDetail.setIp(StringUtils.EMPTY);
+		counterPartyDetail.setLocation(StringUtils.EMPTY);
+		counterPartyDetail.setMobileNumber(StringUtils.EMPTY);
+		counterPartyDetail.setNoticeMail(StringUtils.EMPTY);
 
-        Long counterPartyID = tradePartyDetailDao.add(counterPartyDetail);
-        counterPartyDetail.setId(counterPartyID);
+		Long counterPartyID = tradePartyDetailDao.add(counterPartyDetail);
+		counterPartyDetail.setId(counterPartyID);
 
-        TradeDetail tradeDetail = new TradeDetail();
-        tradeDetail.setFeeType(FeeType.CNY.name());
-        tradeDetail.setOrderAddress(orderAddress);
-        tradeDetail.setOrderDesc(orderDesc);
-        tradeDetail.setOrderName(orderName);
-        tradeDetail.setOrderNO(orderNO);
-        tradeDetail.setOriginalAmount(originalAmount);
-        tradeDetail.setPaymentAmount(paymentAmount);
-        tradeDetail.setTradeChannelID(-1);
-        tradeDetail.setTradeCounterpartyID(counterPartyID);
-        tradeDetail.setTradeCreateTime(tradeCreateTime);
-        tradeDetail.setTradeNO(CommonUtil.TradeNoGenerator.gen(nodeId));
-        tradeDetail.setTradePartyID(tradePartyID);
-        tradeDetail.setTradeStatus(TradeStatus.SUCCESS.getName());
-        tradeDetail.setTradeType(tradeType.getName());
-        tradeDetail.setTradePaymentTime(now);
-        tradeDetail.setTradePaymentDate(DateUtil.getOnlyDate(now));
-        tradeDetail.setChannelTradeUserID(-1);
-        tradeDetail.setCounterpartyTradeUserID(departmentTradeUser.getId());
-        tradeDetail.setPartyTradeUserID(smartTradeUser.getId());
+		TradeDetail tradeDetail = new TradeDetail();
+		tradeDetail.setFeeType(FeeType.CNY.name());
+		tradeDetail.setOrderAddress(orderAddress);
+		tradeDetail.setOrderDesc(orderDesc);
+		tradeDetail.setOrderName(orderName);
+		tradeDetail.setOrderNO(orderNO);
+		tradeDetail.setOriginalAmount(originalAmount);
+		tradeDetail.setPaymentAmount(paymentAmount);
+		tradeDetail.setTradeChannelID(-1);
+		tradeDetail.setTradeCounterpartyID(counterPartyID);
+		tradeDetail.setTradeCreateTime(tradeCreateTime);
+		tradeDetail.setTradeNO(CommonUtil.TradeNoGenerator.gen(nodeId));
+		tradeDetail.setTradePartyID(tradePartyID);
+		tradeDetail.setTradeStatus(TradeStatus.SUCCESS.getName());
+		tradeDetail.setTradeType(tradeType.getName());
+		tradeDetail.setTradePaymentTime(now);
+		tradeDetail.setTradePaymentDate(DateUtil.getOnlyDate(now));
+		tradeDetail.setChannelTradeUserID(-1);
+		tradeDetail.setCounterpartyTradeUserID(departmentTradeUser.getId());
+		tradeDetail.setPartyTradeUserID(smartTradeUser.getId());
 
-        Long tradeDetailID = tradeDetailDao.add(tradeDetail);
+		Long tradeDetailID = tradeDetailDao.add(tradeDetail);
 
-        if (tradeDetailID <= 0) {
-            throw new BussException("创建支付订单失败");
-        }
+		if (tradeDetailID <= 0) {
+			throw new BussException("创建支付订单失败");
+		}
 
-        addTradeBalanceDetail(smartUserTradeAccount, tradeDetail.getTradeNO(), paymentAmount);
+		addTradeBalanceDetail(smartUserTradeAccount, tradeDetail.getTradeNO(), paymentAmount);
 
-        updateBalance(smartUserTradeAccount, departmentTradeAccount, paymentAmount);
-        
-        
-        tradeAccountDao.update(smartUserTradeAccount);
-        tradeAccountDao.update(departmentTradeAccount);
-        
-        Map<String, Object> data = new HashMap<>();
-        data.put("tradeNo", tradeDetail.getTradeNO());
+		updateBalance(smartUserTradeAccount, departmentTradeAccount, paymentAmount);
 
-        
-        return new JsonResult(data, "订单创建成功");
-    }
+		tradeAccountDao.update(smartUserTradeAccount);
+		tradeAccountDao.update(departmentTradeAccount);
+
+		Map<String, Object> data = new HashMap<>();
+		data.put("tradeNo", tradeDetail.getTradeNO());
+
+		return new JsonResult(data, "订单创建成功");
+	}
 
 }

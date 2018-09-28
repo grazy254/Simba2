@@ -46,7 +46,8 @@
 												<th>版本名</th>
 												<th>文件大小</th>
 												<th>文件描述</th>
-												<th>时间</th>
+                                                <th>app类型Id</th>
+                                                <th>时间</th>
 												<th>操作</th>
 											</tr>
 										</thead>

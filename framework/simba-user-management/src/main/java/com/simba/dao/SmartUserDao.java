@@ -63,4 +63,12 @@ public interface SmartUserDao {
 	List<SmartUser> page(Pager pager, SmartUserSearchForm searchForm);
 
 	void updateBaseInfo(SmartUser smartUser);
+	
+	/**
+	 * 标志删除用户，同时修改账号避免唯一限制
+	 * @param status
+	 * @param account
+	 * @param id
+	 */
+	void updateUserDel(int status,String account,Long id);
 }

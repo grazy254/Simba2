@@ -14,7 +14,7 @@ import com.simba.framework.util.json.FastJsonUtil;
 import com.simba.framework.util.json.JsonResult;
 
 /**
- * 实时推送系统sdk
+ * 用户系统sdk
  * 
  * @author caozhejun
  *
@@ -65,7 +65,7 @@ public class UserSdk {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("account", account);
 		map.put("password", password);
-		logger.info("客户端登录结果:-----------------" + account + "--------" + password + "--------" + loginUrl + "-" + map);
+		logger.info("客户端登录发送请求:-----------------" + account + "--------" + password + "--------" + loginUrl + "-" + map);
 		String result = client.post(loginUrl, map);
 		logger.info("客户端登录结果:" + result);
 		return FastJsonUtil.toObject(result, JsonResult.class);

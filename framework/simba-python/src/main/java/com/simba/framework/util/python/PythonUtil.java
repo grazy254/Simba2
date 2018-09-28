@@ -1,10 +1,15 @@
 package com.simba.framework.util.python;
 
-import org.python.core.*;
-import org.python.util.PythonInterpreter;
-
 import java.util.LinkedList;
 import java.util.List;
+
+import org.python.core.Py;
+import org.python.core.PyFunction;
+import org.python.core.PyInteger;
+import org.python.core.PyObject;
+import org.python.core.PyString;
+import org.python.core.PySystemState;
+import org.python.util.PythonInterpreter;
 
 
 /**
@@ -43,12 +48,6 @@ public class PythonUtil {
 
     public void executeScriptFile(String filePath) {
         interpreter.execfile(filePath);
-    }
-
-    public static void main(String[] args) {
-        String filePath = "src\\main\\java\\com\\simba\\framework\\util\\python\\test.py";
-        PythonUtil pythonUtil = new PythonUtil("C:\\jython2.7b1\\Lib");
-        pythonUtil.executeScript("print(123)");
     }
 
 }

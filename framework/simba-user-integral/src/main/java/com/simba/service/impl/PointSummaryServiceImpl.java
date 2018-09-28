@@ -13,7 +13,7 @@ import com.simba.model.PointSummary;
 import com.simba.service.PointSummaryService;
 
 /**
- * null Service实现类
+ * Service实现类
  * 
  * @author lilei
  * 
@@ -29,8 +29,7 @@ public class PointSummaryServiceImpl implements PointSummaryService {
 	public String pointSummaryList() {
 		return "pointSummary/list";
 	}
-	
-	
+
 	@Override
 	public void add(PointSummary pointSummary) {
 		pointSummaryDao.add(pointSummary);
@@ -58,16 +57,16 @@ public class PointSummaryServiceImpl implements PointSummaryService {
 	public Long count() {
 		return pointSummaryDao.count();
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Long countBy(String field, Object value){
-		return pointSummaryDao.countBy(field,value);
+	public Long countBy(String field, Object value) {
+		return pointSummaryDao.countBy(field, value);
 	}
-	
+
 	@Override
-	public void deleteBy(String field, Object value){
-		pointSummaryDao.deleteBy(field,value);
+	public void deleteBy(String field, Object value) {
+		pointSummaryDao.deleteBy(field, value);
 	}
 
 	@Override
@@ -80,14 +79,14 @@ public class PointSummaryServiceImpl implements PointSummaryService {
 	public void update(PointSummary pointSummary) {
 		pointSummaryDao.update(pointSummary);
 	}
-	
+
 	@Override
 	public void batchDelete(List<Long> idList) {
 		for (Long id : idList) {
 			this.delete(id);
 		}
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public PointSummary getBy(String field, Object value) {
@@ -141,26 +140,26 @@ public class PointSummaryServiceImpl implements PointSummaryService {
 	public List<PointSummary> pageByOr(String field1, Object value1, String field2, Object value2, Pager page) {
 		return pointSummaryDao.pageByOr(field1, value1, field2, value2, page);
 	}
-	
+
 	@Override
-	public void deleteByAnd(String field1, Object value1, String field2, Object value2){
-		pointSummaryDao.deleteByAnd(field1,value1,field2,value2);
+	public void deleteByAnd(String field1, Object value1, String field2, Object value2) {
+		pointSummaryDao.deleteByAnd(field1, value1, field2, value2);
 	}
-	
+
 	@Override
-	public void deleteByOr(String field1, Object value1, String field2, Object value2){
-		pointSummaryDao.deleteByOr(field1,value1,field2,value2);
+	public void deleteByOr(String field1, Object value1, String field2, Object value2) {
+		pointSummaryDao.deleteByOr(field1, value1, field2, value2);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Long countByAnd(String field1, Object value1, String field2, Object value2){
-		return pointSummaryDao.countByAnd(field1,value1,field2,value2);
+	public Long countByAnd(String field1, Object value1, String field2, Object value2) {
+		return pointSummaryDao.countByAnd(field1, value1, field2, value2);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Long countByOr(String field1, Object value1, String field2, Object value2){
-		return pointSummaryDao.countByOr(field1,value1,field2,value2);
+	public Long countByOr(String field1, Object value1, String field2, Object value2) {
+		return pointSummaryDao.countByOr(field1, value1, field2, value2);
 	}
 }

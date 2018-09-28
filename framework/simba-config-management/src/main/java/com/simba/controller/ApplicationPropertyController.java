@@ -264,10 +264,7 @@ public class ApplicationPropertyController {
 	
 	@RequestMapping("/auth")
 	public String auth(long id) {
-		ApplicationProperty property = applicationPropertyService.get(id);
 		return "applicationProperty/auth";
 	}
-
-	
 
 }

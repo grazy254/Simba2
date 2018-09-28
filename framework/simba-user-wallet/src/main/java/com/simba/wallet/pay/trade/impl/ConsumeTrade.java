@@ -25,10 +25,10 @@ import com.simba.wallet.util.ErrConfig;
 @Service
 @Transactional
 public class ConsumeTrade extends BaseInnerTrade {
-	
+
 	@Autowired
 	private TradeBalanceDetailService tradeBalanceDetailService;
-	
+
 	public ConsumeTrade() {
 	}
 
@@ -44,9 +44,8 @@ public class ConsumeTrade extends BaseInnerTrade {
 
 	@Override
 	public void updateBalance(TradeAccount smartUserTradeAccount, TradeAccount departmentTradeAccount, long paymentAmount) {
-
 		smartUserTradeAccount.setAccountBalance(smartUserTradeAccount.getAccountBalance() - paymentAmount);
-		long availableBalancePart = 0; 
+		long availableBalancePart = 0;
 		long virtualBalancePart = 0;
 		if (smartUserTradeAccount.getAvailableBalance() >= paymentAmount) {
 			availableBalancePart = paymentAmount;
@@ -57,7 +56,6 @@ public class ConsumeTrade extends BaseInnerTrade {
 			smartUserTradeAccount.setAvailableBalance(0);
 			smartUserTradeAccount.setVirtualBalance(smartUserTradeAccount.getVirtualBalance() - virtualBalancePart);
 		}
-
 		departmentTradeAccount.setAccountBalance(departmentTradeAccount.getAccountBalance() + paymentAmount);
 		departmentTradeAccount.setAvailableBalance(departmentTradeAccount.getAvailableBalance() + availableBalancePart);
 		departmentTradeAccount.setVirtualBalance(departmentTradeAccount.getVirtualBalance() + virtualBalancePart);
@@ -66,7 +64,7 @@ public class ConsumeTrade extends BaseInnerTrade {
 	@Override
 	public void addTradeBalanceDetail(TradeAccount smartUserTradeAccount, long tradeNo, long paymentAmount) {
 		TradeBalanceDetail tradeBalanceDetail = new TradeBalanceDetail();
-		long availableBalancePart = 0; 
+		long availableBalancePart = 0;
 		long virtualBalancePart = 0;
 		if (smartUserTradeAccount.getAvailableBalance() >= paymentAmount) {
 			availableBalancePart = paymentAmount;
@@ -77,18 +75,18 @@ public class ConsumeTrade extends BaseInnerTrade {
 		}
 
 		tradeBalanceDetail.setTradeNo(tradeNo);
-		if(availableBalancePart>0) {
+		if (availableBalancePart > 0) {
 			tradeBalanceDetail.setBalanceType(BalanceType.REALBALANCE.getValue());
 			tradeBalanceDetail.setBalanceAmount(availableBalancePart);
 			tradeBalanceDetailService.add(tradeBalanceDetail);
 		}
-		if(virtualBalancePart>0) {
+		if (virtualBalancePart > 0) {
 			tradeBalanceDetail.setBalanceType(BalanceType.VIRTUALBALANCE.getValue());
 			tradeBalanceDetail.setBalanceAmount(virtualBalancePart);
 			tradeBalanceDetailService.add(tradeBalanceDetail);
 		}
-		
 	}
+
 	@Override
 	public JsonResult trade(String userID, String ip, String location, String orderNO, String orderName, String orderDesc, String orderAddress, long originalAmount, long paymentAmount) {
 		return trade(userID, ip, location, orderNO, orderName, orderDesc, orderAddress, paymentAmount, paymentAmount, new Date(), RegistryUtil.get("trade.department.consume"), TradeType.CONSUME);

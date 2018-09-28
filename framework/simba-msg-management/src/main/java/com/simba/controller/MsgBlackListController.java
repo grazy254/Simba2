@@ -52,7 +52,7 @@ public class MsgBlackListController {
 
 	@RequestMapping("/add")
 	public String add(MsgBlacklist blacklist) {
-		if (!blacklistService.isDuplicated(blacklist.getMobile())) {
+		if (!blacklistService.inBlackList(blacklist.getMobile())) {
 			blacklistService.add(blacklist);
 		}
 		return "redirect:/msgBlacklist/list";

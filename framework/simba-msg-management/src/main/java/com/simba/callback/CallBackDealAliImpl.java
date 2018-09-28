@@ -3,9 +3,7 @@ package com.simba.callback;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.simba.model.ShortMessage;
 import com.simba.model.enums.SendStatus;
@@ -18,7 +16,6 @@ import com.simba.service.ShortMessageService;
  * Created by linshuo on 2017/12/19.
  */
 @Component
-@Transactional
 public class CallBackDealAliImpl implements DealAliMsgCallback {
 
 	private static final Log logger = LogFactory.getLog(CallBackDealAliImpl.class);

@@ -13,6 +13,7 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.wallet.model.TradeBalanceDetail;
 import com.simba.wallet.service.TradeBalanceDetailService;
+
 /**
  * 控制器
  * 
@@ -30,21 +31,21 @@ public class TradeBalanceDetailController {
 	public String list() {
 		return "tradeBalanceDetail/list";
 	}
-	
+
 	@RequestMapping("/getList")
-	public String getList(Pager pager,ModelMap model){
+	public String getList(Pager pager, ModelMap model) {
 		List<TradeBalanceDetail> list = tradeBalanceDetailService.page(pager);
 		model.put("list", list);
 		return "tradeBalanceDetail/table";
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/count")
 	public JsonResult count() {
 		Long count = tradeBalanceDetailService.count();
 		return new JsonResult(count, "", 200);
 	}
-	
+
 	@RequestMapping("/toAdd")
 	public String toAdd() {
 		return "tradeBalanceDetail/add";
@@ -82,7 +83,5 @@ public class TradeBalanceDetailController {
 		tradeBalanceDetailService.batchDelete(Arrays.asList(id));
 		return new JsonResult();
 	}
-
-	
 
 }

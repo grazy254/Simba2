@@ -193,10 +193,10 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
 		counterPartyDetail.setTradeAccountID(departmentTradeAccount.getAccountID());
 		counterPartyDetail.setTradeUserID(departmentTradeUser.getId());
 		// 对手实体默认不填
-		counterPartyDetail.setIp("");
-		counterPartyDetail.setLocation("");
-		counterPartyDetail.setMobileNumber("");
-		counterPartyDetail.setNoticeMail("");
+		counterPartyDetail.setIp(StringUtils.EMPTY);
+		counterPartyDetail.setLocation(StringUtils.EMPTY);
+		counterPartyDetail.setMobileNumber(StringUtils.EMPTY);
+		counterPartyDetail.setNoticeMail(StringUtils.EMPTY);
 
 		Long counterPartyID = tradePartyDetailDao.add(counterPartyDetail);
 		counterPartyDetail.setId(counterPartyID);
@@ -275,28 +275,21 @@ public abstract class BaseCallbackTrade implements CallbackTradeInterface {
 	 */
 	protected JsonResult finishTrade(String userID, ChannelType channelType, String orderNO, String channelOrderNO, String openID, Date channelStartTime, Date channelPaymentTime,
 			String channelErrorMsg, String channelErrorCode, long paymentAmount, TradeStatus tradeStatus, String tradeDeptNO, TradeType tradeType) {
-
 		logger.info("finish trade: " + userID + " channelType: " + channelType.getName() + " orderNO: " + orderNO + " channelOrderNO: " + channelOrderNO + " openID: " + openID + " channelStartTime: "
 				+ channelStartTime + " channelPaymentTime: " + channelPaymentTime + " paymentAmount: " + paymentAmount + " tradeStatus:" + tradeStatus.getName() + " tradeDeptNO: " + tradeDeptNO
 				+ " tadeType: " + tradeType.getName());
-
 		TradeDetail tradeDetail = tradeDetailDao.getByAnd("orderNO", orderNO, "tradeType", tradeType.getName());
-
 		logger.info("tradeDetail :" + tradeDetail);
-
 		if (tradeDetail == null) {
 			throw ErrConfig.INVALID_ORDER;
 		}
-
 		if (TradeStatus.SUCCESS.getName().equals(tradeDetail.getTradeStatus())) {
-			return new JsonResult("订单完成");
+			return new JsonResult("订单已完成");
 		}
-
 		TradeChannelDetail tradeChannelDetail = tradeChannelDetailDao.get(tradeDetail.getTradeChannelID());
 		TradeAccount smartUserTradeAccount = tradeAccountDao.get(userID, TradeUserType.PERSION);
 		TradeAccount departmentTradeAccount = tradeAccountDao.get(tradeDeptNO, TradeUserType.DEPARTMENT);
 		TradeAccount channelTradeAccount = tradeAccountDao.get(channelType.getName(), TradeUserType.CHANNEL);
-
 		if (channelStartTime != null) {
 			tradeChannelDetail.setOrderCreateTime(channelStartTime);
 		}

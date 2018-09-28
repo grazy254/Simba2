@@ -5,8 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,8 +28,6 @@ public class ActivityServiceImpl implements ActivityService {
 	@Autowired
 	private ActivityDao activityDao;
 
-	private static final Log logger = LogFactory.getLog(ActivityServiceImpl.class);
-	
 	@RequestMapping("/list")
 	public String list() {
 		return "activity/list";
@@ -43,18 +39,15 @@ public class ActivityServiceImpl implements ActivityService {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 小写的mm表示的是分钟
 		activity.setStartTime(sdf.parse(activity.getStart()));
 		activity.setEndTime(sdf.parse(activity.getEnd()));
-		activity.setCreateTime(new Date());
-		activity.setUpdateTime(new Date());
+		Date now = new Date();
+		activity.setCreateTime(now);
+		activity.setUpdateTime(now);
 		activityDao.add(activity);
 	}
 
 	@Override
 	public boolean isExistedActivityID(String activityID) {
-
-		if (activityDao.listBy("activityID", activityID).size() > 0) {
-			return true;
-		}
-		return false;
+		return activityDao.countBy("activityID", activityID) > 0;
 	}
 
 	@Override
@@ -100,7 +93,7 @@ public class ActivityServiceImpl implements ActivityService {
 	@Override
 	public void update(Activity activity) throws ParseException {
 		// 把start和end转化为startTime和endTime
-		Activity act=activityDao.get(activity.getId());
+		Activity act = activityDao.get(activity.getId());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 小写的mm表示的是分钟
 		act.setStartTime(sdf.parse(activity.getStart()));
 		act.setEndTime(sdf.parse(activity.getEnd()));

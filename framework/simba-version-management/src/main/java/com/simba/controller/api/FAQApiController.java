@@ -55,16 +55,16 @@ public class FAQApiController {
 	public JsonResult getList(Pager pager, FAQSearchForm searchForm, ModelMap model) {
 		List<FAQ> list = fAQService.page(pager, searchForm);
 		List<Map<String, Object>> lists = new ArrayList<Map<String, Object>>();
-		for (int i = 0; i < list.size(); i++) {
-			String type = fAQTypeService.get(list.get(i).getType()).getType();
+		list.forEach((FAQ faq) -> {
+			String type = fAQTypeService.get(faq.getType()).getType();
 			Map<String, Object> map = new HashMap<>();
-			map.put("id", String.valueOf(list.get(i).getId()));
-			map.put("title", list.get(i).getTitle());
-			map.put("text", list.get(i).getText());
-			map.put("createTime", String.valueOf(list.get(i).getCreateTime()));
+			map.put("id", String.valueOf(faq.getId()));
+			map.put("title", faq.getTitle());
+			map.put("text", faq.getText());
+			map.put("createTime", String.valueOf(faq.getCreateTime()));
 			map.put("type", type);
 			lists.add(map);
-		}
+		});
 		return new JsonResult(lists);
 	}
 

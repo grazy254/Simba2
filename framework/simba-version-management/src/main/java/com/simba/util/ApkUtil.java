@@ -1,20 +1,21 @@
 package com.simba.util;
 
-import com.simba.framework.util.common.XmlUtil;
-import com.simba.framework.util.zip.ZipUtil;
-import org.apache.commons.io.IOUtils;
-import org.w3c.dom.Document;
-import util.AxmlUtil;
-
 import java.io.InputStream;
 import java.util.Map;
 
-import static java.lang.System.in;
+import org.apache.commons.io.IOUtils;
+import org.w3c.dom.Document;
+
+import com.simba.framework.util.common.XmlUtil;
+import com.simba.framework.util.zip.ZipUtil;
+
+import util.AxmlUtil;
 
 /**
  * Created by shuoGG on 2018/8/8
  */
 public class ApkUtil {
+	
     private ApkUtil() {
     }
 

@@ -1,14 +1,13 @@
 package com.simba.service;
 
-import com.simba.framework.util.jdbc.Pager;
-import com.simba.model.ApkVersion;
-import org.csource.common.FastdfsException;
-import org.springframework.web.multipart.MultipartFile;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.List;
+
+import org.csource.common.FastdfsException;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.simba.framework.util.jdbc.Pager;
+import com.simba.model.ApkVersion;
 
 /**
  *apk管理 Service

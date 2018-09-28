@@ -45,7 +45,6 @@ public class ApkVersionServiceImpl implements ApkVersionService {
         String fileUrl = UploadUtil.getInstance().getUpload().upload(file.getBytes(), file.getOriginalFilename(), "version_uploadFile");
         try {
             double fileSize = ((double) file.getSize()) / 1024 / 1024;
-            apkVersion.setTypeId(0);
             apkVersion.setFileUrl(fileUrl);
             apkVersion.setFileSize(fileSize);
             apkVersion.setCreateTime(new Date());

@@ -1,6 +1,5 @@
 package com.simba.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -22,6 +21,7 @@ import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.SmartUser;
 import com.simba.model.ThirdSystemUser;
+import com.simba.model.constant.SimbaRedisKey;
 import com.simba.model.enums.ThirdSystemType;
 import com.simba.model.enums.UserStatus;
 import com.simba.model.form.SmartUserSearchForm;
@@ -250,7 +250,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 	@Override
 	public String getUserId(String thirdUserId, String thirdSystemType) {
 		String userId = null;
-		String key = "userId_" + thirdSystemType + "_" + thirdUserId;
+		String key = SimbaRedisKey.thirdUserIdKey + thirdUserId;
 		userId = (String) redisUtil.get(key);
 		if (StringUtils.isNotEmpty(userId)) {
 			return userId;
@@ -275,22 +275,18 @@ public class SmartUserServiceImpl implements SmartUserService {
 	 */
 	@Override
 	public JsonResult toLogin(String code, String account, String password) throws Exception {
-
 		if (password == null || password.length() == 0) {
 			throw new BussException("登录密码不能为空");
 		}
-		String sk = projectSk;
 		List<SmartUser> ulist = smartUserDao.listBy("account", account);
 		if (ulist.size() == 0) {
 			throw new BussException("账户不存在[" + account + "]");
-		} else {
-			// 对密码des解密 再md5
-			String p = "";
-			p = DesUtil.decrypt(password, sk);
-			p = EncryptUtil.md5(p);
-			if (!ulist.get(0).getPassword().equals(p)) {
-				throw new BussException("用户名或密码错误");
-			}
+		}
+		// 对密码des解密 再md5
+		String p = DesUtil.decrypt(password, projectSk);
+		p = EncryptUtil.md5(p);
+		if (!ulist.get(0).getPassword().equals(p)) {
+			throw new BussException("用户名或密码错误");
 		}
 		return new JsonResult(ulist.get(0).getId(), "登录成功", 200);
 	}
@@ -300,7 +296,6 @@ public class SmartUserServiceImpl implements SmartUserService {
 	 */
 	@Override
 	public JsonResult toLoginVerif(String mobile) throws Exception {
-
 		String regex = "^1[3|4|5|7|8][0-9]\\d{4,8}$";
 		Pattern pat = Pattern.compile(regex);
 		Matcher m = pat.matcher(mobile);
@@ -308,7 +303,6 @@ public class SmartUserServiceImpl implements SmartUserService {
 		if (!isMatch) {
 			throw new BussException("手机号不正确，请更换账号");
 		}
-
 		List<SmartUser> ulist = smartUserDao.listBy("account", mobile);
 		if (ulist.size() == 0) {
 			return new JsonResult(-1, "账号" + mobile + "不存在", 400);
@@ -322,7 +316,6 @@ public class SmartUserServiceImpl implements SmartUserService {
 	 */
 	@Override
 	public JsonResult toLoginVerifAndRegister(String mobile) {
-
 		String regex = "^1[34578][0-9]\\d{4,8}$";
 		Pattern pat = Pattern.compile(regex);
 		Matcher m = pat.matcher(mobile);
@@ -330,21 +323,19 @@ public class SmartUserServiceImpl implements SmartUserService {
 		if (!isMatch) {
 			throw new BussException("手机号不正确，请更换账号");
 		}
-
 		List<SmartUser> ulist = smartUserDao.listBy("account", mobile);
 		if (ulist.size() < 1) {
 			// 把手机号写入数据表中
 			SmartUser user = new SmartUser();
 			user.setAccount(mobile);
-			user.setEmail("");
+			user.setEmail(StringUtils.EMPTY);
 			user.setName(mobile);
-			user.setPassword("");
+			user.setPassword(StringUtils.EMPTY);
 			user.setTelNo(mobile);
 			user.setSex(-1);
 			user.setGroupId(0);
-			user.setHeadPic("");
-			;
-			user.setThirdSystem("");
+			user.setHeadPic(StringUtils.EMPTY);
+			user.setThirdSystem(StringUtils.EMPTY);
 			user.setCreateTime(new Date());
 			user.setStatus(0);
 			smartUserDao.add(user);
@@ -369,15 +360,12 @@ public class SmartUserServiceImpl implements SmartUserService {
 		if (name == null || name.length() == 0 || password == null || password.length() == 0) {
 			throw new BussException("密码或者昵称不能为空");
 		}
-		String sk = projectSk;
 		SmartUser user = smartUserDao.get(id);
 		user.setName(name);
-		String p = "";
-		p = DesUtil.decrypt(password, sk);
+		String p = DesUtil.decrypt(password, projectSk);
 		p = EncryptUtil.md5(p);
 		user.setPassword(p);
 		smartUserDao.update(user);
-
 		return new JsonResult("信息完善成功", 200);
 	}
 
@@ -402,13 +390,12 @@ public class SmartUserServiceImpl implements SmartUserService {
 		user.setAccount(account);
 		user.setName(account);
 		user.setTelNo(account);
-		user.setEmail("");
+		user.setEmail(StringUtils.EMPTY);
 		user.setSex(-1);
 		user.setGroupId(0);
-		user.setHeadPic("");
-		// 给密码解密之后再md5。
-		String p = "";
-		p = DesUtil.decrypt(password, sk);
+		user.setHeadPic(StringUtils.EMPTY);
+		// 给密码解密之后再md5
+		String p = DesUtil.decrypt(password, sk);
 		p = EncryptUtil.md5(p);
 		user.setPassword(p);
 		long re = addRegister(user);
@@ -428,13 +415,10 @@ public class SmartUserServiceImpl implements SmartUserService {
 		if (!isMatch) {
 			throw new BussException("手机号不正确，请更换账号");
 		}
-		String sk = projectSk;
 		List<SmartUser> ulist = smartUserDao.listBy("account", account);
-		// 给密码解密之后再md5。
-		String op = "";
-		String np = "";
-		op = DesUtil.decrypt(oldPassword, sk);
-		np = DesUtil.decrypt(newPassword, sk);
+		// 给密码解密之后再md5
+		String op = DesUtil.decrypt(oldPassword, projectSk);
+		String np = DesUtil.decrypt(newPassword, projectSk);
 		op = EncryptUtil.md5(op);
 		np = EncryptUtil.md5(np);
 		if (ulist.get(0).getPassword().equals(op)) {
@@ -442,9 +426,8 @@ public class SmartUserServiceImpl implements SmartUserService {
 				throw new BussException("修改失败");
 			}
 		} else {
-			throw new BussException("密码错误");
+			throw new BussException("与原密码不一致");
 		}
-
 		return new JsonResult("重置成功", 200);
 	}
 
@@ -453,17 +436,12 @@ public class SmartUserServiceImpl implements SmartUserService {
 	 */
 	@Override
 	public JsonResult toResetPasswordWithUserIdApp(String code, long userId, String oldPassword, String newPassword) throws Exception {
-
 		// 重置密码，使用原来的密码重置
 		// 验证密码是否正确
-		SmartUser smartUser = new SmartUser();
-		smartUser = smartUserDao.get(userId);
-		String sk = projectSk;
+		SmartUser smartUser = smartUserDao.get(userId);
 		// 给密码解密之后再md5。
-		String op = "";
-		String np = "";
-		op = DesUtil.decrypt(oldPassword, sk);
-		np = DesUtil.decrypt(newPassword, sk);
+		String op = DesUtil.decrypt(oldPassword, projectSk);
+		String np = DesUtil.decrypt(newPassword, projectSk);
 		op = EncryptUtil.md5(op);
 		np = EncryptUtil.md5(np);
 		if (smartUser.getPassword().equals(op)) {
@@ -471,9 +449,8 @@ public class SmartUserServiceImpl implements SmartUserService {
 				throw new BussException("修改失败");
 			}
 		} else {
-			throw new BussException("密码错误");
+			throw new BussException("与原密码不一致");
 		}
-
 		return new JsonResult("重置成功", 200);
 	}
 
@@ -490,9 +467,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 		if (!isMatch) {
 			throw new BussException("手机号不正确，请更换账号");
 		}
-		String sk = projectSk;
-		String p = "";
-		p = DesUtil.decrypt(newPassword, sk);
+		String p = DesUtil.decrypt(newPassword, projectSk);
 		p = EncryptUtil.md5(p);
 		if (!smartUserDao.updatePassword(account, p)) {
 			throw new BussException("修改失败");
@@ -505,9 +480,8 @@ public class SmartUserServiceImpl implements SmartUserService {
 	 */
 	@Override
 	public JsonResult getMobileByUserId(long userId) {
-		List<SmartUser> smartUserList = new ArrayList<SmartUser>();
-		smartUserList = smartUserDao.listBy("id", userId);
-		String mobile = "";
+		List<SmartUser> smartUserList = smartUserDao.listBy("id", userId);
+		String mobile = null;
 		if (smartUserList.size() > 0) {
 			mobile = smartUserList.get(0).getTelNo();
 		} else {
@@ -523,12 +497,12 @@ public class SmartUserServiceImpl implements SmartUserService {
 	public JsonResult isRegByMobile(String mobile) {
 		List<SmartUser> list = smartUserDao.listBy("account", mobile);
 		if (list.size() > 0) {
-			if (list.get(0).getPassword() == null || list.get(0).getPassword().equals("")) {
+			String password = list.get(0).getPassword();
+			if (StringUtils.isEmpty(password)) {
 				return new JsonResult("已经注册,没有完善信息", 400);
 			} else {
 				return new JsonResult("已经注册", 200);
 			}
-
 		} else {
 			return new JsonResult("没有注册", 400);
 		}
@@ -543,8 +517,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 	 */
 	@Override
 	public JsonResult updateName(String name, long userId) {
-		SmartUser smartUser = new SmartUser();
-		smartUser = smartUserDao.get(userId);
+		SmartUser smartUser = smartUserDao.get(userId);
 		smartUser.setName(name);
 		smartUserDao.update(smartUser);
 		return new JsonResult("更新成功", 200);
@@ -559,8 +532,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 	 */
 	@Override
 	public JsonResult updateHeadPic(String headPic, long userId) {
-		SmartUser smartUser = new SmartUser();
-		smartUser = smartUserDao.get(userId);
+		SmartUser smartUser = smartUserDao.get(userId);
 		smartUser.setHeadPic(headPic);
 		smartUserDao.update(smartUser);
 		return new JsonResult("更新成功", 200);
@@ -568,8 +540,7 @@ public class SmartUserServiceImpl implements SmartUserService {
 
 	@Override
 	public JsonResult changeStatus(Long id, Integer changeStatus) {
-		SmartUser smartUser = new SmartUser();
-		smartUser = smartUserDao.get(id);
+		SmartUser smartUser = smartUserDao.get(id);
 		smartUser.setStatus(changeStatus);
 		smartUserDao.update(smartUser);
 		return new JsonResult("更新成功", 200);
@@ -578,6 +549,11 @@ public class SmartUserServiceImpl implements SmartUserService {
 	@Override
 	public void updateBaseInfo(SmartUser smartUser) {
 		smartUserDao.updateBaseInfo(smartUser);
+	}
+
+	@Override
+	public void updateUserDel(int status, String account, Long id) {
+		smartUserDao.updateUserDel(status, account, id);
 	}
 
 }

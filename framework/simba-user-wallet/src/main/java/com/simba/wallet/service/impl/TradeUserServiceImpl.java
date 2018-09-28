@@ -1,9 +1,11 @@
 package com.simba.wallet.service.impl;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.simba.exception.BussException;
 import com.simba.framework.util.jdbc.Pager;
 import com.simba.framework.util.json.JsonResult;
@@ -186,9 +188,7 @@ public class TradeUserServiceImpl implements TradeUserService {
 
 	@Override
 	public JsonResult activatePayment(String userID, TradeUserType userType) {
-
 		TradeUser tradeUser = tradeUserDao.get(userID, userType);
-
 		if (CommonUtil.checkTradeUserActive(tradeUser) == AccountActiveStatus.ACTIVE) {
 			if (CommonUtil.checkTradeUserPayment(tradeUser) == TradePayment.NOTALLOWPAY) {
 				tradeUser.setIsAllowPay(TradePayment.ALLOWPAY.getValue());

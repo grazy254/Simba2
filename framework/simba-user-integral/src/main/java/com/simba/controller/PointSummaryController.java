@@ -31,14 +31,14 @@ public class PointSummaryController {
 	public String list() {
 		return "pointSummary/list";
 	}
-	
+
 	@RequestMapping("/getList")
-	public String getList(Pager pager,ModelMap model){
+	public String getList(Pager pager, ModelMap model) {
 		List<PointSummary> list = pointSummaryService.page(pager);
 		model.put("list", list);
 		return "pointSummary/table";
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/count")
 	public JsonResult count() {
@@ -83,7 +83,5 @@ public class PointSummaryController {
 		pointSummaryService.batchDelete(Arrays.asList(id));
 		return new JsonResult();
 	}
-
-	
 
 }

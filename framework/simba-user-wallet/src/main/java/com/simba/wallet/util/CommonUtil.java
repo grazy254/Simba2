@@ -2,8 +2,6 @@ package com.simba.wallet.util;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,11 +14,8 @@ import com.simba.wallet.model.TradeUser;
 import com.simba.wallet.util.Constants.AccountActiveStatus;
 import com.simba.wallet.util.Constants.AccountFrozenStatus;
 import com.simba.wallet.util.Constants.AccountType;
-import com.simba.wallet.util.Constants.ChannelType;
 import com.simba.wallet.util.Constants.TradePayment;
 import com.simba.wallet.util.Constants.TradeRechargement;
-import com.simba.wallet.util.Constants.TradeStatus;
-import com.simba.wallet.util.Constants.TradeType;
 import com.simba.wallet.util.Constants.TradeUserType;
 
 public class CommonUtil {
@@ -28,39 +23,24 @@ public class CommonUtil {
 	public static String transToCNYType(Long amount) {
 		return transToCNYTypeWithouUnit(amount) + "元";
 	}
+
 	public static String transToCNYTypeWithouUnit(Long amount) {
 		DecimalFormat fmt = new DecimalFormat("0.00");
 		return fmt.format(amount * 1.0 / 100);
 	}
-	public static String transToCNYType(Long amount, boolean addMinus) {
 
+	public static String transToCNYType(Long amount, boolean addMinus) {
 		DecimalFormat fmt = new DecimalFormat("0.00");
 		if (addMinus) {
 			amount = amount * -1;
 		}
 		return fmt.format(amount * 1.0 / 100);
-
 	}
 
 	public static Long CNYToLong(String amount) throws ParseException {
 		DecimalFormat fmt = new DecimalFormat("0.00");
 		return (long) (fmt.parse(amount).doubleValue() * 100);
 	}
-
-	public static void main(String[] args) {
-		try {
-			System.out.println(CNYToLong("1.233212"));
-			System.out.println(transToCNYType(12332L, true));
-			System.out.println(transToCNYTypeWithouUnit(123123L));
-
-			System.out.println(Date.from(LocalDate.of(1979, 1, 1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
-			System.out.println(DateUtil.str2Date("1979-01-01", DateUtil.DAY_FORMAT, new Date()));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 
 	public static AccountActiveStatus checkAccountActive(TradeAccount tradeAccount) {
 		if (tradeAccount.getIsActive() == AccountActiveStatus.ACTIVE.getValue()) {
@@ -127,8 +107,6 @@ public class CommonUtil {
 	}
 
 	public static String getUserStatus(TradeUser tradeUser) {
-		// AccountActiveStatus activeStatus = checkTradeUserActive(tradeUser);
-		// AccountFrozenStatus frozenStatus = checkTradeUserPayment(tradeUser);
 		return checkTradeUserActive(tradeUser).getName();
 	}
 
@@ -151,7 +129,6 @@ public class CommonUtil {
 	}
 
 	public static AccountType getAccountType(String accountType) {
-
 		if (AccountType.CHANNEL_ACCOUNT.getValue().equals(accountType)) {
 			return AccountType.CHANNEL_ACCOUNT;
 		} else if (AccountType.COMPANY_ACCOUNT.getValue().equals(accountType)) {
@@ -182,7 +159,6 @@ public class CommonUtil {
 	}
 
 	public static class TradeNoGenerator {
-
 		public static Snowflake snowflake = null;
 
 		public static long gen(Integer nodeId) {

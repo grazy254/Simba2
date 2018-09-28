@@ -21,24 +21,19 @@ import com.simba.wallet.util.Constants.TradeType;
 @Service
 @Transactional
 public class NewRegisterRewardTrade extends BaseInnerTrade {
-	
+
 	@Autowired
 	private RewardTrade rewardTrade;
-	
-    @Override
-    public JsonResult trade(String userID, String ip, String location, String orderNO,
-            String orderName, String orderDesc, String orderAddress, long originalAmount,
-            long paymentAmount) {
-        return super.trade(userID, ip, location, orderNO, orderName, orderDesc, orderAddress,
-                paymentAmount, paymentAmount, new Date(),
-                RegistryUtil.get("trade.department.reward"), TradeType.NEWREGISTERREWARD);
-    }
-    @Override
-    public void updateBalance(TradeAccount smartUserTradeAccount,
-            TradeAccount departmentTradeAccount, long paymentAmount) {    
-    	rewardTrade.updateBalance(smartUserTradeAccount, departmentTradeAccount, paymentAmount);
-    }
 
+	@Override
+	public JsonResult trade(String userID, String ip, String location, String orderNO, String orderName, String orderDesc, String orderAddress, long originalAmount, long paymentAmount) {
+		return super.trade(userID, ip, location, orderNO, orderName, orderDesc, orderAddress, paymentAmount, paymentAmount, new Date(), RegistryUtil.get("trade.department.reward"),
+				TradeType.NEWREGISTERREWARD);
+	}
 
+	@Override
+	public void updateBalance(TradeAccount smartUserTradeAccount, TradeAccount departmentTradeAccount, long paymentAmount) {
+		rewardTrade.updateBalance(smartUserTradeAccount, departmentTradeAccount, paymentAmount);
+	}
 
 }

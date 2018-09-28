@@ -1,0 +1,9 @@
+F:\localgit\simba\framework\simba-email-management\src\main\java\com\simba\service\impl\EmailServiceImpl.java
+F:\localgit\simba\framework\simba-email-management\src\main\java\com\simba\controller\EmailController.java
+F:\localgit\simba\framework\simba-email-management\src\main\java\com\simba\dao\EmailDao.java
+F:\localgit\simba\framework\simba-email-management\src\main\java\com\simba\model\Email.java
+F:\localgit\simba\framework\simba-email-management\src\main\java\com\simba\consumer\MessageReceiver.java
+F:\localgit\simba\framework\simba-email-management\src\main\java\com\simba\service\EmailService.java
+F:\localgit\simba\framework\simba-email-management\src\main\java\com\simba\config\RabbitConfig.java
+F:\localgit\simba\framework\simba-email-management\src\main\java\com\simba\config\ThreadPoolConfig.java
+F:\localgit\simba\framework\simba-email-management\src\main\java\com\simba\dao\impl\EmailDaoImpl.java

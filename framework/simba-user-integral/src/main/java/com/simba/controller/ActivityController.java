@@ -4,11 +4,6 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -33,21 +28,19 @@ public class ActivityController {
 
 	@Autowired
 	private ActivityService activityService;
-	
-	private static final Log logger=LogFactory.getLog(ActivityController.class);
 
 	@RequestMapping("/list")
 	public String list() {
 		return "activity/list";
 	}
-	
+
 	@RequestMapping("/getList")
-	public String getList(Pager pager,ModelMap model){
+	public String getList(Pager pager, ModelMap model) {
 		List<Activity> list = activityService.page(pager);
 		model.put("list", list);
 		return "activity/table";
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/count")
 	public JsonResult count() {
@@ -62,22 +55,20 @@ public class ActivityController {
 
 	@TimeAnnotation
 	@RequestMapping("/add")
-	public String add(Activity activity ,HttpServletRequest request, HttpServletResponse response) throws ParseException{
-		logger.info("id-----"+request.getSession().getAttribute("sessUser"));
-		activity.setOwnerID(request.getSession().getAttribute("userId")+"");
+	public String add(Activity activity, String sessAccount) throws ParseException {
+		activity.setOwnerID(sessAccount);
 		activityService.add(activity);
 		return "redirect:/activity/list";
 	}
-	
+
 	@TimeAnnotation
 	@ResponseBody
 	@RequestMapping("/isExistedActivityID")
-	public JsonResult isExistedActivityID(String activityID ){
-		if(activityService.isExistedActivityID(activityID)){
-			return new JsonResult("此编号已经重复",400);
+	public JsonResult isExistedActivityID(String activityID) {
+		if (activityService.isExistedActivityID(activityID)) {
+			return new JsonResult("此编号已经重复", 400);
 		}
-		return new JsonResult("",200);
-		
+		return new JsonResult();
 	}
 
 	@RequestMapping("/toUpdate")
@@ -88,9 +79,8 @@ public class ActivityController {
 	}
 
 	@RequestMapping("/update")
-	public String update(Activity activity,HttpServletRequest request, HttpServletResponse response) throws ParseException {
-		logger.info("id-----"+request.getSession().getAttribute("sessUser"));
-		activity.setOwnerID(request.getSession().getAttribute("userId").toString());
+	public String update(Activity activity, String sessAccount) throws ParseException {
+		activity.setOwnerID(sessAccount);
 		activityService.update(activity);
 		return "redirect:/activity/list";
 	}
@@ -108,7 +98,5 @@ public class ActivityController {
 		activityService.batchDelete(Arrays.asList(id));
 		return new JsonResult();
 	}
-
-	
 
 }

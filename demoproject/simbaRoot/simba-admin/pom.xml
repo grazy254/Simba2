@@ -118,7 +118,6 @@
 			<groupId>com.simba</groupId>
 			<artifactId>simba-wechat-pay-bill</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>com.simba</groupId>
 			<artifactId>simba-database-management</artifactId>
@@ -150,6 +149,14 @@
 		<dependency>
 			<groupId>com.simba</groupId>
 			<artifactId>simba-alipay-enterprise-bill</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-eureka-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.simba</groupId>
+			<artifactId>simba-boot-admin-client</artifactId>
 		</dependency>
 	</dependencies>
 

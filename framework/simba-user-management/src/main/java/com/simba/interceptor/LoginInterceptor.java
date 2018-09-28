@@ -21,7 +21,7 @@ import com.simba.framework.util.common.PathUtil;
 import com.simba.model.constant.ConstantData;
 
 /**
- * 登录的拦截器(如果用户没有传UUID，)
+ * 登录的拦截器(如果用户没有传UUID)
  * 
  * @author lilei
  *
@@ -54,7 +54,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		String requestUri = getRequestUri(request);
-		logger.info("==========登录拦截url=========="+requestUri);
+		logger.info("==========登录拦截url==========" + requestUri);
 		for (String url : excludeUrlList) {
 			if (PathUtil.match(requestUri, url)) {
 				return true;
@@ -76,11 +76,11 @@ public class LoginInterceptor implements HandlerInterceptor {
 			throw new ErrorCodeException("没有发现token，请每次访问携带token", 401);
 		}
 		// 判断redis中token关联的userId是否存在，不存在就说明是伪造的token或者token失效
-		if (StringUtils.isEmpty(redisUtil.get(token)+"")) {
+		if (StringUtils.isEmpty(redisUtil.get(token) + StringUtils.EMPTY)) {
 			throw new ErrorCodeException("所发送的token已失效，请重新登录", 401);
 		}
 		// 判断session中的userId是否存在
-		if (StringUtils.isEmpty(session.getAttribute(USERID)+"")) {
+		if (StringUtils.isEmpty(session.getAttribute(USERID) + StringUtils.EMPTY)) {
 			// 说明登录状态过期，使用token保持登录状态
 			session.setAttribute(USERID, Long.parseLong(redisUtil.get(token).toString()));
 		} else {

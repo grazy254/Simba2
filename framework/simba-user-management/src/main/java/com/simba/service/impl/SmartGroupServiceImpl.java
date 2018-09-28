@@ -28,7 +28,6 @@ public class SmartGroupServiceImpl implements SmartGroupService {
 	@Override
 	public void add(SmartGroup smartGroup) {
 		smartGroup.setCreateTime(new Date());
-		smartGroup.setCreater("");
 		smartGroup.setType(0);
 		smartGroup.setStatus(0);
 		smartGroupDao.add(smartGroup);
@@ -56,16 +55,16 @@ public class SmartGroupServiceImpl implements SmartGroupService {
 	public Long count() {
 		return smartGroupDao.count();
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Long countBy(String field, Object value){
-		return smartGroupDao.countBy(field,value);
+	public Long countBy(String field, Object value) {
+		return smartGroupDao.countBy(field, value);
 	}
-	
+
 	@Override
-	public void deleteBy(String field, Object value){
-		smartGroupDao.deleteBy(field,value);
+	public void deleteBy(String field, Object value) {
+		smartGroupDao.deleteBy(field, value);
 	}
 
 	@Override
@@ -76,16 +75,17 @@ public class SmartGroupServiceImpl implements SmartGroupService {
 
 	@Override
 	public void update(SmartGroup smartGroup) {
+		smartGroup.setCreateTime(new Date());
 		smartGroupDao.update(smartGroup);
 	}
-	
+
 	@Override
 	public void batchDelete(List<Long> idList) {
 		for (Long id : idList) {
 			this.delete(id);
 		}
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public SmartGroup getBy(String field, Object value) {
@@ -139,26 +139,26 @@ public class SmartGroupServiceImpl implements SmartGroupService {
 	public List<SmartGroup> pageByOr(String field1, Object value1, String field2, Object value2, Pager page) {
 		return smartGroupDao.pageByOr(field1, value1, field2, value2, page);
 	}
-	
+
 	@Override
-	public void deleteByAnd(String field1, Object value1, String field2, Object value2){
-		smartGroupDao.deleteByAnd(field1,value1,field2,value2);
+	public void deleteByAnd(String field1, Object value1, String field2, Object value2) {
+		smartGroupDao.deleteByAnd(field1, value1, field2, value2);
 	}
-	
+
 	@Override
-	public void deleteByOr(String field1, Object value1, String field2, Object value2){
-		smartGroupDao.deleteByOr(field1,value1,field2,value2);
+	public void deleteByOr(String field1, Object value1, String field2, Object value2) {
+		smartGroupDao.deleteByOr(field1, value1, field2, value2);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Long countByAnd(String field1, Object value1, String field2, Object value2){
-		return smartGroupDao.countByAnd(field1,value1,field2,value2);
+	public Long countByAnd(String field1, Object value1, String field2, Object value2) {
+		return smartGroupDao.countByAnd(field1, value1, field2, value2);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public Long countByOr(String field1, Object value1, String field2, Object value2){
-		return smartGroupDao.countByOr(field1,value1,field2,value2);
+	public Long countByOr(String field1, Object value1, String field2, Object value2) {
+		return smartGroupDao.countByOr(field1, value1, field2, value2);
 	}
 }

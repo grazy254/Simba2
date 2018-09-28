@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.simba.cache.RedisUtil;
 import com.simba.framework.util.json.JsonResult;
 import com.simba.model.ThirdSystemUser;
+import com.simba.model.constant.SimbaRedisKey;
 import com.simba.model.enums.ThirdSystemType;
 import com.simba.service.SmartUserService;
 import com.simba.service.ThirdSystemUserService;
@@ -75,7 +76,7 @@ public class UserManageController {
 	 */
 	@RequestMapping("/getOpenidByUserId")
 	public JsonResult getOpenidByUserId(long userId) {
-		String key = "openid_userId_" + userId;
+		String key = SimbaRedisKey.userIdOpenIdKey + userId;
 		String openid = (String) redisUtil.get(key);
 		if (StringUtils.isNotEmpty(openid)) {
 			return new JsonResult(openid);

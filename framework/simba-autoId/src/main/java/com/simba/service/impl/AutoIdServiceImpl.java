@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.simba.cache.Redis;
 import com.simba.model.AutoId;
+import com.simba.model.constant.SimbaRedisKey;
 import com.simba.service.AutoIdService;
 
 /**
@@ -20,8 +21,6 @@ import com.simba.service.AutoIdService;
  */
 @Service
 public class AutoIdServiceImpl implements AutoIdService {
-
-	private static final String suffix = "_autoId";
 
 	@Resource
 	private Redis redisUtil;
@@ -35,19 +34,18 @@ public class AutoIdServiceImpl implements AutoIdService {
 
 	@Override
 	public void delete(String id) {
-		String key = id + suffix;
+		String key = SimbaRedisKey.autoIdKey + id;
 		redisUtil.removeString(key);
 	}
 
 	@Override
 	public List<AutoId> listAll(String key) {
 		key = StringUtils.defaultString(key, StringUtils.EMPTY);
-		String keys = key + "*" + suffix;
+		String keys = SimbaRedisKey.autoIdKey + key + "*";
 		List<String> keyList = redisUtil.keysString(keys);
 		List<AutoId> autoIdList = new ArrayList<>(keyList.size());
 		keyList.forEach((String k) -> {
-			int index = k.lastIndexOf(suffix);
-			String id = k.substring(0, index);
+			String id = k.substring(SimbaRedisKey.autoIdKey.length());
 			long num = redisUtil.getNum(k);
 			AutoId autoId = new AutoId();
 			autoId.setId(id);
@@ -59,14 +57,14 @@ public class AutoIdServiceImpl implements AutoIdService {
 
 	@Override
 	public void add(AutoId autoId) {
-		String key = autoId.getId() + suffix;
+		String key = SimbaRedisKey.autoIdKey + autoId.getId();
 		long num = autoId.getNum();
 		redisUtil.setString(key, num + "");
 	}
 
 	@Override
 	public AutoId get(String id) {
-		String key = id + suffix;
+		String key = SimbaRedisKey.autoIdKey + id;
 		long num = redisUtil.getNum(key);
 		AutoId autoId = new AutoId();
 		autoId.setId(id);
@@ -81,7 +79,7 @@ public class AutoIdServiceImpl implements AutoIdService {
 
 	@Override
 	public long getAutoId(String id) {
-		String key = id + suffix;
+		String key = SimbaRedisKey.autoIdKey + id;
 		return redisUtil.getAutoId(key);
 	}
 

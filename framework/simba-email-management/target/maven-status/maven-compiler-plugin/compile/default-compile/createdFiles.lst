@@ -1,0 +1,9 @@
+com\simba\dao\EmailDao.class
+com\simba\service\impl\EmailServiceImpl.class
+com\simba\service\EmailService.class
+com\simba\config\ThreadPoolConfig.class
+com\simba\controller\EmailController.class
+com\simba\config\RabbitConfig.class
+com\simba\model\Email.class
+com\simba\dao\impl\EmailDaoImpl.class
+com\simba\consumer\MessageReceiver.class

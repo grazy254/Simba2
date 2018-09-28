@@ -23,6 +23,8 @@ public interface MsgTemplateService {
 
 	void add(MsgTemplate template);
 
+	void updateTemplate(MsgTemplate template) throws NumberFormatException, APIConnectionException, APIRequestException;
+
 	void update(MsgTemplate template);
 
 	void delete(Integer id) throws APIConnectionException, APIRequestException;
@@ -30,15 +32,15 @@ public interface MsgTemplateService {
 	List<MsgTemplate> listAll();
 
 	Integer count();
-	
+
 	Integer countBy(String field, Object value);
-	
+
 	void deleteBy(String field, Object value);
-	
+
 	List<MsgTemplate> page(Pager page);
 
 	MsgTemplate get(Integer id);
-	
+
 	void batchDelete(List<Integer> idList) throws APIConnectionException, APIRequestException;
 
 	MsgTemplate getBy(String field, Object value);
@@ -59,18 +61,19 @@ public interface MsgTemplateService {
 
 	List<MsgTemplate> pageByOr(String field1, Object value1, String field2, Object value2, Pager page);
 
-    /** 获取任意一个有效的平台+对应平台的真实模板Id
-	 *  若两者都有, 则优先返回极光模板
-     * @param selfId
-     * @return
-     */
-    EntryPlatform getOnePlatformTemplateId(String selfId);
+	/**
+	 * 获取任意一个有效的平台+对应平台的真实模板Id 若两者都有, 则优先返回极光模板
+	 * 
+	 * @param selfId
+	 * @return
+	 */
+	EntryPlatform getOnePlatformTemplateId(String selfId);
 
-    String getPlatformTemplateId(String selfId, MsgType msgType);
+	String getPlatformTemplateId(String selfId, MsgType msgType);
 
-    void addJpush(JpushTemplateForm template) throws APIConnectionException, APIRequestException;
+	void addJpush(JpushTemplateForm template) throws APIConnectionException, APIRequestException;
 
-    void addAli(AliTemplateForm template);
+	void addAli(AliTemplateForm template);
 
 	AuditStatus checkStatus(int templateId) throws APIConnectionException, APIRequestException;
 

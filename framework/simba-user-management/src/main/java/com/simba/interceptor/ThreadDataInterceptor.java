@@ -31,8 +31,8 @@ import com.simba.service.SmartUserService;
 public class ThreadDataInterceptor implements HandlerInterceptor {
 
 	private static final Log logger = LogFactory.getLog(ThreadDataInterceptor.class);
-	
-	private static final String  USERID = "userId";
+
+	private static final String USERID = "userId";
 
 	private String excludeUrls;
 
@@ -75,10 +75,10 @@ public class ThreadDataInterceptor implements HandlerInterceptor {
 		String url = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getRequestURI();
 		logger.info("userId:" + userId);
 		logger.info("token:" + token);
-		if (userId==null || "".equals(userId)) {
+		if (userId == null || StringUtils.isEmpty(userId + StringUtils.EMPTY)) {
 			// 通过token获取userId
 			if (token == null || redisUtil.get(token) == null) {
-				throw new ErrorCodeException("您还未登录系统，无法set登录session进去" + url,401);
+				throw new ErrorCodeException("您还未登录系统，无法set登录session进去" + url, 401);
 			} else {
 				userId = redisUtil.get(token);
 				session.setAttribute(USERID, Long.parseLong(userId.toString()));
@@ -87,24 +87,22 @@ public class ThreadDataInterceptor implements HandlerInterceptor {
 				SmartUser smartUser = smartUserService.get(Long.parseLong(userId.toString()));
 				if (smartUser == null) {
 					session.removeAttribute(USERID);
-					throw new ErrorCodeException("用户数据已经删除，请换其他账号登录",401);
+					throw new ErrorCodeException("用户数据已经删除，请换其他账号登录", 401);
 				}
 				// 处于安全考虑，将密码设为空
-				smartUser.setPassword("");
+				smartUser.setPassword(StringUtils.EMPTY);
 				logger.info("已写入线程变量 --key=account value=" + smartUser);
-				
 			}
-
 		} else {
 			logger.info("userId:" + userId.toString());
 			ThreadDataUtil.set("account", smartUserService.get(Long.parseLong(userId.toString())));
 			SmartUser smartUser = smartUserService.get(Long.parseLong(userId.toString()));
 			if (smartUser == null) {
 				session.removeAttribute(USERID);
-				throw new ErrorCodeException("用户数据已经删除，请换其他账号登录",401);
+				throw new ErrorCodeException("用户数据已经删除，请换其他账号登录", 401);
 			}
 			// 处于安全考虑，将密码设为空
-			smartUser.setPassword("");
+			smartUser.setPassword(StringUtils.EMPTY);
 			logger.info("已写入线程变量 --key=account value=" + smartUser);
 		}
 	}

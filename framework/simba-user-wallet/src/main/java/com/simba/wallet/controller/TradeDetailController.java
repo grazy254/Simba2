@@ -39,91 +39,89 @@ import com.simba.wallet.util.ErrConfig;
 @RequestMapping("/tradeDetail")
 public class TradeDetailController {
 
-    @Autowired
-    private TradeDetailService tradeDetailService;
+	@Autowired
+	private TradeDetailService tradeDetailService;
 
-    @Autowired
-    private TradeUserService tradeUserService;
+	@Autowired
+	private TradeUserService tradeUserService;
 
-    @Autowired
-    private TradePartyDetailService tradePartyDetailService;
+	@Autowired
+	private TradePartyDetailService tradePartyDetailService;
 
-    @Autowired
-    private TradeChannelDetailService tradeChannelDetailService;
+	@Autowired
+	private TradeChannelDetailService tradeChannelDetailService;
 
-    @Autowired
-    private TradeChannelService tradeChannelService;
+	@Autowired
+	private TradeChannelService tradeChannelService;
 
-    @RequestMapping("/list")
-    public String list(ModelMap model) {
-        model.put("tradeUserTypeList", TradeUserType.values());
-        model.put("tradeTypeList", TradeType.values());
-        model.put("tradeStatusList", TradeStatus.values());
-        return "tradeDetail/list";
-    }
+	@RequestMapping("/list")
+	public String list(ModelMap model) {
+		model.put("tradeUserTypeList", TradeUserType.values());
+		model.put("tradeTypeList", TradeType.values());
+		model.put("tradeStatusList", TradeStatus.values());
+		return "tradeDetail/list";
+	}
 
-    @RequestMapping("/getList")
-    public String getList(Pager pager, ModelMap model) {
-        model.put("list", getTradeDetailVOList(tradeDetailService.page(pager)));
-        return "tradeDetail/table";
-    }
+	@RequestMapping("/getList")
+	public String getList(Pager pager, ModelMap model) {
+		model.put("list", getTradeDetailVOList(tradeDetailService.page(pager)));
+		return "tradeDetail/table";
+	}
 
-    @RequestMapping("/doSearch")
-    public String getList(Pager pager, TradeDetailSearchForm tradeDetailSearchForm,
-            ModelMap model) {
-        model.put("list", getTradeDetailVOList(
-                tradeDetailService.page(pager, fillTradeUserID(tradeDetailSearchForm))));
-        return "tradeDetail/table";
-    }
+	@RequestMapping("/doSearch")
+	public String getList(Pager pager, TradeDetailSearchForm tradeDetailSearchForm, ModelMap model) {
+		model.put("list", getTradeDetailVOList(tradeDetailService.page(pager, fillTradeUserID(tradeDetailSearchForm))));
+		return "tradeDetail/table";
+	}
 
-    @ResponseBody
-    @RequestMapping("/count")
-    public JsonResult count(TradeDetailSearchForm tradeDetailSearchForm) {
-        Long count = tradeDetailService.count(fillTradeUserID(tradeDetailSearchForm));
-        return new JsonResult(count, "", 200);
-    }
+	@ResponseBody
+	@RequestMapping("/count")
+	public JsonResult count(TradeDetailSearchForm tradeDetailSearchForm) {
+		Long count = tradeDetailService.count(fillTradeUserID(tradeDetailSearchForm));
+		return new JsonResult(count, "", 200);
+	}
 
-    private List<TradeDetailVO> getTradeDetailVOList(List<TradeDetail> tradeDetailList) {
-        List<TradeDetailVO> result = new ArrayList<>();
-        for (TradeDetail tradeDetail : tradeDetailList) {
-            TradeDetailVO vo = new TradeDetailVO();
-            vo.setPaymentAmount(CommonUtil.transToCNYType(tradeDetail.getPaymentAmount()));
-            vo.setTradeStatus(TradeStatus.getValue(tradeDetail.getTradeStatus()));
-            vo.setTradePaymentTime(DateTime.getTime(tradeDetail.getTradePaymentTime()));
-            vo.setTradeType(TradeType.getValue(tradeDetail.getTradeType()));
-            if (tradeDetail.getTradeChannelID() >= 0) {
-                vo.setChannelName(tradeChannelService.get(tradeChannelDetailService
-                        .get(tradeDetail.getTradeChannelID()).getChannelID()).getName());
-            }
+	private List<TradeDetailVO> getTradeDetailVOList(List<TradeDetail> tradeDetailList) {
+		List<TradeDetailVO> result = new ArrayList<>();
+		for (TradeDetail tradeDetail : tradeDetailList) {
+			TradeDetailVO vo = buildDetailVO(tradeDetail);
+			result.add(vo);
+		}
+		return result;
+	}
 
-            vo.setCreateTime(DateUtil.date2String(tradeDetail.getCreateTime()));
-            vo.setFeeType(tradeDetail.getFeeType());
-            vo.setLastUpdateTime(DateUtil.date2String(tradeDetail.getLastUpdateTime()));
-            vo.setOrderNO(tradeDetail.getOrderNO());
-            vo.setOriginalAmount(CommonUtil.transToCNYType(tradeDetail.getOriginalAmount()));
-            vo.setPaymentAmount(CommonUtil.transToCNYType(tradeDetail.getPaymentAmount()));
-            vo.setTradeCounterpartyName(tradePartyDetailService
-                    .get(tradeDetail.getTradeCounterpartyID()).getPartyName());
-            vo.setTradeCreateTime(DateUtil.date2String(tradeDetail.getTradeCreateTime()));
-            vo.setTradeNO(Long.toString(tradeDetail.getTradeNO()));
-            vo.setTradePartyName(
-                    tradePartyDetailService.get(tradeDetail.getTradePartyID()).getPartyName());
-            vo.setTradePaymentTime(DateUtil.date2String(tradeDetail.getTradePaymentTime()));
-            result.add(vo);
-        }
-        return result;
-    }
+	private TradeDetailVO buildDetailVO(TradeDetail tradeDetail) {
+		TradeDetailVO vo = new TradeDetailVO();
+		vo.setPaymentAmount(CommonUtil.transToCNYType(tradeDetail.getPaymentAmount()));
+		vo.setTradeStatus(TradeStatus.getValue(tradeDetail.getTradeStatus()));
+		vo.setTradePaymentTime(DateTime.getTime(tradeDetail.getTradePaymentTime()));
+		vo.setTradeType(TradeType.getValue(tradeDetail.getTradeType()));
+		if (tradeDetail.getTradeChannelID() >= 0) {
+			vo.setChannelName(tradeChannelService.get(tradeChannelDetailService.get(tradeDetail.getTradeChannelID()).getChannelID()).getName());
+		}
+		vo.setCreateTime(DateUtil.date2String(tradeDetail.getCreateTime()));
+		vo.setFeeType(tradeDetail.getFeeType());
+		vo.setLastUpdateTime(DateUtil.date2String(tradeDetail.getLastUpdateTime()));
+		vo.setOrderNO(tradeDetail.getOrderNO());
+		vo.setOriginalAmount(CommonUtil.transToCNYType(tradeDetail.getOriginalAmount()));
+		vo.setPaymentAmount(CommonUtil.transToCNYType(tradeDetail.getPaymentAmount()));
+		vo.setTradeCounterpartyName(tradePartyDetailService.get(tradeDetail.getTradeCounterpartyID()).getPartyName());
+		vo.setTradeCreateTime(DateUtil.date2String(tradeDetail.getTradeCreateTime()));
+		vo.setTradeNO(Long.toString(tradeDetail.getTradeNO()));
+		vo.setTradePartyName(tradePartyDetailService.get(tradeDetail.getTradePartyID()).getPartyName());
+		vo.setTradePaymentTime(DateUtil.date2String(tradeDetail.getTradePaymentTime()));
+		return vo;
+	}
 
-    private TradeDetailSearchForm fillTradeUserID(TradeDetailSearchForm tradeDetailSearchForm) {
-        if (!Strings.isNullOrEmpty(tradeDetailSearchForm.getUserID())) {
-            if (!Strings.isNullOrEmpty(tradeDetailSearchForm.getTradeUserType())) {
-                TradeUser tradeUser = tradeUserService.get(tradeDetailSearchForm.getUserID(),
-                        TradeUserType.getTradeUserType(tradeDetailSearchForm.getTradeUserType()));
-                tradeDetailSearchForm.setTradeUserID(tradeUser.getId());
-            } else {
-                throw ErrConfig.INVALID_PARAMETER;
-            }
-        }
-        return tradeDetailSearchForm;
-    }
+	private TradeDetailSearchForm fillTradeUserID(TradeDetailSearchForm tradeDetailSearchForm) {
+		if (!Strings.isNullOrEmpty(tradeDetailSearchForm.getUserID())) {
+			if (!Strings.isNullOrEmpty(tradeDetailSearchForm.getTradeUserType())) {
+				TradeUser tradeUser = tradeUserService.get(tradeDetailSearchForm.getUserID(), TradeUserType.getTradeUserType(tradeDetailSearchForm.getTradeUserType()));
+				tradeDetailSearchForm.setTradeUserID(tradeUser.getId());
+			} else {
+				throw ErrConfig.INVALID_PARAMETER;
+			}
+		}
+		return tradeDetailSearchForm;
+	}
 }

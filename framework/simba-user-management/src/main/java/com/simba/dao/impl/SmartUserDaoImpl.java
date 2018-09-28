@@ -1,9 +1,11 @@
 package com.simba.dao.impl;
 
 import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import com.simba.dao.SmartUserDao;
 import com.simba.framework.util.jdbc.Jdbc;
 import com.simba.framework.util.jdbc.Pager;
@@ -23,7 +25,7 @@ public class SmartUserDaoImpl implements SmartUserDao {
     @Autowired
     private Jdbc jdbc;
 
-    private static final String table = "smartUser";
+    public static final String table = "smartUser";
 
     @Override
     public long add(SmartUser smartUser) {
@@ -226,6 +228,12 @@ public class SmartUserDaoImpl implements SmartUserDao {
 		String sql = "update " + table + " set  name = ? , email = ? , telNo = ?, status = ?  where id = ?  ";
         jdbc.updateForBoolean(sql,  smartUser.getName(),smartUser.getEmail(), 
         		smartUser.getTelNo(), smartUser.getStatus(),smartUser.getId());
+	}
+
+	@Override
+	public void updateUserDel(int status,String account,Long id) {
+		String sql = "update " + table + " set  status = ?,account=?  where id = ?  ";
+        jdbc.updateForBoolean(sql,status,account,id);
 	}
 
 }

@@ -13,6 +13,9 @@ cd ../
 cd simba-constant
 call mvn clean -U deploy
 cd ../
+cd simba-email-model
+call mvn clean -U deploy
+cd ../
 cd simba-exception
 call mvn clean -U deploy
 cd ../
@@ -289,6 +292,9 @@ cd ../
 cd simba-version-management
 call mvn clean -U  deploy
 cd ../
+cd simba-eamil-management
+call mvn clean -U  deploy
+cd ../
 cd simba-switch-management
 call mvn clean -U  deploy
 cd ../
@@ -335,6 +341,9 @@ cd simba-switch-sdk
 call mvn clean -U deploy
 cd ../
 cd simba-version-sdk
+call mvn clean -U deploy
+cd ../
+cd simba-email-sdk
 call mvn clean -U deploy
 cd ../
 echo " deplay all finish "

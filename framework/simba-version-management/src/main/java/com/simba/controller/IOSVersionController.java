@@ -11,15 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.csource.common.FastdfsException;
-import org.eclipse.jgit.api.errors.AbortedByHookException;
-import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.api.errors.InvalidRemoteException;
-import org.eclipse.jgit.api.errors.NoHeadException;
-import org.eclipse.jgit.api.errors.NoMessageException;
-import org.eclipse.jgit.api.errors.TransportException;
-import org.eclipse.jgit.api.errors.UnmergedPathsException;
-import org.eclipse.jgit.api.errors.WrongRepositoryStateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -36,10 +28,7 @@ import com.simba.model.IOSVersion;
 import com.simba.service.FileTypeService;
 import com.simba.service.IOSVersionService;
 
-import freemarker.core.ParseException;
-import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.TemplateException;
-import freemarker.template.TemplateNotFoundException;
 
 /**
  * IOS安装包版本管理控制器
@@ -91,8 +80,7 @@ public class IOSVersionController {
 
 	@ResponseBody
 	@RequestMapping("/publish")
-	public JsonResult publish(int id) throws IOException, TemplateException,
-			GitAPIException {
+	public JsonResult publish(int id) throws IOException, TemplateException, GitAPIException {
 		iOSVersionService.publish(id);
 		return new JsonResult();
 	}

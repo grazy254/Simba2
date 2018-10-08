@@ -27,3 +27,7 @@ hs_err_pid*
 *.idea
 *.iml
 *.prefs
+/framework/simba-email-sdk/target
+/framework/simba-email-server/target
+/framework/simba-email-model/target
+/framework/simba-email-management/target

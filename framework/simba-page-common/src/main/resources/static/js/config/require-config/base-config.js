@@ -12,13 +12,11 @@ define(function() {
       }
     ],
     waitSeconds: 5,
+    skipDataMain: true,
     paths: {
       // *** folder ***
       "components": "./components/",
-      "common": "./common/",
-
-      // plugins folder
-      "jquery-validate": "./plugins/jquery-validate/"
+      "common": "./common/"
     }
   };
 });

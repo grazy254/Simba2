@@ -1,7 +1,7 @@
 define([
   'jquery',
   'bs-timepicker'
-], function ($, BaseHelper) {
+], function ($) {
   'use strict';
   /**
    * @typedef { Object } iCheckOptions

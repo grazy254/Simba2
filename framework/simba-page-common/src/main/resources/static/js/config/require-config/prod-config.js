@@ -3,7 +3,14 @@ define([
   './base-config'
 ], function (dodo, baseConfig) {
   'use strict';
-  return dodo.extend(true, {}, baseConfig, {
+  // package是数组需要单独处理，因为extend对数组是覆盖，
+  // 但是实际是需要合并两个数组
+  var mergedPackageProp = [{
+    name: 'jquery-validate',
+    main: 'jquery-validate-main-min',
+    location: './plugins/jquery-validate/'
+  }].concat(baseConfig.packages || []);
+  var prodConfig = dodo.extend(true, {}, baseConfig, {
     "paths": {
       // requirejs plugins
       "text": "./requirejs/plugins/text/2.0.15/js/text.min",
@@ -15,6 +22,7 @@ define([
       "bootstrap3": './plugins/bootstrap/3.3.7/js/bootstrap.min',
       "adminlte": './plugins/adminlte/2.4.2/js/adminlte.min',
       "backbone": "./plugins/backbone/1.3.3/js/backbone-min",
+      "backbone-localstorage":"./plugins/backbone.localstorage/1.1.16/js/backbone.localStorage.min",
       "underscore": "./plugins/underscore/1.9.1/js/underscore-min",
       "layer": "./plugins/layer/3.1.1/layer",
 
@@ -39,7 +47,8 @@ define([
       "js-logger": "./plugins/js-logger/1.4.0/js/logger.min",
       "js-cookie": "./plugins/js-cookie/2.2.0/js/js.cookie.min",
       "json5": "./plugins/json5/2.2.0/js/json5.min",
-      "localforage": "./plugins/localforage/1.7.2/js/localforage.min"
+      "localforage": "./plugins/localforage/1.7.2/js/localforage.min",
+      "ajax-hook":"./plugins/ajax-hook/ajaxhook.min"
     },
     "shim": {
       "bootstrap3": {
@@ -55,7 +64,7 @@ define([
         ]
       },
       "backbone": {
-        "deps": ["underscore", "jquery"],
+        // "deps": ["underscore", "jquery"],
         "exports": "Backbone"
       },
       "underscore": {
@@ -108,6 +117,9 @@ define([
         ]
       }
     }
-  }, true);
+  });
+
+  prodConfig.packages = mergedPackageProp;
+  return prodConfig;
 });
 

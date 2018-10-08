@@ -120,10 +120,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.simba</groupId>
-			<artifactId>simba-database-management</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
 			<artifactId>simba-user-integral</artifactId>
 		</dependency>
 		<dependency>

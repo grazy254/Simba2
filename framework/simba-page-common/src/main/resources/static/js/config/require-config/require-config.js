@@ -8,6 +8,11 @@
 define(function (require) {
   "use strict";
   return {
+
+    /**
+     * @param  {Object} globalConfig - 全局配置
+     * @returns {Object} - prod-config或者dev-config配置的对象
+     */
     fetchBy: function (globalConfig) {
       var envMode = globalConfig.envMode, options; // dev or prod
       switch (envMode) {

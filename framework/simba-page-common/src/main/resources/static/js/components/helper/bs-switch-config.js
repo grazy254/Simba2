@@ -1,7 +1,7 @@
 define([
   'jquery',
   'bs-switch'
-], function ($, BaseHelper) {
+], function ($) {
   'use strict';
   var defaultOptions = function () {
     return {

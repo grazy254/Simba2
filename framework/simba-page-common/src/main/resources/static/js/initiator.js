@@ -70,20 +70,26 @@
       return $.Deferred(function (dfd) {
         // 加载配置
         require([configId].concat(customConfigId), function (config) {
-          var customOptions = $.makeArray(arguments).slice(1);
+          var customRequireOptions = $.makeArray(arguments).slice(1);
           // initiator.js script标签的data-*合并到global-config.js
-          var mergedOptions = $.extend(true, {}, config.originGlobalConfig(), customGlobalOptions);
+          var mergedGlobalOptions = $.extend(true, {}, config.originGlobalConfig(), customGlobalOptions);
           // merge globalConifg + customConfig to config .
           config.store({
-            globalConfig: mergedOptions
+            globalConfig: mergedGlobalOptions
           });
           dfd.resolve(config);
-          var presettingOptions = config.fetch(mergedOptions);
+          var presettingRequireOptions = config.fetch(mergedGlobalOptions);
           // initiator.js script标签的data-coustom-config属性值配置文件返回的object和
           // 默认配置的defaultOptions合并.
-          var options = $.extend(true, {}, presettingOptions);
-          $.each(customOptions, function (index, config) {
-            $.extend(options, config);
+          var options = $.extend(true, {}, presettingRequireOptions);
+          $.each(customRequireOptions, function (index, config) {
+            // 因为$.extend合并数组，使用后一个覆盖前一个数组内容，
+            // 但是需要的是concat两个数组的内容
+            var packages = (options.packages || []).concat(config.packages || []);
+            options.packages = null;
+            config.packages = null;
+            $.extend(true, options, config);
+            options.packages = packages;
           });
 
           presettingEvent.trigger(presettingEvent.events.beforeSetConfig);

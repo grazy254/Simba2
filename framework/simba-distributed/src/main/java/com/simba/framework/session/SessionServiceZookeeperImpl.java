@@ -2,8 +2,15 @@ package com.simba.framework.session;
 
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
+
 import com.simba.framework.session.zookeeper.ZooKeeperSessionHelper;
-import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 
 /**
  * SessionService的zookeeper实现
@@ -11,21 +18,19 @@ import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
  * @author caozj
  *
  */
+@Component
+@ConditionalOnProperty(prefix = "distribute", value = "type", havingValue = "zookeeper")
 public class SessionServiceZookeeperImpl implements SessionService {
 
+	private static final Log logger = LogFactory.getLog(SessionServiceZookeeperImpl.class);
+
+	@PostConstruct
+	private void init() {
+		logger.info("**************初始化Zookeeper Session****************");
+	}
+
+	@Autowired
 	private ZooKeeperSessionHelper zooKeeperSessionHelper;
-
-	private SessionServiceZookeeperImpl() {
-		zooKeeperSessionHelper = (ZooKeeperSessionHelper) ApplicationContextUtil.getBean("zooKeeperSessionHelper");
-	}
-
-	private static final class SessionServiceZookeeperImplHolder {
-		private static final SessionServiceZookeeperImpl instance = new SessionServiceZookeeperImpl();
-	}
-
-	public static SessionServiceZookeeperImpl getInstance() {
-		return SessionServiceZookeeperImplHolder.instance;
-	}
 
 	@SuppressWarnings("unchecked")
 	@Override

@@ -18,6 +18,9 @@ define([
     isDebug: function () {
       return globalConfig.envMode === 'dev';
     },
+    isDev: function () {
+      return this.isDebug();
+    },
     isProd: function () {
       return globalConfig.envMode === 'prod';
     }

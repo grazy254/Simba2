@@ -70,6 +70,9 @@ cd ../
 cd simba-okhttp
 call mvn clean -U deploy
 cd ../
+cd simba-database-management
+call mvn clean -U deploy
+cd ../
 cd simba-database
 call mvn clean -U deploy
 cd ../
@@ -306,9 +309,6 @@ call mvn clean -U  deploy
 cd ../
 cd simba-realtime-management
 call mvn clean -U  deploy
-cd ../
-cd simba-database-management
-call mvn clean -U deploy
 cd ../
 cd simba-autoId
 call mvn clean -U deploy

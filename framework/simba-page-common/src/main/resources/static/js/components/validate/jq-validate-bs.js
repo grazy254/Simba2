@@ -7,7 +7,7 @@
  */
 define([
   'jquery',
-  'components/validate/jq-validate'
+  'jquery-validate'
 ], function ($, validator) {
   'use strict';
   validator.setDefaults({

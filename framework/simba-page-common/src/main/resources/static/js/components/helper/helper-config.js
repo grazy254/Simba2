@@ -10,7 +10,7 @@ define([
   'jquery',
   'dodo'
 ], function ($, dodo) {
-  var configs = {// name: require.config path的name, value对应的plugin的helper名称
+  var pluginConfigs = {// name: require.config path的name, value对应的plugin的helper名称
     'bs-switch': 'components/helper/bs-switch-config',
     'bs-datepicker': 'components/helper/bs-datepicker-config',
     'bs-timepicker': 'components/helper/bs-timepicker-config',
@@ -30,18 +30,18 @@ define([
       switch (length) {
         case 1:
           if (dodo.isObject(name)) {
-            dodo.extend(configs, name);
-            result = dodo.extend(true, {}, configs);
+            dodo.extend(pluginConfigs, name);
+            result = dodo.extend(true, {}, pluginConfigs);
           } else {
-            result = configs[name];
+            result = pluginConfigs[name];
           }
           break;
         case 2:
-          result = configs[name];
-          configs[name] = value;
+          result = pluginConfigs[name];
+          pluginConfigs[name] = value;
           break;
         default:
-          result = dodo.extend(true, {}, configs);
+          result = dodo.extend(true, {}, pluginConfigs);
           break;
       }
       return result;
@@ -53,7 +53,7 @@ define([
      * @return {boolean}
      */
     has: function (name) {
-      return dodo.notEmptyTrimmedString(configs[name]);
+      return dodo.notEmptyTrimmedString(pluginConfigs[name]);
     }
   };
 });

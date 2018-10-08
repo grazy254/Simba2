@@ -9,6 +9,7 @@ define([
    * @property {Function} ctor - 构造函数
    * @property {Object} defaults - plugin全局配置属性
    * @property {Object} [defaultOptions] - 默认配置.
+   * @property {Function} [on] - 绑定事件的处理方法。
    */
 
   /**
@@ -33,12 +34,12 @@ define([
   // prototype
 
   /**
-   * @param  {Object} option - 配置
+   * @param  {Object} [options] - 配置
    * @return {Object | undefined}
    */
-  BaseHelper.prototype.defaults = function (option) {
+  BaseHelper.prototype.defaults = function (options) {
     if (arguments.length === 1) {
-      $.extend(this.metadata.defaults, option || {});
+      $.extend(this.metadata.defaults, options || {});
     } else {
       return $.extend(true, {}, this.metadata.defaults);
     }
@@ -59,7 +60,8 @@ define([
    * 调用方法.
    * @param  {HTMLElement | string | jQuery} el
    * @param  {string} name - 方法名称
-   * @param params - 参数.
+   * @param {*} [*params] - 参数.
+   * @returns {*}
    */
   BaseHelper.prototype.callWith = function (el, name, params) {
     var args = $.makeArray(arguments).slice(1);

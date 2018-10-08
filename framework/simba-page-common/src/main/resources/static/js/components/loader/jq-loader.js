@@ -1,5 +1,5 @@
 /**
- * @file jqloader.js
+ * @file jq-loader.js
  * @author betgar (betgar@163.com)
  * @date 09/10/2018
  * @time 09:13:25
@@ -12,18 +12,25 @@ define([
   'use strict';
   var pluginName = 'loadingIndicator';
   return {
+    /**
+     *  @param  {string | jQuery | HTMLElement} el
+     * @param  {Object} [options]
+     */
     show: function (el, options) {
       var $el = $(el), instance = $(el).data(pluginName);
       if (instance) {
-        instance.show();
+        return instance.show();
       } else {
-        $el[pluginName](options);
+        return $el[pluginName](options);
       }
      },
+     /**
+      * @param  {string | jQuery | HTMLElement} el
+      */
      hide: function (el) {
       var instance = $(el).data(pluginName);
       if (instance) {
-        instance.hide();
+        return instance.hide();
       }
     }
   };

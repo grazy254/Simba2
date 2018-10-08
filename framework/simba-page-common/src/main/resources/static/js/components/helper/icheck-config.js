@@ -1,7 +1,7 @@
 define([
   'jquery',
   'icheck'
-], function ($, helper) {
+], function ($) {
   'use strict';
   var defaultOptions = function () {
     return {

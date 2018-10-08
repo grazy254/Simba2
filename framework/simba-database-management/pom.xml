@@ -10,6 +10,13 @@
 	<name>simba-database-management</name>
 	<url>http://maven.apache.org</url>
 
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.3.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<simba.version>2.1.0-SNAPSHOT</simba.version>
@@ -17,19 +24,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-web</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-database</artifactId>
-			<version>${simba.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.simba</groupId>
-			<artifactId>simba-office</artifactId>
-			<version>${simba.version}</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
 	</dependencies>
 

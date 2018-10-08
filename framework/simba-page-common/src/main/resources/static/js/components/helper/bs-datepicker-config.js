@@ -1,7 +1,7 @@
 define([
   'jquery',
   'bs-datepicker-zh'
-], function ($, BaseHelper) {
+], function ($) {
   'use strict';
   var defaultOptions = function () {
     return {

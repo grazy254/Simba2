@@ -2,11 +2,15 @@ package com.simba.framework.session;
 
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 
 import com.simba.cache.Redis;
-import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 
 /**
  * SessionService的redis实现
@@ -14,22 +18,18 @@ import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
  * @author caozj
  *
  */
+@Component
+@ConditionalOnProperty(prefix = "distribute", value = "type", havingValue = "redis")
 public class SessionServiceRedisImpl implements SessionService {
 
-	protected static final Log logger = LogFactory.getLog(SessionServiceRedisImpl.class);
+	private static final Log logger = LogFactory.getLog(SessionServiceRedisImpl.class);
 
+	@Resource
 	private Redis redisUtil;
 
-	private static final class SessionServiceHolder {
-		private static final SessionServiceRedisImpl instance = new SessionServiceRedisImpl();
-	}
-
-	public static SessionServiceRedisImpl getInstance() {
-		return SessionServiceHolder.instance;
-	}
-
-	private SessionServiceRedisImpl() {
-		redisUtil = (Redis) ApplicationContextUtil.getBean(Redis.class);
+	@PostConstruct
+	private void init() {
+		logger.info("**************初始化Redis Session****************");
 	}
 
 	/**
@@ -39,7 +39,7 @@ public class SessionServiceRedisImpl implements SessionService {
 	 * @return
 	 */
 	private String getSessionKey(String sid) {
-		return "sid:" + sid;
+		return "Simba:Object:Sid:" + sid;
 	}
 
 	/**

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSessionContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.simba.common.EnvironmentUtil;
 import com.simba.framework.util.applicationcontext.ApplicationContextUtil;
 import com.simba.model.constant.ConstantData;
 
@@ -32,19 +31,16 @@ public class HttpSessionWrapper implements HttpSession {
 
 	private long accessedTime;
 
-	private String sessionType;
-
 	public HttpSessionWrapper(String sid, int expiry) {
 		this.sid = sid;
 		this.expiry = expiry;
 		createTime = System.currentTimeMillis();
 		accessedTime = System.currentTimeMillis();
-		sessionType = ApplicationContextUtil.getBean(EnvironmentUtil.class).get("distribute.type");
 	}
 
 	protected Map<String, Object> getMap() {
 		if (this.map == null) {
-			this.map = SessionServiceFactory.getInstance(sessionType).getSession(sid);
+			this.map = ApplicationContextUtil.getBean(SessionService.class).getSession(sid);
 		}
 		if (this.map == null) {
 			this.map = new HashMap<String, Object>();
@@ -126,7 +122,7 @@ public class HttpSessionWrapper implements HttpSession {
 			return;
 		}
 		this.getMap().put(key, value);
-		SessionServiceFactory.getInstance(sessionType).saveSession(this.sid, this.getMap(), expiry / 1000);
+		ApplicationContextUtil.getBean(SessionService.class).saveSession(this.sid, this.getMap(), expiry / 1000);
 	}
 
 	@Override
@@ -138,7 +134,7 @@ public class HttpSessionWrapper implements HttpSession {
 	public void removeAttribute(String name) {
 		accessedTime = System.currentTimeMillis();
 		this.getMap().remove(name);
-		SessionServiceFactory.getInstance(sessionType).saveSession(this.sid, this.getMap(), expiry / 1000);
+		ApplicationContextUtil.getBean(SessionService.class).saveSession(this.sid, this.getMap(), expiry / 1000);
 	}
 
 	@Override
@@ -150,7 +146,7 @@ public class HttpSessionWrapper implements HttpSession {
 	public void invalidate() {
 		accessedTime = System.currentTimeMillis();
 		this.getMap().clear();
-		SessionServiceFactory.getInstance(sessionType).removeSession(this.sid);
+		ApplicationContextUtil.getBean(SessionService.class).removeSession(this.sid);
 		logger.info("清空session:" + this.sid);
 	}
 

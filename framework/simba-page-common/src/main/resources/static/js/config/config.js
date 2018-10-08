@@ -12,14 +12,14 @@ define([
 ], function (dodo, globalConfig, requireConfig) {
   'use strict';
   var configs = {
-    globalConfig: dodo.extend({}, globalConfig)
+    globalConfig: dodo.extend(true, {}, globalConfig)
   };
   return {
     /**
      * @return {Object} - 全局配置对象。
      */
     originGlobalConfig: function () {
-      return dodo.extend({}, globalConfig);
+      return dodo.extend(true, {}, globalConfig);
     },
     /**
      * 获得配置.

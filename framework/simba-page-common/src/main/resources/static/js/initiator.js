@@ -5,7 +5,6 @@
  * @time 15:00:23
  * @description
  */
-
 (function (global, $) {
   "use strict";
   // 如果在requirejs之前引入jquery,做一个适配.
@@ -14,6 +13,8 @@
       return $;
     });
   }
+  var consoleLog = (window.console && window.console.log
+    && typeof (window.console.log) === 'function') ? window.console.log : function () { };
   require(['jquery'], function ($) {
     var initiator = {
       el: null, // $(script'[src^="initiator.js]')
@@ -51,6 +52,65 @@
     };
     initiator.init(); // 初始化
 
+    var fetchRequireConfig = function (configId, customConfigId, customGlobalOptions) {
+      var presettingEvent = {
+        hasDoc: !!global.document,
+        events: {
+          beforeSetConfig: 'beforeSetConfig.initiator',
+          afterSetConfig: 'afterSetConfig.initiator',
+          beforeLoadEntry: 'beforeLoadEntry.initiator',
+          afterLoadEntry: 'afterLoadEntry.initiator'
+        },
+        trigger: function (eventName, data) {
+          if (this.hasDoc) {
+            data ? $(global.document).trigger(eventName, data) : $(global.document).trigger(eventName);
+          }
+        }
+      };
+      return $.Deferred(function (dfd) {
+        // 加载配置
+        require([configId].concat(customConfigId), function (config) {
+          var customOptions = $.makeArray(arguments).slice(1);
+          // initiator.js script标签的data-*合并到global-config.js
+          var mergedOptions = $.extend(true, {}, config.originGlobalConfig(), customGlobalOptions);
+          // merge globalConifg + customConfig to config .
+          config.store({
+            globalConfig: mergedOptions
+          });
+          dfd.resolve(config);
+          var presettingOptions = config.fetch(mergedOptions);
+          // initiator.js script标签的data-coustom-config属性值配置文件返回的object和
+          // 默认配置的defaultOptions合并.
+          var options = $.extend(true, {}, presettingOptions);
+          $.each(customOptions, function (index, config) {
+            $.extend(options, config);
+          });
+
+          presettingEvent.trigger(presettingEvent.events.beforeSetConfig);
+          // reset require config
+          require.config(options);
+          presettingEvent.trigger(presettingEvent.events.afterSetConfig);
+
+          // start load entry
+          presettingEvent.trigger(presettingEvent.events.beforeLoadEntry);
+          if ($.trim(customGlobalOptions.customEntry)) {
+            require([customGlobalOptions.customEntry], function () {
+              presettingEvent.trigger(presettingEvent.events.afterLoadEntry);
+            });
+          }
+        }, function (err) {
+          dfd.reject(err);
+        });
+      }).promise();
+    };
+
+    /**
+     * 定义的基础的require config配置(baseUrl, config文件地址)
+     * defaultRequireConfig.call()作用 <br>
+     * 1.合并initiator.data() 和 config地址组成多个depConfigs <br>
+     * 2.合并initiator.data() 和 config.originGlobalConfig()中配置行程新的globalConfig <br>
+     * 3.加载配置的文件入口.  <br>
+     */
     var defaultRequireConfig = {
       baseUrl: initiator.findBaseUrl() || 'js',
       packages: [
@@ -63,64 +123,30 @@
           main: 'config'
         }
       ],
-      paths: {
-        text: './requirejs/plugins/text/2.0.15/js/text',
-        i18n: './requirejs/plugins/i18n/2.0.6/i18n',
-        domReady: './requirejs/plugins/domready/2.0.1/js/domReady',
-        css: './requirejs/plugins/css/0.1.10/js/css'
-      },
       deps: [
         'config'
       ],
       callback: function () {
-        var presetEvent = {
-          hasDoc: !!global.document,
-          events: {
-            beforeSetConfig: 'beforeSetConfig.initiator',
-            afterSetConfig: 'afterSetConfig.initiator',
-            beforeLoadEntry: 'beforeLoadEntry.initiator',
-            afterLoadEntry: 'afterLoadEntry.initiator'
-          },
-          trigger: function (eventName, data) {
-            if (this.hasDoc) {
-              data ? $(global.document).trigger(eventName, data) : $(global.document).trigger(eventName);
-            }
-          }
-        };
         var customGlobalOptions = $(initiator.el).data() || {};
         var customConfigUrl = customGlobalOptions.envMode === 'dev' ? (customGlobalOptions.customDevConfig || customGlobalOptions.customConfig) : customGlobalOptions.customConfig;
         // customDeps不能依赖其它组件，因为加载时config还没有设置.
-        var deps = ['config'].concat(customConfigUrl || []);
-
-        // 加载配置
-        require(deps, function (config) {
-          var customOptions = $.makeArray(arguments).slice(1);
-          // initiator.js script标签的data-*合并到global-config.js
-          var mergedOptions = $.extend({}, config.originGlobalConfig(), customGlobalOptions, true);
-          var presettingOptions = config.fetch(mergedOptions);
-          // initiator.js script标签的data-coustom-config属性值配置文件返回的object和
-          // 默认配置的defaultOptions合并.
-          var options = $.extend({}, presettingOptions);
-          $.each(customOptions, function (index, config) {
-            $.extend(options, config);
-          });
-          presetEvent.trigger(presetEvent.events.beforeSetConfig);
-          require.config(options); // reset require config
-          presetEvent.trigger(presetEvent.events.afterSetConfig);
-
-
-          presetEvent.trigger(presetEvent.events.beforeLoadEntry);
-          if ($.trim(customGlobalOptions.customEntry)) {
-            require([customGlobalOptions.customEntry], function () {
-              presetEvent.trigger(presetEvent.events.afterLoadEntry);
-            });
-          }
-
-        });
+        fetchRequireConfig('config', customConfigUrl || [], customGlobalOptions)
+          .done(function (config) {
+            var mergedOptions = config.store().globalConfig;
+            if (mergedOptions.envMode === 'dev') {
+              consoleLog(mergedOptions);
+            }
+          }).fail(function () { });
       }
     };
 
     require.config(defaultRequireConfig);
+    // default requirejs error handler
+    requirejs.onError = function (err) {
+      // err.requireType: scripterror, timeout, nodefine
+      window.console && window.console.error && window.console.error(err.requireType + ': moduleName --> ' + err.requireModules);
+      throw err;
+    };
   });
 }(typeof window !== "undefined" ? window : this, jQuery));
 

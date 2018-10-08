@@ -202,6 +202,10 @@
     isString: isString,
     isObject: isObject,
     isPlainObject: isPlainObject,
-    extend: _extend
+    extend: _extend,
+    // TODO:
+    // each, trim
+    // makeArray
+    // isArrayLike
   };
 });

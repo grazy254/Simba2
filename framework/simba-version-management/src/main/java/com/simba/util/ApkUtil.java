@@ -3,13 +3,13 @@ package com.simba.util;
 import java.io.InputStream;
 import java.util.Map;
 
+import com.simba.framework.util.apk.AxmlUtil;
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 
 import com.simba.framework.util.common.XmlUtil;
 import com.simba.framework.util.zip.ZipUtil;
 
-import util.AxmlUtil;
 
 /**
  * Created by shuoGG on 2018/8/8

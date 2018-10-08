@@ -4,8 +4,14 @@ define([
 ],
 function (dodo, baseConfig) {
   "use strict";
-  return dodo.extend({}, baseConfig, {
+  return dodo.extend(true, {}, baseConfig, {
     "paths": {
+      "text": "./requirejs/plugins/text/2.0.15/js/text",
+      "i18n": "./requirejs/plugins/i18n/2.0.6/i18n",
+      "domReady": "./requirejs/plugins/domready/2.0.1/js/domReady",
+      "css": "./requirejs/plugins/css/0.1.10/js/css",
+
+      "jquery": './plugins/jquery/1.12.4/js/jquery',
       "bootstrap3": "./plugins/bootstrap3/3.3.7/js/bootstrap",
       "adminlte": "./plugins/adminlte/2.4.2/js/adminlte",
       "backbone": "./plugins/backbone/1.3.3/js/backbone",
@@ -17,16 +23,23 @@ function (dodo, baseConfig) {
       "jquery-loading-indicator": "./plugins/jquery-loading-indicator/3.3.1/js/jquery.loading-indicator",
       // *** form plugins ***
       // AMD module plugins
+      // "jquery-validate":"./plugins/jquery-validate/1.17.0/localization/messages.zh",
       "bs-datetimepicker": "./plugins/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker",
       "bs-datepicker": "./plugins/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker",
       "bs-switch": "./plugins/bootstrap-switch/3.3.4/js/bootstrap-switch",
+      "autosize": "./plugins/autosize/4.0.2/js/autosize",
       // not AMD module plugins
       "bs-datepicker-zh": "./plugins/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.zh-CN.min",
       "icheck": "./plugins/icheck/1.0.2/js/icheck",
       "bs-timepicker": "./plugins/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker",
 
-      // *** date libraries plugins ***
-      "moment": "./plugins/moment/2.22.2/js/moment-with-locales"
+      // *** common plugins***
+      // AMD module plugins
+      "moment": "./plugins/moment/2.22.2/js/moment-with-locales",
+      "js-logger": "./plugins/js-logger/1.4.0/js/logger",
+      "js-cookie": "./plugins/js-cookie/2.2.0/js/js.cookie",
+      "json5": "./plugins/json5/2.2.0/js/json5",
+      "localforage": "./plugins/localforage/1.7.2/js/localforage",
     },
     "shim": {
       "bootstrap3": {
@@ -80,7 +93,7 @@ function (dodo, baseConfig) {
       },
       "bs-datetimepicker": {
         "deps": [
-          // jquery, moment
+          // jquery, moment, bootstrap
           "css!./plugins/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker"
         ]
       },

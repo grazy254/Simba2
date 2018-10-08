@@ -29,16 +29,16 @@ public class UserIdWebSocketHandler implements WebSocketHandler {
 
 	private static final Set<String> onlineSet = Collections.synchronizedSet(new HashSet<>());
 
-	private void addOnlineUser(String appid, String userId) throws UnknownHostException {
-		String key = appid + "_" + userId;
+	private void addOnlineUser(String appid, String userId, String sid) throws UnknownHostException {
+		String key = appid + ":" + userId + ":" + sid;
 		if (onlineSet.add(key)) {
 			OnlineUserUtil onlineUserUtil = ApplicationContextUtil.getBean(OnlineUserUtil.class);
 			onlineUserUtil.incrOnlineUser(appid);
 		}
 	}
 
-	private void addOfflineUser(String appid, String userId) throws UnknownHostException {
-		String key = appid + "_" + userId;
+	private void addOfflineUser(String appid, String userId, String sid) throws UnknownHostException {
+		String key = appid + ":" + userId + ":" + sid;
 		if (onlineSet.contains(key)) {
 			OnlineUserUtil onlineUserUtil = ApplicationContextUtil.getBean(OnlineUserUtil.class);
 			onlineUserUtil.incrOfflineUser(appid);
@@ -84,8 +84,8 @@ public class UserIdWebSocketHandler implements WebSocketHandler {
 		String appid = getAppid(session);
 		if (StringUtils.isNotEmpty(userId) && StringUtils.isNotEmpty(appid)) {
 			UserIdConnectionPool.getInstance().add(userId, appid, session);
-			logger.info("用户连接Session保存成功[userId:" + userId + "][appid:" + appid + "]");
-			addOnlineUser(appid, userId);
+			logger.info("用户连接Session保存成功[userId:" + userId + "][appid:" + appid + "][sid:" + session.getId() + "]");
+			addOnlineUser(appid, userId, session.getId());
 		}
 		logger.info("用户websocket连接成功sid:" + session.getId());
 		logger.info("此服务器上连接的用户有******" + UserIdConnectionPool.getInstance().all().toString() + "******");
@@ -119,7 +119,7 @@ public class UserIdWebSocketHandler implements WebSocketHandler {
 			UserIdConnectionPool.getInstance().add(userId, appid, session);
 			logger.info("用户连接Session保存成功[userId:" + userId + "][appid:" + appid + "]");
 			set(userId, appid, session);
-			addOnlineUser(appid, userId);
+			addOnlineUser(appid, userId, session.getId());
 		} else {
 			logger.error("收到用户websocket消息，但是内容格式错误:[" + content + "]");
 		}
@@ -131,9 +131,9 @@ public class UserIdWebSocketHandler implements WebSocketHandler {
 		String appid = getAppid(session);
 		logger.error("用户websocket连接发生异常:[userId:" + userId + "][appid:" + appid + "]", exception);
 		if (StringUtils.isNotEmpty(userId) && StringUtils.isNotEmpty(appid)) {
-			UserIdConnectionPool.getInstance().remove(userId, appid);
+			UserIdConnectionPool.getInstance().remove(userId, appid, session);
 			logger.info("清空websocket连接[userId:" + userId + "][appid:" + appid + "]");
-			addOfflineUser(appid, userId);
+			addOfflineUser(appid, userId, session.getId());
 		}
 	}
 
@@ -143,9 +143,9 @@ public class UserIdWebSocketHandler implements WebSocketHandler {
 		String appid = getAppid(session);
 		logger.info("用户websocket连接关闭:[userId:" + userId + "][appid:" + appid + "]," + closeStatus);
 		if (StringUtils.isNotEmpty(userId) && StringUtils.isNotEmpty(appid)) {
-			UserIdConnectionPool.getInstance().remove(userId, appid);
+			UserIdConnectionPool.getInstance().remove(userId, appid, session);
 			logger.info("清空websocket连接[userId:" + userId + "][appid:" + appid + "]");
-			addOfflineUser(appid, userId);
+			addOfflineUser(appid, userId, session.getId());
 		}
 	}
 

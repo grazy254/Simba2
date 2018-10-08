@@ -1,6 +1,8 @@
 package com.simba.websocket;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,7 +16,7 @@ import org.springframework.web.socket.WebSocketSession;
  */
 public class UserIdConnectionPool {
 
-	private Map<String, WebSocketSession> sessionMap;
+	private Map<String, Map<String, WebSocketSession>> sessionMap;
 
 	private UserIdConnectionPool() {
 		init();
@@ -34,7 +36,12 @@ public class UserIdConnectionPool {
 
 	public void add(String userId, String appid, WebSocketSession session) {
 		String key = buildKey(userId, appid);
-		sessionMap.put(key, session);
+		Map<String, WebSocketSession> userSessions = sessionMap.get(key);
+		if (userSessions == null) {
+			userSessions = new HashMap<>();
+		}
+		userSessions.put(session.getId(), session);
+		sessionMap.put(key, userSessions);
 	}
 
 	private String buildKey(String userId, String appid) {
@@ -42,14 +49,23 @@ public class UserIdConnectionPool {
 		return key;
 	}
 
-	public void remove(String userId, String appid) {
+	public void remove(String userId, String appid, WebSocketSession session) {
 		String key = buildKey(userId, appid);
-		sessionMap.remove(key);
+		Map<String, WebSocketSession> userSessions = sessionMap.get(key);
+		if (userSessions != null) {
+			userSessions.remove(session.getId());
+			sessionMap.put(key, userSessions);
+		}
 	}
 
-	public WebSocketSession get(String userId, String appid) {
+	public List<WebSocketSession> get(String userId, String appid) {
 		String key = buildKey(userId, appid);
-		return sessionMap.get(key);
+		Map<String, WebSocketSession> userSessions = sessionMap.get(key);
+		List<WebSocketSession> sessions = new ArrayList<>();
+		if (userSessions != null) {
+			sessions.addAll(userSessions.values());
+		}
+		return sessions;
 	}
 
 	public Set<String> all() {

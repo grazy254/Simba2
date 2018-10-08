@@ -28,19 +28,19 @@ public class OnlineUserUtil {
 	private RedisUtil redisUtil;
 
 	private String getOnlineKey(String appid) throws UnknownHostException {
-		return "online_" + SystemUtil.getIpAddress() + "_" + SystemUtil.getMachineName() + "&" + appid;
+		return "simba:long:websocket:online_" + SystemUtil.getIpAddress() + "_" + SystemUtil.getMachineName() + "&" + appid;
 	}
 
 	private String getOfflineKey(String appid) throws UnknownHostException {
-		return "offline_" + SystemUtil.getIpAddress() + "_" + SystemUtil.getMachineName() + "&" + appid;
+		return "simba:long:websocket:offline_" + SystemUtil.getIpAddress() + "_" + SystemUtil.getMachineName() + "&" + appid;
 	}
 
 	private String getOnlineKey() throws UnknownHostException {
-		return "online_" + SystemUtil.getIpAddress() + "_" + SystemUtil.getMachineName();
+		return "simba:long:websocket:online_" + SystemUtil.getIpAddress() + "_" + SystemUtil.getMachineName();
 	}
 
 	private String getOfflineKey() throws UnknownHostException {
-		return "offline_" + SystemUtil.getIpAddress() + "_" + SystemUtil.getMachineName();
+		return "simba:long:websocket:offline_" + SystemUtil.getIpAddress() + "_" + SystemUtil.getMachineName();
 	}
 
 	/**
@@ -115,8 +115,8 @@ public class OnlineUserUtil {
 	 * @return
 	 */
 	public long countOnlineUser() {
-		List<String> onlineKeys = redisUtil.keys("online_" + "*");
-		List<String> offlineKeys = redisUtil.keys("offline_" + "*");
+		List<String> onlineKeys = redisUtil.keys("simba:long:websocket:online_" + "*");
+		List<String> offlineKeys = redisUtil.keys("simba:long:websocket:offline_" + "*");
 		long onlineCount = 0L;
 		long offlineCount = 0L;
 		for (String key : onlineKeys) {
@@ -135,8 +135,8 @@ public class OnlineUserUtil {
 	 */
 	public Map<String, Long> countOnlineUserByApp() {
 		Map<String, Long> onlineMap = new HashMap<>();
-		List<String> onlineKeys = redisUtil.keys("online_" + "*");
-		List<String> offlineKeys = redisUtil.keys("offline_" + "*");
+		List<String> onlineKeys = redisUtil.keys("simba:long:websocket:online_" + "*");
+		List<String> offlineKeys = redisUtil.keys("simba:long:websocket:offline_" + "*");
 		onlineKeys.forEach((String key) -> {
 			String[] split = key.split("&");
 			String appid = split[1];

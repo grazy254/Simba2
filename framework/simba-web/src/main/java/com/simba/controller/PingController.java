@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.simba.framework.util.json.JsonResult;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -26,17 +28,17 @@ public class PingController {
 
 	@ApiOperation(value = "ping", notes = "成功返回ok")
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String ping() {
-		return "ok";
+	public JsonResult ping() {
+		return new JsonResult("ok");
 	}
 
 	@ApiOperation(value = "ping", notes = "成功返回ok")
 	@RequestMapping(value = "/async", method = RequestMethod.GET)
-	public Callable<String> asyncPing() {
+	public Callable<JsonResult> asyncPing() {
 		logger.info("begin ping");
-		Callable<String> callable = () -> {
+		Callable<JsonResult> callable = () -> {
 			logger.info("ping...");
-			return "ok";
+			return new JsonResult("ok");
 		};
 		logger.info("end ping");
 		return callable;

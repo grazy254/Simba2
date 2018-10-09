@@ -81,6 +81,7 @@ public class TradeByAliPay implements AliPayInterface {
 	@Override
 	public void appPay(AppPayForm payForm) {
 		logger.info(String.format("alipay recharge start trade AppPayForm: %s", payForm.toString()));
+		// TODO:需要考虑用户中心和钱包分离的情况，通过sdk获取用户数据
 		SmartUser user = (SmartUser) ThreadDataUtil.get("account");
 		JsonResult rs = rechargeContext.startTrade(user.getAccount(), StringUtils.EMPTY, payForm.getOutTradeNo(), NumberUtils.toLong(payForm.getTotalAmount()));
 		logger.info("alipay recharge start trade result: " + rs.toJson());

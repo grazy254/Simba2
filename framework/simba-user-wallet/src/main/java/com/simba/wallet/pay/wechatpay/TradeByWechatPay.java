@@ -67,6 +67,7 @@ public class TradeByWechatPay implements PayInterface {
 	@Override
 	public void dealOrder(UnifiedOrderReq req, String prePayId, String codeUrl, String mwebUrl) {
 		logger.info(String.format("wechat recharge start trade UnifiedOrderReq %s, prePayId %s, codeUrl %s, mwebUrl %s", req.toString(), prePayId, codeUrl, mwebUrl));
+		// TODO:需要考虑用户中心和钱包分离的情况，通过sdk获取用户数据
 		SmartUser user = (SmartUser) ThreadDataUtil.get("account");
 		JsonResult rs = rechargeContext.startTrade(user.getAccount(), req.getSpbill_create_ip(), req.getOut_trade_no(), req.getTotal_fee(), CommonUtil.getGmtDate(req.getTime_start()));
 		logger.info("wechat recharge start trade result: " + rs.toJson());

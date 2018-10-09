@@ -118,7 +118,7 @@
      * 3.加载配置的文件入口.  <br>
      */
     var defaultRequireConfig = {
-      baseUrl: initiator.findBaseUrl() || 'js',
+      baseUrl: initiator.findBaseUrl() || '/js',
       packages: [
         {
           name: 'dodo',

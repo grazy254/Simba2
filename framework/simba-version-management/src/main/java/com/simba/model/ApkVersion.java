@@ -2,15 +2,21 @@ package com.simba.model;
 
 import com.simba.annotation.DescAnnotation;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by shuoGG on 2018/8/8
  */
 @DescAnnotation(desc = "apk管理")
-public class ApkVersion {
+public class ApkVersion implements Serializable {
 
-    private int id;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 675998610879314964L;
+
+	private int id;
 
     /**
      * 版本号

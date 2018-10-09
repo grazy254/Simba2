@@ -7,6 +7,8 @@ import javax.annotation.PreDestroy;
 
 import cn.jpush.api.push.model.Message;
 import cn.jpush.api.push.model.Options;
+import cn.jpush.api.push.model.notification.IosNotification;
+import cn.jpush.api.push.model.notification.PlatformNotification;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -80,11 +82,12 @@ public class JpushAppUtil {
      * @throws APIConnectionException
      */
     public PushResult sendNotification(List<String> users, String content) throws APIConnectionException, APIRequestException {
+        Notification no = Notification.newBuilder().setAlert(content).addPlatformNotification(IosNotification.newBuilder().setSound("default").build()).build();
         PushPayload payload = PushPayload.newBuilder().setPlatform(Platform.all()).setAudience(Audience.newBuilder().addAudienceTarget(AudienceTarget.alias(users)).build())
-                .setNotification(Notification.alert(content)).setOptions(Options.newBuilder().setApnsProduction(isAppProduct).build()).build();
-        PushResult result = sendPush(payload);
-        return result;
+                .setNotification(no).setOptions(Options.newBuilder().setApnsProduction(isAppProduct).build()).build();
+        return sendPush(payload);
     }
+
 
     /**
      * 使用别名发送极光推送通知
@@ -93,10 +96,10 @@ public class JpushAppUtil {
      * @param content
      */
     public PushResult sendNotification(String user, String content) throws APIConnectionException, APIRequestException {
-        PushPayload payload = PushPayload.newBuilder().setPlatform(Platform.all()).setAudience(Audience.alias(user)).setNotification(Notification.alert(content))
+        Notification no = Notification.newBuilder().setAlert(content).addPlatformNotification(IosNotification.newBuilder().setSound("default").build()).build();
+        PushPayload payload = PushPayload.newBuilder().setPlatform(Platform.all()).setAudience(Audience.alias(user)).setNotification(no)
                 .setOptions(Options.newBuilder().setApnsProduction(isAppProduct).build()).build();
-        PushResult result = sendPush(payload);
-        return result;
+        return sendPush(payload);
     }
 
     /**
@@ -105,10 +108,10 @@ public class JpushAppUtil {
      * @param content
      */
     public PushResult sendNotificationAll(String content) throws APIConnectionException, APIRequestException {
-        PushPayload payload = PushPayload.newBuilder().setPlatform(Platform.all()).setAudience(Audience.all()).setNotification(Notification.alert(content))
+        Notification no = Notification.newBuilder().setAlert(content).addPlatformNotification(IosNotification.newBuilder().setSound("default").build()).build();
+        PushPayload payload = PushPayload.newBuilder().setPlatform(Platform.all()).setAudience(Audience.all()).setNotification(no)
                 .setOptions(Options.newBuilder().setApnsProduction(isAppProduct).build()).build();
-        PushResult result = sendPush(payload);
-        return result;
+        return sendPush(payload);
     }
 
 

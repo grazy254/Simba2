@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.simba.framework.util.json.JsonResult;
 import com.simba.sdk.UserSdk;
+import com.simba.util.UserUtil;
 
 /**
  * 用户登录
@@ -23,6 +24,9 @@ public class UserApiController {
 
 	@Autowired
 	private UserSdk userSdk;
+
+	@Autowired
+	private UserUtil userUtil;
 
 	/**
 	 * 验证码，从api系统中获取对比
@@ -177,7 +181,7 @@ public class UserApiController {
 	 */
 	@RequestMapping("/api/userLogin/getMobileApi")
 	public JsonResult getMobileApi(long userId) {
-		return userSdk.getMobile(userId);
+		return new JsonResult(userUtil.getMobile(userId));
 	}
 
 	@Deprecated

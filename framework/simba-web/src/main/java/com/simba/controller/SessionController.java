@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.simba.framework.util.json.JsonResult;
 import com.simba.model.constant.ConstantData;
 
 import io.swagger.annotations.Api;
@@ -30,7 +31,7 @@ public class SessionController {
 	 */
 	@ApiOperation(value = "获取会话session的sid", notes = "获取会话session的sid")
 	@RequestMapping(value = "/getSid", method = RequestMethod.GET)
-	public String getSid(HttpServletRequest request) {
-		return (String) request.getAttribute(ConstantData.SESSIONID_COOKIE_NAME);
+	public JsonResult getSid(HttpServletRequest request) {
+		return new JsonResult(request.getAttribute(ConstantData.SESSIONID_COOKIE_NAME));
 	}
 }

@@ -44,7 +44,7 @@ public class UserSdk {
 
 	private static final String verifUrl = "http://USER/api/simbaUser/verif";
 
-	private static final String userIdSessionKey = "userId";
+	public static final String userIdSessionKey = "userId";
 
 	@Autowired
 	private EurekaClientUtil client;

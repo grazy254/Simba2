@@ -1,0 +1,1 @@
+mvn deploy:deploy-file -Dfile=gradle-tooling-api-2.13.jar -DgroupId=org.gradle -DartifactId=gradle-tooling-api -Dversion=2.13 -Dpackaging=jar -Durl=http://192.168.75.25:8081/repository/maven-releases/ -DrepositoryId=nexus-releases
